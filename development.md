@@ -37,7 +37,7 @@ If Chromium cannot start, those tests are skipped and the test name says why.
 | `src/bun-plugin` | The Bun loader for `.lucia` files |
 | `test/runtime`, `test/compiler`, `test/bun-plugin` | Tests. Each folder mirrors its `src/` folder |
 | `examples/serve.ts` | Serves one example: `bun examples/serve.ts <name>` |
-| `examples/web` | A landing page that shows every feature |
+| `examples/web` | A docs-style page: every feature with live demos and source |
 | `examples/stress` | Scenarios that push the limits and report timings |
 | `test/setup.ts` | Preloaded by `bun test`: sets up a fake DOM (happy-dom) and the `.lucia` loader |
 | `lucia.d.ts` | Type declaration so TypeScript accepts `import App from "./App.lucia"` |
@@ -55,7 +55,7 @@ Imports inside one area stay relative, for example `../utils/braces.ts`.
 
 ## Tests
 
-Tests live in `test/`, one folder per area. Each folder mirrors its `src/` folder, so `src/compiler/style/modes.ts` is tested in `test/compiler/style/modes.test.ts`. The plugin tests attach the real web `Counter`, so update them when it changes.
+Tests live in `test/`, one folder per area. Each folder mirrors its `src/` folder, so `src/compiler/style/modes.ts` is tested in `test/compiler/style/modes.test.ts`. The plugin tests attach the web example's `Events` demo, so update them when it changes.
 
 ## Stress scenarios
 
