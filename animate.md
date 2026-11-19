@@ -6,14 +6,15 @@
 
 ```html
 <script>
-import { ACTIVE, EASE, TRANSITION } from "lucia";
+import { EASE, WHEN } from "lucia";
 
 const fadeUp = {
+  default: [EASE.STYLE.QUART, EASE.OUT],
   0: { opacity: 0, translate: "0px 20px" },
-  1: [TRANSITION.QUART, EASE.OUT, { opacity: 1, translate: "0px 0px" }],
+  1: { opacity: 1, translate: "0px 0px" },
 };
 
-const reveal = { animation: fadeUp, active: ACTIVE.VIEW, duration: 400 };
+const reveal = { style: fadeUp, when: WHEN.VIEW, duration: 400 };
 </script>
 
 <div animate={reveal}>Hi</div>
@@ -28,14 +29,14 @@ Animation is the only special attribute. Everything else lives inside its value.
 
 | Form | Meaning |
 |---|---|
-| `Keyframes` | Plays once on attach with the defaults. Shorthand for `{ animation: it }` |
+| `Keyframes` | Plays once on attach with the defaults. Shorthand for `{ style: it }` |
 | `AnimateItem` | One animation with its own trigger and timing |
 | An array | Each item plays on its own trigger |
 
 ```html
 <div animate={[
-  { animation: fadeIn, active: ACTIVE.VIEW, duration: 400 },
-  { animation: glow, active: ACTIVE.HOVER },
+  { style: fadeIn, when: WHEN.VIEW, duration: 400 },
+  { style: glow, when: WHEN.HOVER },
 ]}>...</div>
 ```
 
@@ -43,12 +44,11 @@ Animation is the only special attribute. Everything else lives inside its value.
 
 | Field | Type | Default | Effect |
 |---|---|---|---|
-| `animation` | Keyframes | required | The keys to play |
-| `transition` | `TRANSITION` member | `TRANSITION.CUBIC` | The curve for every key that sets none. See [Keyframes](#keyframes) |
-| `ease` | `EASE` member | `EASE.OUT` | The ease for every key that sets none |
-| `active` | `ACTIVE` member or a store | `ACTIVE.IN` | What plays it. See [Triggers](#triggers) |
+| `style` | Keyframes | required | The keys to play |
+| `when` | `WHEN` member or a store | `WHEN.ATTACH` | What plays it. See [Triggers](#triggers) |
 | `control` | controller | none | Lets code play, reverse, stop or seek the item. See [Controller](#controller) |
-| `once` | boolean | `false` (`true` for `ACTIVE.VIEW`) | Play forward only the first time. `VIEW` stays once unless `more.reverse` is set |
+| `once` | boolean | `false` (`true` for `WHEN.VIEW`) | Play forward only the first time. `VIEW` stays once unless `more.reverse` is set |
+| `midway` | `MIDWAY` member or object | `MIDWAY.TURN` | What a new play does while one is still running. See [Midway](#midway) |
 | `more` | object | none | Options for the trigger: `margin`, `amount` and `reverse` for `VIEW`, `inDelay`, `outDelay`, `out` and `outDuration` for `HOVER`, `start`, `end`, `follow` and `part` for `SCROLL`. See [more](#more) |
 | `keep` | boolean | `true` | When `false`, the inline styles the animation wrote are removed once a play ends at progress 1 |
 | `duration` | ms | `300` | Length of one play |
@@ -56,35 +56,44 @@ Animation is the only special attribute. Everything else lives inside its value.
 | `loop` | boolean or count | none | `true` repeats forever, `3` repeats three times |
 | `backAndForth` | boolean | `false` | With `loop`: each repeat plays 0 to 1, then 1 to 0 (one loop pass = there and back) |
 
-Missing `animation`, an unknown `active` value and keyframes without 0 or 1 throw an error.
+Missing `style`, an unknown `when` value and keyframes without 0 or 1 throw an error.
 
 > [!NOTE]
 > `alternate` was renamed to `backAndForth`. An item that still uses `alternate` throws `alternate was renamed to backAndForth`.
 
 > [!NOTE]
+> `animation` was renamed to `style`, and `active` was renamed to `when`. An item with the old keys throws `animation was renamed to style` or `active was renamed to when`.
+
+> [!NOTE]
+> `ACTIVE.IN` and `ACTIVE.OUT` were renamed to `WHEN.ATTACH` and `WHEN.DETACH`. Old names throw `ACTIVE.IN and ACTIVE.OUT were renamed to ACTIVE.ATTACH and ACTIVE.DETACH`.
+
+> [!NOTE]
+> `ease` is not an item field. Set it in the keyframes `default`. An item with `ease`, `curve` or `transition` throws, such as `ease moved into the keyframes: default: [...]`.
+
+> [!NOTE]
 > Items in an array are independent. If two items set the same CSS property, the later item wins for that property, and the earlier one does not write it.
 
-An element can have one `IN` item and one `OUT` item, so it has different enter and leave animations.
+An element can have one `ATTACH` item and one `DETACH` item, so it has different enter and leave animations.
 
 ## Triggers
 
-| `active` | When it plays | Notes |
+| `when` | When it plays | Notes |
 |---|---|---|
-| `ACTIVE.IN` (default) | 0 to 1 once, when attached | Nothing on detach |
-| `ACTIVE.OUT` | Its own keyframes, when detaching | Detach waits for it. Nothing on attach |
-| `ACTIVE.VIEW` | 0 to 1 when at least 15% is visible | Once by default. `more: { reverse: true }` plays 1 to 0 when it leaves the view |
-| `ACTIVE.HOVER` | 0 to 1 on pointer enter, 1 to 0 on leave | Leave plays from the current progress. `more` sets delays and a separate way out. Touch: a tap toggles, a tap outside plays out. Focus counts as enter and blur as leave |
-| `ACTIVE.SCROLL` | The progress follows the element's place on screen | Scroll-linked. `duration`, `delay`, `once` and `loop` do not apply. `loop` is an error |
-| `ACTIVE.MANUAL` | Only when a controller plays it | No automatic trigger |
+| `WHEN.ATTACH` (default) | 0 to 1 once, when attached | Nothing on detach |
+| `WHEN.DETACH` | Its own keyframes, when detaching | Detach waits for it. Nothing on attach |
+| `WHEN.VIEW` | 0 to 1 when at least 15% is visible | Once by default. `more: { reverse: true }` plays 1 to 0 when it leaves the view |
+| `WHEN.HOVER` | 0 to 1 on pointer enter, 1 to 0 on leave | Leave plays from the current progress. `more` sets delays and a separate way out. Touch: a tap toggles, a tap outside plays out. Focus counts as enter and blur as leave |
+| `WHEN.SCROLL` | The progress follows the element's place on screen | Scroll-linked. `duration`, `delay`, `once` and `loop` do not apply. `loop` is an error |
+| `WHEN.MANUAL` | Only when a controller plays it | No automatic trigger |
 | A store or read store | Truthy: 0 to 1. Falsy: 1 to 0 | Read reactively. The first value is applied without animating |
 
 > [!IMPORTANT]
-> Only `OUT` items delay the removal of the nodes on detach. `VIEW`, `HOVER` and store items do not.
+> Only `DETACH` items delay the removal of the nodes on detach. `VIEW`, `HOVER` and store items do not.
 
 ```html
-<section animate={{ animation: fadeUp, active: ACTIVE.VIEW }}>...</section>
-<button animate={{ animation: grow, active: ACTIVE.HOVER }}>Hover me</button>
-<div animate={{ animation: pulse, active: isOpen }}>...</div>
+<section animate={{ style: fadeUp, when: WHEN.VIEW }}>...</section>
+<button animate={{ style: grow, when: WHEN.HOVER }}>Hover me</button>
+<div animate={{ style: pulse, when: isOpen }}>...</div>
 ```
 
 `once` on `HOVER` or a store plays forward only the first time. `VIEW` already plays once unless `more.reverse` is set.
@@ -95,26 +104,26 @@ An element can have one `IN` item and one `OUT` item, so it has different enter 
 
 | Trigger | Key | Type | Default | Effect |
 |---|---|---|---|---|
-| `ACTIVE.VIEW` | `margin` | number or CSS length | `0` | How far inside the screen edge the element must be before it counts as in view. A number is px. A string such as `"10%"` works too. Positive values need the element further in |
-| `ACTIVE.VIEW` | `amount` | number, 0 to 1 | `0.15` | How much of the element must be visible |
-| `ACTIVE.VIEW` | `reverse` | boolean | `false` | Play back out when the element leaves the view, and again on re-entry |
-| `ACTIVE.HOVER` | `inDelay` | ms | `0` | Wait after pointer enter before playing in. Leaving inside the wait cancels it |
-| `ACTIVE.HOVER` | `outDelay` | ms | `0` | Wait after pointer leave before playing back. Entering again inside the wait cancels it |
-| `ACTIVE.HOVER` | `out` | keyframes | none | The animation for leaving. It starts from the look the element has at that moment, so nothing jumps. Without it, the in plays backward |
-| `ACTIVE.HOVER` | `outDuration` | ms | item `duration` | Length of the way out. Needs `out` |
-| `ACTIVE.SCROLL` | `start` | number | `0` | The line where the progress is 0. Fraction of the screen height, counted from the bottom edge |
-| `ACTIVE.SCROLL` | `end` | number | `1` | The line where the progress is 1. Same units as `start`. `0` is the bottom edge, `1` the top edge |
-| `ACTIVE.SCROLL` | `follow` | store of an element | none | The tall element that drives the progress. Its scroll position is used instead of the item's own. Not with `start` or `end`. See [Pinned scroll](#pinned-scroll) |
-| `ACTIVE.SCROLL` | `part` | `[from, to]` | `[0, 1]` | Plays only that slice of the progress. `[0.5, 1]` plays in the second half. Needs `0 <= from < to <= 1` |
+| `WHEN.VIEW` | `margin` | number or CSS length | `0` | How far inside the screen edge the element must be before it counts as in view. A number is px. A string such as `"10%"` works too. Positive values need the element further in |
+| `WHEN.VIEW` | `amount` | number, 0 to 1 | `0.15` | How much of the element must be visible |
+| `WHEN.VIEW` | `reverse` | boolean | `false` | Play back out when the element leaves the view, and again on re-entry |
+| `WHEN.HOVER` | `inDelay` | ms | `0` | Wait after pointer enter before playing in. Leaving inside the wait cancels it |
+| `WHEN.HOVER` | `outDelay` | ms | `0` | Wait after pointer leave before playing back. Entering again inside the wait cancels it |
+| `WHEN.HOVER` | `out` | keyframes | none | The animation for leaving. It starts from the look the element has at that moment, so nothing jumps. Without it, the in plays backward |
+| `WHEN.HOVER` | `outDuration` | ms | item `duration` | Length of the way out. Needs `out` |
+| `WHEN.SCROLL` | `start` | number | `0` | The line where the progress is 0. Fraction of the screen height, counted from the bottom edge |
+| `WHEN.SCROLL` | `end` | number | `1` | The line where the progress is 1. Same units as `start`. `0` is the bottom edge, `1` the top edge |
+| `WHEN.SCROLL` | `follow` | store of an element | none | The tall element that drives the progress. Its scroll position is used instead of the item's own. Not with `start` or `end`. See [Pinned scroll](#pinned-scroll) |
+| `WHEN.SCROLL` | `part` | `[from, to]` | `[0, 1]` | Plays only that slice of the progress. `[0.5, 1]` plays in the second half. Needs `0 <= from < to <= 1` |
 
 ```html
-<section animate={{ animation: PRESET.SLIDE_UP, active: ACTIVE.VIEW, more: { margin: "10%", amount: 0.5, reverse: true } }}>...</section>
-<button animate={{ animation: glow, active: ACTIVE.HOVER, more: { outDelay: 200 } }}>Hover me</button>
-<div animate={{ animation: fadeOut, active: ACTIVE.SCROLL, more: { start: 0.2, end: 0.8 } }}>...</div>
+<section animate={{ style: PRESET.SLIDE_UP, when: WHEN.VIEW, more: { margin: "10%", amount: 0.5, reverse: true } }}>...</section>
+<button animate={{ style: glow, when: WHEN.HOVER, more: { outDelay: 200 } }}>Hover me</button>
+<div animate={{ style: fadeOut, when: WHEN.SCROLL, more: { start: 0.2, end: 0.8 } }}>...</div>
 ```
 
 > [!NOTE]
-> `ACTIVE.VIEW` items with the same margin and amount share one observer. The observer is removed when its last item detaches.
+> `WHEN.VIEW` items with the same margin and amount share one observer. The observer is removed when its last item detaches.
 
 > [!NOTE]
 > `reverse` at the top level of an item is an error: `reverse moved into more: { reverse: true }`.
@@ -135,14 +144,14 @@ Use `follow` to play a scene while a tall section scrolls past, with the scene h
 
 ```html
 <script>
-import { store, ACTIVE, PRESET } from "lucia";
+import { store, WHEN, PRESET } from "lucia";
 
 const section = store(null);
 </script>
 
 <section bind-element={section} style="height: 300vh">
   <div style="position: sticky; top: 0; height: 100vh">
-    <h1 animate={{ animation: PRESET.FADE, active: ACTIVE.SCROLL, more: { follow: section } }}>Title</h1>
+    <h1 animate={{ style: PRESET.FADE, when: WHEN.SCROLL, more: { follow: section } }}>Title</h1>
   </div>
 </section>
 ```
@@ -156,6 +165,46 @@ const section = store(null);
 > [!NOTE]
 > Many items can follow the same section. The section is measured once per frame, not once per item.
 
+## Midway
+
+A play can be asked for while another one is still running: a hover leaves mid-way, a store flips, or code calls `play()` or `reverse()`. `midway` sets what happens then.
+
+| `midway` | What the new play does |
+|---|---|
+| `MIDWAY.TURN` (default) | Starts at once, from the current progress. `turn` shapes the change |
+| `MIDWAY.FINISH` | Waits for the running play to end. If several requests come in, only the last one runs |
+| `MIDWAY.RESTART` | Starts from its own beginning. The element snaps there |
+| `MIDWAY.SKIP` | Jumps the running play to its end, then runs the new one |
+| `MIDWAY.IGNORE` | Drops the request |
+
+`turn` only matters for `TURN`, and for the switch of `FINISH` and `SKIP`:
+
+| `turn` | How the motion changes |
+|---|---|
+| `TURN.SUDDEN` (default) | The new play starts from the current progress. Its speed may jump |
+| `TURN.SMOOTH` | Keeps the current speed and bends into the new direction over `turnDuration`. Position and speed stay continuous |
+| `TURN.STOP` | Slows to rest over half of `turnDuration`, then starts the new play |
+
+Set the options in an object. A `MIDWAY` member alone sets only `play`:
+
+| Key | Type | Default | Effect |
+|---|---|---|---|
+| `play` | `MIDWAY` member | `MIDWAY.TURN` | What the new play does |
+| `turn` | `TURN` member or a function | `TURN.SUDDEN` | How the motion changes direction |
+| `turnDuration` | ms | `200` | Length of the change |
+| `turnStyle` | `EASE.STYLE` member | `EASE.STYLE.CUBIC` | Easing style of the blend |
+| `turnEase` | `EASE` member | `EASE.INOUT` | Ease of the blend |
+
+```html
+<button animate={{ style: grow, when: WHEN.HOVER, midway: MIDWAY.FINISH }}>Hover me</button>
+<div animate={{ style: slide, when: store, midway: { turn: TURN.SMOOTH, turnDuration: 250 } }}>...</div>
+```
+
+A custom `turn` function gets `(from, to, t, speed)`. `from` is the progress at the switch, `to` is where the new play is now, `t` is the ms since the switch, and `speed` is progress per ms. It returns the progress to show until `turnDuration` has passed.
+
+> [!NOTE]
+> Speed is tracked every frame, from the values the element shows. No allocation happens per frame for it.
+
 ## Keyframes
 
 A keyframes object maps progress keys to a step each. A key is a number from 0 to 1. 0 is the start, 1 is the end.
@@ -164,61 +213,81 @@ A keyframes object maps progress keys to a step each. A key is a number from 0 t
 import type { Keyframes } from "lucia";
 
 const fade: Keyframes = {
+  default: [EASE.STYLE.QUART, EASE.INOUT],
   0: { opacity: 0 },
   0.5: [EASE.IN, { opacity: 0.8 }],
-  1: [TRANSITION.QUART, EASE.OUT, { opacity: 1 }],
+  1: { opacity: 1 },
 };
 ```
 
 | Part | Meaning |
 |---|---|
+| `default` | Optional. The easing for keys that do not set their own. Its forms are `[EASE.STYLE.x, ease]`, `[EASE.STYLE.x]` and `[EASE.y]` |
 | Key | Progress from 0 to 1. Must include `0` and `1`. Keys outside 0 to 1, or listed twice, throw |
 | Value | One of the four key forms below |
-| `style` | CSS properties, in camelCase or kebab-case |
+| `style` | CSS properties in camelCase, such as `backgroundColor`. Custom properties start with `--` |
 
 ### Key forms
 
-| Form | Example | Curve used |
+| Form | Example | Easing used |
 |---|---|---|
-| Style object | `{ opacity: 0 }` | The item's `transition` and `ease` |
-| `[transition, ease, style]` | `[TRANSITION.QUART, EASE.OUT, { opacity: 1 }]` | The ones written |
-| `[transition, style]` | `[TRANSITION.QUART, { opacity: 1 }]` | The written transition, the item's ease |
-| `[ease, style]` | `[EASE.IN, { opacity: 1 }]` | The item's transition, the written ease |
+| `{ css }` | `{ opacity: 0 }` | The defaults: the keyframes `default`, then the engine default |
+| `[ease, { css }]` | `[EASE.IN, { opacity: 1 }]` | The written ease. The style comes from the defaults |
+| `[EASE.STYLE.x, { css }]` | `[EASE.STYLE.QUAD, { opacity: 1 }]` | The written style. The ease comes from the defaults |
+| `[EASE.STYLE.x, ease, { css }]` | `[EASE.STYLE.QUART, EASE.OUT, { opacity: 1 }]` | Both written |
 
-A transition is a function, and an ease is an `EASE` member, so the two are told apart by their type. Any other shape throws.
+An ease is one of `EASE.IN`, `EASE.OUT` or `EASE.INOUT`. A style is a function from `EASE.STYLE`, or your own function. Any other shape throws.
+
+Key 0 is the start, so its easing is never used. It can always be a plain `{ css }`.
 
 The keyframes value is read again at the start of every play. Keyframes built from stores pick up new values.
 
-### Defaults for an item
+### Defaults
 
-Set `transition` and `ease` on the item to change the curve for every key that does not set its own.
+Each part of the easing (style and ease) is looked up in three levels. The first one that sets it wins:
 
-```html
-<div animate={{ animation: fade, transition: TRANSITION.EXPO, ease: EASE.INOUT }}>...</div>
+| Level | Set by | Used for |
+|---|---|---|
+| Key | The key's own form, such as `[EASE.IN, { ... }]` | That key |
+| Keyframes | `default: [...]` in the keyframes | Keys that do not set that part |
+| Engine | The library: `EASE.STYLE.QUART` and `EASE.INOUT`, 300 ms | Anything no level above sets |
+
+The style and the ease are looked up separately. A key can set only its ease, and take its style from the keyframes default.
+
+Change the engine default for the whole app with `setAnimateDefault`:
+
+```ts
+import { setAnimateDefault, EASE } from "lucia";
+
+setAnimateDefault({ ease: [EASE.STYLE.CUBIC, EASE.OUT], duration: 400 });
 ```
 
-| Field | Library default |
+| Key | Effect |
 |---|---|
-| `transition` | `TRANSITION.CUBIC` |
-| `ease` | `EASE.OUT` |
+| `ease` | Takes the same forms as `default`. Each part merges with the current engine default |
+| `duration` | Replaces the 300 ms default. An item's own `duration` still wins |
 
-### Transition and ease belong to the segment that ends at the key
+It is read at each play, so a call at app start applies everywhere. A play that is already running keeps the default it started with. Other keys throw.
 
-A segment is the stretch between two keys. Its transition and ease come from the key where it ends.
+### Easing belongs to the segment that ends at the key
+
+A segment is the stretch between two keys. Its style and ease come from the key where it ends.
 
 ```
-key 0 ---- uses key 0.5's transition and ease ----> key 0.5 ---- uses key 1's transition and ease ----> key 1
+key 0 ---- uses key 0.5's style and ease ----> key 0.5 ---- uses key 1's style and ease ----> key 1
 ```
 
-Key 0 has no segment that ends at it, so its transition and ease are not used going forward.
+Key 0 has no segment that ends at it, so its easing is not used going forward.
 
-A reverse play runs each segment backward with the same curve, so the motion looks the same, only backward.
+A reverse play runs each segment backward with the same style, so the motion looks the same, only backward.
 
-## TRANSITION
+## EASE
 
-`TRANSITION` holds the easing curves. Each member is a function `(t) => number` that goes from 0 at `t = 0` to 1 at `t = 1`.
+### STYLE
 
-| Member | Curve | Use |
+`EASE.STYLE` holds the easing styles. Each member is a function `(t) => number` that goes from 0 at `t = 0` to 1 at `t = 1`.
+
+| Member | Style | Use |
 |---|---|---|
 | `LINEAR` | Constant speed | Motion that should not speed up |
 | `QUAD` | Gentle curve | Small moves |
@@ -232,22 +301,23 @@ A reverse play runs each segment backward with the same curve, so the motion loo
 | `ELASTIC` | Springs around the end | Springy motion |
 | `BOUNCE` | Bounces like a ball | Drops and landings |
 
-### Your own curve
+### Your own style
 
-Any function of the same shape works in the first slot. No registration is needed.
+Any function of the same shape works as a style, in a key or in `default`. No registration is needed.
 
 ```ts
 const SOFT = (t: number) => t * t;
 
 const slide = {
+  default: [SOFT, EASE.OUT],
   0: { translate: "-20px 0px" },
-  1: [SOFT, EASE.OUT, { translate: "0px 0px" }],
+  1: { translate: "0px 0px" },
 };
 ```
 
-## EASE
+### Directions
 
-`EASE` decides how a segment plays its curve.
+`EASE.IN`, `EASE.OUT` and `EASE.INOUT` decide how a style plays in a segment.
 
 | Member | Shape | Feel |
 |---|---|---|
@@ -274,16 +344,16 @@ const slide = {
 
 ## Controller
 
-A controller plays items by hand. Use it with `ACTIVE.MANUAL`, or with any trigger.
+A controller plays items by hand. Use it with `WHEN.MANUAL`, or with any trigger.
 
 ```ts
-import { ACTIVE, controller } from "lucia";
+import { WHEN, controller } from "lucia";
 
 const ctl = controller();
 ```
 
 ```html
-<div animate={{ animation: pop, active: ACTIVE.MANUAL, control: ctl }}>...</div>
+<div animate={{ style: pop, when: WHEN.MANUAL, control: ctl }}>...</div>
 ```
 
 | Method | What it does |
@@ -297,15 +367,15 @@ One controller can drive several items and elements.
 
 ## PRESET
 
-`PRESET` holds ready-made keyframes. Use one as the animation, or as a base to change.
+`PRESET` holds ready-made keyframes. Use one as the style, or as a base to change.
 
 ```html
 <script>
-import { ACTIVE, PRESET } from "lucia";
+import { WHEN, PRESET } from "lucia";
 </script>
 
 <div animate={PRESET.FADE}>Plays once on attach</div>
-<section animate={{ animation: PRESET.SLIDE_UP, active: ACTIVE.VIEW, duration: 500 }}>...</section>
+<section animate={{ style: PRESET.SLIDE_UP, when: WHEN.VIEW, duration: 500 }}>...</section>
 ```
 
 | Member | Effect |
@@ -322,7 +392,7 @@ import { ACTIVE, PRESET } from "lucia";
 | `SPIN` | One full turn |
 | `FLIP` | Turns into view around the vertical axis while fading in |
 
-Presets use `translate`, `scale` and `rotate`, not `transform`. They combine with the element's own `transform`. Their keys set only styles, so the item's `transition` and `ease` apply to them.
+Presets use `translate`, `scale` and `rotate`, not `transform`. They combine with the element's own `transform`. Their keys set only styles, and each preset has its own `default` (CUBIC and OUT), so they need no easing.
 
 > [!TIP]
 > To change a preset, spread it and replace the keys you need: `{ ...PRESET.FADE, 1: { opacity: 0.5 } }`.
@@ -331,22 +401,23 @@ Presets use `translate`, `scale` and `rotate`, not `transform`. They combine wit
 
 | Need | Pattern |
 |---|---|
-| A variant of a keyframes object | Spread it and replace one key: `{ ...fadeUp, 1: [TRANSITION.QUART, EASE.OUT, { opacity: 0.5 }] }` |
+| A variant of a keyframes object | Spread it and replace one key: `{ ...fadeUp, 1: [EASE.STYLE.QUART, EASE.OUT, { opacity: 0.5 }] }` |
 | Many similar animations | A function that returns the keyframes: `animate={fadeUp(20)}` |
-| One item with other timing | Use the item form: `{ animation: fadeUp, duration: 600 }` |
+| One item with other timing | Use the item form: `{ style: fadeUp, duration: 600 }` |
 
 ```ts
 function fadeUp(distance: number): Keyframes {
   return {
+    default: [EASE.STYLE.QUART, EASE.OUT],
     0: { opacity: 0, translate: `0px ${distance}px` },
-    1: [TRANSITION.QUART, EASE.OUT, { opacity: 1, translate: "0px 0px" }],
+    1: { opacity: 1, translate: "0px 0px" },
   };
 }
 ```
 
 ## Leave
 
-`detach()` returns a promise. It resolves when the `OUT` animations have finished and the nodes are removed.
+`detach()` returns a promise. It resolves when the `DETACH` animations have finished and the nodes are removed.
 
 ```ts
 const card = attach(Card, slot);
@@ -355,9 +426,9 @@ await card.detach(); // the nodes are gone when this resolves
 
 | Case | Result |
 |---|---|
-| No `OUT` items | Nodes are removed at once, and the promise resolves at once |
-| `OUT` starts while an `IN` is still running | It plays its own keyframes from the current style |
-| A child component has `OUT` items | The parent waits for them too |
+| No `DETACH` items | Nodes are removed at once, and the promise resolves at once |
+| `DETACH` starts while an `ATTACH` is still running | It plays its own keyframes from the current style |
+| A child component has `DETACH` items | The parent waits for them too |
 
 ## Reduced motion
 
@@ -384,8 +455,8 @@ It returns a function. Call it with `t` from 0 to 1. It handles numbers, text wi
 | Limit | What to do |
 |---|---|
 | No `auto` sizes. `height: auto` cannot tween | Animate a fixed value, or animate `scale` instead |
-| Touch has no hover. `ACTIVE.HOVER` uses taps there: a tap toggles, and a tap outside plays out | For content that should play on scroll, use `ACTIVE.VIEW` |
-| `ACTIVE.SCROLL` does not reload keyframes that come from stores while it runs | Set the keyframes before the element mounts |
+| Touch has no hover. `WHEN.HOVER` uses taps there: a tap toggles, and a tap outside plays out | For content that should play on scroll, use `WHEN.VIEW` |
+| `WHEN.SCROLL` does not reload keyframes that come from stores while it runs | Set the keyframes before the element mounts |
 | No stagger helper. Delays for a list are set by hand | Give each item its own `delay` |
 | Frames are driven by JavaScript, not the compositor | Keep the number of animated elements moderate. See the stress example |
 | Layout properties (`width`, `top`, `margin`) are slow | Animate `transform` and `opacity` where you can |
@@ -394,8 +465,11 @@ It returns a function. Call it with `t` from 0 to 1. It handles numbers, text wi
 
 | Type | Shape |
 |---|---|
-| `Keyframes` | `Record<number, [Transition, Ease, Style]>` |
-| `AnimateItem` | `{ animation, transition?, ease?, active?, control?, once?, more?, keep?, duration?, delay?, loop?, backAndForth? }` |
-| `Transition` | `(t: number) => number`, such as `TRANSITION.QUART` |
+| `Keyframes` | `{ default?: DefaultEasing; 0: KeyframeValue; 1: KeyframeValue } & Record<number, KeyframeValue>` |
+| `KeyframeValue` | `Style`, `[Ease, Style]`, `[EaseStyle, Style]` or `[EaseStyle, Ease, Style]` |
+| `DefaultEasing` | `[EaseStyle, Ease]`, `[EaseStyle]` or `[Ease]` |
+| `Style` | The DOM style properties in camelCase (`opacity`, `backgroundColor`), with numbers or strings, and `--custom` properties |
+| `AnimateItem` | A union on `when`: `more` is typed by the trigger. For example `ViewMore` on `WHEN.VIEW`, `HoverMore` on `WHEN.HOVER`, and no `more` on `ATTACH`, `DETACH`, `MANUAL` or a store |
+| `EaseStyle` | `(t: number) => number`, such as `EASE.STYLE.QUART` |
 | `Ease` | One of `EASE.IN`, `EASE.OUT`, `EASE.INOUT` |
 | `Animate` | `Keyframes \| AnimateItem \| (Keyframes \| AnimateItem)[]` |
