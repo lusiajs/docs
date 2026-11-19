@@ -39,19 +39,21 @@ Any stylesheets go in `<link>` tags. An optional `public/` folder is copied as i
 | `--outdir <path>` | build | `dist` | Output folder, relative to where you run the command. It is emptied first |
 | `--no-minify` | build | minified | Keep the bundle readable |
 | `--port <n>` | dev | `3000`, or `PORT` | Port for the dev server. `0` picks a free port |
+| `--routes <paths>` | build | none | Comma-separated client routes, such as `/guide,/reference`. Each gets a copy of `index.html` |
 
 Run it with Bun: `bun src/cli/index.ts build examples/web`.
 
-## Browser tests
+## Client routes
 
-Most tests run in a fake DOM (happy-dom). The scope tests in `test/compiler/style/scope.browser.test.ts` run in real Chromium through Playwright.
+Apps with client-side routes (history API) need a server that answers deep links with `index.html`.
 
-| Setup | How |
+| Where | What happens |
 |---|---|
-| Use Playwright's Chromium | `bunx playwright install chromium` |
-| Use your own Chromium | `LUCIA_CHROMIUM=/path/to/chromium bun test` |
+| `lucia dev` | A GET for a path with no file extension gets `index.html`. Files and `public/` still win |
+| `lucia build --routes /guide` | Writes `dist/guide/index.html`, a copy of `index.html`, so a static host serves the deep link |
 
-If Chromium cannot start, those tests are skipped and the test name says why.
+> [!NOTE]
+> Each route must start with `/` and cannot contain `..`.
 
 ## Browser tests
 
