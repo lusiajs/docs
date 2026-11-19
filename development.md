@@ -7,15 +7,51 @@
 | Task | Command |
 |---|---|
 | Install | `bun install` |
-| Web example | `bun dev` (port 3000; set `PORT` to change it) |
-| Stress example | `bun dev:stress` (port 3000) |
+| Web example | `bun run dev` (port 3000) |
+| Stress example | `bun run dev:stress` (port 3000) |
+| Build the web example | `bun run build` (writes `dist/`) |
 | All tests | `bun test` |
 | One test file | `bun test test/compiler/style/modes.test.ts` |
 | Tests by name | `bun test -t "diamond"` |
 | Typecheck | `bun run typecheck` |
 
 > [!NOTE]
-> `bun dev` rebuilds `.lucia` files on each page load, so refresh the browser after editing them. After editing the compiler or runtime, restart `bun dev`.
+> The dev server rebuilds on each save and reloads the browser. Build errors show in the page and in the terminal.
+
+## CLI
+
+The `lucia` command builds and serves an app folder. An app folder has an `index.html` that points to its entry with a module script:
+
+```html
+<script type="module" src="./src/main.ts"></script>
+```
+
+Any stylesheets go in `<link>` tags. An optional `public/` folder is copied as it is.
+
+| Command | What it does |
+|---|---|
+| `lucia build [dir]` | Bundles the app into `dist/` and prints the file sizes |
+| `lucia dev [dir]` | Serves the app with live reload |
+
+| Option | Command | Default | Effect |
+|---|---|---|---|
+| `dir` | both | `.` | The app folder |
+| `--outdir <path>` | build | `dist` | Output folder, relative to where you run the command. It is emptied first |
+| `--no-minify` | build | minified | Keep the bundle readable |
+| `--port <n>` | dev | `3000`, or `PORT` | Port for the dev server. `0` picks a free port |
+
+Run it with Bun: `bun src/cli/index.ts build examples/web`.
+
+## Browser tests
+
+Most tests run in a fake DOM (happy-dom). The scope tests in `test/compiler/style/scope.browser.test.ts` run in real Chromium through Playwright.
+
+| Setup | How |
+|---|---|
+| Use Playwright's Chromium | `bunx playwright install chromium` |
+| Use your own Chromium | `LUCIA_CHROMIUM=/path/to/chromium bun test` |
+
+If Chromium cannot start, those tests are skipped and the test name says why.
 
 ## Browser tests
 
@@ -32,13 +68,14 @@ If Chromium cannot start, those tests are skipped and the test name says why.
 
 | Path | What it holds |
 |---|---|
-| `src/runtime` | The runtime: signals and DOM helpers |
+| `src/runtime` | The runtime: stores and DOM helpers |
 | `src/compiler` | The `.lucia` compiler |
-| `src/bun-plugin` | The Bun loader for `.lucia` files |
-| `test/runtime`, `test/compiler`, `test/bun-plugin` | Tests. Each folder mirrors its `src/` folder |
-| `examples/serve.ts` | Serves one example: `bun examples/serve.ts <name>` |
+| `src/bun-plugin` | The Bun loader for `.lucia` files and `?raw` imports |
+| `src/cli` | The `lucia` command: `build` and `dev` |
+| `test/runtime`, `test/compiler`, `test/bun-plugin`, `test/cli` | Tests. Each folder mirrors its `src/` folder |
 | `examples/web` | A docs-style page: every feature with live demos and source |
 | `examples/stress` | Scenarios that push the limits and report timings |
+| `editors/vscode` | The VS Code extension: `.lucia` grammar, snippets and language settings. See [Editor](editor.md) |
 | `test/setup.ts` | Preloaded by `bun test`: sets up a fake DOM (happy-dom) and the `.lucia` loader |
 | `lucia.d.ts` | Type declaration so TypeScript accepts `import App from "./App.lucia"` |
 
@@ -49,6 +86,7 @@ If Chromium cannot start, those tests are skipped and the test name says why.
 | `@runtime/*` | `src/runtime/*` | Runtime files, from another area |
 | `@compiler/*` | `src/compiler/*` | Compiler files, from another area |
 | `@bun-plugin/*` | `src/bun-plugin/*` | Plugin files, from another area |
+| `@cli/*` | `src/cli/*` | CLI files, from another area |
 | `lucia`, `lucia/compiler`, `lucia/bun-plugin` | The package exports in `package.json` | Examples and tests |
 
 Imports inside one area stay relative, for example `../utils/braces.ts`.
@@ -59,7 +97,7 @@ Tests live in `test/`, one folder per area. Each folder mirrors its `src/` folde
 
 ## Stress scenarios
 
-Each folder under `examples/stress` is one scenario. Open `http://localhost:3000` after `bun dev:stress` to see all the results in one table.
+Each folder under `examples/stress` is one scenario. Open `http://localhost:3000` after `bun run dev:stress` to see all the results in one table.
 
 1. Create a folder, for example `examples/stress/my-case/`.
 2. Add `main.ts` that exports `run(): Promise<Result[]>` (type `Result` is in `examples/stress/report.ts`).

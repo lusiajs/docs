@@ -6,7 +6,7 @@ A component is one `.lucia` file with up to three parts.
 
 | Part | Required | What it is |
 |---|---|---|
-| `<script>` | No | TypeScript. Runs once when the file is first imported |
+| `<script>` | No | TypeScript. Its imports run once per file. The rest runs once per instance |
 | Markup | No | HTML, with `{expression}` for values |
 | `<style>` | No | SCSS. Scoped to this component by default. Can repeat |
 
@@ -18,28 +18,64 @@ Anything declared here can be used in the markup. Import other files the normal 
 
 ```html
 <script>
-import { signal } from "lucia";
+import { store } from "lucia";
 import { user } from "./store.ts";
 
-const count = signal(0);
+const count = store(0);
 </script>
 ```
 
+| Rule | Detail |
+|---|---|
+| Imports | Run once per file, not once per instance |
+| Declarations | Run once per instance. Each `attach` gets its own `count` |
+| `export` | A compile error. Move shared values to a `.ts` file |
+
+### `props()`
+
+Declare the props this component accepts, with their defaults.
+
+```html
+<script>
+import { props } from "lucia";
+
+const { label, tone } = props({ label: "New", tone: "info" });
+</script>
+
+<span class="badge {tone}">{label}</span>
+```
+
+| Rule | Detail |
+|---|---|
+| Value | The passed value. The default is used when nothing is passed, or the value is `null` or `undefined` |
+| Type | Each prop is a read-only store. Use it as `{label}` or `label.value` |
+| Where | Only in the script, at top level. Calling it elsewhere throws |
+
 ### `setup(root)`
 
-Export a `setup` function to run code after the component is placed on the page. `root` is the element it was attached to. If `setup` returns a function, that function runs when the component is detached.
+Add a `function setup` to run code after the component is placed on the page. Do not use `export`. `root` is the node the component was placed in: the attach target, or the parent's node for a child component. That can be a fragment rather than an element, so use `root.querySelector(...)`. If `setup` returns a function, that function runs when the component is detached.
 
 ```ts
-export function setup(root: Element) {
+import { store } from "lucia";
+
+const count = store(0);
+
+function add() {
+  count.value++;
+}
+
+function setup(root: Element) {
   const button = root.querySelector("button")!;
-  const add = () => count.value++;
   button.addEventListener("click", add);
-  return () => button.removeEventListener("click", add);
+  function cleanup() {
+    button.removeEventListener("click", add);
+  }
+  return cleanup;
 }
 ```
 
-> [!NOTE]
-> `setup` is a stopgap. Event syntax in markup is planned.
+> [!TIP]
+> For clicks and other events, use `onclick={fn}` in the markup. See [Events and bind](events.md). `setup` is for code that needs the placed nodes.
 
 ## Markup
 
@@ -50,6 +86,10 @@ Plain HTML. Put any TypeScript expression inside `{}`.
 | Text | `<p>Hi {name}</p>` | Text that updates |
 | Whole attribute | `<button disabled={isDone}>` | See the value rules below |
 | Part of an attribute | `<p class="status {kind}">` | Joined into one string |
+| Event | `<button onclick={increment}>` | Runs the function. See [Events and bind](events.md) |
+| Two-way link | `<input bind={name} />` | Keeps the field and the store in sync. See [Events and bind](events.md) |
+| Show, repeat or skip | `<IF {loggedIn}>`, `<EACH {todos} as={todo}>`, `<FOR {i} to={5}>` | See [Flow](flow.md) |
+| Animation | `<div animate={fadeUp}>` | Animates the element. See [Animate](animate.md) |
 
 ### Value rules
 
@@ -57,16 +97,16 @@ Plain HTML. Put any TypeScript expression inside `{}`.
 |---|---|---|
 | `null`, `undefined`, `false` | Empty | Attribute removed |
 | `true` | `true` | Attribute set with no value (`disabled=""`) |
-| Signal or computed | Its current value | Its current value |
+| Store or read store | Its current value | Its current value |
 | Anything else | `String(value)` | `String(value)` |
 
 In a partial attribute, `null`, `undefined` and `false` become an empty string.
 
 ### What updates
 
-An expression re-runs when a signal it reads changes.
+An expression re-runs when a store or read store it reads changes.
 
-- `{count}` reads the signal for you.
+- `{count}` reads the store for you.
 - `{count.value * 2}` reads it through `.value`.
 - `{limit}` with a plain `const` never changes.
 
@@ -75,6 +115,35 @@ Text is inserted as text, not HTML, so values cannot inject markup.
 ### Braces inside expressions
 
 Nested braces and strings work: `{ {a: 1}.a }` and `{`${n} left`}` are both fine.
+
+### Child components
+
+Import another `.lucia` file, then use its name as a tag. The file name does not matter, only the import name does.
+
+```html
+<script>
+import badge from "./badge.lucia";
+</script>
+
+<p>Mail: <badge label={mailLabel} /></p>
+<p>Status: <badge label="Done" tone="warn" /></p>
+```
+
+Pass props as attributes.
+
+| Attribute | The child gets |
+|---|---|
+| `label="Done"` | The string `Done` |
+| `label={mailLabel}` | The store's value. It updates when the store changes |
+| `flag` | `true` |
+| `onclick={fn}` | The function. The child reads it with `props()` |
+
+| Rule | Detail |
+|---|---|
+| Name | The tag name must match the import name exactly, so `<Badge />` needs `import Badge` |
+| `bind` | Not allowed on a component tag. Put `bind` on the field inside the child |
+| Child content | Not supported yet. `<badge />` and `<badge></badge>` are fine. Anything other than whitespace between the tags is a compile error |
+| Unknown tags | Any tag without a matching import is plain HTML |
 
 ## Style
 
@@ -143,7 +212,7 @@ import { attach } from "lucia";
 import Counter from "./Counter.lucia";
 
 const counter = attach(Counter, document.getElementById("slot-counter")!);
-counter.detach(); // removes the nodes and stops all updates
+await counter.detach(); // resolves once any leave animation has finished and the nodes are removed
 ```
 
-See [Signals](signals.md) for state.
+See [Store](store.md) for state.
