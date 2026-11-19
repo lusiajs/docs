@@ -29,8 +29,8 @@ The VS Code extension lives in `editors/vscode`. It gives `.lucia` files colours
 | On a plain tag | `animate={...}`, the events (`onclick`, `oninput`, ...) and `bind-element`. On `input`, `textarea` and `select` also `bind`, `bind-value` and `bind-checked` |
 | On `<style` | `scoped`, `global`, `lang="css"` |
 | In a style body | `@scoped`, `@global`, `:global()` |
-| After `TRANSITION.`, `EASE.` or `ACTIVE.` | The enum's members, with the enum imported |
-| Inside `animate={...}` | The keys of an item object (`animation`, `active`, `once`, ...). After `active:`, the `ACTIVE` enum |
+| After `EASE.`, `EASE.STYLE.` or `WHEN.` | The enum's members, with the enum imported |
+| Inside `animate={...}` | The keys of an item object (`style`, `when`, `once`, ...). After `when:`, the `WHEN` enum |
 
 > [!NOTE]
 > Keys of an item object are offered where an object can start a new item. Keyframes objects (keys that are numbers) are skipped.
