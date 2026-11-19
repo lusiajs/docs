@@ -10,7 +10,7 @@
 | Web example | `bun dev` (port 3000; set `PORT` to change it) |
 | Stress example | `bun dev:stress` (port 3000) |
 | All tests | `bun test` |
-| One test file | `bun test packages/compiler/test/style/modes.test.ts` |
+| One test file | `bun test test/compiler/style/modes.test.ts` |
 | Tests by name | `bun test -t "diamond"` |
 | Typecheck | `bun run typecheck` |
 
@@ -19,7 +19,7 @@
 
 ## Browser tests
 
-Most tests run in a fake DOM (happy-dom). The scope tests in `packages/compiler/test/style/scope.browser.test.ts` run in real Chromium through Playwright.
+Most tests run in a fake DOM (happy-dom). The scope tests in `test/compiler/style/scope.browser.test.ts` run in real Chromium through Playwright.
 
 | Setup | How |
 |---|---|
@@ -32,20 +32,30 @@ If Chromium cannot start, those tests are skipped and the test name says why.
 
 | Path | What it holds |
 |---|---|
-| `packages/lucia` | The runtime: signals and DOM helpers |
-| `packages/compiler` | The `.lucia` compiler |
-| `packages/bun-plugin` | The Bun loader for `.lucia` files |
+| `src/runtime` | The runtime: signals and DOM helpers |
+| `src/compiler` | The `.lucia` compiler |
+| `src/bun-plugin` | The Bun loader for `.lucia` files |
+| `test/runtime`, `test/compiler`, `test/bun-plugin` | Tests. Each folder mirrors its `src/` folder |
 | `examples/serve.ts` | Serves one example: `bun examples/serve.ts <name>` |
 | `examples/web` | A landing page that shows every feature |
 | `examples/stress` | Scenarios that push the limits and report timings |
 | `test/setup.ts` | Preloaded by `bun test`: sets up a fake DOM (happy-dom) and the `.lucia` loader |
 | `lucia.d.ts` | Type declaration so TypeScript accepts `import App from "./App.lucia"` |
 
-Bun uses its isolated linker here. The root `package.json` must list every workspace package that the tests import.
+## Import paths
+
+| Import | Resolves to | Use it for |
+|---|---|---|
+| `@runtime/*` | `src/runtime/*` | Runtime files, from another area |
+| `@compiler/*` | `src/compiler/*` | Compiler files, from another area |
+| `@bun-plugin/*` | `src/bun-plugin/*` | Plugin files, from another area |
+| `lucia`, `lucia/compiler`, `lucia/bun-plugin` | The package exports in `package.json` | Examples and tests |
+
+Imports inside one area stay relative, for example `../utils/braces.ts`.
 
 ## Tests
 
-Each package keeps its tests in `test/`. Test folders mirror the source folders, so `src/style/modes.ts` is tested in `test/style/modes.test.ts`. The plugin tests attach the real web `Counter`, so update them when it changes.
+Tests live in `test/`, one folder per area. Each folder mirrors its `src/` folder, so `src/compiler/style/modes.ts` is tested in `test/compiler/style/modes.test.ts`. The plugin tests attach the real web `Counter`, so update them when it changes.
 
 ## Stress scenarios
 

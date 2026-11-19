@@ -6,9 +6,9 @@ How a `.lucia` file becomes DOM.
 
 ```
 App.lucia
-   |  @lucia/bun-plugin (onLoad, loader "ts")
+   |  lucia/bun-plugin (onLoad, loader "ts")
    v
-@lucia/compiler:  parse  ->  style  ->  template  ->  codegen
+lucia/compiler:  parse  ->  style  ->  template  ->  codegen
    |
    v
 TypeScript module  --imports-->  lucia/internal (runtime helpers)
@@ -27,14 +27,14 @@ Shared helpers used by more than one step live in `utils/`: `braces.ts` (skip a 
 
 ### Source layout
 
-| Package | Folder | What it holds |
-|---|---|---|
-| `compiler` | `src/parse/` | Sections and attributes of a `.lucia` file |
-| `compiler` | `src/style/` | Sass, scope modes, `:global()` and selector rewriting |
-| `compiler` | `src/template/` | Markup scanner and the module generator |
-| `compiler` | `src/utils/` | Helpers used by two or more steps |
-| `lucia` | `src/signal/` | `signal.ts` (values) and `graph.ts` (dependency graph, batch, watch) |
-| `lucia` | `src/dom/` | Bindings, template cloning, injected styles and `attach` |
+| Folder | What it holds |
+|---|---|
+| `src/compiler/parse/` | Sections and attributes of a `.lucia` file |
+| `src/compiler/style/` | Sass, scope modes, `:global()` and selector rewriting |
+| `src/compiler/template/` | Markup scanner and the module generator |
+| `src/compiler/utils/` | Helpers used by two or more steps |
+| `src/runtime/signal/` | `signal.ts` (values) and `graph.ts` (dependency graph, batch, watch) |
+| `src/runtime/dom/` | Bindings, template cloning, injected styles and `attach` |
 
 ### Scope
 
@@ -61,7 +61,7 @@ Restyle cost against plain unscoped CSS. Measured on about 20,000 elements, Chro
 
 ### Markers
 
-The template step replaces each binding with a marker in the HTML. Marker names and `COMPONENT_ATTR` (`data-l`) live in `packages/lucia/src/markers.ts` and are shared by the compiler and the runtime.
+The template step replaces each binding with a marker in the HTML. Marker names and `COMPONENT_ATTR` (`data-l`) live in `src/runtime/markers.ts` and are shared by the compiler and the runtime.
 
 | Binding | Marker |
 |---|---|
