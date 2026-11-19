@@ -8,7 +8,7 @@ A component is one `.lucia` file with up to three parts.
 |---|---|---|
 | `<script>` | No | TypeScript. Runs once when the file is first imported |
 | Markup | No | HTML, with `{expression}` for values |
-| `<style>` | No | SCSS, scoped to this component |
+| `<style>` | No | SCSS. Scoped to this component by default. Can repeat |
 
 ## Script
 
@@ -78,7 +78,7 @@ Nested braces and strings work: `{ {a: 1}.a }` and `{`${n} left`}` are both fine
 
 ## Style
 
-`<style>` is SCSS by default. Use `lang="css"` for plain CSS.
+`<style>` is SCSS by default. Use `lang="css"` for plain CSS. A component can have several `<style>` blocks.
 
 ```html
 <style>
@@ -90,12 +90,48 @@ button:hover { background: color.adjust($accent, $lightness: 30%); }
 </style>
 ```
 
-| Feature | How it works |
+### Modes
+
+Plain `<style>` is tree mode. Use the attribute form or the block form to change it.
+
+| Mode | Attribute form | Block form | Applies to |
+|---|---|---|---|
+| Tree (default) | `<style>` | none | This component and everything inside it, child components included |
+| Scoped | `<style scoped>` | `@scoped { }` | This component's own markup. Stops at child components |
+| Global | `<style global>` | `@global { }` | The whole page, unscoped |
+| Inline global | none | `:global(sel)` | Only `sel` is global. Write it inside a selector |
+
+- Tree: `h1 { color: tomato; }` also styles an h1 inside a child component.
+- Scoped: `.card { padding: 1rem; }` styles `.card` in this file, but not inside a child.
+- Global: `body { margin: 0; }` styles the page body.
+- Inline: `.card :global(a)` scopes `.card` and leaves `a` global.
+
+```html
+<style>
+h2 { color: tomato; }
+
+@scoped {
+  .card { padding: 1rem; }
+}
+
+@global {
+  ::selection { background: tomato; }
+}
+</style>
+
+<style global>
+body { margin: 0; }
+</style>
+```
+
+### Notes
+
+| Topic | Behaviour |
 |---|---|
-| Scoping | Every element gets a `data-l-<hash>` attribute, and every selector is limited to it |
-| `:global(selector)` | Not scoped. `.card :global(a)` scopes `.card` and leaves `a` global |
+| Specificity | Rules keep the specificity you wrote. The scope adds zero specificity |
 | `@keyframes`, `@font-face` | Left unscoped |
 | `@use` | Paths resolve relative to the `.lucia` file |
+| `lang="css"` | Skips Sass. The rules are still scoped |
 | Injection | CSS is added to the page once per component, on first attach |
 
 ## Attaching
