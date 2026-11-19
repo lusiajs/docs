@@ -10,12 +10,23 @@
 | Web example | `bun dev` (port 3000; set `PORT` to change it) |
 | Stress example | `bun dev:stress` (port 3000) |
 | All tests | `bun test` |
-| One test file | `bun test packages/compiler/test/style.test.ts` |
+| One test file | `bun test packages/compiler/test/style/modes.test.ts` |
 | Tests by name | `bun test -t "diamond"` |
 | Typecheck | `bun run typecheck` |
 
 > [!NOTE]
 > `bun dev` rebuilds `.lucia` files on each page load, so refresh the browser after editing them. After editing the compiler or runtime, restart `bun dev`.
+
+## Browser tests
+
+Most tests run in a fake DOM (happy-dom). The scope tests in `packages/compiler/test/style/scope.browser.test.ts` run in real Chromium through Playwright.
+
+| Setup | How |
+|---|---|
+| Use Playwright's Chromium | `bunx playwright install chromium` |
+| Use your own Chromium | `LUCIA_CHROMIUM=/path/to/chromium bun test` |
+
+If Chromium cannot start, those tests are skipped and the test name says why.
 
 ## Layout
 
@@ -34,7 +45,7 @@ Bun uses its isolated linker here. The root `package.json` must list every works
 
 ## Tests
 
-Each package keeps its tests in `test/`. The plugin tests attach the real web `Counter`, so update them when it changes.
+Each package keeps its tests in `test/`. Test folders mirror the source folders, so `src/style/modes.ts` is tested in `test/style/modes.test.ts`. The plugin tests attach the real web `Counter`, so update them when it changes.
 
 ## Stress scenarios
 
