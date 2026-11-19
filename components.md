@@ -4,11 +4,11 @@
 
 A component is one `.lucia` file with up to three parts.
 
-| Part | Required | What it is |
-|---|---|---|
-| `<script>` | No | TypeScript. Its imports run once per file. The rest runs once per instance |
-| Markup | No | HTML, with `{expression}` for values |
-| `<style>` | No | SCSS. Scoped to this component by default. Can repeat |
+| Part       | Required | What it is                                                                 |
+| ---------- | -------- | -------------------------------------------------------------------------- |
+| `<script>` | No       | TypeScript. Its imports run once per file. The rest runs once per instance |
+| Markup     | No       | HTML, with `{expression}` for values                                       |
+| `<style>`  | No       | SCSS. Scoped to this component by default. Can repeat                      |
 
 ## Script
 
@@ -18,18 +18,18 @@ Anything declared here can be used in the markup. Import other files the normal 
 
 ```html
 <script>
-import { store } from "lucia";
-import { user } from "./store.ts";
+  import { store } from "lucia";
+  import { user } from "./store.ts";
 
-const count = store(0);
+  const count = store(0);
 </script>
 ```
 
-| Rule | Detail |
-|---|---|
-| Imports | Run once per file, not once per instance |
+| Rule         | Detail                                                    |
+| ------------ | --------------------------------------------------------- |
+| Imports      | Run once per file, not once per instance                  |
 | Declarations | Run once per instance. Each `attach` gets its own `count` |
-| `export` | A compile error. Move shared values to a `.ts` file |
+| `export`     | A compile error. Move shared values to a `.ts` file       |
 
 ### `props()`
 
@@ -37,19 +37,19 @@ Declare the props this component accepts, with their defaults.
 
 ```html
 <script>
-import { props } from "lucia";
+  import { props } from "lucia";
 
-const { label, tone } = props({ label: "New", tone: "info" });
+  const { label, tone } = props({ label: "New", tone: "info" });
 </script>
 
 <span class="badge {tone}">{label}</span>
 ```
 
-| Rule | Detail |
-|---|---|
+| Rule  | Detail                                                                                              |
+| ----- | --------------------------------------------------------------------------------------------------- |
 | Value | The passed value. The default is used when nothing is passed, or the value is `null` or `undefined` |
-| Type | Each prop is a read-only store. Use it as `{label}` or `label.value` |
-| Where | Only in the script, at top level. Calling it elsewhere throws |
+| Type  | Each prop is a read-only store. Use it as `{label}` or `label.value`                                |
+| Where | Only in the script, at top level. Calling it elsewhere throws                                       |
 
 ### `setup(root)`
 
@@ -81,24 +81,24 @@ function setup(root: Element) {
 
 Plain HTML. Put any TypeScript expression inside `{}`.
 
-| Where | Example | Result |
-|---|---|---|
-| Text | `<p>Hi {name}</p>` | Text that updates |
-| Whole attribute | `<button disabled={isDone}>` | See the value rules below |
-| Part of an attribute | `<p class="status {kind}">` | Joined into one string |
-| Event | `<button onclick={increment}>` | Runs the function. See [Events and bind](events.md) |
-| Two-way link | `<input bind={name} />` | Keeps the field and the store in sync. See [Events and bind](events.md) |
-| Show, repeat or skip | `<IF {loggedIn}>`, `<EACH {todos} as={todo}>`, `<FOR {i} to={5}>` | See [Flow](flow.md) |
-| Animation | `<div animate={fadeUp}>` | Animates the element. See [Animate](animate.md) |
+| Where                | Example                                                           | Result                                                                  |
+| -------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Text                 | `<p>Hi {name}</p>`                                                | Text that updates                                                       |
+| Whole attribute      | `<button disabled={isDone}>`                                      | See the value rules below                                               |
+| Part of an attribute | `<p class="status {kind}">`                                       | Joined into one string                                                  |
+| Event                | `<button onclick={increment}>`                                    | Runs the function. See [Events and bind](events.md)                     |
+| Two-way link         | `<input bind={name} />`                                           | Keeps the field and the store in sync. See [Events and bind](events.md) |
+| Show, repeat or skip | `<IF {loggedIn}>`, `<EACH {todos} as={todo}>`, `<FOR {i} to={5}>` | See [Flow](flow.md)                                                     |
+| Animation            | `<div animate={fadeUp}>`                                          | Animates the element. See [Animate](animate.md)                         |
 
 ### Value rules
 
-| Value | In text | In a whole attribute |
-|---|---|---|
-| `null`, `undefined`, `false` | Empty | Attribute removed |
-| `true` | `true` | Attribute set with no value (`disabled=""`) |
-| Store or read store | Its current value | Its current value |
-| Anything else | `String(value)` | `String(value)` |
+| Value                        | In text           | In a whole attribute                        |
+| ---------------------------- | ----------------- | ------------------------------------------- |
+| `null`, `undefined`, `false` | Empty             | Attribute removed                           |
+| `true`                       | `true`            | Attribute set with no value (`disabled=""`) |
+| Store or read store          | Its current value | Its current value                           |
+| Anything else                | `String(value)`   | `String(value)`                             |
 
 In a partial attribute, `null`, `undefined` and `false` become an empty string.
 
@@ -122,28 +122,28 @@ Import another `.lucia` file, then use its name as a tag. The file name does not
 
 ```html
 <script>
-import badge from "./badge.lucia";
+  import badge from "./badge.lucia";
 </script>
 
-<p>Mail: <badge label={mailLabel} /></p>
+<p>Mail: <badge label="{mailLabel}" /></p>
 <p>Status: <badge label="Done" tone="warn" /></p>
 ```
 
 Pass props as attributes.
 
-| Attribute | The child gets |
-|---|---|
-| `label="Done"` | The string `Done` |
+| Attribute           | The child gets                                       |
+| ------------------- | ---------------------------------------------------- |
+| `label="Done"`      | The string `Done`                                    |
 | `label={mailLabel}` | The store's value. It updates when the store changes |
-| `flag` | `true` |
-| `onclick={fn}` | The function. The child reads it with `props()` |
+| `flag`              | `true`                                               |
+| `onclick={fn}`      | The function. The child reads it with `props()`      |
 
-| Rule | Detail |
-|---|---|
-| Name | The tag name must match the import name exactly, so `<Badge />` needs `import Badge` |
-| `bind` | Not allowed on a component tag. Put `bind` on the field inside the child |
+| Rule          | Detail                                                                                                                            |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Name          | The tag name must match the import name exactly, so `<Badge />` needs `import Badge`                                              |
+| `bind`        | Not allowed on a component tag. Put `bind` on the field inside the child                                                          |
 | Child content | Not supported yet. `<badge />` and `<badge></badge>` are fine. Anything other than whitespace between the tags is a compile error |
-| Unknown tags | Any tag without a matching import is plain HTML |
+| Unknown tags  | Any tag without a matching import is plain HTML                                                                                   |
 
 ## Style
 
@@ -151,11 +151,15 @@ Pass props as attributes.
 
 ```html
 <style>
-@use "sass:color";
-$accent: tomato;
+  @use "sass:color";
+  $accent: tomato;
 
-h1 { color: $accent; }
-button:hover { background: color.adjust($accent, $lightness: 30%); }
+  h1 {
+    color: $accent;
+  }
+  button:hover {
+    background: color.adjust($accent, $lightness: 30%);
+  }
 </style>
 ```
 
@@ -163,12 +167,12 @@ button:hover { background: color.adjust($accent, $lightness: 30%); }
 
 Plain `<style>` is tree mode. Use the attribute form or the block form to change it.
 
-| Mode | Attribute form | Block form | Applies to |
-|---|---|---|---|
-| Tree (default) | `<style>` | none | This component and everything inside it, child components included |
-| Scoped | `<style scoped>` | `@scoped { }` | This component's own markup. Stops at child components |
-| Global | `<style global>` | `@global { }` | The whole page, unscoped |
-| Inline global | none | `:global(sel)` | Only `sel` is global. Write it inside a selector |
+| Mode           | Attribute form   | Block form     | Applies to                                                         |
+| -------------- | ---------------- | -------------- | ------------------------------------------------------------------ |
+| Tree (default) | `<style>`        | none           | This component and everything inside it, child components included |
+| Scoped         | `<style scoped>` | `@scoped { }`  | This component's own markup. Stops at child components             |
+| Global         | `<style global>` | `@global { }`  | The whole page, unscoped                                           |
+| Inline global  | none             | `:global(sel)` | Only `sel` is global. Write it inside a selector                   |
 
 - Tree: `h1 { color: tomato; }` also styles an h1 inside a child component.
 - Scoped: `.card { padding: 1rem; }` styles `.card` in this file, but not inside a child.
@@ -177,31 +181,39 @@ Plain `<style>` is tree mode. Use the attribute form or the block form to change
 
 ```html
 <style>
-h2 { color: tomato; }
+  h2 {
+    color: tomato;
+  }
 
-@scoped {
-  .card { padding: 1rem; }
-}
+  @scoped {
+    .card {
+      padding: 1rem;
+    }
+  }
 
-@global {
-  ::selection { background: tomato; }
-}
+  @global {
+    ::selection {
+      background: tomato;
+    }
+  }
 </style>
 
 <style global>
-body { margin: 0; }
+  body {
+    margin: 0;
+  }
 </style>
 ```
 
 ### Notes
 
-| Topic | Behaviour |
-|---|---|
-| Specificity | Rules keep the specificity you wrote. The scope adds zero specificity |
-| `@keyframes`, `@font-face` | Left unscoped |
-| `@use` | Paths resolve relative to the `.lucia` file |
-| `lang="css"` | Skips Sass. The rules are still scoped |
-| Injection | CSS is added to the page once per component, on first attach |
+| Topic                      | Behaviour                                                             |
+| -------------------------- | --------------------------------------------------------------------- |
+| Specificity                | Rules keep the specificity you wrote. The scope adds zero specificity |
+| `@keyframes`, `@font-face` | Left unscoped                                                         |
+| `@use`                     | Paths resolve relative to the `.lucia` file                           |
+| `lang="css"`               | Skips Sass. The rules are still scoped                                |
+| Injection                  | CSS is added to the page once per component, on first attach          |
 
 ## Attaching
 

@@ -6,12 +6,12 @@ A **store** holds a value. Markup that reads it updates when it changes. Stores 
 
 ## API
 
-| Function | Use |
-|---|---|
-| `store(value)` | A writable store. Read and write with `.value` |
-| `store.from(() => ...)` | A read-only store derived from other stores. Cached until its inputs change |
+| Function                    | Use                                                                                          |
+| --------------------------- | -------------------------------------------------------------------------------------------- |
+| `store(value)`              | A writable store. Read and write with `.value`                                               |
+| `store.from(() => ...)`     | A read-only store derived from other stores. Cached until its inputs change                  |
 | `store.onUpdate(() => ...)` | Run code now, then again when a store it reads changes. See [store.onUpdate](#storeonupdate) |
-| `.peek()` | On any store: read without depending on it |
+| `.peek()`                   | On any store: read without depending on it                                                   |
 
 ```ts
 import { store } from "lucia";
@@ -37,18 +37,18 @@ const snapshot = count.peek();
 
 ## Types
 
-| Type | Returned by | Can write |
-|---|---|---|
-| `Store<T>` | `store(value)` | Yes, `.value = next` |
-| `ReadStore<T>` | `store.from(fn)` and `props()` | No |
+| Type           | Returned by                    | Can write            |
+| -------------- | ------------------------------ | -------------------- |
+| `Store<T>`     | `store(value)`                 | Yes, `.value = next` |
+| `ReadStore<T>` | `store.from(fn)` and `props()` | No                   |
 
 ## Behaviour
 
-| Rule | Detail |
-|---|---|
-| Same value | Setting a value equal to the current one (`Object.is`) does nothing |
-| Lazy `store.from` | It runs only when read, and only if an input changed |
-| No glitches | When several values depend on one store, nothing sees a half-updated state |
+| Rule              | Detail                                                                     |
+| ----------------- | -------------------------------------------------------------------------- |
+| Same value        | Setting a value equal to the current one (`Object.is`) does nothing        |
+| Lazy `store.from` | It runs only when read, and only if an input changed                       |
+| No glitches       | When several values depend on one store, nothing sees a half-updated state |
 
 ## store.onUpdate
 
@@ -64,17 +64,17 @@ function logCount() {
 }
 
 const stop = store.onUpdate(logCount); // logs "count is 0" now
-count.value++;                         // logs "count is 1"
+count.value++; // logs "count is 1"
 stop();
 ```
 
-| Rule | Detail |
-|---|---|
-| Reads | Each run tracks what it reads. A read inside an `if` counts only while that branch runs |
-| Other stores | A store that `fn` does not read does not re-run it |
-| Peek | `.peek()` reads without tracking. Use it for values that `fn` should not depend on |
-| Stop | Call the returned function to stop it |
-| Component | Inside a component's `<script>`, it stops when the component is removed |
+| Rule         | Detail                                                                                  |
+| ------------ | --------------------------------------------------------------------------------------- |
+| Reads        | Each run tracks what it reads. A read inside an `if` counts only while that branch runs |
+| Other stores | A store that `fn` does not read does not re-run it                                      |
+| Peek         | `.peek()` reads without tracking. Use it for values that `fn` should not depend on      |
+| Stop         | Call the returned function to stop it                                                   |
+| Component    | Inside a component's `<script>`, it stops when the component is removed                 |
 
 > [!TIP]
 > Use `store.onUpdate` for side effects, such as logging, saving or talking to the page. Use `store.from` for values you show in markup.
@@ -92,7 +92,7 @@ export const clicks = store(0);
 
 ```html
 <script>
-import { clicks } from "./store.ts";
+  import { clicks } from "./store.ts";
 </script>
 
 <p>{clicks} clicks</p>
