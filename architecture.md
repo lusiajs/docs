@@ -24,7 +24,7 @@ TypeScript module  --imports-->  lucia/internal (runtime helpers)
 | Template | `template/scanner.ts`, `blocks.ts`, `events.ts`, `bind.ts`, `element.ts`, `checks.ts` | Static HTML plus a list of bindings in document order. A tag named like an imported component becomes a component binding. `<IF>`, `<EACH>` and `<FOR>` read their body as a nested template. `on*` and `bind*` attributes become element bindings |
 | Codegen | `template/codegen.ts` | The module (see [Compiled module](#compiled-module)) |
 
-Shared helpers used by more than one step live in `utils/`: `braces.ts` (skip a `{...}` expression) and `position.ts` (line and column from an index). `index.ts` wires the steps into `compile()`. `LuciaError` lives in `errors.ts`.
+Shared helpers used by more than one step live in `utils/`: `braces.ts` (skip a `{...}` expression) and `position.ts` (line and column from an index). `index.ts` wires the steps into `compile()`. `src/compiler/errors.ts` holds `LuciaError`, the error class used at compile time and at runtime.
 
 ### Source layout
 
@@ -34,12 +34,14 @@ Shared helpers used by more than one step live in `utils/`: `braces.ts` (skip a 
 | `src/compiler/style/` | Sass, scope modes, `:global()` and selector rewriting |
 | `src/compiler/template/` | Markup scanner and the module generator |
 | `src/compiler/utils/` | Helpers used by two or more steps |
+| `src/compiler/errors/` | `codes.ts` (the `CODES` table), `create.ts` (`luciaError`), `where.ts` (the `file:line:column` string). See [Errors](#errors) |
+| `src/compiler/sourcemap/` | Position markers in the generated code, and the step that turns them into a source map. See [Source maps](#source-maps) |
 | `src/runtime/store/` | `store.ts` (stores, `store.from`), `update.ts` (`store.onUpdate`) and `graph.ts` (dependency graph, grouped updates, watch) |
 | `src/compiler/template/` | Also `codegen-blocks.ts` and `codegen-element.ts`, which write the binder code for blocks and elements |
 | `src/runtime/dom/` | Bindings, template cloning, injected styles, `attach`, components, `props()` and the leave list |
 | `src/runtime/dom/bind/` | `bind`, `bind-<prop>` and `bind-element`: the store-to-DOM watch and the DOM-to-store events |
 | `src/runtime/dom/blocks/` | `<IF>` (`if.ts`), `<EACH>` with keyed rows (`each.ts`), `<FOR>` over a range (`range.ts`), and the mounts and leave outlet they share |
-| `src/runtime/animate/` | The `animate` engine: the TRANSITION, EASE and ACTIVE enums, ease modes, keyframe segments, value blending, the players and the shared frame loop. See [Animate](animate.md) |
+| `src/runtime/animate/` | The `animate` engine: the EASE and WHEN enums, ease modes, keyframe segments, value blending, the players and the shared frame loop. See [Animate](animate.md) |
 
 ### Scope
 
@@ -129,7 +131,7 @@ type Leave = () => Promise<void>;
 
 | Step | What happens |
 |---|---|
-| Animate binder | Adds a cleanup that cancels its players. Adds a leave hook only for `ACTIVE.OUT` items |
+| Animate binder | Adds a cleanup that cancels its players. Adds a leave hook only for `WHEN.DETACH` items |
 | `detach()` | `leaveThen(leaves, remove)`: with no hooks it removes the nodes at once. Otherwise it waits for `Promise.all` of the hooks, then removes |
 | Child components | A child's leave hooks join the parent's list, so the parent waits for them |
 | `<IF>` branch switch, `<EACH>` row removal | The removed branch or row runs its leave hooks, then is disposed. The block's leave hook waits for those |
@@ -208,7 +210,7 @@ animate={...}  -->  __animate(node, () => (expr), cleanups, leaves)   // compile
                          v
           prepare keyframes once per element, one Player per item
                          |
-          IN: forward once on attach. OUT: leave hook on detach
+          ATTACH: forward once on attach. DETACH: leave hook on detach
           VIEW / HOVER / store: shared IntersectionObserver / pointer listeners / watch()
           MANUAL: only a controller plays it
                          |
@@ -246,6 +248,56 @@ Both commands call `Bun.build` on the app's `index.html`. Bun bundles the script
 ## Raw imports
 
 `import text from "./file.txt?raw"` gives the file's text as a string. It works for any file, including `.lucia` files, in builds, the dev server and `bun test`. The plugin reads the file with `Bun.file` and exports it as a string, so `.lucia` files are not compiled.
+
+## Errors
+
+Every error has a code from the `CODES` table in `src/compiler/errors/codes.ts`. See [Error codes](errors.md) for the list.
+
+| Part | File | Role |
+|---|---|---|
+| `LuciaError` | `src/compiler/errors.ts` | The error class. Holds `code`, `hint`, `file`, `line`, `column` and `length` |
+| `luciaError(code, values, span)` | `src/compiler/errors/create.ts` | Fills the `$name` placeholders in the message and hint |
+| `runtimeError(code, values)` | `src/runtime/errors.ts` | The same, for runtime checks. Uses the location set by `withWhere` |
+| `formatWhere` / `parseWhere` | `src/compiler/errors/where.ts` | Turns a location into a `file:line:column` string and back |
+
+- `L1xxx` errors come from the compiler and carry a file and position.
+- `L2xxx` errors come from the runtime. They have no location unless the dev build sets one.
+- The dev build passes each expression's `file:line:column` to the runtime checks as a string. Production builds pass nothing, so the location is `undefined`.
+- `src/runtime/errors.ts` imports with relative paths, because the runtime ships to apps where `@compiler` does not resolve.
+
+## Source maps
+
+The generated code keeps the `.lucia` positions as comments, and a step removes them and builds a source map.
+
+| Step | File | Role |
+|---|---|---|
+| Mark | `sourcemap/marker.ts` | Writes `/*@line:column*/` before each expression, and at the start of each line of the script |
+| Extract | `sourcemap/extract.ts` | `extractSourceMap` strips the markers from the code and returns the code and a version 3 map |
+| VLQ | `sourcemap/vlq.ts` | Encodes the `mappings` field |
+
+- The map lists the `.lucia` file in `sources` and its text in `sourcesContent`.
+- `compile()` returns `code` (markers removed) and `map` (JSON string).
+- The dev build (`src/bun-plugin/index.ts`) appends the map as a base64 `data:` URL in `sourceMappingURL`, so the browser can map the code back to the `.lucia` source.
+- A production build uses the code only. The map is not emitted.
+
+## Expr positions
+
+`Expr` (in `src/compiler/template/types.ts`) is one `{expression}` from the markup, with where it starts.
+
+```ts
+interface Expr {
+  code: string;   // the expression text
+  line: number;   // 1-based line in the .lucia file
+  column: number; // 1-based column in that line
+}
+```
+
+| Used for | How |
+|---|---|
+| Attribute values | An attribute keeps its parts as `string` or `Expr`. `expressionOf` returns the `Expr` when the value is exactly one `{expr}` |
+| Error location | Compile errors use the `Expr` line and column |
+| Source maps | `markedCode(expr)` writes the marker before `expr.code` |
+| Runtime location | `formatWhere(file, expr.line, expr.column)` in dev builds only |
 
 ## Store graph
 

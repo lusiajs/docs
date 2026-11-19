@@ -64,6 +64,16 @@ Most tests run in a fake DOM (happy-dom). The scope tests in `test/compiler/styl
 
 If Chromium cannot start, those tests are skipped and the test name says why.
 
+## Errors
+
+Error codes live in `src/compiler/errors/codes.ts`. Each code has a message and a hint. See [Error codes](errors.md) for the list.
+
+To add a code:
+
+1. Add one entry to `CODES` in `codes.ts`. Use `L1xxx` for compile errors and `L2xxx` for runtime errors.
+2. Raise it with `luciaError` (compiler) or `runtimeError` (runtime), and pass a value for each `$name` placeholder.
+3. Add a `## L....` section for it in [docs/errors.md](errors.md).
+
 ## Layout
 
 | Path | What it holds |
