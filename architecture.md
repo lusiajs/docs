@@ -37,9 +37,9 @@ The template step replaces each binding with a marker in the HTML. Marker names 
 | Step | When | What happens |
 |---|---|---|
 | `createTemplate` | Once per component | Parses the HTML, adds the scope attribute, strips the markers and records the child-index path to each one |
-| `instantiate` | Every mount | Clones the template, finds each node by its path, runs its binder |
-| Binder | Every mount | Wires one node to a `watch()` that re-runs when its signals change |
-| `destroy` | Unmount | Runs every cleanup (stops watches) and removes the nodes |
+| `instantiate` | Every attach | Clones the template, finds each node by its path, runs its binder |
+| Binder | Every attach | Wires one node to a `watch()` that re-runs when its signals change |
+| `detach()` | Detach | Runs every cleanup (stops watches) and removes the nodes |
 
 Every expression is wrapped in `unwrap()`, so a bare signal shows its value.
 

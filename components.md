@@ -27,7 +27,7 @@ const count = signal(0);
 
 ### `setup(root)`
 
-Export a `setup` function to run code after the component is placed on the page. `root` is the element it was mounted into. If `setup` returns a function, that function runs when the component is destroyed.
+Export a `setup` function to run code after the component is placed on the page. `root` is the element it was attached to. If `setup` returns a function, that function runs when the component is detached.
 
 ```ts
 export function setup(root: Element) {
@@ -96,16 +96,18 @@ button:hover { background: color.adjust($accent, $lightness: 30%); }
 | `:global(selector)` | Not scoped. `.card :global(a)` scopes `.card` and leaves `a` global |
 | `@keyframes`, `@font-face` | Left unscoped |
 | `@use` | Paths resolve relative to the `.lucia` file |
-| Injection | CSS is added to the page once per component, on first mount |
+| Injection | CSS is added to the page once per component, on first attach |
 
-## Mounting
+## Attaching
+
+`attach(Component, target)` puts a component into an element and returns an instance. Call `detach()` on it to remove the nodes and stop all updates.
 
 ```ts
-import { mount } from "lucia";
-import App from "./App.lucia";
+import { attach } from "lucia";
+import Counter from "./Counter.lucia";
 
-const app = mount(App, document.getElementById("app")!);
-app.destroy(); // removes the nodes and stops all updates
+const counter = attach(Counter, document.getElementById("slot-counter")!);
+counter.detach(); // removes the nodes and stops all updates
 ```
 
 See [Signals](signals.md) for state.
