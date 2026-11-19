@@ -14,6 +14,7 @@
 | One test file | `bun test test/compiler/style/modes.test.ts` |
 | Tests by name | `bun test -t "diamond"` |
 | Typecheck | `bun run typecheck` |
+| Everything before a commit: typecheck, tests, site build, extension build | `bun run check` |
 
 > [!NOTE]
 > The dev server rebuilds on each save and reloads the browser. Build errors show in the page and in the terminal.
