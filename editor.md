@@ -51,7 +51,7 @@ Warnings use the source `lucia-lint`. They never block a build.
 | `animate-keyframes` (error) | An `animate` attribute on a plain tag is not `{expr}`. Matches the compiler's error                                                                                      |
 | `animate-key` (error)       | A keyframes key or an item key in `animate` is not known, such as `defaut` or `durtion`. Matches the runtime error. Keys in keyframes kept in the script are checked too |
 | `flow-chain` (error)        | `<ELSE>` or `<ELSEIF>` is not right after `</IF>` or `</ELSEIF>`. Matches the compiler's error                                                                           |
-| `bind-target` (error)       | `bind` is on a tag other than `input`, `textarea` or `select`, or on a component. Matches the compiler's error                                                           |
+| `bind-target` (error)       | `bind` is on a tag other than `input`, `textarea` or `select`, or `bind-element` is on a component. Matches the compiler's error |
 
 > [!NOTE]
 > `unknown-prop` needs the child file on disk. It does not warn when the child cannot be read.

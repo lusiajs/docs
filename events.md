@@ -121,7 +121,7 @@ A number field writes `null` when it is empty.
 | -------------- | ---------------------------------------------------------------------------------------------------- |
 | Writable variable | The variable must come from `variable()`. A `variable.compute()` value, or a plain value, is refused at run time |
 | Where          | `bind` works on `input`, `textarea` and `select`. Use `bind-<prop>` on other elements                |
-| Components     | `bind` is not allowed on a component tag                                                             |
+| Components     | `bind-<prop>` on a component tag links the prop both ways. See [Two-way bind](components.md#two-way-bind) |
 | Loops          | A value that is already equal is not written again, so the two sides do not loop                     |
 
 ## Errors
@@ -131,7 +131,7 @@ A number field writes `null` when it is empty.
 | `bind` with no `{variable}`      | `bind needs {variable}`                                                       |
 | `bind-` with no property name | `bind-<property> needs a property name, like bind-value`                   |
 | `bind` on a plain element     | `bind works on input, textarea and select; use bind-<property>`            |
-| `bind` on a component         | `bind works on elements only`                                              |
+| `bind-element` on a component | `bind-element works on elements only`                                      |
 | A read-only or plain value    | `bind-value needs a writable variable` (the attribute name is in the message) |
 | Event with text mixed in      | `onclick needs one {handler}`                                              |
 

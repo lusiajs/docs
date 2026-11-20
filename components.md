@@ -48,7 +48,7 @@ Declare the props this component accepts, with their defaults.
 | Rule  | Detail                                                                                              |
 | ----- | --------------------------------------------------------------------------------------------------- |
 | Value | The passed value. The default is used when nothing is passed, or the value is `null` or `undefined` |
-| Type  | Each prop is a computed variable. Use it as `{label}` or `label.value`                                |
+| Type  | Each prop is a variable. Use it as `{label}` or `label.value`. Writing it needs a bind, see [Two-way bind](#two-way-bind) |
 | Where | Only in the script, at top level. Calling it elsewhere throws                                       |
 
 ### `setup(root)`
@@ -155,13 +155,52 @@ Pass props as attributes.
 | `label={mailLabel}` | The variable's value. It updates when the variable updates |
 | `flag`              | `true`                                               |
 | `onclick={fn}`      | The function. The child reads it with `props()`      |
+| `bind={name}`       | The variable's value, and the child can write back. See [Two-way bind](#two-way-bind) |
+| `bind-value={name}` | The same, for the prop named `value`. Any `bind-<prop>` works |
 
 | Rule          | Detail                                                                                                                            |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | Name          | The tag name must match the import name exactly, so `<Badge />` needs `import Badge`                                              |
-| `bind`        | Not allowed on a component tag. Put `bind` on the field inside the child                                                          |
 | Children      | Markup between the tags. The component places it with `<CONTENT />`. See [Children](#children) |
 | Unknown tags  | Any tag without a matching import is plain HTML                                                                                   |
+
+### Two-way bind
+
+`bind-<prop>={variable}` links a prop to a variable in both directions. The child writes the prop, and the parent's variable changes.
+
+```html
+<script>
+  import Field from "./Field.lucia";
+  import { variable } from "lucia";
+
+  const name = variable("Ada");
+</script>
+
+<Field bind-value={name} />
+<p>Hello {name}</p>
+```
+
+```html
+<!-- Field.lucia -->
+<script>
+  import { props } from "lucia";
+
+  const { value } = props({ value: "" });
+</script>
+
+<input bind={value} />
+```
+
+| Rule             | Detail                                                                                                  |
+| ---------------- | ------------------------------------------------------------------------------------------------------- |
+| `bind={name}`    | Same as `bind-value={name}`, like a form field                                                          |
+| Child side       | `props()` gives a writable prop for a bound name. Writing it sets the parent's variable                |
+| Not bound        | A prop the parent did not bind is read-only. Writing it throws L2058                                    |
+| Writable only    | The variable must come from `variable()`. A plain value throws `bind-value needs a writable variable`  |
+| Default          | The default is used when the parent's variable is `null` or `undefined`                                 |
+| `bind-element`   | Not allowed on a component tag. Use it on an element inside the child (error L1023)                    |
+
+### Children
 
 ### Children
 
