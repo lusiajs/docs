@@ -90,7 +90,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L2012](#l2012) | `more` has an unknown key `"<key>"`, use `<keys>`                                                                                        | A close name, such as `did you mean 'keepSpace'?`, or check the spelling.                           |
 | [L2013](#l2013) | animate `more` `outDuration` needs `out`                                                                                                 | Add `out` with the keyframes for leaving, or remove `outDuration`.                                  |
 | [L2014](#l2014) | animate `more` `out` must be keyframes                                                                                                   | Give `out` an object of keyframes.                                                                  |
-| [L2015](#l2015) | animate `more` `start` and `end` cannot be used with `follow`                                                                            | Remove `start` and `end`. `follow` sets the progress.                                               |
+| [L2015](#l2015) | animate `more` `part` cannot be used with `start` and `end`                                                                              | Use `part` alone, or `start` and `end` alone.                                                       |
 | [L2016](#l2016) | animate `more` `follow` must be a variable that holds an element                                                                         | Use a variable that `bind-element` writes to.                                                       |
 | [L2017](#l2017) | animate `more` `start` or `end` must be SCROLL_AT or { element, window }                                                                 | Use a SCROLL_AT member, such as `SCROLL_AT.ENTER`, or `{ element: EDGE.TOP, window: EDGE.BOTTOM }`. |
 | [L2018](#l2018) | animate `more` `start` and `end` must be different moments                                                                               | Use two different SCROLL_AT members, or two different points.                                       |
@@ -1271,21 +1271,21 @@ Fixed:
 
 ## L2015
 
-|         |                                                               |
-| ------- | ------------------------------------------------------------- |
-| Message | animate `more` `start` and `end` cannot be used with `follow` |
-| Hint    | Remove `start` and `end`. `follow` sets the progress.         |
+|         |                                                                   |
+| ------- | ----------------------------------------------------------------- |
+| Message | animate `more` `part` cannot be used with `start` and `end`       |
+| Hint    | Use `part` alone, or `start` and `end` alone.                     |
 
 Bad:
 
 ```html
-<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { follow: section, start: 0.2 } }}>Title</h1>
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { follow: section, start: SCROLL_AT.ENTER, part: [0, 0.5] } }}>Title</h1>
 ```
 
 Fixed:
 
 ```html
-<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { follow: section } }}>Title</h1>
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { follow: section, start: SCROLL_AT.ENTER, end: SCROLL_AT.CENTER } }}>Title</h1>
 ```
 
 ## L2016

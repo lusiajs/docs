@@ -121,7 +121,7 @@ An element can have one `ATTACH` item and one `DETACH` item, so it has different
 | `WHEN.HOVER`  | `outDuration` | ms                                   | item `duration`   | Length of the way out. Needs `out`                                                                                                                                              |
 | `WHEN.SCROLL` | `start`       | `SCROLL_AT` or `{ element, window }` | `SCROLL_AT.ENTER` | Where the progress is 0. See [SCROLL points](#scroll-points)                                                                                                                    |
 | `WHEN.SCROLL` | `end`         | `SCROLL_AT` or `{ element, window }` | `SCROLL_AT.LEAVE` | Where the progress is 1. Same form as `start`                                                                                                                                   |
-| `WHEN.SCROLL` | `follow`      | variable of an element               | none              | The tall element that drives the progress. Its scroll position is used instead of the item's own. Not with `start` or `end`. See [Pinned scroll](#pinned-scroll)                |
+| `WHEN.SCROLL` | `follow`      | variable of an element               | none              | The element whose box is measured instead of the item's own. Alone it is pinned to the screen. With `start` and `end` it runs like the item's own box. See [Pinned scroll](#pinned-scroll) and [Follow with start and end](#follow-with-start-and-end) |
 | `WHEN.SCROLL` | `part`        | `[from, to]`                         | `[0, 1]`          | Plays only that slice of the progress. `[0.5, 1]` plays in the second half. Needs `0 <= from < to <= 1`                                                                         |
 | `WHEN.DETACH` | `keepSpace`   | boolean                              | `false`           | Keeps the space the element holds until it is removed. Without it, the space closes with the leave. See [Leave](#leave)                                                         |
 
@@ -219,6 +219,22 @@ const section = variable(null);
 
 > [!NOTE]
 > Many items can follow the same section. The section is measured once per frame, not once per item.
+
+### Follow with start and end
+
+Add `start` and `end` to `follow` to play from points on the followed element, the same as an item's own box. A short section works here, because the points set the range. Set `part` only without `start` and `end`.
+
+```html
+<section bind-element={section}>
+  <h2 animate={{ style: rise, when: WHEN.SCROLL, more: {
+    follow: section,
+    start: SCROLL_AT.ENTER,
+    end: { element: EDGE.TOP, window: 0.33 },
+  } }}>Title</h2>
+</section>
+```
+
+The title rises from the moment the section enters at the bottom, and is done when the section's top edge reaches a third of the way down the screen.
 
 ## SCROLL guide
 
