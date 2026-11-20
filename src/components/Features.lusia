@@ -196,7 +196,7 @@ bun dev</code></pre>
           </span>
           <h3>VS Code extension</h3>
         </div>
-        <p>Syntax highlighting for <code>.lusia</code> files.</p>
+        <p>Completion, hover, errors and formatting for <code>.lusia</code> files.</p>
         <pre class="snippet"><code data-lang="lusia">{helloSnippet}</code></pre>
       </article>
     </div>
