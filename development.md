@@ -105,13 +105,13 @@ A hot update re-renders each mounted copy of the edited component, in the same p
 | Kept                                                                                 | Lost                                                                        |
 | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
 | Position, props and child slots                                                      | DOM state inside the component, such as focus and input text                |
-| Stores declared at the top of the script (`const count = store(0)`), matched by name | Stores whose name is new start from their first value                       |
-| `store.from` values (they run again)                                                 | Effects from `store.onUpdate` of the old copy (they stop; the new ones run) |
+| Variables declared at the top of the script (`const count = variable(0)`), matched by name | Variables whose name is new start from their first value                       |
+| `variable.compute` values (they run again)                                                 | Effects from `variable.onUpdate` of the old copy (they stop; the new ones run) |
 
 - Leave and attach animations are skipped on a hot update.
 - If the new script or markup throws, the old copy stays and an overlay shows the error. The next good edit swaps.
-- A component that uses another component is re-created with it. Each child keeps its stores by name too.
-- Only top-level `store(...)` declarations keep their value. A store made inside a function or an `if` starts fresh.
+- A component that uses another component is re-created with it. Each child keeps its variables by name too.
+- Only top-level `variable(...)` declarations keep their value. A variable made inside a function or an `if` starts fresh.
 
 ### Dynamic imports
 
@@ -154,13 +154,13 @@ To add a code:
 
 | Path                                                           | What it holds                                                                                    |
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `src/runtime`                                                  | The runtime: stores and DOM helpers                                                              |
+| `src/runtime`                                                  | The runtime: variables and DOM helpers                                                              |
 | `src/compiler`                                                 | The `.lucia` compiler                                                                            |
 | `src/bun-plugin`                                               | The Bun loader for `.lucia` files and `?raw` imports                                             |
 | `src/cli`                                                      | The `lucia` command: `build` and `dev`                                                           |
 | `test/runtime`, `test/compiler`, `test/bun-plugin`, `test/cli` | Tests. Each folder mirrors its `src/` folder                                                     |
 | `examples/web`                                                 | A docs-style page: every feature with live demos and source                                      |
-| `examples/web/src/App.lucia`                                   | A minimal starter component: store, `bind` and flow in one file                                  |
+| `examples/web/src/App.lucia`                                   | A minimal starter component: variable, `bind` and flow in one file                                  |
 | `examples/web/src/playground`                                  | The [playground](playground.md) page: file list and live run                                     |
 | `examples/web/src/live`                                        | The shared browser build and preview frame, used by the playground and the Guide demos. See [editor.md](editor.md#live-demos) |
 | `examples/web/public/playground`                               | The preview frame (`frame.html`, `frame.js`). `lucia.js` is generated, not committed             |

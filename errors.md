@@ -7,7 +7,7 @@ An error code is a short name, such as `L1016`, that tells you which check faile
 | Range              | When it shows                                                                | Raised by    |
 | ------------------ | ---------------------------------------------------------------------------- | ------------ |
 | `L1001` to `L1034` | While the app builds, for a problem in a `.lucia` file                       | The compiler |
-| `L2001` to `L2050` | While the app runs, for a value passed to `animate`, `bind`, `EACH` or `FOR` | The runtime  |
+| `L2001` to `L2053` | While the app runs, for a value passed to `animate`, `bind`, `EACH` or `FOR` | The runtime  |
 | `L3001` to `L3003` | While the app builds, for an import or file that the bundler cannot build    | The build    |
 
 In messages, `<name>` stands for a value filled in when the error is raised, such as a tag or attribute name.
@@ -53,7 +53,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L1012](#l1012) | `expected an attribute name`                                                                      | Remove the stray character, or add a name.                                                          |
 | [L1013](#l1013) | `unclosed attribute value`                                                                        | Add the closing quote after the value.                                                              |
 | [L1014](#l1014) | `bind-<property>` needs a property name                                                           | Write the property after the dash, such as `bind-value`.                                            |
-| [L1015](#l1015) | `<attr>` needs `{store}`                                                                          | Put a store in braces, such as `<attr>={name}`.                                                     |
+| [L1015](#l1015) | `<attr>` needs `{variable}`                                                                          | Put a variable in braces, such as `<attr>={name}`.                                                     |
 | [L1016](#l1016) | `<attr>` needs one `{handler}`                                                                    | Put one function in braces, such as `onclick={increment}`.                                          |
 | [L1017](#l1017) | an element can have only one `animate`                                                            | Put several animations in one array inside `animate`.                                               |
 | [L1018](#l1018) | `animate` needs `{keyframes}`                                                                     | Put the keyframes in braces, such as `animate={fadeIn}`.                                            |
@@ -61,7 +61,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L1020](#l1020) | `<tag>` has no `<attr>` attribute                                                                 | Check the spelling. Only the attributes listed in the docs are allowed.                             |
 | [L1021](#l1021) | `<attr>` is given twice                                                                           | Keep one `<attr>` attribute.                                                                        |
 | [L1022](#l1022) | `<attr>` needs `{expression}`                                                                     | Put a value in braces, such as `<attr>={value}`.                                                    |
-| [L1023](#l1023) | `bind` works on elements only                                                                     | Pass the store as a prop, such as `value={name}`, and bind inside the component.                    |
+| [L1023](#l1023) | `bind` works on elements only                                                                     | Pass the variable as a prop, such as `value={name}`, and bind inside the component.                    |
 | [L1024](#l1024) | `bind` works on input, textarea and select                                                        | Use `bind-value`, `bind-checked` and so on for other elements.                                      |
 | [L1025](#l1025) | `<attr>` needs a name in `{}`, like `<attr>={item}`                                               | Use one plain name, with no dots or symbols.                                                        |
 | [L1026](#l1026) | `<name>` needs a closing `</name>`                                                                | Write `<name> ... </name>` instead of `<name />`.                                                   |
@@ -74,7 +74,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L1033](#l1033) | unexpected `</tag>`                                                                               | Remove it, or open the block it closes.                                                             |
 | [L1034](#l1034) | `<tag>` must directly follow `</IF>` or `</ELSEIF>`                                               | Put `ELSEIF` or `ELSE` right after the branch before it.                                            |
 | [L2001](#l2001) | animate item needs a style                                                                        | Add `style` to the item, such as `{ style: fadeIn }`.                                               |
-| [L2002](#l2002) | animate `when` must be `WHEN.ATTACH`, `DETACH`, `VIEW`, `HOVER`, `SCROLL`, `MOVE`, `RESIZE`, `MOVE_OR_RESIZE` or `MANUAL`, or a store | Pass one of the `WHEN` values, or a store.                                                          |
+| [L2002](#l2002) | animate `when` must be `WHEN.ATTACH`, `DETACH`, `VIEW`, `HOVER`, `SCROLL`, `MOVE`, `RESIZE`, `MOVE_OR_RESIZE` or `MANUAL`, or a variable | Pass one of the `WHEN` values, or a variable.                                                          |
 | [L2003](#l2003) | animate `<name>` must be a time in ms                                                             | Use a number of milliseconds, such as `300`.                                                        |
 | [L2004](#l2004) | animate `loop` must be `true` or a count                                                          | Use `true`, or a number of times such as `3`.                                                       |
 | [L2005](#l2005) | ease moved into the keyframes: `default: [...]`                                                   | Write `default: [EASE.STYLE.QUART, EASE.INOUT]` inside the keyframes.                               |
@@ -88,7 +88,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L2013](#l2013) | animate `more` `outDuration` needs `out`                                                          | Add `out` with the keyframes for leaving, or remove `outDuration`.                                  |
 | [L2014](#l2014) | animate `more` `out` must be keyframes                                                            | Give `out` an object of keyframes.                                                                  |
 | [L2015](#l2015) | animate `more` `start` and `end` cannot be used with `follow`                                     | Remove `start` and `end`. `follow` sets the progress.                                               |
-| [L2016](#l2016) | animate `more` `follow` must be a store that holds an element                                     | Use a store that `bind-element` writes to.                                                          |
+| [L2016](#l2016) | animate `more` `follow` must be a variable that holds an element                                     | Use a variable that `bind-element` writes to.                                                          |
 | [L2017](#l2017) | animate `more` `start` or `end` must be SCROLL_AT or { element, window }                          | Use a SCROLL_AT member, such as `SCROLL_AT.ENTER`, or `{ element: EDGE.TOP, window: EDGE.BOTTOM }`. |
 | [L2018](#l2018) | animate `more` `start` and `end` must be different moments                                        | Use two different SCROLL_AT members, or two different points.                                       |
 | [L2019](#l2019) | animate `more` `part` must be `[from, to]` with `0 <= from < to <= 1`                             | Use a pair such as `[0, 0.5]`.                                                                      |
@@ -115,7 +115,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L2040](#l2040) | `props()` can only be called in a component's `<script>`                                          | Call `props()` at the top level of a `.lucia` `<script>`.                                           |
 | [L2041](#l2041) | `EACH` keys must be unique, but `<key>` appears twice                                             | Give each row a key that no other row has.                                                          |
 | [L2042](#l2042) | `FOR` needs a step that is not 0                                                                  | Use a step such as `1`, or `-1` to count down.                                                      |
-| [L2043](#l2043) | `<attr>` needs a writable store                                                                   | Bind to a store made with `store()`, not to a computed value.                                       |
+| [L2043](#l2043) | `<attr>` needs a writable variable                                                                   | Bind to a variable made with `variable()`, not to a computed value.                                       |
 | [L2044](#l2044) | `ACTIVE.IN` and `ACTIVE.OUT` were renamed to `ACTIVE.ATTACH` and `ACTIVE.DETACH`                  | Replace `IN` with `ATTACH` and `OUT` with `DETACH`.                                                 |
 | [L2045](#l2045) | animation was renamed to style                                                                    | Write `style: keyframes` instead of `animation: keyframes`.                                         |
 | [L2046](#l2046) | active was renamed to when                                                                        | Write `when:` instead of `active:`.                                                                 |
@@ -125,6 +125,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L2050](#l2050) | animate `more` `start` or `end` needs both `element` and `window`                                 | Write `{ element: EDGE.TOP, window: EDGE.BOTTOM }`.                                                 |
 | [L2051](#l2051) | `loop` does not work with `WHEN.MOVE`, `RESIZE` or `MOVE_OR_RESIZE`                              | Remove `loop`. A glide plays once for each change.                               |
 | [L2052](#l2052) | `<name>` is set by the glide and cannot be in style                                              | Remove `<name>` from style. Use `transform` for other moves.                     |
+| [L2053](#l2053) | a computed variable cannot be set                                                                | Set the variables it reads, or use `variable(...)` for a value you can set.      |
 | [L3001](#l3001) | `"<name>"` is not exported by `"<module>"`                                                        | Check the name, or see `reference/api.ts`. Renamed names get the new name.                          |
 | [L3002](#l3002) | cannot resolve `"<name>"`                                                                         | Check the spelling of the path or package name, and that the file exists.                           |
 | [L3003](#l3003) | `<message>`                                                                                       | Fix the code on this line, then build again.                                                        |
@@ -427,8 +428,8 @@ Fixed:
 
 |         |                                                 |
 | ------- | ----------------------------------------------- |
-| Message | `<attr>` needs `{store}`                        |
-| Hint    | Put a store in braces, such as `<attr>={name}`. |
+| Message | `<attr>` needs `{variable}`                        |
+| Hint    | Put a variable in braces, such as `<attr>={name}`. |
 
 Bad:
 
@@ -580,7 +581,7 @@ Fixed:
 |         |                                                                                  |
 | ------- | -------------------------------------------------------------------------------- |
 | Message | `bind` works on elements only                                                    |
-| Hint    | Pass the store as a prop, such as `value={name}`, and bind inside the component. |
+| Hint    | Pass the variable as a prop, such as `value={name}`, and bind inside the component. |
 
 Bad:
 
@@ -836,8 +837,8 @@ Fixed:
 
 |         |                                                                                                   |
 | ------- | ------------------------------------------------------------------------------------------------- |
-| Message | animate `when` must be `WHEN.ATTACH`, `DETACH`, `VIEW`, `HOVER`, `SCROLL`, `MOVE`, `RESIZE`, `MOVE_OR_RESIZE` or `MANUAL`, or a store |
-| Hint    | Pass one of the `WHEN` values, or a store.                                                        |
+| Message | animate `when` must be `WHEN.ATTACH`, `DETACH`, `VIEW`, `HOVER`, `SCROLL`, `MOVE`, `RESIZE`, `MOVE_OR_RESIZE` or `MANUAL`, or a variable |
+| Hint    | Pass one of the `WHEN` values, or a variable.                                                        |
 
 Bad:
 
@@ -1020,6 +1021,26 @@ Bad:
 
 Fixed: use `transform` in the keyframes, or move the element with `WHEN.MOVE`.
 
+## L2053
+
+|         |                                                                   |
+| ------- | ----------------------------------------------------------------- |
+| Message | a computed variable cannot be set                                 |
+| Hint    | Set the variables it reads, or use `variable(...)` for a value you can set. |
+
+Bad:
+
+```ts
+const double = variable.compute(() => count.value * 2);
+double.set(4);
+```
+
+Fixed: set `count`, which `double` reads.
+
+```ts
+count.value = 2;
+```
+
 ## L2010
 
 |         |                                                      |
@@ -1138,16 +1159,16 @@ Fixed:
 
 |         |                                                                                                  |
 | ------- | ------------------------------------------------------------------------------------------------ |
-| Message | animate `more` `follow` must be a store that holds an element, such as one set by `bind-element` |
-| Hint    | Use a store that `bind-element` writes to.                                                       |
+| Message | animate `more` `follow` must be a variable that holds an element, such as one set by `bind-element` |
+| Hint    | Use a variable that `bind-element` writes to.                                                       |
 
-Bad (`sectionEl` is a plain element, not a store):
+Bad (`sectionEl` is a plain element, not a variable):
 
 ```html
 <h1 animate={{ style: fade, when: WHEN.SCROLL, more: { follow: sectionEl } }}>Title</h1>
 ```
 
-Fixed (`const sectionEl = store(null)`, then on the section):
+Fixed (`const sectionEl = variable(null)`, then on the section):
 
 ```html
 <section bind-element="{sectionEl}">...</section>
@@ -1296,13 +1317,13 @@ Fixed:
 Bad:
 
 ```html
-<div animate={{ style: slide, when: store, midway: { turnSpeed: 200 } }}>...</div>
+<div animate={{ style: slide, when: variable, midway: { turnSpeed: 200 } }}>...</div>
 ```
 
 Fixed:
 
 ```html
-<div animate={{ style: slide, when: store, midway: { turnDuration: 200 } }}>...</div>
+<div animate={{ style: slide, when: variable, midway: { turnDuration: 200 } }}>...</div>
 ```
 
 ## L2025
@@ -1334,13 +1355,13 @@ Fixed:
 Bad:
 
 ```html
-<div animate={{ style: slide, when: store, midway: { turn: "smooth" } }}>...</div>
+<div animate={{ style: slide, when: variable, midway: { turn: "smooth" } }}>...</div>
 ```
 
 Fixed:
 
 ```html
-<div animate={{ style: slide, when: store, midway: { turn: TURN.SMOOTH } }}>...</div>
+<div animate={{ style: slide, when: variable, midway: { turn: TURN.SMOOTH } }}>...</div>
 ```
 
 ## L2027
@@ -1353,13 +1374,13 @@ Fixed:
 Bad:
 
 ```html
-<div animate={{ style: slide, when: store, midway: { turn: TURN.SMOOTH, turnDuration: "fast" } }}>...</div>
+<div animate={{ style: slide, when: variable, midway: { turn: TURN.SMOOTH, turnDuration: "fast" } }}>...</div>
 ```
 
 Fixed:
 
 ```html
-<div animate={{ style: slide, when: store, midway: { turn: TURN.SMOOTH, turnDuration: 200 } }}>...</div>
+<div animate={{ style: slide, when: variable, midway: { turn: TURN.SMOOTH, turnDuration: 200 } }}>...</div>
 ```
 
 ## L2028
@@ -1372,13 +1393,13 @@ Fixed:
 Bad:
 
 ```html
-<div animate={{ style: slide, when: store, midway: { turnStyle: "cubic" } }}>...</div>
+<div animate={{ style: slide, when: variable, midway: { turnStyle: "cubic" } }}>...</div>
 ```
 
 Fixed:
 
 ```html
-<div animate={{ style: slide, when: store, midway: { turnStyle: EASE.STYLE.CUBIC } }}>...</div>
+<div animate={{ style: slide, when: variable, midway: { turnStyle: EASE.STYLE.CUBIC } }}>...</div>
 ```
 
 ## L2029
@@ -1391,13 +1412,13 @@ Fixed:
 Bad:
 
 ```html
-<div animate={{ style: slide, when: store, midway: { turnEase: "inout" } }}>...</div>
+<div animate={{ style: slide, when: variable, midway: { turnEase: "inout" } }}>...</div>
 ```
 
 Fixed:
 
 ```html
-<div animate={{ style: slide, when: store, midway: { turnEase: EASE.INOUT } }}>...</div>
+<div animate={{ style: slide, when: variable, midway: { turnEase: EASE.INOUT } }}>...</div>
 ```
 
 ## L2030
@@ -1587,13 +1608,13 @@ const fadeUp = { 0: { opacity: 0 }, 1: { opacity: 1 } };
 | Message | animate list changed length after it was attached                     |
 | Hint    | Keep the number of animate items fixed. Only their values can change. |
 
-Bad (the number of items depends on a store):
+Bad (the number of items depends on a variable):
 
 ```html
 <div animate="{extra.value" ? [{ style: fadeIn }, { style: glow }] : [{ style: fadeIn }]}>...</div>
 ```
 
-Fixed (always two items, the store changes only the trigger):
+Fixed (always two items, the variable changes only the trigger):
 
 ```html
 <div animate={[{ style: fadeIn }, { style: glow, when: extra }]}>...</div>
@@ -1660,16 +1681,16 @@ Fixed:
 
 |         |                                                               |
 | ------- | ------------------------------------------------------------- |
-| Message | `<attr>` needs a writable store                               |
-| Hint    | Bind to a store made with `store()`, not to a computed value. |
+| Message | `<attr>` needs a writable variable                               |
+| Hint    | Bind to a variable made with `variable()`, not to a computed value. |
 
-Bad (`hot` is computed with `store.from`):
+Bad (`hot` is computed with `variable.compute`):
 
 ```html
 <input bind="{hot}" />
 ```
 
-Fixed (`const text = store("")`):
+Fixed (`const text = variable("")`):
 
 ```html
 <input bind="{text}" />

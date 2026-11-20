@@ -18,10 +18,10 @@ Anything declared here can be used in the markup. Import other files the normal 
 
 ```html
 <script>
-  import { store } from "lucia";
-  import { user } from "./store.ts";
+  import { variable } from "lucia";
+  import { user } from "./variable.ts";
 
-  const count = store(0);
+  const count = variable(0);
 </script>
 ```
 
@@ -48,7 +48,7 @@ Declare the props this component accepts, with their defaults.
 | Rule  | Detail                                                                                              |
 | ----- | --------------------------------------------------------------------------------------------------- |
 | Value | The passed value. The default is used when nothing is passed, or the value is `null` or `undefined` |
-| Type  | Each prop is a read-only store. Use it as `{label}` or `label.value`                                |
+| Type  | Each prop is a computed variable. Use it as `{label}` or `label.value`                                |
 | Where | Only in the script, at top level. Calling it elsewhere throws                                       |
 
 ### `setup(root)`
@@ -56,9 +56,9 @@ Declare the props this component accepts, with their defaults.
 Add a `function setup` to run code after the component is placed on the page. Do not use `export`. `root` is the node the component was placed in: the attach target, or the parent's node for a child component. That can be a fragment rather than an element, so use `root.querySelector(...)`. If `setup` returns a function, that function runs when the component is detached.
 
 ```ts
-import { store } from "lucia";
+import { variable } from "lucia";
 
-const count = store(0);
+const count = variable(0);
 
 function add() {
   count.value++;
@@ -87,7 +87,7 @@ Plain HTML. Put any TypeScript expression inside `{}`.
 | Whole attribute      | `<button disabled={isDone}>`                                      | See the value rules below                                               |
 | Part of an attribute | `<p class="status {kind}">`                                       | Joined into one string                                                  |
 | Event                | `<button onclick={increment}>`                                    | Runs the function. See [Events and bind](events.md)                     |
-| Two-way link         | `<input bind={name} />`                                           | Keeps the field and the store in sync. See [Events and bind](events.md) |
+| Two-way link         | `<input bind={name} />`                                           | Keeps the field and the variable in sync. See [Events and bind](events.md) |
 | Show, repeat or skip | `<IF {loggedIn}>`, `<EACH {todos} as={todo}>`, `<FOR {i} to={5}>` | See [Flow](flow.md)                                                     |
 | Animation            | `<div animate={fadeUp}>`                                          | Animates the element. See [Animate](animate.md)                         |
 
@@ -97,16 +97,16 @@ Plain HTML. Put any TypeScript expression inside `{}`.
 | ---------------------------- | ----------------- | ------------------------------------------- |
 | `null`, `undefined`, `false` | Empty             | Attribute removed                           |
 | `true`                       | `true`            | Attribute set with no value (`disabled=""`) |
-| Store or read store          | Its current value | Its current value                           |
+| Variable or computed variable          | Its current value | Its current value                           |
 | Anything else                | `String(value)`   | `String(value)`                             |
 
 In a partial attribute, `null`, `undefined` and `false` become an empty string.
 
 ### What updates
 
-An expression re-runs when a store or read store it reads changes.
+An expression re-runs when a variable or computed variable it reads updates.
 
-- `{count}` reads the store for you.
+- `{count}` reads the variable for you.
 - `{count.value * 2}` reads it through `.value`.
 - `{limit}` with a plain `const` never changes.
 
@@ -134,7 +134,7 @@ Pass props as attributes.
 | Attribute           | The child gets                                       |
 | ------------------- | ---------------------------------------------------- |
 | `label="Done"`      | The string `Done`                                    |
-| `label={mailLabel}` | The store's value. It updates when the store changes |
+| `label={mailLabel}` | The variable's value. It updates when the variable updates |
 | `flag`              | `true`                                               |
 | `onclick={fn}`      | The function. The child reads it with `props()`      |
 
@@ -227,4 +227,4 @@ const counter = attach(Counter, document.getElementById("slot-counter")!);
 await counter.detach(); // resolves once any leave animation has finished and the nodes are removed
 ```
 
-See [Store](store.md) for state.
+See [Variable](variable.md) for state.

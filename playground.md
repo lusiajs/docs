@@ -20,7 +20,7 @@ On a phone the editor sits above the preview.
 
 | Rule                                                 | Example                           |
 | ---------------------------------------------------- | --------------------------------- |
-| Letters, digits, `-` and `_`, then `.lucia` or `.ts` | `Card.lucia`, `store-utils.ts`    |
+| Letters, digits, `-` and `_`, then `.lucia` or `.ts` | `Card.lucia`, `variable-utils.ts`    |
 | Starts with a letter                                 | `Card.lucia`, not `1st.lucia`     |
 | No folders: every file sits in one list              | `Card.lucia`, not `ui/Card.lucia` |
 
