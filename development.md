@@ -115,7 +115,7 @@ A hot update re-renders each mounted copy of the edited component, in the same p
 
 ### Dynamic imports
 
-`import()` in the app creates a separate chunk file, loaded when the code runs. `lucia build` writes it to the output folder, and `lucia dev` serves it.
+`import()` in the app creates a separate chunk file, loaded when the code runs. `lucia build` writes it to the output folder, and `lucia dev` serves it. For components, see [Lazy components](lazy.md).
 
 ## Client routes
 
