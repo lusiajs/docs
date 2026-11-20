@@ -10,6 +10,7 @@
 | Web example                                                               | `bun run dev` (port 3000)                    |
 | Stress example                                                            | `bun run dev:stress` (port 3000)             |
 | Build the web example                                                     | `bun run build` (writes `dist/`)             |
+| Write the playground runtime only                                         | `bun scripts/playground-runtime.ts`          |
 | All tests                                                                 | `bun test`                                   |
 | One test file                                                             | `bun test test/compiler/style/modes.test.ts` |
 | Tests by name                                                             | `bun test -t "diamond"`                      |
@@ -45,7 +46,7 @@ Any stylesheets go in `<link>` tags. An optional `public/` folder is copied as i
 | `--routes <paths>` | build   | none              | Comma-separated client routes, such as `/guide,/reference`. Each gets a copy of `index.html` |
 | `--quiet`          | both    | off               | Hides the timing output. Errors still show                                                   |
 
-Run it with Bun: `bun src/cli/index.ts build examples/web`.
+Run it with Bun: `bun src/cli/index.ts build examples/web`. The [playground](playground.md) needs `public/playground/lucia.js`. `bun run build` and `bun run dev` write it first, so run `bun scripts/playground-runtime.ts` before using the command above.
 
 ### Timing output
 
@@ -143,6 +144,9 @@ To add a code:
 | `test/runtime`, `test/compiler`, `test/bun-plugin`, `test/cli` | Tests. Each folder mirrors its `src/` folder                                                     |
 | `examples/web`                                                 | A docs-style page: every feature with live demos and source                                      |
 | `examples/web/src/App.lucia`                                   | A minimal starter component: store, `bind` and flow in one file                                  |
+| `examples/web/src/playground`                                  | The [playground](playground.md) page: file list, live run and the preview frame                  |
+| `examples/web/public/playground`                               | The preview frame (`frame.html`, `frame.js`). `lucia.js` is generated, not committed             |
+| `scripts`                                                      | Build helpers, such as `playground-runtime.ts`, which writes the preview runtime                 |
 | `examples/stress`                                              | Scenarios that push the limits and report timings                                                |
 | `editors/vscode`                                               | The VS Code extension: `.lucia` grammar, snippets and language settings. See [Editor](editor.md) |
 | `test/setup.ts`                                                | Preloaded by `bun test`: sets up a fake DOM (happy-dom) and the `.lucia` loader                  |

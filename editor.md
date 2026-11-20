@@ -114,12 +114,14 @@ The docs site has a code editor component, `examples/web/src/components/CodeEdit
 
 ### Props
 
-| Prop       | Type                   | Default | What it does                                            |
-| ---------- | ---------------------- | ------- | ------------------------------------------------------- |
-| `files`    | `{ name, code }[]`     | `[]`    | The files to show. Two or more files add tabs           |
-| `active`   | string                 | `""`    | The file to show first                                  |
-| `readOnly` | boolean                | `false` | Blocks typing and formatting                            |
-| `onChange` | `(name, code) => void` | no-op   | Called after each edit, with the file name and its code |
+| Prop       | Type                               | Default | What it does                                                                                                    |
+| ---------- | ---------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------- |
+| `files`    | `{ name, code }[]`                 | `[]`    | The files to show. Two or more files add tabs                                                                   |
+| `active`   | string                             | `""`    | The file to show first                                                                                          |
+| `readOnly` | boolean                            | `false` | Blocks typing and formatting                                                                                    |
+| `onChange` | `(name, code) => void`             | no-op   | Called after each edit, with the file name and its code                                                         |
+| `onSelect` | `(name) => void`                   | no-op   | Called when a tab is picked, with the file name                                                                 |
+| `jump`     | `{ file, line, column }` or `null` | `null`  | Moves the cursor to that place and shows its file. Set a new object to jump again. Lines and columns start at 1 |
 
 ```html
 <CodeEditor files="{sources}" active="App.lucia" onChange="{save}" />
