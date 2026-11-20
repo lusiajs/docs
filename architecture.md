@@ -36,7 +36,7 @@ Shared helpers used by more than one step live in `utils/`: `braces.ts` (skip a 
 | `src/compiler/utils/`     | Helpers used by two or more steps                                                                                                                              |
 | `src/compiler/errors/`    | `codes.ts` (the `CODES` table), `create.ts` (`luciaError`), `where.ts` (the `file:line:column` string). See [Errors](#errors)                                  |
 | `src/compiler/sourcemap/` | Position markers in the generated code, and the step that turns them into a source map. See [Source maps](#source-maps)                                        |
-| `src/runtime/variable/`   | `variable.ts` (`variable`, `count.onUpdate`), `compute.ts` (`variable.compute`), `update.ts` (`variable.onUpdate`, `variable.watch`), `reactive.ts` (the marker) and `graph.ts` (dependency graph, grouped updates) |
+| `src/runtime/variable/`   | `variable.ts` (`variable`, `count.onUpdate`), `compute.ts` (`variable.compute`), `update.ts` (`variable.autoRun`, `variable.watch`), `reactive.ts` (the marker) and `graph.ts` (dependency graph, grouped updates) |
 | `src/compiler/template/`  | Also `codegen-blocks.ts` and `codegen-element.ts`, which write the binder code for blocks and elements                                                         |
 | `src/runtime/dom/`        | Bindings, template cloning, injected styles, `attach`, components, `props()` and the leave list                                                                |
 | `src/runtime/dom/bind/`   | `bind`, `bind-<prop>` and `bind-element`: the variable-to-DOM watch and the DOM-to-variable events                                                                   |
@@ -335,4 +335,4 @@ Updates run in two phases:
 
 This prevents glitches when several values depend on one variable (diamond-shaped graphs). `markDirty()` must never read variables or computed variables.
 
-`watch()` is internal. `variable.onUpdate()`, `variable.watch()` and `count.onUpdate()` are the public ways to run code on update, and they stop with their component. See [Variable](variable.md).
+`watch()` is internal. `variable.autoRun()`, `variable.watch()` and `count.onUpdate()` are the public ways to run code on update, and they stop with their component. See [Variable](variable.md).
