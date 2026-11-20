@@ -11,7 +11,7 @@ The playground is a page on the docs site, at `/playground`. Edit the files on t
 | Toolbar      | Auto run on or off, Run (shown when auto run is off), Format and Reset                                         |
 | File buttons | New file, Rename and Delete. `App.lucia` is the entry file, so it cannot be renamed or deleted                 |
 | Editor       | The [web editor](editor.md#web-editor). Tabs appear when there are two or more files                           |
-| Preview      | The app, running in a sandbox                                                                                  |
+| Preview      | The app, running in a sandbox. The Run again button in its header starts the app over                         |
 | Errors       | Each problem with its code, message and hint. Click the location, such as `App.lucia:4:40`, to move the cursor |
 
 On a phone the editor sits above the preview.
