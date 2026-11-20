@@ -240,11 +240,37 @@ animate={...}  -->  __animate(node, () => (expr), cleanups, leaves)   // compile
 | `dev-build.ts`       | One in-memory build, with the reload client added to the HTML                                                               |
 | `reload-client.ts`   | Browser script: reloads on a build, swaps changed component css in place, shows errors as an overlay                        |
 | `watch.ts`           | Recursive watch with a 15 ms debounce. Skips `node_modules` and dot folders                                                 |
-| `update.ts`          | Picks a css swap or a reload for each rebuild                                                                               |
+| `update.ts`          | Picks a css swap, a hot swap or a reload for each rebuild                                                                   |
+| `hot-build.ts`       | Builds one changed `.lucia` file as its own module, served under `/__lucia/hot/`                                            |
+| `runtime-module.ts`  | Builds the whole runtime once as `/__lucia/runtime.js`                                                                      |
+| `runtime-shim.ts`    | Dev-only `lucia` modules that list the real export names, so a missing name still fails the build (L3001)                   |
 | `timings.ts`         | Step timings and the `rebuilt in` and step table lines                                                                      |
 | `log.ts`, `color.ts` | Logger. Colors only in a terminal, off with `NO_COLOR`. Category color is a pastel hue from the FNV-1a hash of the category |
 
 Both commands call `Bun.build` on the app's `index.html`. Bun bundles the script and stylesheet tags it finds there, so the plugin runs on every `.lucia` file.
+
+### Dev runtime and hot swap
+
+In `lucia dev`, `lucia` and `lucia/internal` are not bundled into the app. Each page gets an import map that points them at `/__lucia/runtime.js`. The app and every hot module then share one copy of the store graph.
+
+| Step     | What happens                                                                                                                                                                    |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Compile  | `compile(..., { dev: true })` wraps each top-level `const x = store(...)` as `__hotStore("x", store(...))`, and exports `__hotComponent(...)`. Production output has neither    |
+| Register | `hotComponent` keeps the latest definition per file id. Every mounted copy is tracked by its id                                                                                 |
+| Build    | `hot-build.ts` bundles the changed `.lucia` file alone. If it pulls in any file other than `.lucia` files, the update reloads, because that file would be copied and not shared |
+| Send     | The server sends `{type: "hot", url}`. The page imports the module and calls `swapComponent`                                                                                    |
+| Swap     | Each copy is rendered again with the new definition. Stores are restored by name, the new render goes in before the old one comes out, and a throw leaves the old copy in place |
+
+Files in `src/runtime/dom/hot/`:
+
+| File                                       | Job                                                                                |
+| ------------------------------------------ | ---------------------------------------------------------------------------------- |
+| `define.ts`                                | `hotComponent`: the dev component, which looks up its definition by id             |
+| `instance.ts`                              | One mounted copy: its region of nodes, cleanups, stores and leave hook             |
+| `render.ts`                                | Runs a script and markup without inserting them, and inserts them                  |
+| `store.ts`                                 | `hotStore`: registers a store by name and restores its value during a swap         |
+| `swap.ts`                                  | `swapComponent` and `swapStyle`: re-renders every copy of a file                   |
+| `registry.ts`, `session.ts`, `teardown.ts` | Definitions and live copies, the values waiting for new copies, and removing nodes |
 
 ## Raw imports
 
