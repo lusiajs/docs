@@ -1,5 +1,5 @@
 // Written by scripts/playground-runtime.ts before dev and build.
-const RUNTIME_URL = "/playground/lucia.js";
+const RUNTIME_URL = "/playground/lusia.js";
 
 let loading: Promise<string> | undefined;
 

@@ -8,7 +8,7 @@ import { hoverMarkdown } from "./markdown.ts";
 const HOVER_DELAY_MS = 300;
 
 /** Hover docs from reference/api.ts, and the props of an imported component. */
-export function luciaHover(fileName: string, getFiles: () => readonly EditorFile[]): Extension {
+export function lusiaHover(fileName: string, getFiles: () => readonly EditorFile[]): Extension {
   return hoverTooltip(
     (view, pos): Tooltip | null => {
       const text = view.state.doc.toString();

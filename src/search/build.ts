@@ -74,7 +74,7 @@ function playgroundEntry(): SearchEntry {
     href: playgroundPath,
     icon: "terminal",
     title: field("Playground"),
-    summary: field("Edit .lucia code and see it run"),
+    summary: field("Edit .lusia code and see it run"),
     keywords: field("try run edit code sandbox"),
   };
 }

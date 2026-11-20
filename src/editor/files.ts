@@ -13,7 +13,7 @@ export interface EditorJump {
   column: number;
 }
 
-/** The file that an import specifier in `fromName` points at, such as "../ui/Badge.lucia". */
+/** The file that an import specifier in `fromName` points at, such as "../ui/Badge.lusia". */
 export function findImportedFile(
   files: readonly EditorFile[],
   fromName: string,

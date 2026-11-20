@@ -1,9 +1,9 @@
 import { formatScript } from "./format-parts.ts";
-import { formatLucia } from "./format.ts";
+import { formatLusia } from "./format.ts";
 
-/** Formats a file the way the extension formats .lucia files, and .ts files as plain TypeScript. */
+/** Formats a file the way the extension formats .lusia files, and .ts files as plain TypeScript. */
 export async function formatFile(name: string, code: string): Promise<string> {
-  if (!name.endsWith(".ts")) return formatLucia(code);
+  if (!name.endsWith(".ts")) return formatLusia(code);
   const formatted = await formatScript(code);
   return formatted === "" ? "" : `${formatted}\n`;
 }

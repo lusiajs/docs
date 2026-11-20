@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="LuciaJS: a Bun-native UI framework with single-file components, variables and scoped SCSS."
+      content="Lusia: a Bun-native UI framework with single-file components, variables and scoped SCSS."
     />
-    <title>LuciaJS</title>
+    <title>Lusia</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -101,23 +101,23 @@
       document.documentElement.classList.add("js", "is-loading");
       var stored = null;
       try {
-        stored = localStorage.getItem("lucia-web-theme");
+        stored = localStorage.getItem("lusia-web-theme");
       } catch (error) {}
       var dark = stored ? stored === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     </script>
   </head>
   <body>
-    <div id="loader" class="loader-static" role="status" aria-label="Loading LuciaJS">
+    <div id="loader" class="loader-static" role="status" aria-label="Loading Lusia">
       <div class="loader-inner">
-        <p class="name">LuciaJS</p>
+        <p class="name">Lusia</p>
         <div class="dots" aria-hidden="true">
           <span class="dot"></span><span class="dot"></span><span class="dot"></span>
         </div>
       </div>
     </div>
     <p class="status-strip" role="note">
-      Preview — LuciaJS is under active development and has no release yet.
+      Preview — Lusia is under active development and has no release yet.
       <a href="https://github.com/AzPepoze/luciajs">Follow progress on GitHub</a>
     </p>
     <header class="topbar">
@@ -131,7 +131,7 @@
       >
         <span class="material-symbols-rounded" aria-hidden="true">menu</span>
       </button>
-      <a class="brand" href="/">LuciaJS</a>
+      <a class="brand" href="/">Lusia</a>
       <nav class="main-menu" aria-label="Main">
         <a href="/">Home</a>
         <a href="/guide">Guide</a>
@@ -146,7 +146,7 @@
           href="https://github.com/AzPepoze/luciajs"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="LuciaJS on GitHub"
+          aria-label="Lusia on GitHub"
         >
           <svg class="github-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <path
@@ -170,7 +170,7 @@
     <div id="outlet"></div>
 
     <footer class="site-footer">
-      <p class="footer-brand">LuciaJS</p>
+      <p class="footer-brand">Lusia</p>
       <nav aria-label="Footer">
         <a href="/">Home</a>
         <a href="/guide">Guide</a>

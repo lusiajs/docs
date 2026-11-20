@@ -1,7 +1,7 @@
 import {
   cleanSyntaxMessage,
   compileForBrowser,
-  LuciaError,
+  LusiaError,
   stripTypes,
 } from "@compiler/browser.ts";
 import { plainFrame } from "@compiler/errors/frame.ts";
@@ -11,7 +11,7 @@ import { scssImporter } from "./scss.ts";
 import type { LiveBundle, LiveError } from "./types.ts";
 
 export interface BuildOptions {
-  /** Module names to mount. Default: the .lucia files that no other file imports. */
+  /** Module names to mount. Default: the .lusia files that no other file imports. */
   entries?: string[];
   /** CSS for the frame. Default: none. */
   styles?: string;
@@ -49,11 +49,11 @@ export function buildLive(files: readonly EditorFile[], options: BuildOptions = 
 
 // Other files, such as .scss partials, are only read by the Sass importer.
 function isModule(file: EditorFile): boolean {
-  return file.name.endsWith(".lucia") || file.name.endsWith(".ts");
+  return file.name.endsWith(".lusia") || file.name.endsWith(".ts");
 }
 
 function compileFile(file: EditorFile, project: ReadonlyMap<string, string>): string {
-  if (file.name.endsWith(".lucia")) {
+  if (file.name.endsWith(".lusia")) {
     const importers = [scssImporter(file.name, project)];
     return compileForBrowser(file.code, file.name, { importers }).code;
   }
@@ -63,14 +63,14 @@ function compileFile(file: EditorFile, project: ReadonlyMap<string, string>): st
 function brokenError(file: string, item: { specifier: string; line: number }): LiveError {
   return {
     message: `Cannot find ${item.specifier}.`,
-    hint: "Import a file from this list, using its full name, such as ./Card.lucia.",
+    hint: "Import a file from this list, using its full name, such as ./Card.lusia.",
     file,
     line: item.line,
   };
 }
 
 function toLiveError(error: unknown, file: string, source: string): LiveError {
-  if (error instanceof LuciaError) {
+  if (error instanceof LusiaError) {
     return {
       message: error.message,
       code: error.code,
@@ -88,7 +88,7 @@ function toLiveError(error: unknown, file: string, source: string): LiveError {
   return { message: error instanceof Error ? error.message : String(error), file };
 }
 
-function frameOf(error: LuciaError, source: string): string | undefined {
+function frameOf(error: LusiaError, source: string): string | undefined {
   if (error.line === undefined) return undefined;
   return plainFrame(source, error.line, error.column, error.length);
 }

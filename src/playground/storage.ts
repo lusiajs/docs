@@ -3,7 +3,7 @@ import { starterFiles } from "./starter.ts";
 import type { PlayFile } from "./types.ts";
 
 // The files are kept in this browser only, so a reload keeps the user's work.
-const KEY = "lucia-playground-files";
+const KEY = "lusia-playground-files";
 
 export function loadFiles(): PlayFile[] {
   const saved = readSaved();

@@ -6,10 +6,10 @@ import { childProps, type EditorFile } from "./files.ts";
 const LINT_DELAY_MS = 300;
 
 /** Compile errors and lint warnings for the file, shown as CodeMirror diagnostics. */
-export function luciaLinter(fileName: string, getFiles: () => readonly EditorFile[]): Extension {
+export function lusiaLinter(fileName: string, getFiles: () => readonly EditorFile[]): Extension {
   return linter(
     (view) => {
-      if (!fileName.endsWith(".lucia")) return [];
+      if (!fileName.endsWith(".lusia")) return [];
       const text = view.state.doc.toString();
       const files = getFiles();
       const found = diagnosticsFor(text, fileName, (name) =>

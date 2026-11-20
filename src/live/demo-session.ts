@@ -1,4 +1,4 @@
-import { variable, type ComputedVariable } from "lucia";
+import { variable, type ComputedVariable } from "lusia";
 import type { EditorFile } from "../editor/files.ts";
 import type { LiveBundle, LiveError, LiveRun } from "./types.ts";
 import { locateRuntimeError } from "./locate-error.ts";

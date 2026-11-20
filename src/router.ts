@@ -1,4 +1,4 @@
-import { attach, type Component, type Instance } from "lucia";
+import { attach, type Component, type Instance } from "lusia";
 import { scrollToTarget } from "./hash-scroll.ts";
 import { normalizePath } from "./page-link.ts";
 import { refreshTopbar } from "./topbar.ts";

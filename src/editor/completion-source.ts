@@ -27,7 +27,7 @@ const TYPES: Record<CompletionKind, string> = {
 };
 
 /** The completion source for one file. The file list is read on each request. */
-export function luciaCompletionSource(
+export function lusiaCompletionSource(
   fileName: string,
   getFiles: () => readonly EditorFile[],
 ): CompletionSource {

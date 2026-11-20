@@ -1,8 +1,8 @@
-import { attach, type Instance } from "lucia";
-import Site from "./components/Site.lucia";
-import Loader from "./components/Loader.lucia";
-import SearchPalette from "./components/SearchPalette.lucia";
-import ThemeToggle from "./components/ThemeToggle.lucia";
+import { attach, type Instance } from "lusia";
+import Site from "./components/Site.lusia";
+import Loader from "./components/Loader.lusia";
+import SearchPalette from "./components/SearchPalette.lusia";
+import ThemeToggle from "./components/ThemeToggle.lusia";
 import { pageSpecs } from "./pages.ts";
 import { startRouter } from "./router.ts";
 import { initSearchShortcuts } from "./search/shortcuts.ts";

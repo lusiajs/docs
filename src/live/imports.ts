@@ -35,7 +35,7 @@ export function linkImports(code: string, fromName: string, names: ReadonlySet<s
   });
 }
 
-/** The .lucia files that no other file imports. A file importing itself does not count. */
+/** The .lusia files that no other file imports. A file importing itself does not count. */
 export function rootNames(files: readonly EditorFile[]): string[] {
   const imported = new Set<string>();
   for (const file of files) {
@@ -45,6 +45,6 @@ export function rootNames(files: readonly EditorFile[]): string[] {
     }
   }
   return files
-    .filter((file) => file.name.endsWith(".lucia") && !imported.has(file.name))
+    .filter((file) => file.name.endsWith(".lusia") && !imported.has(file.name))
     .map((file) => file.name);
 }

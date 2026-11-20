@@ -1,4 +1,4 @@
-import { EASE } from "lucia";
+import { EASE } from "lusia";
 
 // Looping keyframes shared by the hero and the features section.
 export const scrollHint = {

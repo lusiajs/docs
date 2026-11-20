@@ -2,7 +2,7 @@ import { ENTRY_FILE } from "./names.ts";
 import type { PlayFile } from "./types.ts";
 
 const STARTER_APP = `<script>
-import { variable, PRESET, WHEN } from "lucia";
+import { variable, PRESET, WHEN } from "lusia";
 
 const count = variable(0);
 const items = variable<string[]>(["Apples", "Pears"]);

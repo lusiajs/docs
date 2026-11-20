@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, test } from "bun:test";
-import type { Component } from "lucia";
+import type { Component } from "lusia";
 import { startRouter, type PageSpec } from "./router.ts";
 import { initTopbar } from "./topbar.ts";
 

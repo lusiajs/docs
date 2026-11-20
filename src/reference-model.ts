@@ -41,7 +41,7 @@ export function matchesFilter(
 }
 
 export function languageOf(entry: ApiEntry): string {
-  return entry.kind === "function" ? "typescript" : "lucia";
+  return entry.kind === "function" ? "typescript" : "lusia";
 }
 
 // Puts each parameter on its own line when the signature is long. Short signatures stay on one line.

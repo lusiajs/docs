@@ -34,12 +34,12 @@ import { htmlCompletionSource } from "@codemirror/lang-html";
 import { highlightSelectionMatches, search, searchKeymap } from "@codemirror/search";
 import type { EditorFile } from "./files.ts";
 import { editorTheme } from "./theme.ts";
-import { luciaHighlighting } from "./lang/highlight.ts";
-import { luciaLanguage, typescriptLanguage } from "./lang/language.ts";
-import { luciaMarks } from "./lang/marks.ts";
-import { luciaCompletionSource } from "./completion-source.ts";
-import { luciaHover } from "./hover-source.ts";
-import { luciaLinter } from "./lint-source.ts";
+import { lusiaHighlighting } from "./lang/highlight.ts";
+import { lusiaLanguage, typescriptLanguage } from "./lang/language.ts";
+import { lusiaMarks } from "./lang/marks.ts";
+import { lusiaCompletionSource } from "./completion-source.ts";
+import { lusiaHover } from "./hover-source.ts";
+import { lusiaLinter } from "./lint-source.ts";
 
 /** Marks a change the editor made itself (a file switch), so it is not reported as typing. */
 export const externalChange = Annotation.define<boolean>();
@@ -66,7 +66,7 @@ export function editorExtensions(options: EditorStateOptions): Extension[] {
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),
     indentOnInput(),
-    luciaHighlighting,
+    lusiaHighlighting,
     bracketMatching(),
     closeBrackets(),
     autocompletion({ override: completionSources(fileName, getFiles) }),
@@ -76,8 +76,8 @@ export function editorExtensions(options: EditorStateOptions): Extension[] {
     highlightSelectionMatches(),
     search({ top: true }),
     lintGutter(),
-    luciaLinter(fileName, getFiles),
-    luciaHover(fileName, getFiles),
+    lusiaLinter(fileName, getFiles),
+    lusiaHover(fileName, getFiles),
     languageFor(fileName),
     editorTheme,
     EditorView.lineWrapping,
@@ -112,13 +112,13 @@ function completionSources(
   fileName: string,
   getFiles: () => readonly EditorFile[],
 ): CompletionSource[] {
-  const lucia = luciaCompletionSource(fileName, getFiles);
-  return fileName.endsWith(".ts") ? [lucia] : [lucia, htmlCompletionSource];
+  const lusia = lusiaCompletionSource(fileName, getFiles);
+  return fileName.endsWith(".ts") ? [lusia] : [lusia, htmlCompletionSource];
 }
 
 function languageFor(fileName: string): Extension {
   if (fileName.endsWith(".ts")) return typescriptLanguage.extension;
-  return [luciaLanguage.extension, luciaMarks];
+  return [lusiaLanguage.extension, lusiaMarks];
 }
 
 function formatKey(format: () => void): KeyBinding {

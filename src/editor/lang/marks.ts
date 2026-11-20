@@ -3,13 +3,13 @@ import { Decoration, type DecorationSet, ViewPlugin, type ViewUpdate } from "@co
 import { highlightTree } from "@lezer/highlight";
 import { expressionEnd } from "../format-expressions.ts";
 import { findSections } from "../sections.ts";
-import { luciaHighlight } from "./highlight.ts";
+import { lusiaHighlight } from "./highlight.ts";
 import { typescriptLanguage } from "./language.ts";
 
 // Group 1 is always the name, so the start is found from the match.
 const FLOW_NAME = /<\/?(IF|ELSEIF|ELSE|EACH|FOR|CONTENT|HTML)(?=[\s/>])/g;
 const COMPONENT_NAME = /<\/?([A-Z][\w.]*)/g;
-const LUCIA_ATTRIBUTE = /(?<=\s)(on[a-z]+|animate|bind(?:-[\w-]+)?)(?=\s*=)/g;
+const LUSIA_ATTRIBUTE = /(?<=\s)(on[a-z]+|animate|bind(?:-[\w-]+)?)(?=\s*=)/g;
 const FLOW_NAMES: ReadonlySet<string> = new Set([
   "IF",
   "ELSEIF",
@@ -20,15 +20,15 @@ const FLOW_NAMES: ReadonlySet<string> = new Set([
   "HTML",
 ]);
 
-/** Decorations for the Lucia parts of a .lucia file that the HTML grammar does not know. */
-export function luciaMarkRanges(text: string): Range<Decoration>[] {
+/** Decorations for the Lusia parts of a .lusia file that the HTML grammar does not know. */
+export function lusiaMarkRanges(text: string): Range<Decoration>[] {
   const ranges: Range<Decoration>[] = [];
   for (const [from, to] of markupRanges(text)) {
     addExpressions(ranges, text, from, to);
     const markup = text.slice(from, to);
-    markNames(ranges, markup, from, FLOW_NAME, () => "lucia-flow");
+    markNames(ranges, markup, from, FLOW_NAME, () => "lusia-flow");
     markNames(ranges, markup, from, COMPONENT_NAME, (name) => componentClass(name));
-    markNames(ranges, markup, from, LUCIA_ATTRIBUTE, attributeClass);
+    markNames(ranges, markup, from, LUSIA_ATTRIBUTE, attributeClass);
   }
   return ranges;
 }
@@ -60,7 +60,7 @@ function addExpressions(ranges: Range<Decoration>[], text: string, from: number,
 
 function highlightExpression(ranges: Range<Decoration>[], code: string, offset: number): void {
   const tree = typescriptLanguage.language.parser.parse(code);
-  highlightTree(tree, luciaHighlight, (start, end, className) => {
+  highlightTree(tree, lusiaHighlight, (start, end, className) => {
     ranges.push(Decoration.mark({ class: className }).range(offset + start, offset + end));
   });
 }
@@ -82,29 +82,29 @@ function markNames(
 }
 
 function componentClass(name: string): string | undefined {
-  return FLOW_NAMES.has(name) ? undefined : "lucia-component";
+  return FLOW_NAMES.has(name) ? undefined : "lusia-component";
 }
 
 function attributeClass(name: string): string {
-  if (name === "animate") return "lucia-animate";
-  if (name.startsWith("bind")) return "lucia-bind";
-  return "lucia-event";
+  if (name === "animate") return "lusia-animate";
+  if (name.startsWith("bind")) return "lusia-bind";
+  return "lusia-event";
 }
 
-class LuciaMarks {
+class LusiaMarks {
   decorations: DecorationSet;
 
   constructor(view: { state: { doc: { toString(): string } } }) {
-    this.decorations = Decoration.set(luciaMarkRanges(view.state.doc.toString()), true);
+    this.decorations = Decoration.set(lusiaMarkRanges(view.state.doc.toString()), true);
   }
 
   update(update: ViewUpdate): void {
     if (update.docChanged) {
-      this.decorations = Decoration.set(luciaMarkRanges(update.state.doc.toString()), true);
+      this.decorations = Decoration.set(lusiaMarkRanges(update.state.doc.toString()), true);
     }
   }
 }
 
-export const luciaMarks = ViewPlugin.fromClass(LuciaMarks, {
+export const lusiaMarks = ViewPlugin.fromClass(LusiaMarks, {
   decorations: (plugin) => plugin.decorations,
 });

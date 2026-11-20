@@ -1,4 +1,4 @@
-import type { Variable } from "lucia";
+import type { Variable } from "lusia";
 import { spawnSparks, type Spark } from "./sparks.ts";
 
 const TRAIL_GAP_MS = 45;

@@ -1,8 +1,8 @@
 import type { PlayFile } from "./types.ts";
 
-export const ENTRY_FILE = "App.lucia";
+export const ENTRY_FILE = "App.lusia";
 
-const NAME_PATTERN = /^[A-Za-z][A-Za-z0-9_-]*\.(lucia|ts)$/;
+const NAME_PATTERN = /^[A-Za-z][A-Za-z0-9_-]*\.(lusia|ts)$/;
 
 /** Why a file name cannot be used, or undefined when it can. `current` is the name the file has now. */
 export function nameProblem(
@@ -10,7 +10,7 @@ export function nameProblem(
   files: readonly PlayFile[],
   current?: string,
 ): string | undefined {
-  if (!NAME_PATTERN.test(name)) return "Use letters, digits, - or _, then .lucia or .ts.";
+  if (!NAME_PATTERN.test(name)) return "Use letters, digits, - or _, then .lusia or .ts.";
   if (name !== current && files.some((file) => file.name === name)) {
     return "A file with this name already exists.";
   }

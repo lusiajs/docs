@@ -1,4 +1,4 @@
-const STORAGE_KEY = "lucia-web-search-recent";
+const STORAGE_KEY = "lusia-web-search-recent";
 const LIMIT = 5;
 
 // The latest term goes first, without repeats, and the list keeps only the last few.

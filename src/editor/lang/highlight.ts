@@ -2,7 +2,7 @@ import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
 import { tags as t } from "@lezer/highlight";
 
 // The colours are the site's theme tokens, so light and dark mode follow the page.
-export const luciaHighlight = HighlightStyle.define([
+export const lusiaHighlight = HighlightStyle.define([
   { tag: [t.keyword, t.operatorKeyword, t.modifier], color: "var(--tok-keyword)" },
   { tag: [t.string, t.special(t.string), t.regexp], color: "var(--tok-string)" },
   { tag: [t.number, t.bool, t.null, t.atom], color: "var(--tok-number)" },
@@ -21,4 +21,4 @@ export const luciaHighlight = HighlightStyle.define([
   },
 ]);
 
-export const luciaHighlighting = syntaxHighlighting(luciaHighlight);
+export const lusiaHighlighting = syntaxHighlighting(lusiaHighlight);

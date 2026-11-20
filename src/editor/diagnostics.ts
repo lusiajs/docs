@@ -1,9 +1,9 @@
-import { LuciaError } from "../../../src/compiler/errors.ts";
+import { LusiaError } from "../../../src/compiler/errors.ts";
 import { formatWhere } from "../../../src/compiler/errors/where.ts";
 import { compileWithoutStyles } from "./compile-check.ts";
 import { errorPosition } from "./error-position.ts";
 import { typescriptLanguage } from "./lang/language.ts";
-import { lintLucia, type LintIssue } from "./lint.ts";
+import { lintLusia, type LintIssue } from "./lint.ts";
 import type { PropDef } from "./props.ts";
 import { scriptSection } from "./sections.ts";
 
@@ -15,10 +15,10 @@ export interface EditorDiagnostic {
   /** Characters to mark from the column. Undefined marks to the end of the line. */
   length?: number;
   severity: "error" | "warning";
-  /** "lucia" for compile errors, "lucia-lint" for warnings. */
-  source: "lucia" | "lucia-lint";
+  /** "lusia" for compile errors, "lusia-lint" for warnings. */
+  source: "lusia" | "lusia-lint";
   message: string;
-  /** The LuciaError code, such as L1003, or the lint code, such as unused-import. */
+  /** The LusiaError code, such as L1003, or the lint code, such as unused-import. */
   code?: string;
   hint?: string;
   /** file:line:column, as the build prints it. */
@@ -28,7 +28,7 @@ export interface EditorDiagnostic {
 export type ChildPropsLookup = (name: string) => PropDef[] | undefined;
 
 /**
- * Compile errors, TypeScript syntax errors and lint warnings for a .lucia or .ts source,
+ * Compile errors, TypeScript syntax errors and lint warnings for a .lusia or .ts source,
  * with 1-based positions. The compiler does not parse TypeScript, so syntax is checked here.
  */
 export function diagnosticsFor(
@@ -75,7 +75,7 @@ function syntaxDiagnostic(source: string, offset: number, file: string): EditorD
     line,
     column,
     severity: "error",
-    source: "lucia",
+    source: "lusia",
     message: "Syntax error in the script",
     code: "syntax",
     where: formatWhere(file, line, column),
@@ -93,16 +93,16 @@ function compileDiagnostics(source: string, file: string): EditorDiagnostic[] {
 
 function compileDiagnostic(error: unknown, file: string): EditorDiagnostic {
   const { line, column, message } = errorPosition(error);
-  const luciaError = error instanceof LuciaError ? error : undefined;
+  const lusiaError = error instanceof LusiaError ? error : undefined;
   return {
     line,
     column,
-    length: luciaError?.length,
+    length: lusiaError?.length,
     severity: "error",
-    source: "lucia",
+    source: "lusia",
     message,
-    code: luciaError?.code,
-    hint: luciaError?.hint,
+    code: lusiaError?.code,
+    hint: lusiaError?.hint,
     where: formatWhere(file, line, column),
   };
 }
@@ -112,7 +112,7 @@ function lintDiagnostics(
   file: string,
   childProps: ChildPropsLookup,
 ): EditorDiagnostic[] {
-  return lintLucia(source, childProps).map((issue) => lintDiagnostic(issue, file));
+  return lintLusia(source, childProps).map((issue) => lintDiagnostic(issue, file));
 }
 
 function lintDiagnostic(issue: LintIssue, file: string): EditorDiagnostic {
@@ -120,7 +120,7 @@ function lintDiagnostic(issue: LintIssue, file: string): EditorDiagnostic {
     line: issue.line,
     column: issue.column,
     severity: issue.severity,
-    source: "lucia-lint",
+    source: "lusia-lint",
     message: issue.message,
     code: issue.code,
     where: formatWhere(file, issue.line, issue.column),

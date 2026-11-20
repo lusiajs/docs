@@ -1,0 +1,79 @@
+<script>
+import { api } from "../../../reference/api.ts";
+import { entryIcon } from "../catalog.ts";
+import RefCard from "../components/RefCard.lusia";
+import RefIndex from "../components/RefIndex.lusia";
+import { placeGroups } from "../guide-placement.ts";
+import { pageMotion } from "../motion/page.ts";
+import { kindsOf } from "../reference-model.ts";
+
+// The index and the cards read the same plan as the Guide, so their order always matches.
+const groups = placeGroups().map((group) => ({
+  group: group.group,
+  label: group.label,
+  icon: group.icon,
+  color: group.color,
+  blocks: group.blocks.map((block) => ({
+    id: block.id,
+    label: block.label,
+    entries: block.entries,
+    links: block.entries.map((entry) => ({
+      id: entry.id,
+      name: entry.name,
+      icon: entryIcon(entry.id),
+    })),
+  })),
+}));
+const kinds = kindsOf(api);
+</script>
+
+<div class="page-root docs reference">
+  <aside class="sidebar" id="sidebar" aria-label="Reference">
+    <span class="nav-indicator" aria-hidden="true"></span>
+    <RefIndex groups={groups} />
+  </aside>
+  <div class="scrim" id="scrim" hidden></div>
+  <main class="content" animate={pageMotion}>
+    <h1 class="ref-page-title">Reference</h1>
+    <div class="ref-tools">
+      <label class="ref-search">
+        <span class="material-symbols-rounded" aria-hidden="true">search</span>
+        <input
+          id="ref-filter"
+          type="search"
+          placeholder="Filter the reference"
+          aria-label="Filter the reference"
+          autocomplete="off"
+        />
+      </label>
+      <div class="ref-kinds" role="group" aria-label="Filter by kind">
+        <EACH {kinds} as={kind}>
+          <button class="chip kind-chip" type="button" data-kind={kind} data-ref-kind={kind} aria-pressed="false">
+            {kind}
+          </button>
+        </EACH>
+      </div>
+    </div>
+
+    <div class="ref-empty" data-ref-empty hidden>
+      <p>Nothing matches your filter.</p>
+      <button class="ref-clear" type="button" data-ref-clear>Clear filters</button>
+    </div>
+
+    <EACH {groups} as={group}>
+      <section class="ref-group" data-ref-group={group.group} style={"--group: " + group.color}>
+        <h2 class="ref-group-title">{group.label}</h2>
+        <EACH {group.blocks} as={block}>
+          <section class="ref-block" data-ref-section data-block={block.id}>
+            <IF {block.label}>
+              <h3 class="ref-block-title">{block.label}</h3>
+            </IF>
+            <EACH {block.entries} as={entry}>
+              <RefCard entry={entry} block={block.id} />
+            </EACH>
+          </section>
+        </EACH>
+      </section>
+    </EACH>
+  </main>
+</div>

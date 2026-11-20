@@ -1,4 +1,4 @@
-import { variable } from "lucia";
+import { variable } from "lusia";
 
 // Whether the palette is open. The topbar box, the backdrop and the shortcuts all read this one variable.
 export const searchOpen = variable(false);

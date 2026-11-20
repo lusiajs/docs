@@ -1,7 +1,7 @@
 import type { Parser } from "@lezer/common";
 import { highlightCode } from "@lezer/highlight";
-import { luciaHighlight } from "./lang/highlight.ts";
-import { luciaLanguage, typescriptLanguage } from "./lang/language.ts";
+import { lusiaHighlight } from "./lang/highlight.ts";
+import { lusiaLanguage, typescriptLanguage } from "./lang/language.ts";
 
 const FENCE = /^```/;
 const BULLET = /^- /;
@@ -9,7 +9,7 @@ const INLINE = /(\*\*[^*]+\*\*|`[^`]+`)/;
 
 const parsers: Record<string, Parser> = {
   ts: typescriptLanguage.language.parser,
-  html: luciaLanguage.language.parser,
+  html: lusiaLanguage.language.parser,
 };
 
 /**
@@ -55,7 +55,7 @@ function highlightInto(element: HTMLElement, code: string, language: string): vo
   highlightCode(
     code,
     parser.parse(code),
-    luciaHighlight,
+    lusiaHighlight,
     (text, classes) => element.append(styledText(text, classes)),
     () => element.append("\n"),
   );

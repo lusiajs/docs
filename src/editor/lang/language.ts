@@ -9,10 +9,10 @@ const scss = sass();
 export const typescriptLanguage = typescript;
 
 /**
- * A .lucia file: HTML markup, TypeScript in <script>, SCSS in <style>.
+ * A .lusia file: HTML markup, TypeScript in <script>, SCSS in <style>.
  * `lang="css"` keeps the built-in CSS parser, as the compiler does.
  */
-export const luciaLanguage = html({
+export const lusiaLanguage = html({
   nestedLanguages: [
     { tag: "script", parser: typescript.language.parser },
     { tag: "style", attrs: (attrs) => attrs.lang !== "css", parser: scss.language.parser },

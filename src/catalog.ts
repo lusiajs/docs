@@ -1,133 +1,133 @@
-import type { Component } from "lucia";
-import Attributes from "./demos/basics/Attributes.lucia";
-import Markdown from "./demos/basics/Markdown.lucia";
-import BindElement from "./demos/basics/BindElement.lucia";
-import BindFields from "./demos/basics/BindFields.lucia";
-import Events from "./demos/basics/Events.lucia";
-import Setup from "./demos/basics/Setup.lucia";
-import Text from "./demos/basics/Text.lucia";
-import EachDemo from "./demos/flow/EachDemo.lucia";
-import ForDemo from "./demos/flow/ForDemo.lucia";
-import IfDemo from "./demos/flow/IfDemo.lucia";
-import KeyframeDefault from "./demos/motion/KeyframeDefault.lucia";
-import Presets from "./demos/motion/Presets.lucia";
-import bindElementSource from "./demos/basics/BindElement.lucia?raw";
-import bindFieldsSource from "./demos/basics/BindFields.lucia?raw";
-import markdownSource from "./demos/basics/Markdown.lucia?raw";
-import setupSource from "./demos/basics/Setup.lucia?raw";
-import eachSource from "./demos/flow/EachDemo.lucia?raw";
-import forSource from "./demos/flow/ForDemo.lucia?raw";
-import ifSource from "./demos/flow/IfDemo.lucia?raw";
-import keyframeDefaultSource from "./demos/motion/KeyframeDefault.lucia?raw";
-import presetsSource from "./demos/motion/Presets.lucia?raw";
-import Attach from "./demos/components/Attach.lucia";
-import LazyDemo from "./demos/components/LazyDemo.lucia";
-import Components from "./demos/components/Components.lucia";
-import FileTree from "./demos/components/FileTree.lucia";
-import CommentThread from "./demos/components/CommentThread.lucia";
-import fileTreeSource from "./demos/components/FileTree.lucia?raw";
-import folderSource from "./demos/components/Folder.lucia?raw";
-import commentThreadSource from "./demos/components/CommentThread.lucia?raw";
-import commentSource from "./demos/components/Comment.lucia?raw";
-import Props from "./demos/components/Props.lucia";
-import Children from "./demos/components/Children.lucia";
-import BindChild from "./demos/components/BindChild.lucia";
-import Batch from "./demos/reactivity/Batch.lucia";
-import Variable from "./demos/reactivity/Variable.lucia";
-import AutoRun from "./demos/reactivity/AutoRun.lucia";
-import UpdateBefore from "./demos/reactivity/UpdateBefore.lucia";
-import Watch from "./demos/reactivity/Watch.lucia";
-import SharedReader from "./demos/reactivity/SharedReader.lucia";
-import SharedWriter from "./demos/reactivity/SharedWriter.lucia";
-import GlobalStyles from "./demos/styling/GlobalStyles.lucia";
-import Scss from "./demos/styling/Scss.lucia";
-import StyleParent from "./demos/styling/StyleParent.lucia";
-import attachSource from "./demos/components/Attach.lucia?raw";
-import attachChipSource from "./demos/components/Chip.lucia?raw";
-import lazyDemoSource from "./demos/components/LazyDemo.lucia?raw";
-import lazyChartSource from "./demos/components/LazyChart.lucia?raw";
-import badgeSource from "./demos/components/badge.lucia?raw";
-import componentsSource from "./demos/components/Components.lucia?raw";
-import propsSource from "./demos/components/Props.lucia?raw";
-import childrenSource from "./demos/components/Children.lucia?raw";
-import cardSource from "./demos/components/Card.lucia?raw";
-import bindChildSource from "./demos/components/BindChild.lucia?raw";
-import fieldSource from "./demos/components/Field.lucia?raw";
-import attributesSource from "./demos/basics/Attributes.lucia?raw";
-import eventsSource from "./demos/basics/Events.lucia?raw";
-import textSource from "./demos/basics/Text.lucia?raw";
-import batchSource from "./demos/reactivity/Batch.lucia?raw";
-import variableDemoSource from "./demos/reactivity/Variable.lucia?raw";
-import autoRunSource from "./demos/reactivity/AutoRun.lucia?raw";
-import updateBeforeSource from "./demos/reactivity/UpdateBefore.lucia?raw";
-import watchSource from "./demos/reactivity/Watch.lucia?raw";
-import sharedReaderSource from "./demos/reactivity/SharedReader.lucia?raw";
-import sharedWriterSource from "./demos/reactivity/SharedWriter.lucia?raw";
+import type { Component } from "lusia";
+import Attributes from "./demos/basics/Attributes.lusia";
+import Markdown from "./demos/basics/Markdown.lusia";
+import BindElement from "./demos/basics/BindElement.lusia";
+import BindFields from "./demos/basics/BindFields.lusia";
+import Events from "./demos/basics/Events.lusia";
+import Setup from "./demos/basics/Setup.lusia";
+import Text from "./demos/basics/Text.lusia";
+import EachDemo from "./demos/flow/EachDemo.lusia";
+import ForDemo from "./demos/flow/ForDemo.lusia";
+import IfDemo from "./demos/flow/IfDemo.lusia";
+import KeyframeDefault from "./demos/motion/KeyframeDefault.lusia";
+import Presets from "./demos/motion/Presets.lusia";
+import bindElementSource from "./demos/basics/BindElement.lusia?raw";
+import bindFieldsSource from "./demos/basics/BindFields.lusia?raw";
+import markdownSource from "./demos/basics/Markdown.lusia?raw";
+import setupSource from "./demos/basics/Setup.lusia?raw";
+import eachSource from "./demos/flow/EachDemo.lusia?raw";
+import forSource from "./demos/flow/ForDemo.lusia?raw";
+import ifSource from "./demos/flow/IfDemo.lusia?raw";
+import keyframeDefaultSource from "./demos/motion/KeyframeDefault.lusia?raw";
+import presetsSource from "./demos/motion/Presets.lusia?raw";
+import Attach from "./demos/components/Attach.lusia";
+import LazyDemo from "./demos/components/LazyDemo.lusia";
+import Components from "./demos/components/Components.lusia";
+import FileTree from "./demos/components/FileTree.lusia";
+import CommentThread from "./demos/components/CommentThread.lusia";
+import fileTreeSource from "./demos/components/FileTree.lusia?raw";
+import folderSource from "./demos/components/Folder.lusia?raw";
+import commentThreadSource from "./demos/components/CommentThread.lusia?raw";
+import commentSource from "./demos/components/Comment.lusia?raw";
+import Props from "./demos/components/Props.lusia";
+import Children from "./demos/components/Children.lusia";
+import BindChild from "./demos/components/BindChild.lusia";
+import Batch from "./demos/reactivity/Batch.lusia";
+import Variable from "./demos/reactivity/Variable.lusia";
+import AutoRun from "./demos/reactivity/AutoRun.lusia";
+import UpdateBefore from "./demos/reactivity/UpdateBefore.lusia";
+import Watch from "./demos/reactivity/Watch.lusia";
+import SharedReader from "./demos/reactivity/SharedReader.lusia";
+import SharedWriter from "./demos/reactivity/SharedWriter.lusia";
+import GlobalStyles from "./demos/styling/GlobalStyles.lusia";
+import Scss from "./demos/styling/Scss.lusia";
+import StyleParent from "./demos/styling/StyleParent.lusia";
+import attachSource from "./demos/components/Attach.lusia?raw";
+import attachChipSource from "./demos/components/Chip.lusia?raw";
+import lazyDemoSource from "./demos/components/LazyDemo.lusia?raw";
+import lazyChartSource from "./demos/components/LazyChart.lusia?raw";
+import badgeSource from "./demos/components/badge.lusia?raw";
+import componentsSource from "./demos/components/Components.lusia?raw";
+import propsSource from "./demos/components/Props.lusia?raw";
+import childrenSource from "./demos/components/Children.lusia?raw";
+import cardSource from "./demos/components/Card.lusia?raw";
+import bindChildSource from "./demos/components/BindChild.lusia?raw";
+import fieldSource from "./demos/components/Field.lusia?raw";
+import attributesSource from "./demos/basics/Attributes.lusia?raw";
+import eventsSource from "./demos/basics/Events.lusia?raw";
+import textSource from "./demos/basics/Text.lusia?raw";
+import batchSource from "./demos/reactivity/Batch.lusia?raw";
+import variableDemoSource from "./demos/reactivity/Variable.lusia?raw";
+import autoRunSource from "./demos/reactivity/AutoRun.lusia?raw";
+import updateBeforeSource from "./demos/reactivity/UpdateBefore.lusia?raw";
+import watchSource from "./demos/reactivity/Watch.lusia?raw";
+import sharedReaderSource from "./demos/reactivity/SharedReader.lusia?raw";
+import sharedWriterSource from "./demos/reactivity/SharedWriter.lusia?raw";
 import variableSource from "./variable.ts?raw";
-import globalStylesSource from "./demos/styling/GlobalStyles.lucia?raw";
-import scssSource from "./demos/styling/Scss.lucia?raw";
-import styleChildSource from "./demos/styling/StyleChild.lucia?raw";
-import styleParentSource from "./demos/styling/StyleParent.lucia?raw";
+import globalStylesSource from "./demos/styling/GlobalStyles.lusia?raw";
+import scssSource from "./demos/styling/Scss.lusia?raw";
+import styleChildSource from "./demos/styling/StyleChild.lusia?raw";
+import styleParentSource from "./demos/styling/StyleParent.lusia?raw";
 import themeSource from "./styles/_theme.scss?raw";
-import Enter from "./demos/motion/Enter.lucia";
-import Easing from "./demos/motion/Easing.lucia";
-import Keys from "./demos/motion/Keys.lucia";
-import Reveal from "./demos/motion/Reveal.lucia";
-import Loops from "./demos/motion/Loops.lucia";
-import enterSource from "./demos/motion/Enter.lucia?raw";
-import boxSource from "./demos/motion/Box.lucia?raw";
-import easingSource from "./demos/motion/Easing.lucia?raw";
-import LayoutCard from "./demos/motion/LayoutCard.lucia";
-import LayoutCorners from "./demos/motion/LayoutCorners.lucia";
-import LayoutList from "./demos/motion/LayoutList.lucia";
-import layoutCardSource from "./demos/motion/LayoutCard.lucia?raw";
-import layoutCornersSource from "./demos/motion/LayoutCorners.lucia?raw";
-import layoutListSource from "./demos/motion/LayoutList.lucia?raw";
-import keysSource from "./demos/motion/Keys.lucia?raw";
-import revealSource from "./demos/motion/Reveal.lucia?raw";
-import loopsSource from "./demos/motion/Loops.lucia?raw";
-import Leave from "./demos/motion/Leave.lucia";
-import LeaveList from "./demos/motion/LeaveList.lucia";
-import SpinAway from "./demos/motion/SpinAway.lucia";
-import Both from "./demos/motion/Both.lucia";
-import VariableTrigger from "./demos/motion/VariableTrigger.lucia";
-import Control from "./demos/motion/Control.lucia";
-import leaveSource from "./demos/motion/Leave.lucia?raw";
-import leaveListSource from "./demos/motion/LeaveList.lucia?raw";
-import spinAwaySource from "./demos/motion/SpinAway.lucia?raw";
-import shrinkSource from "./demos/motion/Shrink.lucia?raw";
-import bothSource from "./demos/motion/Both.lucia?raw";
-import popSource from "./demos/motion/Pop.lucia?raw";
-import variableTriggerSource from "./demos/motion/VariableTrigger.lucia?raw";
-import controlSource from "./demos/motion/Control.lucia?raw";
-import HoverDelay from "./demos/motion/HoverDelay.lucia";
-import FollowScroll from "./demos/motion/FollowScroll.lucia";
-import hoverDelaySource from "./demos/motion/HoverDelay.lucia?raw";
-import followScrollSource from "./demos/motion/FollowScroll.lucia?raw";
-import PinnedScroll from "./demos/motion/PinnedScroll.lucia";
-import HoverInOut from "./demos/motion/HoverInOut.lucia";
-import pinnedScrollSource from "./demos/motion/PinnedScroll.lucia?raw";
-import hoverInOutSource from "./demos/motion/HoverInOut.lucia?raw";
-import MidwayMode from "./demos/motion/MidwayMode.lucia";
-import midwayModeSource from "./demos/motion/MidwayMode.lucia?raw";
-import ScrollDefault from "./demos/motion/ScrollDefault.lucia";
-import ScrollEnterCenter from "./demos/motion/ScrollEnterCenter.lucia";
-import ScrollCenterLeave from "./demos/motion/ScrollCenterLeave.lucia";
-import ScrollPresets from "./demos/motion/ScrollPresets.lucia";
-import ScrollTouchPoints from "./demos/motion/ScrollTouchPoints.lucia";
-import ScrollLines from "./demos/motion/ScrollLines.lucia";
-import ScrollTwo from "./demos/motion/ScrollTwo.lucia";
-import ScrollPartFollow from "./demos/motion/ScrollPartFollow.lucia";
-import ScrollEffects from "./demos/motion/ScrollEffects.lucia";
-import scrollDefaultSource from "./demos/motion/ScrollDefault.lucia?raw";
-import scrollEnterCenterSource from "./demos/motion/ScrollEnterCenter.lucia?raw";
-import scrollCenterLeaveSource from "./demos/motion/ScrollCenterLeave.lucia?raw";
-import scrollPresetsSource from "./demos/motion/ScrollPresets.lucia?raw";
-import scrollTouchPointsSource from "./demos/motion/ScrollTouchPoints.lucia?raw";
-import scrollLinesSource from "./demos/motion/ScrollLines.lucia?raw";
-import scrollTwoSource from "./demos/motion/ScrollTwo.lucia?raw";
-import scrollPartFollowSource from "./demos/motion/ScrollPartFollow.lucia?raw";
-import scrollEffectsSource from "./demos/motion/ScrollEffects.lucia?raw";
+import Enter from "./demos/motion/Enter.lusia";
+import Easing from "./demos/motion/Easing.lusia";
+import Keys from "./demos/motion/Keys.lusia";
+import Reveal from "./demos/motion/Reveal.lusia";
+import Loops from "./demos/motion/Loops.lusia";
+import enterSource from "./demos/motion/Enter.lusia?raw";
+import boxSource from "./demos/motion/Box.lusia?raw";
+import easingSource from "./demos/motion/Easing.lusia?raw";
+import LayoutCard from "./demos/motion/LayoutCard.lusia";
+import LayoutCorners from "./demos/motion/LayoutCorners.lusia";
+import LayoutList from "./demos/motion/LayoutList.lusia";
+import layoutCardSource from "./demos/motion/LayoutCard.lusia?raw";
+import layoutCornersSource from "./demos/motion/LayoutCorners.lusia?raw";
+import layoutListSource from "./demos/motion/LayoutList.lusia?raw";
+import keysSource from "./demos/motion/Keys.lusia?raw";
+import revealSource from "./demos/motion/Reveal.lusia?raw";
+import loopsSource from "./demos/motion/Loops.lusia?raw";
+import Leave from "./demos/motion/Leave.lusia";
+import LeaveList from "./demos/motion/LeaveList.lusia";
+import SpinAway from "./demos/motion/SpinAway.lusia";
+import Both from "./demos/motion/Both.lusia";
+import VariableTrigger from "./demos/motion/VariableTrigger.lusia";
+import Control from "./demos/motion/Control.lusia";
+import leaveSource from "./demos/motion/Leave.lusia?raw";
+import leaveListSource from "./demos/motion/LeaveList.lusia?raw";
+import spinAwaySource from "./demos/motion/SpinAway.lusia?raw";
+import shrinkSource from "./demos/motion/Shrink.lusia?raw";
+import bothSource from "./demos/motion/Both.lusia?raw";
+import popSource from "./demos/motion/Pop.lusia?raw";
+import variableTriggerSource from "./demos/motion/VariableTrigger.lusia?raw";
+import controlSource from "./demos/motion/Control.lusia?raw";
+import HoverDelay from "./demos/motion/HoverDelay.lusia";
+import FollowScroll from "./demos/motion/FollowScroll.lusia";
+import hoverDelaySource from "./demos/motion/HoverDelay.lusia?raw";
+import followScrollSource from "./demos/motion/FollowScroll.lusia?raw";
+import PinnedScroll from "./demos/motion/PinnedScroll.lusia";
+import HoverInOut from "./demos/motion/HoverInOut.lusia";
+import pinnedScrollSource from "./demos/motion/PinnedScroll.lusia?raw";
+import hoverInOutSource from "./demos/motion/HoverInOut.lusia?raw";
+import MidwayMode from "./demos/motion/MidwayMode.lusia";
+import midwayModeSource from "./demos/motion/MidwayMode.lusia?raw";
+import ScrollDefault from "./demos/motion/ScrollDefault.lusia";
+import ScrollEnterCenter from "./demos/motion/ScrollEnterCenter.lusia";
+import ScrollCenterLeave from "./demos/motion/ScrollCenterLeave.lusia";
+import ScrollPresets from "./demos/motion/ScrollPresets.lusia";
+import ScrollTouchPoints from "./demos/motion/ScrollTouchPoints.lusia";
+import ScrollLines from "./demos/motion/ScrollLines.lusia";
+import ScrollTwo from "./demos/motion/ScrollTwo.lusia";
+import ScrollPartFollow from "./demos/motion/ScrollPartFollow.lusia";
+import ScrollEffects from "./demos/motion/ScrollEffects.lusia";
+import scrollDefaultSource from "./demos/motion/ScrollDefault.lusia?raw";
+import scrollEnterCenterSource from "./demos/motion/ScrollEnterCenter.lusia?raw";
+import scrollCenterLeaveSource from "./demos/motion/ScrollCenterLeave.lusia?raw";
+import scrollPresetsSource from "./demos/motion/ScrollPresets.lusia?raw";
+import scrollTouchPointsSource from "./demos/motion/ScrollTouchPoints.lusia?raw";
+import scrollLinesSource from "./demos/motion/ScrollLines.lusia?raw";
+import scrollTwoSource from "./demos/motion/ScrollTwo.lusia?raw";
+import scrollPartFollowSource from "./demos/motion/ScrollPartFollow.lusia?raw";
+import scrollEffectsSource from "./demos/motion/ScrollEffects.lusia?raw";
 import scrollReadoutSource from "./demos/motion/scroll-readout.ts?raw";
 
 // A source file shown in a code panel. The text is imported at build time.
@@ -167,14 +167,14 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Text",
         caption: "Curly braces put a variable or an expression into the text.",
         components: [Text],
-        sources: [{ path: "src/demos/basics/Text.lucia", text: textSource }],
+        sources: [{ path: "src/demos/basics/Text.lusia", text: textSource }],
       },
       {
         id: "expr-attributes",
         title: "Attributes",
         caption: "An attribute takes a value too. A null value removes it.",
         components: [Attributes],
-        sources: [{ path: "src/demos/basics/Attributes.lucia", text: attributesSource }],
+        sources: [{ path: "src/demos/basics/Attributes.lusia", text: attributesSource }],
       },
     ],
   },
@@ -186,14 +186,14 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Derived variable",
         caption: "A derived variable updates when the variables it reads update.",
         components: [Variable],
-        sources: [{ path: "src/demos/reactivity/Variable.lucia", text: variableDemoSource }],
+        sources: [{ path: "src/demos/reactivity/Variable.lusia", text: variableDemoSource }],
       },
       {
         id: "variable-batch",
         title: "Batch",
         caption: "Several writes in one handler update the page once per click.",
         components: [Batch],
-        sources: [{ path: "src/demos/reactivity/Batch.lucia", text: batchSource }],
+        sources: [{ path: "src/demos/reactivity/Batch.lusia", text: batchSource }],
       },
       {
         id: "variable-shared",
@@ -202,8 +202,8 @@ export const catalog: Record<string, CatalogEntry> = {
         components: [SharedWriter, SharedReader],
         sources: [
           { path: "src/variable.ts", text: variableSource },
-          { path: "src/demos/reactivity/SharedWriter.lucia", text: sharedWriterSource },
-          { path: "src/demos/reactivity/SharedReader.lucia", text: sharedReaderSource },
+          { path: "src/demos/reactivity/SharedWriter.lusia", text: sharedWriterSource },
+          { path: "src/demos/reactivity/SharedReader.lusia", text: sharedReaderSource },
         ],
       },
     ],
@@ -240,7 +240,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Peek",
         caption: "peek() reads a variable without subscribing to it.",
         components: [AutoRun],
-        sources: [{ path: "src/demos/reactivity/AutoRun.lucia", text: autoRunSource }],
+        sources: [{ path: "src/demos/reactivity/AutoRun.lusia", text: autoRunSource }],
       },
     ],
   },
@@ -252,7 +252,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Watch",
         caption: "variable.watch runs only when a listed variable updates.",
         components: [Watch],
-        sources: [{ path: "src/demos/reactivity/Watch.lucia", text: watchSource }],
+        sources: [{ path: "src/demos/reactivity/Watch.lusia", text: watchSource }],
       },
     ],
   },
@@ -265,7 +265,7 @@ export const catalog: Record<string, CatalogEntry> = {
         caption:
           "count.onUpdate gets the new and the old value. get() and set() read and write it.",
         components: [UpdateBefore],
-        sources: [{ path: "src/demos/reactivity/UpdateBefore.lucia", text: updateBeforeSource }],
+        sources: [{ path: "src/demos/reactivity/UpdateBefore.lusia", text: updateBeforeSource }],
       },
     ],
   },
@@ -278,8 +278,8 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "Pass values to a child as attributes. Each prop is a variable.",
         components: [Props],
         sources: [
-          { path: "src/demos/components/Props.lucia", text: propsSource },
-          { path: "src/demos/components/badge.lucia", text: badgeSource },
+          { path: "src/demos/components/Props.lusia", text: propsSource },
+          { path: "src/demos/components/badge.lusia", text: badgeSource },
         ],
       },
     ],
@@ -293,8 +293,8 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "The chart loads the first time it is shown. Its FALLBACK shows until it arrives.",
         components: [LazyDemo],
         sources: [
-          { path: "src/demos/components/LazyDemo.lucia", text: lazyDemoSource },
-          { path: "src/demos/components/LazyChart.lucia", text: lazyChartSource },
+          { path: "src/demos/components/LazyDemo.lusia", text: lazyDemoSource },
+          { path: "src/demos/components/LazyChart.lusia", text: lazyChartSource },
         ],
       },
     ],
@@ -308,8 +308,8 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "Attach a component to any element, then detach it later.",
         components: [Attach],
         sources: [
-          { path: "src/demos/components/Attach.lucia", text: attachSource },
-          { path: "src/demos/components/Chip.lucia", text: attachChipSource },
+          { path: "src/demos/components/Attach.lusia", text: attachSource },
+          { path: "src/demos/components/Chip.lusia", text: attachChipSource },
         ],
       },
     ],
@@ -329,8 +329,8 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "Use a child component as a tag. Its props stay reactive.",
         components: [Components],
         sources: [
-          { path: "src/demos/components/Components.lucia", text: componentsSource },
-          { path: "src/demos/components/badge.lucia", text: badgeSource },
+          { path: "src/demos/components/Components.lusia", text: componentsSource },
+          { path: "src/demos/components/badge.lusia", text: badgeSource },
         ],
       },
     ],
@@ -341,11 +341,11 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "recursive-files",
         title: "File tree",
-        caption: "Folder.lucia places itself for each child folder. Click a folder to fold it.",
+        caption: "Folder.lusia places itself for each child folder. Click a folder to fold it.",
         components: [FileTree],
         sources: [
-          { path: "src/demos/components/FileTree.lucia", text: fileTreeSource },
-          { path: "src/demos/components/Folder.lucia", text: folderSource },
+          { path: "src/demos/components/FileTree.lusia", text: fileTreeSource },
+          { path: "src/demos/components/Folder.lusia", text: folderSource },
         ],
       },
       {
@@ -354,8 +354,8 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "Each reply is a Comment inside a Comment. The depth prop stops it at 3.",
         components: [CommentThread],
         sources: [
-          { path: "src/demos/components/CommentThread.lucia", text: commentThreadSource },
-          { path: "src/demos/components/Comment.lucia", text: commentSource },
+          { path: "src/demos/components/CommentThread.lusia", text: commentThreadSource },
+          { path: "src/demos/components/Comment.lusia", text: commentSource },
         ],
       },
     ],
@@ -368,7 +368,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Insert HTML",
         caption: "Type text on the left. The preview is HTML from the escaped text.",
         components: [Markdown],
-        sources: [{ path: "src/demos/basics/Markdown.lucia", text: markdownSource }],
+        sources: [{ path: "src/demos/basics/Markdown.lusia", text: markdownSource }],
       },
     ],
   },
@@ -381,8 +381,8 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "Markup between a component's tags shows where its CONTENT is.",
         components: [Children],
         sources: [
-          { path: "src/demos/components/Children.lucia", text: childrenSource },
-          { path: "src/demos/components/Card.lucia", text: cardSource },
+          { path: "src/demos/components/Children.lusia", text: childrenSource },
+          { path: "src/demos/components/Card.lusia", text: cardSource },
         ],
       },
     ],
@@ -398,7 +398,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Setup and cleanup",
         caption: "setup(root) runs on mount. Its return value runs on detach.",
         components: [Setup],
-        sources: [{ path: "src/demos/basics/Setup.lucia", text: setupSource }],
+        sources: [{ path: "src/demos/basics/Setup.lusia", text: setupSource }],
       },
     ],
   },
@@ -410,7 +410,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Event handlers",
         caption: "A handler gets the event, so it can read the field's value.",
         components: [Events],
-        sources: [{ path: "src/demos/basics/Events.lucia", text: eventsSource }],
+        sources: [{ path: "src/demos/basics/Events.lusia", text: eventsSource }],
       },
     ],
   },
@@ -422,7 +422,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Two-way bind",
         caption: "A field and a variable stay in sync, in both directions.",
         components: [BindFields],
-        sources: [{ path: "src/demos/basics/BindFields.lucia", text: bindFieldsSource }],
+        sources: [{ path: "src/demos/basics/BindFields.lusia", text: bindFieldsSource }],
       },
       {
         id: "bind-child",
@@ -430,8 +430,8 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "The child's input writes to the parent's variable through bind-value.",
         components: [BindChild],
         sources: [
-          { path: "src/demos/components/BindChild.lucia", text: bindChildSource },
-          { path: "src/demos/components/Field.lucia", text: fieldSource },
+          { path: "src/demos/components/BindChild.lusia", text: bindChildSource },
+          { path: "src/demos/components/Field.lusia", text: fieldSource },
         ],
       },
     ],
@@ -444,7 +444,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Element reference",
         caption: "bind-element variables the real DOM element. It is cleared on unmount.",
         components: [BindElement],
-        sources: [{ path: "src/demos/basics/BindElement.lucia", text: bindElementSource }],
+        sources: [{ path: "src/demos/basics/BindElement.lusia", text: bindElementSource }],
       },
     ],
   },
@@ -456,7 +456,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "IF, ELSEIF and ELSE",
         caption: "Show one branch at a time. Each branch slides in and fades out.",
         components: [IfDemo],
-        sources: [{ path: "src/demos/flow/IfDemo.lucia", text: ifSource }],
+        sources: [{ path: "src/demos/flow/IfDemo.lusia", text: ifSource }],
       },
     ],
   },
@@ -468,7 +468,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Each",
         caption: "Repeat markup for each item. A removed row fades out first.",
         components: [EachDemo],
-        sources: [{ path: "src/demos/flow/EachDemo.lucia", text: eachSource }],
+        sources: [{ path: "src/demos/flow/EachDemo.lusia", text: eachSource }],
       },
     ],
   },
@@ -480,7 +480,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Range",
         caption: "Repeat markup over a range of numbers. Bad input falls back to safe values.",
         components: [ForDemo],
-        sources: [{ path: "src/demos/flow/ForDemo.lucia", text: forSource }],
+        sources: [{ path: "src/demos/flow/ForDemo.lusia", text: forSource }],
       },
     ],
   },
@@ -492,7 +492,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Presets",
         caption: "Hover a tile to play its preset.",
         components: [Presets],
-        sources: [{ path: "src/demos/motion/Presets.lucia", text: presetsSource }],
+        sources: [{ path: "src/demos/motion/Presets.lusia", text: presetsSource }],
       },
     ],
   },
@@ -506,7 +506,7 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "Nested rules and a shared variable file, compiled for this component.",
         components: [Scss],
         sources: [
-          { path: "src/demos/styling/Scss.lucia", text: scssSource },
+          { path: "src/demos/styling/Scss.lusia", text: scssSource },
           { path: "src/styles/_theme.scss", text: themeSource },
         ],
       },
@@ -521,8 +521,8 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "A scoped rule stays in this component. A tree rule also reaches its children.",
         components: [StyleParent],
         sources: [
-          { path: "src/demos/styling/StyleParent.lucia", text: styleParentSource },
-          { path: "src/demos/styling/StyleChild.lucia", text: styleChildSource },
+          { path: "src/demos/styling/StyleParent.lusia", text: styleParentSource },
+          { path: "src/demos/styling/StyleChild.lusia", text: styleChildSource },
         ],
       },
     ],
@@ -535,7 +535,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Global rules",
         caption: "A global rule reaches any element, even outside the component.",
         components: [GlobalStyles],
-        sources: [{ path: "src/demos/styling/GlobalStyles.lucia", text: globalStylesSource }],
+        sources: [{ path: "src/demos/styling/GlobalStyles.lusia", text: globalStylesSource }],
       },
     ],
   },
@@ -548,8 +548,8 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "Plays once when attached. detach() removes the box at once.",
         components: [Enter],
         sources: [
-          { path: "src/demos/motion/Enter.lucia", text: enterSource },
-          { path: "src/demos/motion/Box.lucia", text: boxSource },
+          { path: "src/demos/motion/Enter.lusia", text: enterSource },
+          { path: "src/demos/motion/Box.lusia", text: boxSource },
         ],
       },
       {
@@ -558,8 +558,8 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "Plays when detached. detach() waits for it, then removes the box.",
         components: [Leave],
         sources: [
-          { path: "src/demos/motion/Leave.lucia", text: leaveSource },
-          { path: "src/demos/motion/Shrink.lucia", text: shrinkSource },
+          { path: "src/demos/motion/Leave.lusia", text: leaveSource },
+          { path: "src/demos/motion/Shrink.lusia", text: shrinkSource },
         ],
       },
       {
@@ -568,7 +568,7 @@ export const catalog: Record<string, CatalogEntry> = {
         caption:
           "A removed row keeps its size while it fades, and the gap between rows closes with it, so the rows below slide up smoothly. Turn keepSpace on to keep the gap until the row is gone.",
         components: [LeaveList],
-        sources: [{ path: "src/demos/motion/LeaveList.lucia", text: leaveListSource }],
+        sources: [{ path: "src/demos/motion/LeaveList.lusia", text: leaveListSource }],
       },
       {
         id: "animate-leave-spin",
@@ -576,7 +576,7 @@ export const catalog: Record<string, CatalogEntry> = {
         caption:
           "The box spins away while the space it held closes. Its size and rotation stay whole until it is gone.",
         components: [SpinAway],
-        sources: [{ path: "src/demos/motion/SpinAway.lucia", text: spinAwaySource }],
+        sources: [{ path: "src/demos/motion/SpinAway.lusia", text: spinAwaySource }],
       },
       {
         id: "animate-both",
@@ -584,8 +584,8 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "One item plays on attach and another on detach, in an array.",
         components: [Both],
         sources: [
-          { path: "src/demos/motion/Both.lucia", text: bothSource },
-          { path: "src/demos/motion/Pop.lucia", text: popSource },
+          { path: "src/demos/motion/Both.lusia", text: bothSource },
+          { path: "src/demos/motion/Pop.lusia", text: popSource },
         ],
       },
     ],
@@ -599,7 +599,7 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "With no start or end, the card fades in for the whole time it is on screen.",
         components: [ScrollDefault],
         sources: [
-          { path: "src/demos/motion/ScrollDefault.lucia", text: scrollDefaultSource },
+          { path: "src/demos/motion/ScrollDefault.lusia", text: scrollDefaultSource },
           { path: "src/demos/motion/scroll-readout.ts", text: scrollReadoutSource },
         ],
       },
@@ -609,7 +609,7 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "The card finishes when it reaches the middle of the screen.",
         components: [ScrollEnterCenter],
         sources: [
-          { path: "src/demos/motion/ScrollEnterCenter.lucia", text: scrollEnterCenterSource },
+          { path: "src/demos/motion/ScrollEnterCenter.lusia", text: scrollEnterCenterSource },
         ],
       },
       {
@@ -618,7 +618,7 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "The card fades out as it leaves the top of the screen.",
         components: [ScrollCenterLeave],
         sources: [
-          { path: "src/demos/motion/ScrollCenterLeave.lucia", text: scrollCenterLeaveSource },
+          { path: "src/demos/motion/ScrollCenterLeave.lusia", text: scrollCenterLeaveSource },
         ],
       },
       {
@@ -626,21 +626,21 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Presets side by side",
         caption: "Four presets play side by side in one lane. The readout shows its progress.",
         components: [ScrollPresets],
-        sources: [{ path: "src/demos/motion/ScrollPresets.lucia", text: scrollPresetsSource }],
+        sources: [{ path: "src/demos/motion/ScrollPresets.lusia", text: scrollPresetsSource }],
       },
       {
         id: "scroll-lines",
         title: "Start and end lines",
         caption: "The lines light up when the card's lines meet the screen's lines.",
         components: [ScrollLines],
-        sources: [{ path: "src/demos/motion/ScrollLines.lucia", text: scrollLinesSource }],
+        sources: [{ path: "src/demos/motion/ScrollLines.lusia", text: scrollLinesSource }],
       },
       {
         id: "scroll-two-items",
         title: "Two items on one card",
         caption: "One item fades in, another blurs out. They set different properties.",
         components: [ScrollTwo],
-        sources: [{ path: "src/demos/motion/ScrollTwo.lucia", text: scrollTwoSource }],
+        sources: [{ path: "src/demos/motion/ScrollTwo.lusia", text: scrollTwoSource }],
       },
     ],
   },
@@ -653,7 +653,7 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "{ element, window } takes EDGE members or numbers from 0 to 1.",
         components: [ScrollTouchPoints],
         sources: [
-          { path: "src/demos/motion/ScrollTouchPoints.lucia", text: scrollTouchPointsSource },
+          { path: "src/demos/motion/ScrollTouchPoints.lusia", text: scrollTouchPointsSource },
         ],
       },
       {
@@ -661,14 +661,14 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Follow the scroll",
         caption: "The bar fills and the card turns as you scroll.",
         components: [FollowScroll],
-        sources: [{ path: "src/demos/motion/FollowScroll.lucia", text: followScrollSource }],
+        sources: [{ path: "src/demos/motion/FollowScroll.lusia", text: followScrollSource }],
       },
       {
         id: "animate-pinned-scroll",
         title: "Pinned scroll",
         caption: "A tall section holds the box on screen while you scroll past it.",
         components: [PinnedScroll],
-        sources: [{ path: "src/demos/motion/PinnedScroll.lucia", text: pinnedScrollSource }],
+        sources: [{ path: "src/demos/motion/PinnedScroll.lusia", text: pinnedScrollSource }],
       },
       {
         id: "scroll-part-follow",
@@ -676,7 +676,7 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "A pinned scene plays three steps, one slice of the section each.",
         components: [ScrollPartFollow],
         sources: [
-          { path: "src/demos/motion/ScrollPartFollow.lucia", text: scrollPartFollowSource },
+          { path: "src/demos/motion/ScrollPartFollow.lusia", text: scrollPartFollowSource },
         ],
       },
       {
@@ -685,7 +685,7 @@ export const catalog: Record<string, CatalogEntry> = {
         caption:
           "A page bar, two speeds of layer, and a card that turns, grows and changes colour.",
         components: [ScrollEffects],
-        sources: [{ path: "src/demos/motion/ScrollEffects.lucia", text: scrollEffectsSource }],
+        sources: [{ path: "src/demos/motion/ScrollEffects.lusia", text: scrollEffectsSource }],
       },
     ],
   },
@@ -697,28 +697,28 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Reveal on scroll",
         caption: "Each line plays once as it scrolls into view.",
         components: [Reveal],
-        sources: [{ path: "src/demos/motion/Reveal.lucia", text: revealSource }],
+        sources: [{ path: "src/demos/motion/Reveal.lusia", text: revealSource }],
       },
       {
         id: "animate-hover-in-out",
         title: "Hover in and out",
         caption: "Plays in after a wait, and leaves with its own keys.",
         components: [HoverInOut],
-        sources: [{ path: "src/demos/motion/HoverInOut.lucia", text: hoverInOutSource }],
+        sources: [{ path: "src/demos/motion/HoverInOut.lusia", text: hoverInOutSource }],
       },
       {
         id: "animate-hover-delay",
         title: "Hover with a delay out",
         caption: "The box stays lit for 300 ms after the pointer leaves.",
         components: [HoverDelay],
-        sources: [{ path: "src/demos/motion/HoverDelay.lucia", text: hoverDelaySource }],
+        sources: [{ path: "src/demos/motion/HoverDelay.lusia", text: hoverDelaySource }],
       },
       {
         id: "animate-variable",
         title: "Variable as trigger",
         caption: "A variable plays the animation forward when true, and back when false.",
         components: [VariableTrigger],
-        sources: [{ path: "src/demos/motion/VariableTrigger.lucia", text: variableTriggerSource }],
+        sources: [{ path: "src/demos/motion/VariableTrigger.lusia", text: variableTriggerSource }],
       },
     ],
   },
@@ -730,21 +730,21 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Move",
         caption: "No keyframes. The box glides when its place changes, from any cause.",
         components: [LayoutCorners],
-        sources: [{ path: "src/demos/motion/LayoutCorners.lucia", text: layoutCornersSource }],
+        sources: [{ path: "src/demos/motion/LayoutCorners.lusia", text: layoutCornersSource }],
       },
       {
         id: "animate-layout-list",
         title: "Reorder",
         caption: "Rows glide to their new place when the list reorders.",
         components: [LayoutList],
-        sources: [{ path: "src/demos/motion/LayoutList.lucia", text: layoutListSource }],
+        sources: [{ path: "src/demos/motion/LayoutList.lusia", text: layoutListSource }],
       },
       {
         id: "animate-layout-card",
         title: "Resize",
         caption: "A card grows and shrinks smoothly when its content opens.",
         components: [LayoutCard],
-        sources: [{ path: "src/demos/motion/LayoutCard.lucia", text: layoutCardSource }],
+        sources: [{ path: "src/demos/motion/LayoutCard.lusia", text: layoutCardSource }],
       },
     ],
   },
@@ -762,28 +762,28 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Custom easing",
         caption: "Any function from 0 to 1 can be the curve.",
         components: [Easing],
-        sources: [{ path: "src/demos/motion/Easing.lucia", text: easingSource }],
+        sources: [{ path: "src/demos/motion/Easing.lusia", text: easingSource }],
       },
       {
         id: "animate-keyframe-default",
         title: "Keyframe default",
         caption: "default sets the style and ease for keys that do not set their own.",
         components: [KeyframeDefault],
-        sources: [{ path: "src/demos/motion/KeyframeDefault.lucia", text: keyframeDefaultSource }],
+        sources: [{ path: "src/demos/motion/KeyframeDefault.lusia", text: keyframeDefaultSource }],
       },
       {
         id: "animate-keys",
         title: "Several keys",
         caption: "Three keys set the color and size. The loop goes back and forth.",
         components: [Keys],
-        sources: [{ path: "src/demos/motion/Keys.lucia", text: keysSource }],
+        sources: [{ path: "src/demos/motion/Keys.lusia", text: keysSource }],
       },
       {
         id: "animate-loops",
         title: "Loops",
         caption: "Two loops on one square, each at its own speed.",
         components: [Loops],
-        sources: [{ path: "src/demos/motion/Loops.lucia", text: loopsSource }],
+        sources: [{ path: "src/demos/motion/Loops.lusia", text: loopsSource }],
       },
     ],
   },
@@ -796,7 +796,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Controller",
         caption: "Play, reverse or stop the animation from code.",
         components: [Control],
-        sources: [{ path: "src/demos/motion/Control.lucia", text: controlSource }],
+        sources: [{ path: "src/demos/motion/Control.lusia", text: controlSource }],
       },
     ],
   },
@@ -808,7 +808,7 @@ export const catalog: Record<string, CatalogEntry> = {
         title: "Midway: changing your mind",
         caption: "Hover in and out quickly. Each box turns its own way.",
         components: [MidwayMode],
-        sources: [{ path: "src/demos/motion/MidwayMode.lucia", text: midwayModeSource }],
+        sources: [{ path: "src/demos/motion/MidwayMode.lusia", text: midwayModeSource }],
       },
     ],
   },

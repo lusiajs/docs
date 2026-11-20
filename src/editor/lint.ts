@@ -27,8 +27,8 @@ const RULES: LintRule[] = [
   bindTargets,
 ];
 
-/** Lint warnings for a .lucia source. `childProps` gives the props of an imported component. */
-export function lintLucia(
+/** Lint warnings for a .lusia source. `childProps` gives the props of an imported component. */
+export function lintLusia(
   source: string,
   childProps: (name: string) => PropDef[] | undefined,
 ): LintIssue[] {

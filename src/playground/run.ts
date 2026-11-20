@@ -1,4 +1,4 @@
-import { variable } from "lucia";
+import { variable } from "lusia";
 import { ENTRY_FILE } from "./names.ts";
 import { Preview } from "../live/preview.ts";
 import { loadRuntime } from "../live/runtime-source.ts";

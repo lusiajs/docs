@@ -1,7 +1,7 @@
 import { scriptItems, type CompletionItemData, type ScriptItem } from "./completion-data.ts";
 import { completionsAt, type CompletionResult } from "./completions.ts";
 import { childProps, type EditorFile } from "./files.ts";
-import { planLuciaImport } from "./auto-import.ts";
+import { planLusiaImport } from "./auto-import.ts";
 import { expressionEnd } from "./format-expressions.ts";
 import { localItems, receiverAt, variableMemberItems, variableNames } from "./locals.ts";
 import { regionAt } from "./regions.ts";
@@ -69,6 +69,6 @@ function scriptText(text: string): string {
 
 function withImportEdit(item: ScriptItem, text: string): CompletionResult {
   const { importName, ...data } = item;
-  const edit = importName ? planLuciaImport(text, importName) : undefined;
+  const edit = importName ? planLusiaImport(text, importName) : undefined;
   return edit ? { ...data, importEdit: edit } : data;
 }

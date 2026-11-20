@@ -1,7 +1,7 @@
 import { plainFrame } from "@compiler/errors/frame.ts";
 import type { LiveError } from "./types.ts";
 
-// A dev runtime error ends its message with its location, such as "(Card.lucia:3:9)".
+// A dev runtime error ends its message with its location, such as "(Card.lusia:3:9)".
 const LOCATION = / \(([^()]+):(\d+):(\d+)\)$/;
 
 /** Moves a runtime error's location out of its message, and adds the code frame of that line from the file. */

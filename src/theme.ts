@@ -1,8 +1,8 @@
-import { variable } from "lucia";
+import { variable } from "lusia";
 
 export type Theme = "light" | "dark";
 
-const storageKey = "lucia-web-theme";
+const storageKey = "lusia-web-theme";
 
 // The head script in index.html sets data-theme before first paint.
 export const theme = variable<Theme>(

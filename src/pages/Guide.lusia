@@ -1,0 +1,16 @@
+<script>
+import Docs from "../components/Docs.lusia";
+import { pageMotion } from "../motion/page.ts";
+</script>
+
+<div class="page-root docs">
+  <aside class="sidebar" id="sidebar" aria-label="Docs">
+    <span class="nav-indicator" aria-hidden="true"></span>
+    <div id="nav-groups"></div>
+  </aside>
+  <div class="scrim" id="scrim" hidden></div>
+  <main class="content" id="sections" animate={pageMotion}>
+    <span id="first-demo-group" class="anchor-target"></span>
+    <Docs />
+  </main>
+</div>

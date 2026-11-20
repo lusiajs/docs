@@ -5,7 +5,7 @@ const START_LIMIT_MS = 8000;
 
 /** What the frame needs to run a bundle: the bundle, the runtime's source and the theme. */
 export interface RunPayload extends LiveBundle {
-  /** The runtime module's source, which the frame loads under the name "lucia". */
+  /** The runtime module's source, which the frame loads under the name "lusia". */
   runtime: string;
   theme?: string;
 }

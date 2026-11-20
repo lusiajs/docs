@@ -1,3 +1,3 @@
-// Bundled into public/playground/lucia.js for the preview frame. "lucia" and "lucia/internal" must stay one module.
-export * from "lucia";
-export * from "lucia/internal";
+// Bundled into public/playground/lusia.js for the preview frame. "lusia" and "lusia/internal" must stay one module.
+export * from "lusia";
+export * from "lusia/internal";

@@ -7,7 +7,7 @@ import { compileTemplate } from "../../../src/compiler/template/scanner.ts";
 /**
  * The compiler's script, markup and codegen steps, as `compile()` runs them.
  * Styles are skipped: Sass does not run in the browser, so style errors are not reported here.
- * Throws the same LuciaError the build would throw.
+ * Throws the same LusiaError the build would throw.
  */
 export function compileWithoutStyles(source: string, file: string): void {
   const parsed = parse(source, file);
