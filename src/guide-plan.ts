@@ -65,6 +65,7 @@ export const guidePlan: GuideGroup[] = [
       "props",
       "content",
       "attach",
+      "detach",
       "setup",
       "fallback",
       "nolazy",

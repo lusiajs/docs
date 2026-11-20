@@ -314,6 +314,7 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
+  detach: { icon: "link_off" },
   "variable-type": { icon: "data_object" },
   "computed-variable-type": { icon: "data_object" },
   component: { icon: "extension" },
