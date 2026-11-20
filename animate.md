@@ -105,7 +105,7 @@ An element can have one `ATTACH` item and one `DETACH` item, so it has different
 | Trigger       | Key           | Type                 | Default         | Effect                                                                                                                                                                          |
 | ------------- | ------------- | -------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `WHEN.VIEW`   | `margin`      | number or CSS length | `0`             | How far inside the screen edge the element must be before it counts as in view. A number is px. A string such as `"10%"` works too. Positive values need the element further in |
-| `WHEN.VIEW`   | `amount`      | number, 0 to 1       | `0.15`          | How much of the element must be visible                                                                                                                                         |
+| `WHEN.VIEW`   | `amount`      | number, 0 to 1       | `0.15`          | Share of the screen the element must cover. A tall element counts against the screen, so it can still reach the amount                                                          |
 | `WHEN.VIEW`   | `reverse`     | boolean              | `false`         | Play back out when the element leaves the view, and again on re-entry                                                                                                           |
 | `WHEN.HOVER`  | `inDelay`     | ms                   | `0`             | Wait after pointer enter before playing in. Leaving inside the wait cancels it                                                                                                  |
 | `WHEN.HOVER`  | `outDelay`    | ms                   | `0`             | Wait after pointer leave before playing back. Entering again inside the wait cancels it                                                                                         |
@@ -335,6 +335,7 @@ const slide = {
 | Number                      | `opacity: 0`                                                     | Blends in a straight line                                  |
 | Text with numbers and units | `"10px 0px"`                                                     | Each number blends, the text around it stays               |
 | Zero without a unit         | `"0 0"` to `"0 20px"`                                            | The 0 takes the unit of the other side, so it tweens       |
+| Different length units      | `"0px"` to `"-12vh"`                                             | Blends through `calc()`, e.g. `calc(0px + -6vh)`           |
 | Color                       | `"#e11d48"`, `"rgb(0 0 0 / 50%)"`, `"hsl(200 80% 50%)"`, `"red"` | Blends red, green, blue and alpha                          |
 | CSS variable                | `"var(--accent)"`                                                | Resolved on the animated element, so scoped variables work |
 | Different shapes            | `"10px"` to `"auto"`                                             | No blend. Switches at the middle                           |
