@@ -6,7 +6,7 @@ An error code is a short name, such as `L1016`, that tells you which check faile
 
 | Range              | When it shows                                                                | Raised by    |
 | ------------------ | ---------------------------------------------------------------------------- | ------------ |
-| `L1001` to `L1036` | While the app builds, for a problem in a `.lucia` file                       | The compiler |
+| `L1001` to `L1037` | While the app builds, for a problem in a `.lucia` file                       | The compiler |
 | `L2001` to `L2057` | While the app runs, for a value passed to `animate`, `bind`, `EACH`, `FOR` or `lazy` | The runtime  |
 | `L3001` to `L3003` | While the app builds, for an import or file that the bundler cannot build    | The build    |
 
@@ -42,7 +42,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L1001](#l1001) | `unclosed <tag>`                                                                                                                         | Add the closing tag, such as `</tag>`, after the content.                                           |
 | [L1002](#l1002) | `only one <script> is allowed`                                                                                                           | Move the code into one `<script>` section.                                                          |
 | [L1003](#l1003) | `a component's <script> cannot export`                                                                                                   | Move shared values into a `.ts` file and import them.                                               |
-| [L1004](#l1004) | `<name>` is a reserved tag name and cannot be a component                                                                                | Rename the component. `IF`, `ELSEIF`, `ELSE`, `EACH`, `FOR` and `CONTENT` are built in.            |
+| [L1004](#l1004) | `<name>` is a reserved tag name and cannot be a component                                                                                | Rename the component. `IF`, `ELSEIF`, `ELSE`, `EACH`, `FOR`, `CONTENT` and `HTML` are built in.   |
 | [L1005](#l1005) | `<message>`                                                                                                                              | Check the Sass syntax in this `<style>` section.                                                    |
 | [L1006](#l1006) | `unclosed <!-- comment`                                                                                                                  | Add `-->` to close the comment.                                                                     |
 | [L1007](#l1007) | `unclosed <name>`                                                                                                                        | Add `>` to close the tag, or `/>` if it has no content.                                             |
@@ -75,6 +75,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L1034](#l1034) | `<tag>` must directly follow `</IF>` or `</ELSEIF>`                                                                                      | Put `ELSEIF` or `ELSE` right after the branch before it.                                            |
 | [L1035](#l1035) | `<CONTENT /> is used more than once`                                                                                                     | Keep one `<CONTENT />` in the component's markup.                                                   |
 | [L1036](#l1036) | `<CONTENT> needs />`                                                                                                                     | Write `<CONTENT />` with no children. The children go between the component's tags.                |
+| [L1037](#l1037) | `<HTML> needs one {expression}`                                                                                                          | Put one expression in braces between the tags, such as `<HTML>{html}</HTML>`.                       |
 | [L2001](#l2001) | animate item needs a style                                                                                                               | Add `style` to the item, such as `{ style: fadeIn }`.                                               |
 | [L2002](#l2002) | animate `when` must be `WHEN.ATTACH`, `DETACH`, `VIEW`, `HOVER`, `SCROLL`, `MOVE`, `RESIZE`, `MOVE_OR_RESIZE` or `MANUAL`, or a variable | Pass one of the `WHEN` values, or a variable.                                                       |
 | [L2003](#l2003) | animate `<name>` must be a time in ms                                                                                                    | Use a number of milliseconds, such as `300`.                                                        |
@@ -214,7 +215,7 @@ Fixed (in `config.ts`, `export const max = 10;`, then in the component):
 |         |                                                                              |
 | ------- | ---------------------------------------------------------------------------- |
 | Message | `<name>` is a reserved tag name and cannot be a component                    |
-| Hint    | Rename the component. `IF`, `ELSEIF`, `ELSE`, `EACH`, `FOR` and `CONTENT` are built in. |
+| Hint    | Rename the component. `IF`, `ELSEIF`, `ELSE`, `EACH`, `FOR`, `CONTENT` and `HTML` are built in. |
 
 Bad:
 
@@ -860,6 +861,25 @@ Fixed:
 
 ```html
 <section><CONTENT /></section>
+```
+
+## L1037
+
+|         |                                                                  |
+| ------- | ---------------------------------------------------------------- |
+| Message | `<HTML> needs one {expression}`                                  |
+| Hint    | Put one expression in braces between the tags, such as `<HTML>{html}</HTML>`. |
+
+Bad:
+
+```html
+<HTML>Hello</HTML>
+```
+
+Fixed:
+
+```html
+<HTML>{greeting}</HTML>
 ```
 
 ## L2001

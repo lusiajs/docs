@@ -112,6 +112,24 @@ An expression re-runs when a variable or computed variable it reads updates.
 
 Text is inserted as text, not HTML, so values cannot inject markup.
 
+### Raw HTML
+
+`<HTML>{expr}</HTML>` inserts the value as HTML. Use it only for HTML you trust.
+
+```html
+<HTML>{note}</HTML>
+```
+
+> [!WARNING]
+> Never pass user input to `<HTML>`. The value runs as HTML, so a `<script>` or an `onerror` attribute can run code. This is called XSS. Escape the text first, or use `{expr}` instead.
+
+| Rule        | Detail                                                             |
+| ----------- | ------------------------------------------------------------------ |
+| Content     | Exactly one `{expression}`. Text or a second `{}` is error L1037    |
+| Case        | Uppercase only. `<html>` is a normal tag                           |
+| Updates     | Each update replaces the nodes. Lucia markup in the value is not compiled |
+| Attributes  | None                                                               |
+
 ### Braces inside expressions
 
 Nested braces and strings work: `{ {a: 1}.a }` and `{`${n} left`}` are both fine.
