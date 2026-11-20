@@ -14,9 +14,9 @@ Flow tags show, repeat or skip parts of the markup. Their names are uppercase so
 
 ```html
 <script>
-  import { store } from "lucia";
+  import { variable } from "lucia";
 
-  const loggedIn = store(false);
+  const loggedIn = variable(false);
 
   function logIn() {
     loggedIn.value = true;
@@ -41,14 +41,14 @@ Flow tags show, repeat or skip parts of the markup. Their names are uppercase so
 
 - Only the first true branch shows.
 - `ELSEIF` and `ELSE` must come right after `</IF>` or `</ELSEIF>`.
-- A condition is read again when its stores change.
-- Use `.value` in a comparison: `{score.value >= 90}`. A bare store is an object, so `{score >= 90}` does not compare the number.
+- A condition is read again when its variables update.
+- Use `.value` in a comparison: `{score.value >= 90}`. A bare variable is an object, so `{score >= 90}` does not compare the number.
 
 ```html
 <script>
-  import { store } from "lucia";
+  import { variable } from "lucia";
 
-  const score = store(72);
+  const score = variable(72);
 </script>
 
 <IF {score.value
@@ -73,9 +73,9 @@ Flow tags show, repeat or skip parts of the markup. Their names are uppercase so
 
 ```html
 <script>
-  import { store } from "lucia";
+  import { variable } from "lucia";
 
-  const todos = store([
+  const todos = variable([
     { id: 1, title: "Write docs" },
     { id: 2, title: "Ship" },
   ]);
@@ -94,14 +94,14 @@ Flow tags show, repeat or skip parts of the markup. Their names are uppercase so
 
 | Attribute      | Required                        | Effect                                        |
 | -------------- | ------------------------------- | --------------------------------------------- |
-| `{list}`       | Yes                             | The list. An array, or a store that holds one |
+| `{list}`       | Yes                             | The list. An array, or a variable that holds one |
 | `as={name}`    | No, but needed to read the item | Names the item for the markup                 |
-| `index={name}` | No                              | Names the position. It is a store             |
+| `index={name}` | No                              | Names the position. It is a variable             |
 | `key={expr}`   | No                              | Gives each row its identity                   |
 
 ### Index
 
-`index` is a store, so `{i}` shows the number. Math needs `.value`:
+`index` is a variable, so `{i}` shows the number. Math needs `.value`:
 
 | Write           | Result               |
 | --------------- | -------------------- |
@@ -113,14 +113,14 @@ Flow tags show, repeat or skip parts of the markup. Their names are uppercase so
 | Case                  | What happens                                                                            |
 | --------------------- | --------------------------------------------------------------------------------------- |
 | No `key`              | The item itself is the key. Works for primitives, not for new copies of objects         |
-| `key={item.id}`       | Rows with the same id keep their DOM when the list changes. They are moved, not rebuilt |
+| `key={item.id}`       | Rows with the same id keep their DOM when the list updates. They are moved, not rebuilt |
 | Same key, new object  | The row is rebuilt, because its item changed                                            |
 | Two rows with one key | Error: `EACH keys must be unique, but ... appears twice`                                |
 
 > [!TIP]
 > Give every row a `key` from the data, such as an id. It keeps the DOM and the animations of each row.
 
-Inside `key={...}` the index is a plain number, not a store.
+Inside `key={...}` the index is a plain number, not a variable.
 
 ### Changes
 
@@ -137,9 +137,9 @@ Inside `key={...}` the index is a plain number, not a store.
 
 ```html
 <script>
-  import { store } from "lucia";
+  import { variable } from "lucia";
 
-  const rows = store(3);
+  const rows = variable(3);
 </script>
 
 <FOR {i} from="{0}" to="{rows.value}">
@@ -163,7 +163,7 @@ Inside `key={...}` the index is a plain number, not a store.
 > [!WARNING]
 > A `step` of `0` throws `FOR needs a step that is not 0`.
 
-`from`, `to` and `step` are read again when their stores change, and the rows update.
+`from`, `to` and `step` are read again when their variables update, and the rows update.
 
 ## Nesting
 

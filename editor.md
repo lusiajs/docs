@@ -84,7 +84,7 @@ The API table is `reference/api.ts`. Completion, hover and the web docs all read
 | --------- | ------------------------------------------------------------------- |
 | `kind`    | `function`, `type`, `markup`, `style` or `value`                    |
 | `group`   | `basics`, `reactivity`, `flow`, `components`, `styling` or `motion` |
-| `name`    | The label shown, for example `store()`                              |
+| `name`    | The label shown, for example `variable()`                              |
 | `members` | Enum objects only: `{ name, summary }` for each member              |
 
 A `function`, `type` or `value` entry named like a `lucia` export is offered in `<script>` with an auto-import. A `value` is a constant, such as an enum object.
@@ -128,7 +128,7 @@ The docs site has a code editor component, `examples/web/src/components/CodeEdit
 ```
 
 > [!TIP]
-> To keep the code, store it in the `onChange` handler. The editor does not write to the `files` store.
+> To keep the code, variable it in the `onChange` handler. The editor does not write to the `files` variable.
 
 ### What it does
 

@@ -36,10 +36,10 @@ Shared helpers used by more than one step live in `utils/`: `braces.ts` (skip a 
 | `src/compiler/utils/`     | Helpers used by two or more steps                                                                                                                              |
 | `src/compiler/errors/`    | `codes.ts` (the `CODES` table), `create.ts` (`luciaError`), `where.ts` (the `file:line:column` string). See [Errors](#errors)                                  |
 | `src/compiler/sourcemap/` | Position markers in the generated code, and the step that turns them into a source map. See [Source maps](#source-maps)                                        |
-| `src/runtime/store/`      | `store.ts` (stores, `store.from`), `update.ts` (`store.onUpdate`) and `graph.ts` (dependency graph, grouped updates, watch)                                    |
+| `src/runtime/variable/`   | `variable.ts` (`variable`, `count.onUpdate`), `compute.ts` (`variable.compute`), `update.ts` (`variable.onUpdate`, `variable.watch`), `reactive.ts` (the marker) and `graph.ts` (dependency graph, grouped updates) |
 | `src/compiler/template/`  | Also `codegen-blocks.ts` and `codegen-element.ts`, which write the binder code for blocks and elements                                                         |
 | `src/runtime/dom/`        | Bindings, template cloning, injected styles, `attach`, components, `props()` and the leave list                                                                |
-| `src/runtime/dom/bind/`   | `bind`, `bind-<prop>` and `bind-element`: the store-to-DOM watch and the DOM-to-store events                                                                   |
+| `src/runtime/dom/bind/`   | `bind`, `bind-<prop>` and `bind-element`: the variable-to-DOM watch and the DOM-to-variable events                                                                   |
 | `src/runtime/dom/blocks/` | `<IF>` (`if.ts`), `<EACH>` with keyed rows (`each.ts`), `<FOR>` over a range (`range.ts`), and the mounts and leave outlet they share                          |
 | `src/runtime/animate/`    | The `animate` engine: the EASE and WHEN enums, ease modes, keyframe segments, value blending, the players and the shared frame loop. See [Animate](animate.md) |
 
@@ -83,13 +83,13 @@ The template step replaces each binding with a marker in the HTML. Marker names 
 Each `.lucia` file compiles to this shape.
 
 ```ts
-import { store } from "lucia";           // script imports, hoisted: run once per file
+import { variable } from "lucia";           // script imports, hoisted: run once per file
 import badge from "./badge.lucia";
 import { ... } from "lucia/internal";     // runtime helpers
 const __css = "...";
 let __template;                           // built on first render
 function __render(__cleanups) {
-  const count = store(0);                 // script body: runs once per instance
+  const count = variable(0);                 // script body: runs once per instance
   const __binders = [ ... ];              // one binder per binding
   const fragment = __instantiate(__getTemplate(), __binders, __cleanups);
   return { fragment, setup };
@@ -110,15 +110,15 @@ export default __defineComponent(id, __css, __render);
 | `createTemplate`                       | Once per component          | Parses the HTML, sets `data-l` on each top-level element, strips the markers and records the child-index path to each one                                          |
 | `defineComponent`                      | Once per component          | Returns the callable component. Its `place()` renders one instance into a parent node                                                                              |
 | `instantiate`                          | Every attach                | Clones the template, finds each node by its path, runs its binder                                                                                                  |
-| Binder                                 | Every attach                | Wires one node to a `watch()` that re-runs when its stores change                                                                                                  |
+| Binder                                 | Every attach                | Wires one node to a `watch()` that re-runs when its variables change                                                                                                  |
 | `bindComponent`                        | Every render of a parent    | Places the child where its tag was and keeps the child's cleanup                                                                                                   |
 | `listen`                               | Every attach                | Adds one event listener, and removes it on detach                                                                                                                  |
 | `bindInput`, `bindProp`, `bindElement` | Every attach                | Two-way link for `bind`, `bind-<prop>` and `bind-element`. See [Events, bind and blocks](#events-bind-and-blocks)                                                  |
 | `bindIf`, `bindEach`, `bindFor`        | Every attach                | Keeps the branch or the rows in step with their conditions and lists                                                                                               |
-| `props()`                              | During a component's script | Returns one store per prop: the passed value, or the default when it is null or missing                                                                            |
+| `props()`                              | During a component's script | Returns one variable per prop: the passed value, or the default when it is null or missing                                                                            |
 | `detach()`                             | Detach                      | Runs the leave hooks first, waits for them, then runs every cleanup (stops watches, animations, child components) and removes the nodes. Returns a `Promise<void>` |
 
-Every expression is wrapped in `unwrap()`, so a bare store shows its value.
+Every expression is wrapped in `unwrap()`, so a bare variable shows its value.
 
 ### Leave flow
 
@@ -161,7 +161,7 @@ Compiled into the element's binder:
 | --------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | The handler is evaluated once                                         | A listener does not change, so no watch is needed                  |
 | `bind` picks its property by element type                             | The element type is known at attach, so the channel is chosen once |
-| Store to DOM runs in a `watch()`, DOM to store on the element's event | Equal values are never written twice, so the two sides do not loop |
+| Variable to DOM runs in a `watch()`, DOM to variable on the element's event | Equal values are never written twice, so the two sides do not loop |
 
 ### Blocks
 
@@ -181,7 +181,7 @@ __bindIf(__node, [
 | `<FOR>`                      | `bindFor`: an `<EACH>` over the range                                                                                    | The number                |
 
 > [!IMPORTANT]
-> The `<EACH>` index is a store. `{i}` in markup shows its value, but `key={...}` gets the index as a plain number.
+> The `<EACH>` index is a variable. `{i}` in markup shows its value, but `key={...}` gets the index as a plain number.
 
 ## Element bindings: shape
 
@@ -210,7 +210,7 @@ animate={...}  -->  __animate(node, () => (expr), cleanups, leaves)   // compile
           prepare keyframes once per element, one Player per item
                          |
           ATTACH: forward once on attach. DETACH: leave hook on detach
-          VIEW / HOVER / store: shared IntersectionObserver / pointer listeners / watch()
+          VIEW / HOVER / variable: shared IntersectionObserver / pointer listeners / watch()
           MANUAL: only a controller plays it
                          |
                          v
@@ -251,24 +251,24 @@ Both commands call `Bun.build` on the app's `index.html`. Bun bundles the script
 
 ### Dev runtime and hot swap
 
-In `lucia dev`, `lucia` and `lucia/internal` are not bundled into the app. Each page gets an import map that points them at `/__lucia/runtime.js`. The app and every hot module then share one copy of the store graph.
+In `lucia dev`, `lucia` and `lucia/internal` are not bundled into the app. Each page gets an import map that points them at `/__lucia/runtime.js`. The app and every hot module then share one copy of the variable graph.
 
 | Step     | What happens                                                                                                                                                                    |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Compile  | `compile(..., { dev: true })` wraps each top-level `const x = store(...)` as `__hotStore("x", store(...))`, and exports `__hotComponent(...)`. Production output has neither    |
+| Compile  | `compile(..., { dev: true })` wraps each top-level `const x = variable(...)` as `__hotVariable("x", variable(...))`, and exports `__hotComponent(...)`. Production output has neither    |
 | Register | `hotComponent` keeps the latest definition per file id. Every mounted copy is tracked by its id                                                                                 |
 | Build    | `hot-build.ts` bundles the changed `.lucia` file alone. If it pulls in any file other than `.lucia` files, the update reloads, because that file would be copied and not shared |
 | Send     | The server sends `{type: "hot", url}`. The page imports the module and calls `swapComponent`                                                                                    |
-| Swap     | Each copy is rendered again with the new definition. Stores are restored by name, the new render goes in before the old one comes out, and a throw leaves the old copy in place |
+| Swap     | Each copy is rendered again with the new definition. Variables are restored by name, the new render goes in before the old one comes out, and a throw leaves the old copy in place |
 
 Files in `src/runtime/dom/hot/`:
 
 | File                                       | Job                                                                                |
 | ------------------------------------------ | ---------------------------------------------------------------------------------- |
 | `define.ts`                                | `hotComponent`: the dev component, which looks up its definition by id             |
-| `instance.ts`                              | One mounted copy: its region of nodes, cleanups, stores and leave hook             |
+| `instance.ts`                              | One mounted copy: its region of nodes, cleanups, variables and leave hook             |
 | `render.ts`                                | Runs a script and markup without inserting them, and inserts them                  |
-| `store.ts`                                 | `hotStore`: registers a store by name and restores its value during a swap         |
+| `variable.ts`                                 | `hotVariable`: registers a variable by name and restores its value during a swap         |
 | `swap.ts`                                  | `swapComponent` and `swapStyle`: re-renders every copy of a file                   |
 | `registry.ts`, `session.ts`, `teardown.ts` | Definitions and live copies, the values waiting for new copies, and removing nodes |
 
@@ -326,13 +326,13 @@ interface Expr {
 | Source maps      | `markedCode(expr)` writes the marker before `expr.code`                                                                      |
 | Runtime location | `formatWhere(file, expr.line, expr.column)` in dev builds only                                                               |
 
-## Store graph
+## Variable graph
 
 Updates run in two phases:
 
-1. A write marks every dependent `store.from` value dirty, synchronously, without running anything.
+1. A write marks every dependent `variable.compute` value dirty, synchronously, without running anything.
 2. Queued watchers then run once each.
 
-This prevents glitches when several values depend on one store (diamond-shaped graphs). `markDirty()` must never read stores.
+This prevents glitches when several values depend on one variable (diamond-shaped graphs). `markDirty()` must never read variables or computed variables.
 
-`watch()` is internal. `store.onUpdate()` is the public way to run code on change, and it stops with its component. See [Store](store.md).
+`watch()` is internal. `variable.onUpdate()`, `variable.watch()` and `count.onUpdate()` are the public ways to run code on update, and they stop with their component. See [Variable](variable.md).

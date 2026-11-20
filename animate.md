@@ -45,7 +45,7 @@ Animation is the only special attribute. Everything else lives inside its value.
 | Field          | Type                      | Default                          | Effect                                                                                                                                                                                                |
 | -------------- | ------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `style`        | Keyframes                 | required                         | The keys to play                                                                                                                                                                                      |
-| `when`         | `WHEN` member or a store  | `WHEN.ATTACH`                    | What plays it. See [Triggers](#triggers)                                                                                                                                                              |
+| `when`         | `WHEN` member or a variable  | `WHEN.ATTACH`                    | What plays it. See [Triggers](#triggers)                                                                                                                                                              |
 | `control`      | controller                | none                             | Lets code play, reverse, stop or seek the item. See [Controller](#controller)                                                                                                                         |
 | `once`         | boolean                   | `false` (`true` for `WHEN.VIEW`) | Play forward only the first time. `VIEW` stays once unless `more.reverse` is set                                                                                                                      |
 | `midway`       | `MIDWAY` member or object | `MIDWAY.TURN`                    | What a new play does while one is still running. See [Midway](#midway)                                                                                                                                |
@@ -88,10 +88,10 @@ An element can have one `ATTACH` item and one `DETACH` item, so it has different
 | `WHEN.RESIZE`           | Glides when the element's size changes             | Automatic. Ignores place changes. See [Layout](#layout)                                                                                                                  |
 | `WHEN.MOVE_OR_RESIZE`   | Glides when the place or the size changes          | Automatic. See [Layout](#layout)                                                                                                                                         |
 | `WHEN.MANUAL`           | Only when a controller plays it                    | No automatic trigger                                                                                                                                                     |
-| A store or read store   | Truthy: 0 to 1. Falsy: 1 to 0                      | Read reactively. The first value is applied without animating                                                                                                            |
+| A variable or computed variable   | Truthy: 0 to 1. Falsy: 1 to 0                      | Read reactively. The first value is applied without animating                                                                                                            |
 
 > [!IMPORTANT]
-> Only `DETACH` items delay the removal of the nodes on detach. `VIEW`, `HOVER` and store items do not.
+> Only `DETACH` items delay the removal of the nodes on detach. `VIEW`, `HOVER` and variable items do not.
 
 ```html
 <section animate={{ style: fadeUp, when: WHEN.VIEW }}>...</section>
@@ -99,7 +99,7 @@ An element can have one `ATTACH` item and one `DETACH` item, so it has different
 <div animate={{ style: pulse, when: isOpen }}>...</div>
 ```
 
-`once` on `HOVER` or a store plays forward only the first time. `VIEW` already plays once unless `more.reverse` is set.
+`once` on `HOVER` or a variable plays forward only the first time. `VIEW` already plays once unless `more.reverse` is set.
 
 ## more
 
@@ -116,7 +116,7 @@ An element can have one `ATTACH` item and one `DETACH` item, so it has different
 | `WHEN.HOVER`  | `outDuration` | ms                                   | item `duration`   | Length of the way out. Needs `out`                                                                                                                                              |
 | `WHEN.SCROLL` | `start`       | `SCROLL_AT` or `{ element, window }` | `SCROLL_AT.ENTER` | Where the progress is 0. See [SCROLL points](#scroll-points)                                                                                                                    |
 | `WHEN.SCROLL` | `end`         | `SCROLL_AT` or `{ element, window }` | `SCROLL_AT.LEAVE` | Where the progress is 1. Same form as `start`                                                                                                                                   |
-| `WHEN.SCROLL` | `follow`      | store of an element                  | none              | The tall element that drives the progress. Its scroll position is used instead of the item's own. Not with `start` or `end`. See [Pinned scroll](#pinned-scroll)                |
+| `WHEN.SCROLL` | `follow`      | variable of an element                  | none              | The tall element that drives the progress. Its scroll position is used instead of the item's own. Not with `start` or `end`. See [Pinned scroll](#pinned-scroll)                |
 | `WHEN.SCROLL` | `part`        | `[from, to]`                         | `[0, 1]`          | Plays only that slice of the progress. `[0.5, 1]` plays in the second half. Needs `0 <= from < to <= 1`                                                                         |
 
 ```html
@@ -193,9 +193,9 @@ Use `follow` to play a scene while a tall section scrolls past, with the scene h
 
 ```html
 <script>
-import { store, WHEN, PRESET } from "lucia";
+import { variable, WHEN, PRESET } from "lucia";
 
-const section = store(null);
+const section = variable(null);
 </script>
 
 <section bind-element={section} style="height: 300vh">
@@ -208,7 +208,7 @@ const section = store(null);
 - The tall section is the one to follow. Its top edge reaching the top of the screen is 0. Its bottom edge reaching the bottom of the screen is 1.
 - The sticky box keeps the scene on screen while the section scrolls.
 - An element shorter than the screen goes from 0 to 1 once its top passes the top edge.
-- While the store is `null`, progress is 0.
+- While the variable is `null`, progress is 0.
 - `part` plays only one slice of the progress. Two items can play one after another: `part: [0, 0.5]` and `part: [0.5, 1]`.
 
 > [!NOTE]
@@ -315,7 +315,7 @@ A step with `pulse` keys that go back to 0 at the end of its slice is hidden out
 
 ### Progress bar, parallax and colour
 
-- A page progress bar: `follow` a store that holds `document.documentElement`. The root is the tall element, so the bar fills over the whole page.
+- A page progress bar: `follow` a variable that holds `document.documentElement`. The root is the tall element, so the bar fills over the whole page.
 - Parallax: layers with different `translate` ends, both with `follow` on a tall lane. The one that moves more looks nearer.
 - Rotate, scale and colour: put them on a card in the same lane, with `follow`. Colour and opacity can also use the default range.
 
@@ -345,9 +345,9 @@ A scroll item follows the position, not time. Scrolling back up plays the item i
 
 ```html
 <script>
-import { WHEN, store } from "lucia";
+import { WHEN, variable } from "lucia";
 
-const floating = store(false);
+const floating = variable(false);
 const glide = { when: WHEN.MOVE, duration: 400 };
 </script>
 
@@ -360,9 +360,9 @@ const glide = { when: WHEN.MOVE, duration: 400 };
 
 ```html
 <script>
-import { WHEN, store } from "lucia";
+import { WHEN, variable } from "lucia";
 
-const floating = store(false);
+const floating = variable(false);
 const glide = { when: WHEN.MOVE, duration: 400 };
 </script>
 
@@ -417,7 +417,7 @@ const glide = { when: WHEN.MOVE, duration: 400 };
 
 ## Midway
 
-A play can be asked for while another one is still running: a hover leaves mid-way, a store flips, or code calls `play()` or `reverse()`. `midway` sets what happens then.
+A play can be asked for while another one is still running: a hover leaves mid-way, a variable flips, or code calls `play()` or `reverse()`. `midway` sets what happens then.
 
 | `midway`                | What the new play does                                                                 |
 | ----------------------- | -------------------------------------------------------------------------------------- |
@@ -447,7 +447,7 @@ Set the options in an object. A `MIDWAY` member alone sets only `play`:
 
 ```html
 <button animate={{ style: grow, when: WHEN.HOVER, midway: MIDWAY.FINISH }}>Hover me</button>
-<div animate={{ style: slide, when: store, midway: { turn: TURN.SMOOTH, turnDuration: 250 } }}>...</div>
+<div animate={{ style: slide, when: variable, midway: { turn: TURN.SMOOTH, turnDuration: 250 } }}>...</div>
 ```
 
 A custom `turn` function gets `(from, to, t, speed)`. `from` is the progress at the switch, `to` is where the new play is now, `t` is the ms since the switch, and `speed` is progress per ms. It returns the progress to show until `turnDuration` has passed.
@@ -490,7 +490,7 @@ An ease is one of `EASE.IN`, `EASE.OUT` or `EASE.INOUT`. A style is a function f
 
 Key 0 is the start, so its easing is never used. It can always be a plain `{ css }`.
 
-The keyframes value is read again at the start of every play. Keyframes built from stores pick up new values.
+The keyframes value is read again at the start of every play. Keyframes built from variables pick up new values.
 
 ### Defaults
 
@@ -707,7 +707,7 @@ It returns a function. Call it with `t` from 0 to 1. It handles numbers, text wi
 | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | No `auto` sizes. `height: auto` cannot tween                                                 | Animate a fixed value, or animate `scale` instead                     |
 | Touch has no hover. `WHEN.HOVER` uses taps there: a tap toggles, and a tap outside plays out | For content that should play on scroll, use `WHEN.VIEW`               |
-| `WHEN.SCROLL` does not reload keyframes that come from stores while it runs                  | Set the keyframes before the element mounts                           |
+| `WHEN.SCROLL` does not reload keyframes that come from variables while it runs                  | Set the keyframes before the element mounts                           |
 | A change during a layout glide keeps the place, but its speed starts again at rest                                                              | Use a short `duration` for items that change often                     |
 | No stagger helper. Delays for a list are set by hand                                         | Give each item its own `delay`                                        |
 | Frames are driven by JavaScript, not the compositor                                          | Keep the number of animated elements moderate. See the stress example |
@@ -721,7 +721,7 @@ It returns a function. Call it with `t` from 0 to 1. It handles numbers, text wi
 | `KeyframeValue` | `Style`, `[Ease, Style]`, `[EaseStyle, Style]` or `[EaseStyle, Ease, Style]`                                                                                                    |
 | `DefaultEasing` | `[EaseStyle, Ease]`, `[EaseStyle]` or `[Ease]`                                                                                                                                  |
 | `Style`         | The DOM style properties in camelCase (`opacity`, `backgroundColor`), with numbers or strings, and `--custom` properties                                                        |
-| `AnimateItem`   | A union on `when`: `more` is typed by the trigger. For example `ViewMore` on `WHEN.VIEW`, `HoverMore` on `WHEN.HOVER`, and no `more` on `ATTACH`, `DETACH`, `MANUAL` or a store |
+| `AnimateItem`   | A union on `when`: `more` is typed by the trigger. For example `ViewMore` on `WHEN.VIEW`, `HoverMore` on `WHEN.HOVER`, and no `more` on `ATTACH`, `DETACH`, `MANUAL` or a variable |
 | `EaseStyle`     | `(t: number) => number`, such as `EASE.STYLE.QUART`                                                                                                                             |
 | `Ease`          | One of `EASE.IN`, `EASE.OUT`, `EASE.INOUT`                                                                                                                                      |
 | `Animate`       | `Keyframes \| AnimateItem \| (Keyframes \| AnimateItem)[]`                                                                                                                      |

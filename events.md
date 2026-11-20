@@ -2,14 +2,14 @@
 
 # Events and bind
 
-Run code when something happens, and keep form fields in sync with stores.
+Run code when something happens, and keep form fields in sync with variables.
 
 | Attribute              | Use it for                              |
 | ---------------------- | --------------------------------------- |
 | `onclick={fn}`         | Running a function on an event          |
-| `bind={store}`         | Two-way link for a form field           |
-| `bind-<prop>={store}`  | Two-way link for any DOM property       |
-| `bind-element={store}` | Getting the element itself into a store |
+| `bind={variable}`         | Two-way link for a form field           |
+| `bind-<prop>={variable}`  | Two-way link for any DOM property       |
+| `bind-element={variable}` | Getting the element itself into a variable |
 
 ## Events
 
@@ -17,9 +17,9 @@ Any attribute named `on` plus an event name runs a function on that event.
 
 ```html
 <script>
-  import { store } from "lucia";
+  import { variable } from "lucia";
 
-  const count = store(0);
+  const count = variable(0);
 
   function increment() {
     count.value++;
@@ -44,13 +44,13 @@ Any attribute named `on` plus an event name runs a function on that event.
 
 ## bind
 
-`bind={store}` links a form field and a store in both directions. Typing updates the store, and changing the store updates the field.
+`bind={variable}` links a form field and a variable in both directions. Typing updates the variable, and changing the variable updates the field.
 
 ```html
 <script>
-  import { store } from "lucia";
+  import { variable } from "lucia";
 
-  const name = store("");
+  const name = variable("");
 </script>
 
 <input bind="{name}" />
@@ -74,9 +74,9 @@ A number field writes `null` when it is empty.
 
 ```html
 <script>
-  import { store } from "lucia";
+  import { variable } from "lucia";
 
-  const name = store("Ada");
+  const name = variable("Ada");
 </script>
 
 <input type="text" bind-value="{name}" />
@@ -89,17 +89,17 @@ A number field writes `null` when it is empty.
 | `bind-open`    | `open` (see the warning below) |
 
 > [!WARNING]
-> `bind-<prop>` listens to `input` and `change` only. A property that changes on other events does not write back to the store.
+> `bind-<prop>` listens to `input` and `change` only. A property that changes on other events does not write back to the variable.
 
 ## bind-element
 
-`bind-element={store}` puts the element into a store. Use it instead of `querySelector`.
+`bind-element={variable}` puts the element into a variable. Use it instead of `querySelector`.
 
 ```html
 <script>
-  import { store } from "lucia";
+  import { variable } from "lucia";
 
-  const field = (store < HTMLInputElement) | (null > null);
+  const field = (variable < HTMLInputElement) | (null > null);
 
   function focusField() {
     field.value?.focus();
@@ -110,7 +110,7 @@ A number field writes `null` when it is empty.
 <button onclick="{focusField}">Focus</button>
 ```
 
-| Moment   | Store value                                  |
+| Moment   | Variable value                                  |
 | -------- | -------------------------------------------- |
 | Placed   | The element. It is set before `setup()` runs |
 | Detached | `null`                                       |
@@ -119,7 +119,7 @@ A number field writes `null` when it is empty.
 
 | Rule           | Detail                                                                                               |
 | -------------- | ---------------------------------------------------------------------------------------------------- |
-| Writable store | The store must come from `store()`. A `store.from()` value, or a plain value, is refused at run time |
+| Writable variable | The variable must come from `variable()`. A `variable.compute()` value, or a plain value, is refused at run time |
 | Where          | `bind` works on `input`, `textarea` and `select`. Use `bind-<prop>` on other elements                |
 | Components     | `bind` is not allowed on a component tag                                                             |
 | Loops          | A value that is already equal is not written again, so the two sides do not loop                     |
@@ -128,11 +128,11 @@ A number field writes `null` when it is empty.
 
 | Mistake                       | Message                                                                    |
 | ----------------------------- | -------------------------------------------------------------------------- |
-| `bind` with no `{store}`      | `bind needs {store}`                                                       |
+| `bind` with no `{variable}`      | `bind needs {variable}`                                                       |
 | `bind-` with no property name | `bind-<property> needs a property name, like bind-value`                   |
 | `bind` on a plain element     | `bind works on input, textarea and select; use bind-<property>`            |
 | `bind` on a component         | `bind works on elements only`                                              |
-| A read-only or plain value    | `bind-value needs a writable store` (the attribute name is in the message) |
+| A read-only or plain value    | `bind-value needs a writable variable` (the attribute name is in the message) |
 | Event with text mixed in      | `onclick needs one {handler}`                                              |
 
 Compile errors show the file, line and column. Run-time errors name the attribute.
