@@ -88,7 +88,7 @@ import badge from "./badge.lucia";
 import { ... } from "lucia/internal";     // runtime helpers
 const __css = "...";
 let __template;                           // built on first render
-function __render(__cleanups) {
+function __render(__cleanups, __leaves, __host) {
   const count = variable(0);                 // script body: runs once per instance
   const __binders = [ ... ];              // one binder per binding
   const fragment = __instantiate(__getTemplate(), __binders, __cleanups);
@@ -111,7 +111,8 @@ export default __defineComponent(id, __css, __render);
 | `defineComponent`                      | Once per component          | Returns the callable component. Its `place()` renders one instance into a parent node                                                                              |
 | `instantiate`                          | Every attach                | Clones the template, finds each node by its path, runs its binder                                                                                                  |
 | Binder                                 | Every attach                | Wires one node to a `watch()` that re-runs when its variables change                                                                                                  |
-| `bindComponent`                        | Every render of a parent    | Places the child where its tag was and keeps the child's cleanup                                                                                                   |
+| `bindComponent`                        | Every render of a parent    | Places the child where its tag was, passes it its props and children (a slot), and keeps the child's cleanup                                                       |
+| `bindContent`                          | Every render of the child   | `<CONTENT />`: renders the parent's children (the slot) in place of its marker                                                                                     |
 | `listen`                               | Every attach                | Adds one event listener, and removes it on detach                                                                                                                  |
 | `bindInput`, `bindProp`, `bindElement` | Every attach                | Two-way link for `bind`, `bind-<prop>` and `bind-element`. See [Events, bind and blocks](#events-bind-and-blocks)                                                  |
 | `bindIf`, `bindEach`, `bindFor`        | Every attach                | Keeps the branch or the rows in step with their conditions and lists                                                                                               |

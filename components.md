@@ -142,10 +142,58 @@ Pass props as attributes.
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | Name          | The tag name must match the import name exactly, so `<Badge />` needs `import Badge`                                              |
 | `bind`        | Not allowed on a component tag. Put `bind` on the field inside the child                                                          |
-| Child content | Not supported yet. `<badge />` and `<badge></badge>` are fine. Anything other than whitespace between the tags is a compile error |
+| Children      | Markup between the tags. The component places it with `<CONTENT />`. See [Children](#children) |
 | Unknown tags  | Any tag without a matching import is plain HTML                                                                                   |
 
-<<<<<<< HEAD
+### Children
+
+Put markup between a component's tags. The component decides where it goes with `<CONTENT />`.
+
+```html
+<script>
+  import Card from "./Card.lucia";
+  import { variable } from "lucia";
+
+  const count = variable(0);
+
+  function add() {
+    count.value++;
+  }
+</script>
+
+<Card title="Clicks">
+  <p>{count} clicks</p>
+  <button onclick={add}>Add</button>
+</Card>
+```
+
+```html
+<!-- Card.lucia -->
+<script>
+  import { props } from "lucia";
+
+  const { title } = props({ title: "Card" });
+</script>
+
+<section>
+  <h2>{title}</h2>
+  <CONTENT />
+</section>
+```
+
+| Rule         | Detail                                                                                              |
+| ------------ | --------------------------------------------------------------------------------------------------- |
+| Scope        | The children use the parent's variables, events, `animate`, blocks and scoped styles               |
+| Reactive     | Children update like any markup in the parent. They are removed with the component                  |
+| No children  | `<CONTENT />` renders nothing                                                                       |
+| One CONTENT  | A component file has one `<CONTENT />`. A second one is error L1035                                 |
+| Self-closing | Write `<CONTENT />`. `<CONTENT></CONTENT>` is error L1036                                           |
+| Attributes   | `<CONTENT />` takes none                                                                            |
+| Inside flow  | `<CONTENT />` works inside `<IF>`, `<EACH>` and `<FOR>`. Each place shows the children again          |
+
+> [!NOTE]
+> `CONTENT` is a built-in tag, like `IF`. Lowercase `<content>` is a plain HTML element.
+
 ### Recursive components
 
 A component can import itself. Its own tag then works inside its markup, so it can show a tree or nested replies.
