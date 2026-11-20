@@ -107,3 +107,67 @@ The grammar is `editors/vscode/syntaxes/lucia.tmLanguage.json`. Update it in the
 | `bun test test/editors`               | Grammar, real token scopes, completion, hover, format, lint, API table |
 | `cd editors/vscode && bun run build`  | The extension bundles                                                  |
 | `bunx tsc --noEmit -p editors/vscode` | The extension type checks                                              |
+
+## Web editor
+
+The docs site has a code editor component, `examples/web/src/components/CodeEditor.lucia`. It runs the same checks as the VS Code extension, in the browser. It is built on [CodeMirror 6](https://codemirror.net/).
+
+### Props
+
+| Prop       | Type                   | Default | What it does                                            |
+| ---------- | ---------------------- | ------- | ------------------------------------------------------- |
+| `files`    | `{ name, code }[]`     | `[]`    | The files to show. Two or more files add tabs           |
+| `active`   | string                 | `""`    | The file to show first                                  |
+| `readOnly` | boolean                | `false` | Blocks typing and formatting                            |
+| `onChange` | `(name, code) => void` | no-op   | Called after each edit, with the file name and its code |
+
+```html
+<CodeEditor files="{sources}" active="App.lucia" onChange="{save}" />
+```
+
+> [!TIP]
+> To keep the code, store it in the `onChange` handler. The editor does not write to the `files` store.
+
+### What it does
+
+| Feature    | Detail                                                                                                                                   |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Colours    | `.lucia` and `.ts`. Light and dark mode use the site's `--tok-*` colours                                                                 |
+| Completion | Lucia API names with imports, enums, `animate` keys, CSS properties, flow tags, HTML tags, names in the file, and `.value` and `.peek()` |
+| Docs popup | The signature and description from `reference/api.ts`, for completions and hover                                                         |
+| Errors     | Compile errors with code, message and hint, plus TypeScript syntax errors in the script                                                  |
+| Warnings   | The lint rules in [Warnings](#warnings)                                                                                                  |
+| Format     | Shift+Alt+F, or the format button. Same rules as the extension's [Format](#format)                                                       |
+| Editing    | Line numbers, bracket matching, auto-close, auto-indent, multiple cursors, search and replace, undo and redo, folding, active line       |
+| Copy       | The copy button copies the file that is shown                                                                                            |
+
+> [!NOTE]
+> Errors and warnings appear about 300 ms after you stop typing. Style errors are not checked in the browser, because Sass does not run there.
+
+### Keys
+
+| Key            | Action                                         |
+| -------------- | ---------------------------------------------- |
+| Tab            | Indents the line or selection                  |
+| Arrow keys     | In the list of tabs, moves between files       |
+| Esc            | Leaves the editor, so the keyboard can move on |
+| Shift+Alt+F    | Formats the file                               |
+| Ctrl+F         | Search. The panel also has a replace field     |
+| Ctrl+Z, Ctrl+Y | Undo and redo                                  |
+
+On a phone the code text is 16px, so it does not zoom when tapped, and long lines wrap.
+
+### Loading
+
+The editor code loads when the component is placed on the page. Prettier loads the first time a file is formatted.
+
+| Part     | Loads when              | Size (gzipped) |
+| -------- | ----------------------- | -------------- |
+| Editor   | The component is placed | About 240 KB   |
+| Prettier | The first format        | About 400 KB   |
+
+### Tests
+
+| Command                         | Checks                                                                         |
+| ------------------------------- | ------------------------------------------------------------------------------ |
+| `bun test test/examples/editor` | Completions, diagnostics and their positions, format, docs and highlight marks |
