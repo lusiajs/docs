@@ -1,5 +1,5 @@
 import { attach, type Component, type Instance } from "lusia";
-import { scrollToTarget } from "./hash-scroll.ts";
+import { scrollToId } from "./hash-scroll.ts";
 import { normalizePath } from "./page-link.ts";
 import { refreshTopbar } from "./topbar.ts";
 
@@ -57,7 +57,7 @@ async function show(path: string, hash: string, push: boolean): Promise<void> {
   const url = spec.path + hash;
   if (push && url !== location.pathname + location.hash) history.pushState(null, "", url);
   if (current?.spec === spec) {
-    scrollTo(hash);
+    scrollTo(hash, current.controller.signal);
     return;
   }
   // The old page stays on screen until the new page's code has loaded.
@@ -76,7 +76,7 @@ async function show(path: string, hash: string, push: boolean): Promise<void> {
   document.documentElement.dataset.route = spec.route;
   markActiveLink(spec.path);
   refreshTopbar();
-  scrollTo(hash);
+  scrollTo(hash, controller.signal);
 }
 
 function markActiveLink(path: string): void {
@@ -87,7 +87,6 @@ function markActiveLink(path: string): void {
 }
 
 // Scrolls to the hash target, or to the top of the page when there is no hash.
-function scrollTo(hash: string): void {
-  const target = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : null;
-  scrollToTarget(target);
+function scrollTo(hash: string, signal: AbortSignal): void {
+  scrollToId(hash ? decodeURIComponent(hash.slice(1)) : "", signal);
 }

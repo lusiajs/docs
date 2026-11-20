@@ -15,6 +15,8 @@ let linksById = new Map<string, HTMLAnchorElement[]>();
 let activeLinks: HTMLAnchorElement[] = [];
 let sections: HTMLElement[] = [];
 let demos: HTMLElement[] = [];
+let selectors: SpyTargets;
+let observer: MutationObserver | undefined;
 let currentKey = "";
 let frame = 0;
 
@@ -23,12 +25,21 @@ export function initScrollSpy(signal: AbortSignal, targets: SpyTargets): void {
   indicator = document.querySelector<HTMLElement>(".nav-indicator")!;
   const sidebar = document.querySelector<HTMLElement>("#sidebar")!;
   linksById = groupLinksById(sidebar);
+  selectors = targets;
   sections = queryAll(targets.sections);
   demos = targets.demos ? queryAll(targets.demos) : [];
   window.addEventListener("scroll", () => scheduleUpdate(signal), { passive: true, signal });
   window.addEventListener("resize", () => scheduleUpdate(signal), { signal });
   sidebar.addEventListener("transitionend", () => placeIndicator(activeLinks.at(-1)), { signal });
+  // Lazy components mount after the page, so their sections and demos join the targets later.
+  observer = new MutationObserver(() => recollect(signal));
+  observer.observe(document.getElementById("outlet") ?? document.body, {
+    childList: true,
+    subtree: true,
+  });
   signal.addEventListener("abort", () => {
+    observer?.disconnect();
+    observer = undefined;
     cancelAnimationFrame(frame);
     frame = 0;
     currentKey = "";
@@ -40,6 +51,19 @@ export function initScrollSpy(signal: AbortSignal, targets: SpyTargets): void {
 // Call after targets are shown or hidden, so the current link follows the change without a scroll.
 export function refreshScrollSpy(): void {
   update();
+}
+
+function recollect(signal: AbortSignal): void {
+  const nextSections = queryAll(selectors.sections);
+  const nextDemos = selectors.demos ? queryAll(selectors.demos) : [];
+  if (sameTargets(sections, nextSections) && sameTargets(demos, nextDemos)) return;
+  sections = nextSections;
+  demos = nextDemos;
+  scheduleUpdate(signal);
+}
+
+function sameTargets(before: HTMLElement[], after: HTMLElement[]): boolean {
+  return before.length === after.length && before.every((target, index) => target === after[index]);
 }
 
 function queryAll(selector: string): HTMLElement[] {
