@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, SCROLL_AT } from "lusia";
+import { WHEN, EASE, SCROLL_AT, setup } from "lusia";
 import { AT, watchProgress } from "./scroll-readout.ts";
 
 // Two items on one card. They set different properties, so they do not fight.
@@ -26,7 +26,7 @@ const blurOutMotion = {
 };
 const motion = [fadeInMotion, blurOutMotion];
 
-function setup(root) {
+setup((root) => {
   const card = root.querySelector(".card");
   const outputs = root.querySelectorAll("output");
   const stops = [
@@ -34,7 +34,7 @@ function setup(root) {
     watchProgress(card, AT.CENTER, AT.LEAVE, outputs[1]),
   ];
   return () => stops.forEach((stop) => stop());
-}
+});
 </script>
 
 <div class="scroll-demo">

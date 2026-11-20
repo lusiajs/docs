@@ -1,5 +1,5 @@
 <script>
-import { props, variable } from "lusia";
+import { props, setup, variable } from "lusia";
 import type { EditorFile, EditorJump } from "../editor/files.ts";
 import type { EditorSession } from "../editor/session.ts";
 
@@ -48,7 +48,7 @@ variable.autoRun(() => {
 });
 
 // The editor code loads on first mount, so a page without it stays small.
-function setup() {
+setup(() => {
   let closed = false;
   import("../editor/session.ts")
     .then(({ EditorSession }) => {
@@ -68,7 +68,7 @@ function setup() {
     session?.destroy();
     session = undefined;
   };
-}
+});
 
 function changed(name: string, code: string) {
   onChange.peek()(name, code);

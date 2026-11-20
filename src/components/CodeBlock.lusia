@@ -1,5 +1,5 @@
 <script>
-import { props, variable } from "lusia";
+import { props, setup, variable } from "lusia";
 import { highlightInto } from "../highlight/highlight.ts";
 
 const { text, language, className } = props({
@@ -10,9 +10,9 @@ const { text, language, className } = props({
 const code = variable<HTMLElement | null>(null);
 
 // The text never changes after mount, so it is highlighted once.
-function setup() {
+setup(() => {
   highlightInto(code.value!, text.peek(), language.peek());
-}
+});
 </script>
 
 <pre class={className}><code bind-element={code}></code></pre>

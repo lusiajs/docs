@@ -1,5 +1,5 @@
 <script>
-import { WHEN, PRESET, variable } from "lusia";
+import { WHEN, PRESET, setup, variable } from "lusia";
 import { watchPinned } from "./scroll-readout.ts";
 
 // One tall lane drives all four presets, so they play side by side at the same progress.
@@ -22,9 +22,9 @@ const rightMotion = {
   more: { follow: lane },
 };
 
-function setup(root) {
+setup((root) => {
   return watchPinned(root.querySelector(".lane"), root.querySelector("output"));
-}
+});
 </script>
 
 <div class="scroll-demo">

@@ -1,4 +1,5 @@
 <script>
+import { setup } from "lusia";
 import { onScrollFrame, meets } from "./scroll-readout.ts";
 
 // A window line lights up when an element line is on it, and the other way round.
@@ -16,7 +17,7 @@ function isOnScreen(root) {
   return rect.bottom > 0 && rect.top < window.innerHeight;
 }
 
-function setup(root) {
+setup((root) => {
   const card = root.querySelector(".card");
   const windowLines = [...root.querySelectorAll(".window-line")];
   const cardLines = [...root.querySelectorAll(".card-line")];
@@ -31,7 +32,7 @@ function setup(root) {
       line.classList.toggle("lit", meetsAny(rect, line, cardLines));
     }
   });
-}
+});
 </script>
 
 <div class="scroll-demo">

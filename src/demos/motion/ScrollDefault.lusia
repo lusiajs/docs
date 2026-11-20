@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE } from "lusia";
+import { WHEN, EASE, setup } from "lusia";
 import { AT, watchProgress } from "./scroll-readout.ts";
 
 // With no start or end, the range is SCROLL_AT.ENTER to SCROLL_AT.LEAVE.
@@ -11,11 +11,11 @@ const rise = {
 
 const riseMotion = { style: rise, when: WHEN.SCROLL };
 
-function setup(root) {
+setup((root) => {
   const slot = root.querySelector(".slot");
   const out = root.querySelector("output");
   return watchProgress(slot, AT.ENTER, AT.LEAVE, out);
-}
+});
 </script>
 
 <div class="scroll-demo">

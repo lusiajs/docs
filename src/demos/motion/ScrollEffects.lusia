@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, variable } from "lusia";
+import { WHEN, EASE, setup, variable } from "lusia";
 import { watchPinned } from "./scroll-readout.ts";
 
 // The tall lane drives every effect. The effects move the cards, not the lane.
@@ -38,11 +38,11 @@ const spin = {
 
 const spinMotion = { style: spin, when: WHEN.SCROLL, more: { follow: lane } };
 
-function setup(root) {
+setup((root) => {
   page.value = document.documentElement;
   lane.value = root.querySelector(".lane");
   return watchPinned(root.querySelector(".lane"), root.querySelector("output"));
-}
+});
 </script>
 
 <div class="scroll-demo">

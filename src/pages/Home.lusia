@@ -1,5 +1,5 @@
 <script>
-import { variable } from "lusia";
+import { setup, variable } from "lusia";
 import Hero from "../components/Hero.lusia";
 import Features from "../components/Features.lusia";
 import HomeBackground from "../components/HomeBackground.lusia";
@@ -22,7 +22,7 @@ function startStorm(): void {
   setTimeout(() => (storm.value = false), STORM_MS);
 }
 
-function setup() {
+setup(() => {
   const stopCursor = trackCursor(sparks);
   const stopKonami = watchKonami(() => {
     startStorm();
@@ -41,7 +41,7 @@ function setup() {
     stopCursor();
     stopKonami();
   };
-}
+});
 </script>
 
 <div class="page-root home" animate={pageMotion} bind-element={homeEl}>
