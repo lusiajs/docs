@@ -71,7 +71,7 @@ Missing `style`, an unknown `when` value and keyframes without 0 or 1 throw an e
 > `ease` is not an item field. Set it in the keyframes `default`. An item with `ease`, `curve` or `transition` throws, such as `ease moved into the keyframes: default: [...]`.
 
 > [!NOTE]
-> Items in an array are independent. If two items set the same CSS property, the later item wins for that property, and the earlier one does not write it.
+> Items in an array are independent. If two items set the same CSS property, the later item wins for that property, and the earlier one does not write it. A `DETACH` item is the exception: it plays on its own, so it never takes a property from the other items.
 
 An element can have one `ATTACH` item and one `DETACH` item, so it has different enter and leave animations.
 
