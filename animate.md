@@ -42,19 +42,19 @@ Animation is the only special attribute. Everything else lives inside its value.
 
 ### AnimateItem fields
 
-| Field          | Type                      | Default                          | Effect                                                                                                                                                                                                |
-| -------------- | ------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `style`        | Keyframes                 | required                         | The keys to play                                                                                                                                                                                      |
-| `when`         | `WHEN` member or a variable  | `WHEN.ATTACH`                    | What plays it. See [Triggers](#triggers)                                                                                                                                                              |
-| `control`      | controller                | none                             | Lets code play, reverse, stop or seek the item. See [Controller](#controller)                                                                                                                         |
-| `once`         | boolean                   | `false` (`true` for `WHEN.VIEW`) | Play forward only the first time. `VIEW` stays once unless `more.reverse` is set                                                                                                                      |
-| `midway`       | `MIDWAY` member or object | `MIDWAY.TURN`                    | What a new play does while one is still running. See [Midway](#midway)                                                                                                                                |
-| `more`         | object                    | none                             | Options for the trigger: `margin`, `amount` and `reverse` for `VIEW`, `inDelay`, `outDelay`, `out` and `outDuration` for `HOVER`, `start`, `end`, `follow` and `part` for `SCROLL`. See [more](#more) |
-| `keep`         | boolean                   | `true`                           | When `false`, the inline styles the animation wrote are removed once a play ends at progress 1                                                                                                        |
-| `duration`     | ms                        | `300`                            | Length of one play                                                                                                                                                                                    |
-| `delay`        | ms                        | `0`                              | Wait before each forward play                                                                                                                                                                         |
-| `loop`         | boolean or count          | none                             | `true` repeats forever, `3` repeats three times                                                                                                                                                       |
-| `backAndForth` | boolean                   | `false`                          | With `loop`: each repeat plays 0 to 1, then 1 to 0 (one loop pass = there and back)                                                                                                                   |
+| Field          | Type                        | Default                          | Effect                                                                                                                                                                                                |
+| -------------- | --------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `style`        | Keyframes                   | required                         | The keys to play                                                                                                                                                                                      |
+| `when`         | `WHEN` member or a variable | `WHEN.ATTACH`                    | What plays it. See [Triggers](#triggers)                                                                                                                                                              |
+| `control`      | controller                  | none                             | Lets code play, reverse, stop or seek the item. See [Controller](#controller)                                                                                                                         |
+| `once`         | boolean                     | `false` (`true` for `WHEN.VIEW`) | Play forward only the first time. `VIEW` stays once unless `more.reverse` is set                                                                                                                      |
+| `midway`       | `MIDWAY` member or object   | `MIDWAY.TURN`                    | What a new play does while one is still running. See [Midway](#midway)                                                                                                                                |
+| `more`         | object                      | none                             | Options for the trigger: `margin`, `amount` and `reverse` for `VIEW`, `inDelay`, `outDelay`, `out` and `outDuration` for `HOVER`, `start`, `end`, `follow` and `part` for `SCROLL`. See [more](#more) |
+| `keep`         | boolean                     | `true`                           | When `false`, the inline styles the animation wrote are removed once a play ends at progress 1                                                                                                        |
+| `duration`     | ms                          | `300`                            | Length of one play                                                                                                                                                                                    |
+| `delay`        | ms                          | `0`                              | Wait before each forward play                                                                                                                                                                         |
+| `loop`         | boolean or count            | none                             | `true` repeats forever, `3` repeats three times                                                                                                                                                       |
+| `backAndForth` | boolean                     | `false`                          | With `loop`: each repeat plays 0 to 1, then 1 to 0 (one loop pass = there and back)                                                                                                                   |
 
 Missing `style`, an unknown `when` value and keyframes without 0 or 1 throw an error. The layout triggers (`MOVE`, `RESIZE`, `MOVE_OR_RESIZE`) are the one exception: their `style` is optional.
 
@@ -68,6 +68,9 @@ Missing `style`, an unknown `when` value and keyframes without 0 or 1 throw an e
 > `ACTIVE.IN` and `ACTIVE.OUT` were renamed to `WHEN.ATTACH` and `WHEN.DETACH`. Old names throw `ACTIVE.IN and ACTIVE.OUT were renamed to ACTIVE.ATTACH and ACTIVE.DETACH`.
 
 > [!NOTE]
+> An unknown item key, such as `durtion`, throws `unknown animate key` with a `did you mean` hint. A dev build points at the key's own line.
+
+> [!NOTE]
 > `ease` is not an item field. Set it in the keyframes `default`. An item with `ease`, `curve` or `transition` throws, such as `ease moved into the keyframes: default: [...]`.
 
 > [!NOTE]
@@ -77,18 +80,18 @@ An element can have one `ATTACH` item and one `DETACH` item, so it has different
 
 ## Triggers
 
-| `when`                  | When it plays                                      | Notes                                                                                                                                                                    |
-| ----------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `WHEN.ATTACH` (default) | 0 to 1 once, when attached                         | Nothing on detach                                                                                                                                                        |
-| `WHEN.DETACH`           | Its own keyframes, when detaching                  | Detach waits for it. Nothing on attach                                                                                                                                   |
-| `WHEN.VIEW`             | 0 to 1 when at least 15% is visible                | Once by default. `more: { reverse: true }` plays 1 to 0 when it leaves the view                                                                                          |
-| `WHEN.HOVER`            | 0 to 1 on pointer enter, 1 to 0 on leave           | Leave plays from the current progress. `more` sets delays and a separate way out. Touch: a tap toggles, a tap outside plays out. Focus counts as enter and blur as leave |
-| `WHEN.SCROLL`           | The progress follows the element's place on screen | Scroll-linked. `duration`, `delay`, `once` and `loop` do not apply. `loop` is an error                                                                                   |
-| `WHEN.MOVE`             | Glides when the element's place changes            | Automatic, for any cause. See [Layout](#layout)                                                                                                                          |
-| `WHEN.RESIZE`           | Glides when the element's size changes             | Automatic. Ignores place changes. See [Layout](#layout)                                                                                                                  |
-| `WHEN.MOVE_OR_RESIZE`   | Glides when the place or the size changes          | Automatic. See [Layout](#layout)                                                                                                                                         |
-| `WHEN.MANUAL`           | Only when a controller plays it                    | No automatic trigger                                                                                                                                                     |
-| A variable or computed variable   | Truthy: 0 to 1. Falsy: 1 to 0                      | Read reactively. The first value is applied without animating                                                                                                            |
+| `when`                          | When it plays                                      | Notes                                                                                                                                                                    |
+| ------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `WHEN.ATTACH` (default)         | 0 to 1 once, when attached                         | Nothing on detach                                                                                                                                                        |
+| `WHEN.DETACH`                   | Its own keyframes, when detaching                  | Detach waits for it. Nothing on attach                                                                                                                                   |
+| `WHEN.VIEW`                     | 0 to 1 when at least 15% is visible                | Once by default. `more: { reverse: true }` plays 1 to 0 when it leaves the view                                                                                          |
+| `WHEN.HOVER`                    | 0 to 1 on pointer enter, 1 to 0 on leave           | Leave plays from the current progress. `more` sets delays and a separate way out. Touch: a tap toggles, a tap outside plays out. Focus counts as enter and blur as leave |
+| `WHEN.SCROLL`                   | The progress follows the element's place on screen | Scroll-linked. `duration`, `delay`, `once` and `loop` do not apply. `loop` is an error                                                                                   |
+| `WHEN.MOVE`                     | Glides when the element's place changes            | Automatic, for any cause. See [Layout](#layout)                                                                                                                          |
+| `WHEN.RESIZE`                   | Glides when the element's size changes             | Automatic. Ignores place changes. See [Layout](#layout)                                                                                                                  |
+| `WHEN.MOVE_OR_RESIZE`           | Glides when the place or the size changes          | Automatic. See [Layout](#layout)                                                                                                                                         |
+| `WHEN.MANUAL`                   | Only when a controller plays it                    | No automatic trigger                                                                                                                                                     |
+| A variable or computed variable | Truthy: 0 to 1. Falsy: 1 to 0                      | Read reactively. The first value is applied without animating                                                                                                            |
 
 > [!IMPORTANT]
 > Only `DETACH` items delay the removal of the nodes on detach. `VIEW`, `HOVER` and variable items do not.
@@ -116,7 +119,7 @@ An element can have one `ATTACH` item and one `DETACH` item, so it has different
 | `WHEN.HOVER`  | `outDuration` | ms                                   | item `duration`   | Length of the way out. Needs `out`                                                                                                                                              |
 | `WHEN.SCROLL` | `start`       | `SCROLL_AT` or `{ element, window }` | `SCROLL_AT.ENTER` | Where the progress is 0. See [SCROLL points](#scroll-points)                                                                                                                    |
 | `WHEN.SCROLL` | `end`         | `SCROLL_AT` or `{ element, window }` | `SCROLL_AT.LEAVE` | Where the progress is 1. Same form as `start`                                                                                                                                   |
-| `WHEN.SCROLL` | `follow`      | variable of an element                  | none              | The tall element that drives the progress. Its scroll position is used instead of the item's own. Not with `start` or `end`. See [Pinned scroll](#pinned-scroll)                |
+| `WHEN.SCROLL` | `follow`      | variable of an element               | none              | The tall element that drives the progress. Its scroll position is used instead of the item's own. Not with `start` or `end`. See [Pinned scroll](#pinned-scroll)                |
 | `WHEN.SCROLL` | `part`        | `[from, to]`                         | `[0, 1]`          | Plays only that slice of the progress. `[0.5, 1]` plays in the second half. Needs `0 <= from < to <= 1`                                                                         |
 
 ```html
@@ -337,11 +340,11 @@ A scroll item follows the position, not time. Scrolling back up plays the item i
 
 `WHEN.MOVE`, `WHEN.RESIZE` and `WHEN.MOVE_OR_RESIZE` glide an element from its old box to its new one. You do not write any keyframes. The change can come from anything: a class toggle, a flex reflow, a sibling inserted, a switch to `position: fixed`, or a window resize.
 
-| `when`                | The glide runs when                    |
-| --------------------- | -------------------------------------- |
-| `WHEN.MOVE`           | The place changes. Size changes wait   |
-| `WHEN.RESIZE`         | The size changes. Place changes wait   |
-| `WHEN.MOVE_OR_RESIZE` | Either one changes                     |
+| `when`                | The glide runs when                  |
+| --------------------- | ------------------------------------ |
+| `WHEN.MOVE`           | The place changes. Size changes wait |
+| `WHEN.RESIZE`         | The size changes. Place changes wait |
+| `WHEN.MOVE_OR_RESIZE` | Either one changes                   |
 
 ```html
 <script>
@@ -396,15 +399,15 @@ const glide = { when: WHEN.MOVE, duration: 400 };
 
 ### Rules
 
-| Rule                                                                                                                                             |
-| ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `duration`, `delay` and the keyframes `default` ease set the glide. The engine default fills what is missing                                    |
-| `style` is optional. With a `style`, its keys play along the glide, such as a fade. They use the same timing and `midway`                       |
-| `once` glides only the first change. `loop` is an error                                                                                          |
-| A change during a glide starts from the box the element shows now, so nothing jumps                                                              |
-| `translate` and `scale` belong to the glide. Keyframes cannot set them                                                                           |
-| With reduced motion, the element jumps to its new box                                                                                            |
-| A scroll does not glide. Only a change in the layout box does                                                                                    |
+| Rule                                                                                                                      |
+| ------------------------------------------------------------------------------------------------------------------------- |
+| `duration`, `delay` and the keyframes `default` ease set the glide. The engine default fills what is missing              |
+| `style` is optional. With a `style`, its keys play along the glide, such as a fade. They use the same timing and `midway` |
+| `once` glides only the first change. `loop` is an error                                                                   |
+| A change during a glide starts from the box the element shows now, so nothing jumps                                       |
+| `translate` and `scale` belong to the glide. Keyframes cannot set them                                                    |
+| With reduced motion, the element jumps to its new box                                                                     |
+| A scroll does not glide. Only a change in the layout box does                                                             |
 
 > [!NOTE]
 > `WHEN.RESIZE` scales the box. Text and borders are stretched during the glide. For content that must keep its shape, put it in an element that does not resize, and glide the outer box.
@@ -474,6 +477,7 @@ const fade: Keyframes = {
 | --------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `default` | Optional. The easing for keys that do not set their own. Its forms are `[EASE.STYLE.x, ease]`, `[EASE.STYLE.x]` and `[EASE.y]` |
 | Key       | Progress from 0 to 1. Must include `0` and `1`. Keys outside 0 to 1, or listed twice, throw                                    |
+| Name      | Only `default` or a number. Any other name throws `unknown keyframes key`, with a `did you mean` hint for a typo               |
 | Value     | One of the four key forms below                                                                                                |
 | `style`   | CSS properties in camelCase, such as `backgroundColor`. Custom properties start with `--`                                      |
 
@@ -707,21 +711,21 @@ It returns a function. Call it with `t` from 0 to 1. It handles numbers, text wi
 | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | No `auto` sizes. `height: auto` cannot tween                                                 | Animate a fixed value, or animate `scale` instead                     |
 | Touch has no hover. `WHEN.HOVER` uses taps there: a tap toggles, and a tap outside plays out | For content that should play on scroll, use `WHEN.VIEW`               |
-| `WHEN.SCROLL` does not reload keyframes that come from variables while it runs                  | Set the keyframes before the element mounts                           |
-| A change during a layout glide keeps the place, but its speed starts again at rest                                                              | Use a short `duration` for items that change often                     |
+| `WHEN.SCROLL` does not reload keyframes that come from variables while it runs               | Set the keyframes before the element mounts                           |
+| A change during a layout glide keeps the place, but its speed starts again at rest           | Use a short `duration` for items that change often                    |
 | No stagger helper. Delays for a list are set by hand                                         | Give each item its own `delay`                                        |
 | Frames are driven by JavaScript, not the compositor                                          | Keep the number of animated elements moderate. See the stress example |
 | Layout properties (`width`, `top`, `margin`) are slow                                        | Animate `transform` and `opacity` where you can                       |
 
 ## Types
 
-| Type            | Shape                                                                                                                                                                           |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Keyframes`     | `{ default?: DefaultEasing; 0: KeyframeValue; 1: KeyframeValue } & Record<number, KeyframeValue>`                                                                               |
-| `KeyframeValue` | `Style`, `[Ease, Style]`, `[EaseStyle, Style]` or `[EaseStyle, Ease, Style]`                                                                                                    |
-| `DefaultEasing` | `[EaseStyle, Ease]`, `[EaseStyle]` or `[Ease]`                                                                                                                                  |
-| `Style`         | The DOM style properties in camelCase (`opacity`, `backgroundColor`), with numbers or strings, and `--custom` properties                                                        |
+| Type            | Shape                                                                                                                                                                              |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Keyframes`     | `{ default?: DefaultEasing; 0: KeyframeValue; 1: KeyframeValue } & Record<number, KeyframeValue>`                                                                                  |
+| `KeyframeValue` | `Style`, `[Ease, Style]`, `[EaseStyle, Style]` or `[EaseStyle, Ease, Style]`                                                                                                       |
+| `DefaultEasing` | `[EaseStyle, Ease]`, `[EaseStyle]` or `[Ease]`                                                                                                                                     |
+| `Style`         | The DOM style properties in camelCase (`opacity`, `backgroundColor`), with numbers or strings, and `--custom` properties                                                           |
 | `AnimateItem`   | A union on `when`: `more` is typed by the trigger. For example `ViewMore` on `WHEN.VIEW`, `HoverMore` on `WHEN.HOVER`, and no `more` on `ATTACH`, `DETACH`, `MANUAL` or a variable |
-| `EaseStyle`     | `(t: number) => number`, such as `EASE.STYLE.QUART`                                                                                                                             |
-| `Ease`          | One of `EASE.IN`, `EASE.OUT`, `EASE.INOUT`                                                                                                                                      |
-| `Animate`       | `Keyframes \| AnimateItem \| (Keyframes \| AnimateItem)[]`                                                                                                                      |
+| `EaseStyle`     | `(t: number) => number`, such as `EASE.STYLE.QUART`                                                                                                                                |
+| `Ease`          | One of `EASE.IN`, `EASE.OUT`, `EASE.INOUT`                                                                                                                                         |
+| `Animate`       | `Keyframes \| AnimateItem \| (Keyframes \| AnimateItem)[]`                                                                                                                         |
