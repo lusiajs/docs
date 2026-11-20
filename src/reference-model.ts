@@ -1,4 +1,4 @@
-import type { ApiEntry, ApiMember } from "../../reference/api.ts";
+import type { ApiEntry, ApiKind, ApiMember } from "../../reference/api.ts";
 
 export interface MemberRow {
   name: string;
@@ -6,14 +6,53 @@ export interface MemberRow {
   depth: number;
 }
 
+// The Reference reads kind by kind, simplest idea first.
+export const KIND_ORDER: ApiKind[] = ["function", "markup", "style", "value", "type"];
+
+export interface KindInfo {
+  label: string;
+  icon: string;
+  color: string;
+}
+
+export const KIND_INFO: Record<ApiKind, KindInfo> = {
+  function: { label: "Functions", icon: "function", color: "var(--pink)" },
+  markup: { label: "Markup", icon: "code", color: "var(--sky)" },
+  style: { label: "Style", icon: "palette", color: "var(--lavender)" },
+  value: { label: "Values", icon: "sell", color: "var(--mint)" },
+  type: { label: "Types", icon: "data_object", color: "var(--lemon)" },
+};
+
+export interface KindSection extends KindInfo {
+  kind: ApiKind;
+  entries: ApiEntry[];
+}
+
 // Signatures longer than this wrap their parameters, one per line.
 const WRAP_AT = 60;
 const OPENERS = "([{<";
 const CLOSERS = ")]}>";
 
-// Every kind in the list once, in the order it first appears.
-export function kindsOf(entries: ApiEntry[]): string[] {
-  return [...new Set(entries.map((entry) => entry.kind))];
+// The kinds the list actually has, in the Reference's fixed order, so the chips match its sections.
+export function kindsOf(entries: ApiEntry[]): ApiKind[] {
+  return KIND_ORDER.filter((kind) => entries.some((entry) => entry.kind === kind));
+}
+
+// One section per kind that has entries, each list sorted by name so the Reference reads like an index.
+export function kindSections(entries: ApiEntry[]): KindSection[] {
+  return KIND_ORDER.map((kind) => ({
+    kind,
+    ...KIND_INFO[kind],
+    entries: entries
+      .filter((entry) => entry.kind === kind)
+      .sort((a, b) => a.name.localeCompare(b.name)),
+  })).filter((section) => section.entries.length > 0);
+}
+
+// "53 entries" when all show, "1 of 53 entries" when a filter hides some.
+export function countLabel(shown: number, total: number): string {
+  if (shown === total) return `${total} ${total === 1 ? "entry" : "entries"}`;
+  return `${shown} of ${total} ${total === 1 ? "entry" : "entries"}`;
 }
 
 // Nested members become rows with a depth, so the table can indent them.
@@ -24,10 +63,12 @@ export function flattenMembers(members: ApiMember[] = [], depth = 0): MemberRow[
   ]);
 }
 
-// The lower-case text the filter matches: the name, the summary and every member name.
+// The lower-case text the filter matches: the name, summary, signature, every bullet and every member name and summary.
 export function searchText(entry: ApiEntry): string {
-  const memberNames = flattenMembers(entry.members).map((row) => row.name);
-  return [entry.name, entry.summary, ...memberNames].join(" ").toLowerCase();
+  const members = flattenMembers(entry.members).flatMap((row) => [row.name, row.summary]);
+  return [entry.name, entry.summary, entry.signature, ...entry.bullets, ...members]
+    .join(" ")
+    .toLowerCase();
 }
 
 // An entry shows when its text has the query and, if any kind is picked, its kind is one of them.

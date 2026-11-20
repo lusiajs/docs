@@ -1,31 +1,28 @@
-import { matchesFilter } from "./reference-model.ts";
+import { countLabel, matchesFilter } from "./reference-model.ts";
 import { refreshScrollSpy } from "./scroll-spy.ts";
-
-function countShown(counts: Map<string, number>, key: string, shown: boolean): void {
-  counts.set(key, (counts.get(key) ?? 0) + Number(shown));
-}
 
 // Filters the Reference cards and the index by text and kind.
 export function initReferenceFilter(root: HTMLElement, signal: AbortSignal): void {
   const filter = root.querySelector<HTMLInputElement>("#ref-filter")!;
   const picked = new Set<string>();
-  const cards = [...root.querySelectorAll<HTMLElement>("[data-ref-entry]")];
-  const groups = [...root.querySelectorAll<HTMLElement>("[data-ref-group]")];
-  const blocks = [...root.querySelectorAll<HTMLElement>("[data-ref-section]")];
-  const indexGroups = [...root.querySelectorAll<HTMLElement>("[data-index-group]")];
-  const indexBlocks = [...root.querySelectorAll<HTMLElement>("[data-index-block]")];
-  const indexLinks = new Map(
-    [...root.querySelectorAll<HTMLElement>("[data-ref-link]")].map((link) => [
-      link.dataset.refLink!,
-      link,
-    ]),
-  );
   const kindButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-ref-kind]")];
   const empty = root.querySelector<HTMLElement>("[data-ref-empty]")!;
+  const count = root.querySelector<HTMLElement>("[data-ref-count]");
+  let frame = 0;
 
   function apply(): void {
-    const shownByGroup = new Map<string, number>();
-    const shownByBlock = new Map<string, number>();
+    // The cards load after the page, so re-read them on every run. Before they arrive, leave the page as it is.
+    const cards = [...root.querySelectorAll<HTMLElement>("[data-ref-entry]")];
+    if (cards.length === 0) return;
+    const indexLinks = new Map(
+      [...root.querySelectorAll<HTMLElement>("[data-ref-link]")].map((link) => [
+        link.dataset.refLink!,
+        link,
+      ]),
+    );
+    const groups = [...root.querySelectorAll<HTMLElement>("[data-ref-group]")];
+    const indexGroups = [...root.querySelectorAll<HTMLElement>("[data-index-group]")];
+    const shownByGroup = new Map<string, boolean>();
     let shownTotal = 0;
     for (const card of cards) {
       const shown = matchesFilter(
@@ -34,18 +31,44 @@ export function initReferenceFilter(root: HTMLElement, signal: AbortSignal): voi
         picked,
       );
       card.hidden = !shown;
-      indexLinks.get(card.id)!.hidden = !shown;
-      countShown(shownByGroup, card.dataset.group!, shown);
-      countShown(shownByBlock, card.dataset.block!, shown);
+      const link = indexLinks.get(card.id);
+      if (link) link.hidden = !shown;
+      const group = card.dataset.group!;
+      shownByGroup.set(group, (shownByGroup.get(group) ?? false) || shown);
       shownTotal += Number(shown);
     }
     for (const group of groups) group.hidden = !shownByGroup.get(group.dataset.refGroup!);
-    for (const block of blocks) block.hidden = !shownByBlock.get(block.dataset.block!);
     for (const group of indexGroups) group.hidden = !shownByGroup.get(group.dataset.indexGroup!);
-    for (const block of indexBlocks) block.hidden = !shownByBlock.get(block.dataset.indexBlock!);
     empty.hidden = shownTotal > 0;
+    if (count) count.textContent = countLabel(shownTotal, cards.length);
     refreshScrollSpy();
   }
+
+  function scheduleApply(): void {
+    if (frame || signal.aborted) return;
+    frame = requestAnimationFrame(() => {
+      frame = 0;
+      apply();
+    });
+  }
+
+  // The cards are lazy components: they mount after the page and stay for good. Watch for that one arrival.
+  const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      for (const node of mutation.addedNodes) {
+        if (holdsCard(node)) {
+          scheduleApply();
+          return;
+        }
+      }
+    }
+  });
+  observer.observe(root, { childList: true, subtree: true });
+  signal.addEventListener("abort", () => {
+    observer.disconnect();
+    cancelAnimationFrame(frame);
+    frame = 0;
+  });
 
   function setKind(button: HTMLButtonElement): void {
     const kind = button.dataset.refKind!;
@@ -69,4 +92,10 @@ export function initReferenceFilter(root: HTMLElement, signal: AbortSignal): voi
   }
   root.querySelector("[data-ref-clear]")?.addEventListener("click", clearFilters, { signal });
   apply();
+}
+
+// A node that is a card, or that brings cards in as its children.
+function holdsCard(node: Node): boolean {
+  if (!(node instanceof Element)) return false;
+  return node.matches("[data-ref-entry]") || node.querySelector("[data-ref-entry]") !== null;
 }
