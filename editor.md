@@ -41,16 +41,17 @@ Enum members are listed in the `members` field of the entry in `reference/api.ts
 
 Warnings use the source `lucia-lint`. They never block a build.
 
-| Code                        | Warns when                                                                                                     |
-| --------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `unused-import`             | A `.lucia` import is never used as a tag                                                                       |
-| `props-twice`               | `props()` is called more than once in a script                                                                 |
-| `unknown-prop`              | A component tag passes a prop its `props({ ... })` does not declare                                            |
-| `empty-expression`          | Markup has `{}`                                                                                                |
-| `style-attribute`           | A `<style>` tag has an attribute other than `scoped`, `global` or `lang`                                       |
-| `animate-keyframes` (error) | An `animate` attribute on a plain tag is not `{expr}`. Matches the compiler's error                            |
-| `flow-chain` (error)        | `<ELSE>` or `<ELSEIF>` is not right after `</IF>` or `</ELSEIF>`. Matches the compiler's error                 |
-| `bind-target` (error)       | `bind` is on a tag other than `input`, `textarea` or `select`, or on a component. Matches the compiler's error |
+| Code                        | Warns when                                                                                                                                                               |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `unused-import`             | A `.lucia` import is never used as a tag                                                                                                                                 |
+| `props-twice`               | `props()` is called more than once in a script                                                                                                                           |
+| `unknown-prop`              | A component tag passes a prop its `props({ ... })` does not declare                                                                                                      |
+| `empty-expression`          | Markup has `{}`                                                                                                                                                          |
+| `style-attribute`           | A `<style>` tag has an attribute other than `scoped`, `global` or `lang`                                                                                                 |
+| `animate-keyframes` (error) | An `animate` attribute on a plain tag is not `{expr}`. Matches the compiler's error                                                                                      |
+| `animate-key` (error)       | A keyframes key or an item key in `animate` is not known, such as `defaut` or `durtion`. Matches the runtime error. Keys in keyframes kept in the script are checked too |
+| `flow-chain` (error)        | `<ELSE>` or `<ELSEIF>` is not right after `</IF>` or `</ELSEIF>`. Matches the compiler's error                                                                           |
+| `bind-target` (error)       | `bind` is on a tag other than `input`, `textarea` or `select`, or on a component. Matches the compiler's error                                                           |
 
 > [!NOTE]
 > `unknown-prop` needs the child file on disk. It does not warn when the child cannot be read.
@@ -84,7 +85,7 @@ The API table is `reference/api.ts`. Completion, hover and the web docs all read
 | --------- | ------------------------------------------------------------------- |
 | `kind`    | `function`, `type`, `markup`, `style` or `value`                    |
 | `group`   | `basics`, `reactivity`, `flow`, `components`, `styling` or `motion` |
-| `name`    | The label shown, for example `variable()`                              |
+| `name`    | The label shown, for example `variable()`                           |
 | `members` | Enum objects only: `{ name, summary }` for each member              |
 
 A `function`, `type` or `value` entry named like a `lucia` export is offered in `<script>` with an auto-import. A `value` is a constant, such as an enum object.
@@ -178,23 +179,23 @@ The editor code loads when the component is placed on the page. Prettier loads t
 
 The Guide demos can be edited too. Each demo shows its code first. Near the screen, or on a click, the code editor opens.
 
-| Step   | What happens                                                                              |
-| ------ | ----------------------------------------------------------------------------------------- |
-| Edit   | 300 ms after the last key, the demo's files build in the browser and run in a sandbox      |
-| Error  | The error shows under the preview. The last good preview stays                             |
-| Reset  | The original code and the original demo come back                                          |
+| Step  | What happens                                                                          |
+| ----- | ------------------------------------------------------------------------------------- |
+| Edit  | 300 ms after the last key, the demo's files build in the browser and run in a sandbox |
+| Error | The error shows under the preview. The last good preview stays                        |
+| Reset | The original code and the original demo come back                                     |
 
 The build is the same one the [playground](playground.md) uses. It lives in `examples/web/src/live/`.
 
-| File              | Job                                                                                    |
-| ----------------- | -------------------------------------------------------------------------------------- |
-| `build.ts`        | `buildLive(files, { entries, styles })`: compiles every file and links the imports     |
-| `imports.ts`      | Resolves `./` and `../` imports against the importing file, and finds the root files  |
-| `scss.ts`         | The Sass importer. `@use` finds the files in the build, never the disk                 |
-| `demo-build.ts`   | `buildDemo(files)`: adds the site's shared files and theme. Loaded on the first edit   |
-| `demo-session.ts` | `createDemoSession`: edits, the 300 ms delay, reset and the latest-run check           |
-| `preview.ts`      | `Preview`: a new sandboxed frame per run. It replaces the shown frame only after it mounts |
-| `runtime-source.ts` | Loads the runtime that `scripts/playground-runtime.ts` writes                        |
+| File                | Job                                                                                        |
+| ------------------- | ------------------------------------------------------------------------------------------ |
+| `build.ts`          | `buildLive(files, { entries, styles })`: compiles every file and links the imports         |
+| `imports.ts`        | Resolves `./` and `../` imports against the importing file, and finds the root files       |
+| `scss.ts`           | The Sass importer. `@use` finds the files in the build, never the disk                     |
+| `demo-build.ts`     | `buildDemo(files)`: adds the site's shared files and theme. Loaded on the first edit       |
+| `demo-session.ts`   | `createDemoSession`: edits, the 300 ms delay, reset and the latest-run check               |
+| `preview.ts`        | `Preview`: a new sandboxed frame per run. It replaces the shown frame only after it mounts |
+| `runtime-source.ts` | Loads the runtime that `scripts/playground-runtime.ts` writes                              |
 
 > [!NOTE]
 > The frame has an opaque origin (`sandbox="allow-scripts"`), so a demo cannot read the docs site's storage or cookies.
