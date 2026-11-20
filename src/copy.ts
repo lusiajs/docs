@@ -7,11 +7,15 @@ export function initCopy(root: HTMLElement, signal: AbortSignal): void {
     const button = (event.target as Element | null)?.closest<HTMLButtonElement>(".copy-button");
     if (button && root.contains(button)) void copy(button);
   };
-  root.addEventListener("click", onClick);
+  // Capture, because a demo swaps its code panel for the editor in its own bubble handler and the
+  // click may never reach the outlet.
+  root.addEventListener("click", onClick, { capture: true });
   // The outlet outlives the page, so abort takes the listener away with the page's wiring.
-  signal.addEventListener("abort", () => root.removeEventListener("click", onClick), {
-    once: true,
-  });
+  signal.addEventListener(
+    "abort",
+    () => root.removeEventListener("click", onClick, { capture: true }),
+    { once: true },
+  );
 }
 
 async function copy(button: HTMLButtonElement): Promise<void> {
