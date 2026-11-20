@@ -56,7 +56,7 @@ Animation is the only special attribute. Everything else lives inside its value.
 | `loop`         | boolean or count          | none                             | `true` repeats forever, `3` repeats three times                                                                                                                                                       |
 | `backAndForth` | boolean                   | `false`                          | With `loop`: each repeat plays 0 to 1, then 1 to 0 (one loop pass = there and back)                                                                                                                   |
 
-Missing `style`, an unknown `when` value and keyframes without 0 or 1 throw an error.
+Missing `style`, an unknown `when` value and keyframes without 0 or 1 throw an error. The layout triggers (`MOVE`, `RESIZE`, `MOVE_OR_RESIZE`) are the one exception: their `style` is optional.
 
 > [!NOTE]
 > `alternate` was renamed to `backAndForth`. An item that still uses `alternate` throws `alternate was renamed to backAndForth`.
@@ -84,6 +84,9 @@ An element can have one `ATTACH` item and one `DETACH` item, so it has different
 | `WHEN.VIEW`             | 0 to 1 when at least 15% is visible                | Once by default. `more: { reverse: true }` plays 1 to 0 when it leaves the view                                                                                          |
 | `WHEN.HOVER`            | 0 to 1 on pointer enter, 1 to 0 on leave           | Leave plays from the current progress. `more` sets delays and a separate way out. Touch: a tap toggles, a tap outside plays out. Focus counts as enter and blur as leave |
 | `WHEN.SCROLL`           | The progress follows the element's place on screen | Scroll-linked. `duration`, `delay`, `once` and `loop` do not apply. `loop` is an error                                                                                   |
+| `WHEN.MOVE`             | Glides when the element's place changes            | Automatic, for any cause. See [Layout](#layout)                                                                                                                          |
+| `WHEN.RESIZE`           | Glides when the element's size changes             | Automatic. Ignores place changes. See [Layout](#layout)                                                                                                                  |
+| `WHEN.MOVE_OR_RESIZE`   | Glides when the place or the size changes          | Automatic. See [Layout](#layout)                                                                                                                                         |
 | `WHEN.MANUAL`           | Only when a controller plays it                    | No automatic trigger                                                                                                                                                     |
 | A store or read store   | Truthy: 0 to 1. Falsy: 1 to 0                      | Read reactively. The first value is applied without animating                                                                                                            |
 
@@ -329,6 +332,88 @@ A scroll item follows the position, not time. Scrolling back up plays the item i
 | `start` after `end` in scroll order                        | No error. The progress still goes 0 to 1, so the motion runs the other way                     | Swap the two if you expected the other order                                           |
 | A tall element with a short range                          | The range is the window height plus the element height. The item plays slowly                  | Use `follow` with a sticky box for a scene that is taller than the window              |
 | `translate`, `scale` or `rotate` on the item's own element | The progress reads the element's box, and the transform moves that box, so the progress drifts | Use `follow` with a lane, or use `opacity`, `filter` and colour on the element itself  |
+
+## Layout
+
+`WHEN.MOVE`, `WHEN.RESIZE` and `WHEN.MOVE_OR_RESIZE` glide an element from its old box to its new one. You do not write any keyframes. The change can come from anything: a class toggle, a flex reflow, a sibling inserted, a switch to `position: fixed`, or a window resize.
+
+| `when`                | The glide runs when                    |
+| --------------------- | -------------------------------------- |
+| `WHEN.MOVE`           | The place changes. Size changes wait   |
+| `WHEN.RESIZE`         | The size changes. Place changes wait   |
+| `WHEN.MOVE_OR_RESIZE` | Either one changes                     |
+
+```html
+<script>
+import { WHEN, store } from "lucia";
+
+const floating = store(false);
+const glide = { when: WHEN.MOVE, duration: 400 };
+</script>
+
+<div class={floating.value ? "search fixed" : "search"} animate={glide}>...</div>
+```
+
+### Examples
+
+**Topbar search moves to the center.** The search sits at the right of the bar. When the page scrolls past the hero, a class puts it in `position: fixed` at the center. It glides to the new place.
+
+```html
+<script>
+import { WHEN, store } from "lucia";
+
+const floating = store(false);
+const glide = { when: WHEN.MOVE, duration: 400 };
+</script>
+
+<header class="topbar">
+  <div class={floating.value ? "search search-center" : "search"} animate={glide}>
+    <input type="search" placeholder="Search" />
+  </div>
+</header>
+```
+
+**List reorder.** Each row is a flex item. When the array changes order, every row glides to its new place.
+
+```html
+<ul class="list">
+  <EACH {names.value} as={name} key={name}>
+    <li animate={{ when: WHEN.MOVE, duration: 400 }}>{name}</li>
+  </EACH>
+</ul>
+```
+
+**Accordion resize.** A panel grows and shrinks when its content opens. `WHEN.RESIZE` glides the size, and the top edge stays where the layout puts it.
+
+```html
+<section class="panel" animate={{ when: WHEN.RESIZE, duration: 300 }}>
+  <h3>Details</h3>
+  <IF {open.value}>
+    <p>The hidden text.</p>
+  </IF>
+</section>
+```
+
+### Rules
+
+| Rule                                                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `duration`, `delay` and the keyframes `default` ease set the glide. The engine default fills what is missing                                    |
+| `style` is optional. With a `style`, its keys play along the glide, such as a fade. They use the same timing and `midway`                       |
+| `once` glides only the first change. `loop` is an error                                                                                          |
+| A change during a glide starts from the box the element shows now, so nothing jumps                                                              |
+| `translate` and `scale` belong to the glide. Keyframes cannot set them                                                                           |
+| With reduced motion, the element jumps to its new box                                                                                            |
+| A scroll does not glide. Only a change in the layout box does                                                                                    |
+
+> [!NOTE]
+> `WHEN.RESIZE` scales the box. Text and borders are stretched during the glide. For content that must keep its shape, put it in an element that does not resize, and glide the outer box.
+
+> [!NOTE]
+> The glide writes `translate` and `scale` inline, and removes them when it ends. A class that sets `translate` or `scale` on the same element is overridden during the glide. Use `transform` for a fixed move instead.
+
+> [!TIP]
+> The glide scales about the element's `transform-origin`. `WHEN.RESIZE` keeps the top-left corner where the layout puts it, so a panel grows downward.
 
 ## Midway
 
@@ -623,6 +708,7 @@ It returns a function. Call it with `t` from 0 to 1. It handles numbers, text wi
 | No `auto` sizes. `height: auto` cannot tween                                                 | Animate a fixed value, or animate `scale` instead                     |
 | Touch has no hover. `WHEN.HOVER` uses taps there: a tap toggles, and a tap outside plays out | For content that should play on scroll, use `WHEN.VIEW`               |
 | `WHEN.SCROLL` does not reload keyframes that come from stores while it runs                  | Set the keyframes before the element mounts                           |
+| A change during a layout glide keeps the place, but its speed starts again at rest                                                              | Use a short `duration` for items that change often                     |
 | No stagger helper. Delays for a list are set by hand                                         | Give each item its own `delay`                                        |
 | Frames are driven by JavaScript, not the compositor                                          | Keep the number of animated elements moderate. See the stress example |
 | Layout properties (`width`, `top`, `margin`) are slow                                        | Animate `transform` and `opacity` where you can                       |

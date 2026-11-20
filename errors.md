@@ -74,7 +74,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L1033](#l1033) | unexpected `</tag>`                                                                               | Remove it, or open the block it closes.                                                             |
 | [L1034](#l1034) | `<tag>` must directly follow `</IF>` or `</ELSEIF>`                                               | Put `ELSEIF` or `ELSE` right after the branch before it.                                            |
 | [L2001](#l2001) | animate item needs a style                                                                        | Add `style` to the item, such as `{ style: fadeIn }`.                                               |
-| [L2002](#l2002) | animate `when` must be `WHEN.ATTACH`, `DETACH`, `VIEW`, `HOVER`, `SCROLL` or `MANUAL`, or a store | Pass one of the `WHEN` values, or a store.                                                          |
+| [L2002](#l2002) | animate `when` must be `WHEN.ATTACH`, `DETACH`, `VIEW`, `HOVER`, `SCROLL`, `MOVE`, `RESIZE`, `MOVE_OR_RESIZE` or `MANUAL`, or a store | Pass one of the `WHEN` values, or a store.                                                          |
 | [L2003](#l2003) | animate `<name>` must be a time in ms                                                             | Use a number of milliseconds, such as `300`.                                                        |
 | [L2004](#l2004) | animate `loop` must be `true` or a count                                                          | Use `true`, or a number of times such as `3`.                                                       |
 | [L2005](#l2005) | ease moved into the keyframes: `default: [...]`                                                   | Write `default: [EASE.STYLE.QUART, EASE.INOUT]` inside the keyframes.                               |
@@ -123,6 +123,8 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L2048](#l2048) | animate `more` `start.element` or `start.window` (or `end.`) must be an EDGE member or 0 to 1     | Use an `EDGE` member, such as `EDGE.CENTER`, or a number from 0 to 1.                               |
 | [L2049](#l2049) | animate `more` `start` or `end` has an unknown key                                                | Use only `element` and `window`.                                                                    |
 | [L2050](#l2050) | animate `more` `start` or `end` needs both `element` and `window`                                 | Write `{ element: EDGE.TOP, window: EDGE.BOTTOM }`.                                                 |
+| [L2051](#l2051) | `loop` does not work with `WHEN.MOVE`, `RESIZE` or `MOVE_OR_RESIZE`                              | Remove `loop`. A glide plays once for each change.                               |
+| [L2052](#l2052) | `<name>` is set by the glide and cannot be in style                                              | Remove `<name>` from style. Use `transform` for other moves.                     |
 | [L3001](#l3001) | `"<name>"` is not exported by `"<module>"`                                                        | Check the name, or see `reference/api.ts`. Renamed names get the new name.                          |
 | [L3002](#l3002) | cannot resolve `"<name>"`                                                                         | Check the spelling of the path or package name, and that the file exists.                           |
 | [L3003](#l3003) | `<message>`                                                                                       | Fix the code on this line, then build again.                                                        |
@@ -834,7 +836,7 @@ Fixed:
 
 |         |                                                                                                   |
 | ------- | ------------------------------------------------------------------------------------------------- |
-| Message | animate `when` must be `WHEN.ATTACH`, `DETACH`, `VIEW`, `HOVER`, `SCROLL` or `MANUAL`, or a store |
+| Message | animate `when` must be `WHEN.ATTACH`, `DETACH`, `VIEW`, `HOVER`, `SCROLL`, `MOVE`, `RESIZE`, `MOVE_OR_RESIZE` or `MANUAL`, or a store |
 | Hint    | Pass one of the `WHEN` values, or a store.                                                        |
 
 Bad:
@@ -981,6 +983,42 @@ Fixed:
 ```html
 <div animate={{ style: fadeOut, when: WHEN.SCROLL }}>...</div>
 ```
+
+## L2051
+
+|         |                                                                     |
+| ------- | ------------------------------------------------------------------- |
+| Message | `loop` does not work with `WHEN.MOVE`, `RESIZE` or `MOVE_OR_RESIZE` |
+| Hint    | Remove `loop`. A glide plays once for each change.                  |
+
+Bad:
+
+```html
+<div animate={{ when: WHEN.MOVE, loop: true }}>...</div>
+```
+
+Fixed:
+
+```html
+<div animate={{ when: WHEN.MOVE }}>...</div>
+```
+
+## L2052
+
+|         |                                                                 |
+| ------- | --------------------------------------------------------------- |
+| Message | `translate` is set by the glide and cannot be in style          |
+| Hint    | Remove `translate` from style. Use `transform` for other moves. |
+
+The glide writes `translate` and `scale`, so the keyframes cannot set them.
+
+Bad:
+
+```html
+<div animate={{ style: slide, when: WHEN.RESIZE }}>...</div>
+```
+
+Fixed: use `transform` in the keyframes, or move the element with `WHEN.MOVE`.
 
 ## L2010
 
