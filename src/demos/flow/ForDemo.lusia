@@ -26,9 +26,9 @@ const stepValue = variable.compute(() => readStep(step.value));
 
 <div class="for-demo">
   <div class="fields">
-    <label>From <input type="number" bind={start} /></label>
-    <label>To, not included <input type="number" bind={end} /></label>
-    <label>Step <input type="number" bind={step} /></label>
+    <label>From <input type="number" bind-value={start} /></label>
+    <label>To, not included <input type="number" bind-value={end} /></label>
+    <label>Step <input type="number" bind-value={step} /></label>
   </div>
   <div class="cells">
     <FOR {n} from={fromValue} to={toValue} step={stepValue}>

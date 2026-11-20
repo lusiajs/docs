@@ -414,12 +414,12 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
-  bind: {
+  "bind-value": {
     icon: "sync_alt",
     demos: [
       {
         id: "bind-fields",
-        title: "Two-way bind",
+        title: "Two-way bind-value",
         caption: "A field and a variable stay in sync, in both directions.",
         components: [BindFields],
         sources: [{ path: "src/demos/basics/BindFields.lusia", text: bindFieldsSource }],

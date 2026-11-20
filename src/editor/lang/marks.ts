@@ -9,7 +9,7 @@ import { typescriptLanguage } from "./language.ts";
 // Group 1 is always the name, so the start is found from the match.
 const FLOW_NAME = /<\/?(IF|ELSEIF|ELSE|EACH|FOR|CONTENT|HTML)(?=[\s/>])/g;
 const COMPONENT_NAME = /<\/?([A-Z][\w.]*)/g;
-const LUSIA_ATTRIBUTE = /(?<=\s)(on[a-z]+|animate|bind(?:-[\w-]+)?)(?=\s*=)/g;
+const LUSIA_ATTRIBUTE = /(?<=\s)(on[a-z]+|animate|bind-[\w-]+)(?=\s*=)/g;
 const FLOW_NAMES: ReadonlySet<string> = new Set([
   "IF",
   "ELSEIF",
@@ -87,7 +87,7 @@ function componentClass(name: string): string | undefined {
 
 function attributeClass(name: string): string {
   if (name === "animate") return "lusia-animate";
-  if (name.startsWith("bind")) return "lusia-bind";
+  if (name.startsWith("bind-")) return "lusia-bind";
   return "lusia-event";
 }
 

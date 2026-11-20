@@ -13,11 +13,11 @@ const summary = variable.compute(() => {
 </script>
 
 <div class="bind-fields">
-  <label>Name <input bind={name} /></label>
-  <label>Age <input type="number" bind={age} /></label>
-  <label class="check"><input type="checkbox" bind={subscribed} /> Subscribe</label>
+  <label>Name <input bind-value={name} /></label>
+  <label>Age <input type="number" bind-value={age} /></label>
+  <label class="check"><input type="checkbox" bind-value={subscribed} /> Subscribe</label>
   <label>Plan
-    <select bind={plan}>
+    <select bind-value={plan}>
       <option value="free">Free</option>
       <option value="pro">Pro</option>
     </select>

@@ -37,7 +37,7 @@ const boxes = variable.compute(() =>
 <div class="midway-demo">
   <label>
     Play mode
-    <select bind={modeName}>
+    <select bind-value={modeName}>
       <option value="turn">TURN (default)</option>
       <option value="finish">FINISH</option>
       <option value="restart">RESTART</option>

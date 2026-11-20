@@ -140,7 +140,7 @@ function pick(event: MouseEvent, row: Row) {
         aria-label="Search the docs"
         placeholder="Search the docs"
         autocomplete="off"
-        bind={typed}
+        bind-value={typed}
         bind-element={field}
         oninput={onInput}
         onkeydown={onKey}

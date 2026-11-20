@@ -27,7 +27,7 @@ function cancel() {
 <form class="file-form" onsubmit={submit}>
   <label class="file-form-field">
     <span class="file-form-label">{label}</span>
-    <input type="text" bind={value} autocomplete="off" spellcheck="false" />
+    <input type="text" bind-value={value} autocomplete="off" spellcheck="false" />
   </label>
   <div class="file-form-actions">
     <button class="chip" type="submit">{submitText}</button>

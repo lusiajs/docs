@@ -46,7 +46,7 @@ export const guidePlan: GuideGroup[] = [
     label: "Events and input",
     icon: "ads_click",
     color: "var(--rose)",
-    entries: ["event", "bind", "bind-prop", "bind-element"],
+    entries: ["event", "bind-value", "bind-prop", "bind-element"],
   },
   {
     group: "flow",

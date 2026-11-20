@@ -6,7 +6,7 @@ const { value, label } = props({ value: "", label: "Name" });
 
 <label class="field-demo">
   <span>{label}</span>
-  <input bind={value} />
+  <input bind-value={value} />
 </label>
 
 <style>

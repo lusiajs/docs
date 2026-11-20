@@ -19,7 +19,7 @@ const preview = variable.compute(() => toHtml(source.value));
 </script>
 
 <div class="markdown-demo">
-  <textarea bind={source} rows="3"></textarea>
+  <textarea bind-value={source} rows="3"></textarea>
   <div class="preview"><HTML>{preview}</HTML></div>
   <p class="warning">
     Only insert HTML you trust. Escape user input first, as this demo does.

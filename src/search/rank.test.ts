@@ -33,13 +33,13 @@ describe("groupsFor with an empty term", () => {
   });
 
   test("puts recent terms before the suggestions", () => {
-    const groups = groupsFor(index, "", ["bind", "each"]);
+    const groups = groupsFor(index, "", ["bind-value", "each"]);
     expect(groups.map((group) => group.label)).toEqual(["Recent", "Suggestions"]);
     expect(groups[0]!.rows[1]!.term).toBe("each");
   });
 
   test("numbers the rows in list order", () => {
-    const groups = groupsFor(index, "", ["bind"]);
+    const groups = groupsFor(index, "", ["bind-value"]);
     const indexes = groups.flatMap((group) => group.rows.map((row) => row.index));
     expect(indexes).toEqual(indexes.map((_, i) => i));
   });

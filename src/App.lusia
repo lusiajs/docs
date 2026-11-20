@@ -53,7 +53,7 @@ function removeTodo(todo: Todo) {
 
   <section class="card">
     <h2>Bind</h2>
-    <input type="text" bind={name} placeholder="Your name" />
+    <input type="text" bind-value={name} placeholder="Your name" />
   </section>
 
   <section class="card">
@@ -76,7 +76,7 @@ function removeTodo(todo: Todo) {
       </EACH>
     </ul>
     <div class="row">
-      <input type="text" bind={draft} placeholder="New todo title" />
+      <input type="text" bind-value={draft} placeholder="New todo title" />
       <button type="button" onclick={addTodo}>Add todo</button>
     </div>
   </section>

@@ -14,7 +14,7 @@ const groups = [
   {
     id: "l2",
     label: "Runtime errors",
-    intro: "A bad value passed to animate, bind, EACH, FOR or a lazy component.",
+    intro: "A bad value passed to animate, bind-value, EACH, FOR or a lazy component.",
     codes: entries.filter((entry) => entry.id.startsWith("L2")),
   },
   {

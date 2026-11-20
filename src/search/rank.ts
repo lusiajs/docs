@@ -17,7 +17,7 @@ export interface Group {
   rows: Row[];
 }
 
-export const suggestedTerms = ["variable", "animate", "EACH", "bind", "playground"];
+export const suggestedTerms = ["variable", "animate", "EACH", "bind-value", "playground"];
 
 const TITLE_WEIGHT = 3;
 const SUMMARY_WEIGHT = 1.5;

@@ -28,7 +28,7 @@ const attrExpression = {
 function attributes(): Record<string, unknown> {
   return {
     "event-attr": /(?<=\s)on[a-z]+(?=\s*=\s*\{)/,
-    "bind-attr": /(?<=\s)bind(?:-[a-z][a-z-]*)?(?=\s*=\s*\{)/,
+    "bind-attr": /(?<=\s)bind-[a-z][a-z-]*(?=\s*=\s*\{)/,
     "animate-attr": /(?<=\s)animate(?=\s*(?:=|\/?>|\s|$))/,
     "flow-attr": /(?<=\s)(?:as|index|key|from|to|step)(?=\s*=)/,
     attrExpression,

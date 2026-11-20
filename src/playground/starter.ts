@@ -43,7 +43,7 @@ function remove(name: string) {
     </EACH>
   </ul>
   <div class="row">
-    <input type="text" bind={draft} placeholder="New item" />
+    <input type="text" bind-value={draft} placeholder="New item" />
     <button type="button" onclick={add}>Add</button>
   </div>
 </main>
