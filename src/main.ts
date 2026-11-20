@@ -23,16 +23,20 @@ initTopbar();
 void start(loader);
 
 // The page attaches after the loader has left, so the hero's entrance plays where it can be seen.
+// is-loading stays until the first page is in the outlet, so the static footer never shows above it.
 async function start(loaderInstance: Instance): Promise<void> {
 	await hideLoader(loaderInstance);
-	await startRouter(document.getElementById("outlet")!, pageSpecs);
+	try {
+		await startRouter(document.getElementById("outlet")!, pageSpecs);
+	} finally {
+		document.documentElement.classList.remove("is-loading");
+	}
 }
 
 // Waits for the fonts, but never longer than LOADER_MAX_MS, so a slow font cannot hold the page.
 async function hideLoader(instance: Instance): Promise<void> {
 	await Promise.race([document.fonts.ready, wait(LOADER_MAX_MS)]);
 	await instance.detach();
-	document.documentElement.classList.remove("is-loading");
 }
 
 function wait(ms: number): Promise<void> {
