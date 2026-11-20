@@ -196,7 +196,10 @@ bun dev</code></pre>
           </span>
           <h3>VS Code extension</h3>
         </div>
-        <p>Completion, hover, errors and formatting for <code>.lusia</code> files.</p>
+        <p>
+          Type-aware completion, hover, errors and formatting for script, style and
+          markup in <code>.lusia</code> files.
+        </p>
         <pre class="snippet"><code data-lang="lusia">{helloSnippet}</code></pre>
       </article>
     </div>
