@@ -359,6 +359,8 @@ A scroll item follows the position, not time. Scrolling back up plays the item i
 
 `WHEN.MOVE`, `WHEN.RESIZE` and `WHEN.MOVE_OR_RESIZE` glide an element from its old box to its new one. You do not write any keyframes. The change can come from a class toggle, a sibling inserted or removed, a flex reflow, or a window resize.
 
+A move slides the element with a `translate`, so only its place changes. A resize animates the element's real `width` and `height`, so its text, borders and children keep their shape while the size grows.
+
 > Inline `style` changes are not watched, so a move that only comes from an inline style is seen at the next scroll or resize. Put the change in a class to glide it at once.
 
 | `when`                | The glide runs when                  |
@@ -431,13 +433,13 @@ const glide = { when: WHEN.MOVE, duration: 400 };
 | A scroll does not glide. Only a change in the layout box does                                                             |
 
 > [!NOTE]
-> `WHEN.RESIZE` scales the box. Text and borders are stretched during the glide. For content that must keep its shape, put it in an element that does not resize, and glide the outer box.
+> `WHEN.RESIZE` changes the element's real width and height, so its content reflows on every frame. Keep the number of resizing elements small, and avoid it on content that is expensive to lay out.
 
 > [!NOTE]
-> The glide writes `translate` and `scale` inline, and removes them when it ends. A class that sets `translate` or `scale` on the same element is overridden during the glide. Use `transform` for a fixed move instead.
+> The glide writes `translate` inline, and `width` and `height` for `WHEN.RESIZE`. At the end it removes them, or puts back an inline size the element already had. A class that sets `translate` on the same element is overridden during the glide. Use `transform` for a fixed move instead.
 
 > [!TIP]
-> The glide scales about the element's `transform-origin`. `WHEN.RESIZE` keeps the top-left corner where the layout puts it, so a panel grows downward.
+> `WHEN.RESIZE` keeps the top-left corner where the layout puts it, so a panel grows downward. The element's `transform-origin` does not affect the glide.
 
 ## Midway
 
