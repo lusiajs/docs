@@ -106,7 +106,7 @@ A hot update re-renders each mounted copy of the edited component, in the same p
 | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
 | Position, props and child slots                                                      | DOM state inside the component, such as focus and input text                |
 | Variables declared at the top of the script (`const count = variable(0)`), matched by name | Variables whose name is new start from their first value                       |
-| `variable.compute` values (they run again)                                                 | Effects from `variable.onUpdate` of the old copy (they stop; the new ones run) |
+| `variable.compute` values (they run again)                                                 | Effects from `variable.autoRun` of the old copy (they stop; the new ones run) |
 
 - Leave and attach animations are skipped on a hot update.
 - If the new script or markup throws, the old copy stays and an overlay shows the error. The next good edit swaps.

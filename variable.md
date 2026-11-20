@@ -10,7 +10,7 @@ A **variable** holds a value. Markup that reads it updates when the value update
 | -------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | `variable(value)`                      | A variable you can write. Read and write with `.value`, `.get()` and `.set()`                  |
 | `variable.compute(fn)`                 | A computed variable derived from other variables. Cached until its inputs update               |
-| `variable.onUpdate(fn)`                | Run code now, then again when a variable it reads updates. See [onUpdate](#onupdate)           |
+| `variable.autoRun(fn)`                 | Run code now, then again when a variable it reads updates. See [autoRun](#autorun)             |
 | `variable.watch([a, b], fn)`           | Run code when one of the listed variables updates. See [watch](#watch)                         |
 | `count.onUpdate((now, before) => ...)` | Run code with the new and old value after each update. See [On one variable](#on-one-variable) |
 | `.peek()`                              | On any variable: read without depending on it                                                  |
@@ -29,7 +29,7 @@ function useGrace() {
 ```
 
 > [!NOTE]
-> Updates are grouped automatically. Event handlers, `bind` writes and `variable.onUpdate` group their writes, so dependents update once at the end.
+> Updates are grouped automatically. Event handlers, `bind` writes and `variable.autoRun` group their writes, so dependents update once at the end.
 
 ## Computed variables
 
@@ -67,9 +67,9 @@ const count = variable(0);
 count.set(count.get() + 1);
 ```
 
-## onUpdate
+## autoRun
 
-`variable.onUpdate(fn)` runs `fn` once right away. After that it runs again only when a variable or computed variable that `fn` read has updated. It tracks what it reads on every run, so a read inside an `if` counts only while that branch runs.
+`variable.autoRun(fn)` runs `fn` once right away. After that it runs again only when a variable or computed variable that `fn` read has updated. It tracks what it reads on every run, so a read inside an `if` counts only while that branch runs.
 
 ```ts
 import { variable } from "lucia";
@@ -80,13 +80,21 @@ function logCount() {
   console.log("count is", count.value);
 }
 
-const stop = variable.onUpdate(logCount); // logs "count is 0" now
+const stop = variable.autoRun(logCount); // logs "count is 0" now
 count.value++; // logs "count is 1"
 stop();
 ```
 
 > [!TIP]
-> Use `variable.onUpdate` for side effects, such as logging, saving or talking to the page. Use `variable.compute` for values you show in markup.
+> Use `variable.autoRun` for side effects, such as logging, saving or talking to the page. Use `variable.compute` for values you show in markup.
+
+Three ways to run code on update:
+
+| Form                                   | Finds what it reads     | Gets the values                     | Use it when                          |
+| -------------------------------------- | ----------------------- | ----------------------------------- | ------------------------------------ |
+| `variable.autoRun(fn)`                 | Yes, on every run       | You read them inside `fn`           | The list of reads may change         |
+| `variable.watch([a, b], fn)`           | No, you list them       | You read them inside `fn`           | You know the exact list              |
+| `count.onUpdate((now, before) => ...)` | One variable only       | `now` and `before` are passed in    | You need the old value of one variable |
 
 ## watch
 
@@ -127,7 +135,7 @@ At start, `before` is `undefined`. Pass `{ onInit: false }` to skip the start ru
 
 | Form                                   | Runs at start | Pass `{ onInit: false }` |
 | -------------------------------------- | ------------- | ------------------------ |
-| `variable.onUpdate(fn)`                | Yes           | Not supported            |
+| `variable.autoRun(fn)`                 | Yes           | Not supported            |
 | `variable.watch([a, b], fn)`           | Yes           | Yes                      |
 | `count.onUpdate((now, before) => ...)` | Yes           | Yes                      |
 
