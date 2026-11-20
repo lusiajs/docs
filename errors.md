@@ -6,7 +6,7 @@ An error code is a short name, such as `L1016`, that tells you which check faile
 
 | Range              | When it shows                                                                            | Raised by    |
 | ------------------ | ---------------------------------------------------------------------------------------- | ------------ |
-| `L1001` to `L1037` | While the app builds, for a problem in a `.lucia` file                                   | The compiler |
+| `L1001` to `L1042` | While the app builds, for a problem in a `.lucia` file                                   | The compiler |
 | `L2001` to `L2058` | While the app runs, for a value passed to `animate`, `bind`, `EACH`, `FOR` or `lazy`     | The runtime  |
 | `L3001` to `L3004` | While the app builds, for an import, a file the bundler cannot build, or the config file | The build    |
 
@@ -76,6 +76,11 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L1035](#l1035) | `<CONTENT /> is used more than once`                                                                                                     | Keep one `<CONTENT />` in the component's markup.                                                   |
 | [L1036](#l1036) | `<CONTENT> needs />`                                                                                                                     | Write `<CONTENT />` with no children. The children go between the component's tags.                 |
 | [L1037](#l1037) | `<HTML> needs one {expression}`                                                                                                          | Put one expression in braces between the tags, such as `<HTML>{html}</HTML>`.                       |
+| [L1038](#l1038) | `<$tag> must be at the top level of the file`                                                                                            | Move it out of the other elements, to the top level of the markup.                                  |
+| [L1039](#l1039) | `<FALLBACK> can only be used once`                                                                                                       | Keep one `<FALLBACK>` block, and move its content into it.                                          |
+| [L1040](#l1040) | `<NOLAZY /> can only be used once`                                                                                                       | Remove the extra `<NOLAZY />` from this file.                                                       |
+| [L1041](#l1041) | `<NOLAZY /> takes no children`                                                                                                           | Write it as `<NOLAZY />` with no content between the tags.                                          |
+| [L1042](#l1042) | `<what> is not allowed in <FALLBACK>`                                                                                                    | `<FALLBACK>` shows before the script runs, so use plain elements and text only.                     |
 | [L2001](#l2001) | animate item needs a style                                                                                                               | Add `style` to the item, such as `{ style: fadeIn }`.                                               |
 | [L2002](#l2002) | animate `when` must be `WHEN.ATTACH`, `DETACH`, `VIEW`, `HOVER`, `SCROLL`, `MOVE`, `RESIZE`, `MOVE_OR_RESIZE` or `MANUAL`, or a variable | Pass one of the `WHEN` values, or a variable.                                                       |
 | [L2003](#l2003) | animate `<name>` must be a time in ms                                                                                                    | Use a number of milliseconds, such as `300`.                                                        |
@@ -885,6 +890,106 @@ Fixed:
 <html>
   {greeting}
 </html>
+```
+
+## L1038
+
+|         |                                                                    |
+| ------- | ------------------------------------------------------------------ |
+| Message | `<FALLBACK> must be at the top level of the file`                  |
+| Hint    | Move it out of the other elements, to the top level of the markup. |
+
+Bad:
+
+```html
+<div>
+  <FALLBACK>Loading</FALLBACK>
+</div>
+```
+
+Fixed:
+
+```html
+<FALLBACK>Loading</FALLBACK>
+<div>...</div>
+```
+
+## L1039
+
+|         |                                                            |
+| ------- | ---------------------------------------------------------- |
+| Message | `<FALLBACK> can only be used once`                         |
+| Hint    | Keep one `<FALLBACK>` block, and move its content into it. |
+
+Bad:
+
+```html
+<FALLBACK>Loading</FALLBACK> <FALLBACK>Wait</FALLBACK>
+```
+
+Fixed:
+
+```html
+<FALLBACK>Loading</FALLBACK>
+```
+
+## L1040
+
+|         |                                               |
+| ------- | --------------------------------------------- |
+| Message | `<NOLAZY /> can only be used once`            |
+| Hint    | Remove the extra `<NOLAZY />` from this file. |
+
+Bad:
+
+```html
+<NOLAZY /> <NOLAZY />
+```
+
+Fixed:
+
+```html
+<NOLAZY />
+```
+
+## L1041
+
+|         |                                                            |
+| ------- | ---------------------------------------------------------- |
+| Message | `<NOLAZY /> takes no children`                             |
+| Hint    | Write it as `<NOLAZY />` with no content between the tags. |
+
+Bad:
+
+```html
+<NOLAZY>Keep me</NOLAZY>
+```
+
+Fixed:
+
+```html
+<NOLAZY />
+```
+
+## L1042
+
+|         |                                                                                 |
+| ------- | ------------------------------------------------------------------------------- |
+| Message | `<what> is not allowed in <FALLBACK>`                                           |
+| Hint    | `<FALLBACK>` shows before the script runs, so use plain elements and text only. |
+
+`<what>` is one of: `An expression in {braces}`, `An event such as onclick`, or `The component or tag <Name>`.
+
+Bad:
+
+```html
+<FALLBACK>Loading {count}</FALLBACK>
+```
+
+Fixed:
+
+```html
+<FALLBACK>Loading...</FALLBACK>
 ```
 
 ## L2001
