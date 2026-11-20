@@ -7,7 +7,7 @@ An error code is a short name, such as `L1016`, that tells you which check faile
 | Range              | When it shows                                                                | Raised by    |
 | ------------------ | ---------------------------------------------------------------------------- | ------------ |
 | `L1001` to `L1034` | While the app builds, for a problem in a `.lucia` file                       | The compiler |
-| `L2001` to `L2056` | While the app runs, for a value passed to `animate`, `bind`, `EACH` or `FOR` | The runtime  |
+| `L2001` to `L2057` | While the app runs, for a value passed to `animate`, `bind`, `EACH`, `FOR` or `lazy` | The runtime  |
 | `L3001` to `L3003` | While the app builds, for an import or file that the bundler cannot build    | The build    |
 
 In messages, `<name>` stands for a value filled in when the error is raised, such as a tag or attribute name.
@@ -129,6 +129,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L2054](#l2054) | unknown keyframes key `'<key>'`. Keys are numbers from 0 to 1 or `'default'`                                                             | A close name, such as `did you mean 'default'?`, or use a number from 0 to 1, or `'default'`.       |
 | [L2055](#l2055) | unknown animate key `'<key>'`                                                                                                            | A close name, such as `did you mean 'duration'?`, or check the spelling of the key.                 |
 | [L2056](#l2056) | animate `more` `keepSpace` must be true or false, got `<value>`                                                                          | Use `true` to keep the space, or `false` to let it close.                                           |
+| [L2057](#l2057) | lazy component failed to load: `<message>`                                                                                              | Check the import path, and that the file builds. The fallback stays on the page.                    |
 | [L3001](#l3001) | `"<name>"` is not exported by `"<module>"`                                                                                               | Check the name, or see `reference/api.ts`. Renamed names get the new name.                          |
 | [L3002](#l3002) | cannot resolve `"<name>"`                                                                                                                | Check the spelling of the path or package name, and that the file exists.                           |
 | [L3003](#l3003) | `<message>`                                                                                                                              | Fix the code on this line, then build again.                                                        |
@@ -1894,6 +1895,25 @@ Fixed:
 
 ```html
 <h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: { element: EDGE.TOP, window: EDGE.BOTTOM } } }}>Title</h1>
+```
+
+## L2057
+
+|         |                                                                   |
+| ------- | ----------------------------------------------------------------- |
+| Message | lazy component failed to load: $message                           |
+| Hint    | Check the import path, and that the file builds. The fallback stays on the page. |
+
+Bad:
+
+```ts
+const Chart = lazy(() => import("./Chartt.lucia"));
+```
+
+Fixed: check the file name. The error is reported to the console and the fallback stays on the page.
+
+```ts
+const Chart = lazy(() => import("./Chart.lucia"));
 ```
 
 ## L3001
