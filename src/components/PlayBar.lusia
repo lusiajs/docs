@@ -329,7 +329,7 @@ summary.play-icon {
 	}
 }
 
-@media (pointer: coarse), (max-width: 59.99em) {
+@media (pointer: coarse), (max-width: 719px) {
 	.play-icon {
 		width: 2.5rem;
 		height: 2.5rem;
