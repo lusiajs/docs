@@ -1,10 +1,17 @@
 const copyIcon = "content_copy";
 const resetDelay = 1500;
 
-export function initCopy(root: ParentNode, signal: AbortSignal): void {
-  for (const button of root.querySelectorAll<HTMLButtonElement>(".copy-button")) {
-    button.addEventListener("click", () => copy(button), { signal });
-  }
+// The listener lives on the root, so buttons in components that mount after the page still work.
+export function initCopy(root: HTMLElement, signal: AbortSignal): void {
+  const onClick = (event: MouseEvent): void => {
+    const button = (event.target as Element | null)?.closest<HTMLButtonElement>(".copy-button");
+    if (button && root.contains(button)) void copy(button);
+  };
+  root.addEventListener("click", onClick);
+  // The outlet outlives the page, so abort takes the listener away with the page's wiring.
+  signal.addEventListener("abort", () => root.removeEventListener("click", onClick), {
+    once: true,
+  });
 }
 
 async function copy(button: HTMLButtonElement): Promise<void> {
