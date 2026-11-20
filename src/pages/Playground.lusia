@@ -51,6 +51,23 @@ function jumpToError(error: LiveError) {
 </script>
 
 <main class="playground" data-view={view.value} animate={pageMotion}>
+	<div class="play-views" role="group" aria-label="View">
+		<button
+			type="button"
+			aria-pressed={String(view.value === "code")}
+			onclick={showCode}
+		>
+			Code
+		</button>
+		<button
+			type="button"
+			aria-pressed={String(view.value === "preview")}
+			onclick={showPreview}
+		>
+			Preview
+		</button>
+	</div>
+
 	<PlayBar />
 
 	<div class="play-work">
@@ -88,22 +105,6 @@ function jumpToError(error: LiveError) {
 	</div>
 
 	<div class="play-status">
-		<div class="play-views" role="group" aria-label="View">
-			<button
-				type="button"
-				aria-pressed={String(view.value === "code")}
-				onclick={showCode}
-			>
-				Code
-			</button>
-			<button
-				type="button"
-				aria-pressed={String(view.value === "preview")}
-				onclick={showPreview}
-			>
-				Preview
-			</button>
-		</div>
 		<p class="play-note" role="status">{noteText}</p>
 		<IF {problemCount.value > 0}>
 			<button

@@ -22,10 +22,12 @@ const isEntry = variable.compute(() => active.value === ENTRY_FILE);
 const menu = variable<HTMLDetailsElement | null>(null);
 
 function pick(name: string) {
+	closeMenu();
 	selectFile(name);
 }
 
 function openAdd() {
+	closeMenu();
 	formMode.value = "add";
 }
 
@@ -56,6 +58,7 @@ function run() {
 }
 
 function format() {
+	closeMenu();
 	void formatActive();
 }
 
@@ -260,6 +263,7 @@ summary.play-icon {
 	}
 }
 
+// The More menu holds the file actions and Reset.
 .play-more {
 	position: relative;
 	flex: none;
@@ -325,29 +329,7 @@ summary.play-icon {
 	}
 }
 
-@media (pointer: coarse) {
-	.play-icon {
-		width: 2.5rem;
-		height: 2.5rem;
-	}
-}
-
-// A phone has one wide tab: it reads as the open file and is easy to tap.
-@media (max-width: 59.99em) {
-	.play-bar .code-tabs {
-		flex: 1;
-	}
-
-	.play-bar .code-tab {
-		flex: 1;
-	}
-
-	.play-bar .code-tab[aria-selected="true"] {
-		background: var(--code);
-		border-radius: 8px 8px 0 0;
-	}
-
-	.play-bar .code-tab-add,
+@media (pointer: coarse), (max-width: 59.99em) {
 	.play-icon {
 		width: 2.5rem;
 		height: 2.5rem;
