@@ -53,6 +53,30 @@ describe("initCopy", () => {
     root.remove();
   });
 
+  test("copies before a demo swaps its code panel", async () => {
+    const root = document.createElement("div");
+    document.body.append(root);
+    const controller = new AbortController();
+    initCopy(root, controller.signal);
+
+    const lazyCode = document.createElement("div");
+    lazyCode.className = "lazy-code";
+    const { button, glyph } = copyButton("from the demo");
+    lazyCode.append(button);
+    // The demo's own bubble handler swaps the panel for the editor and ends the bubble.
+    lazyCode.addEventListener("click", (event) => {
+      event.stopPropagation();
+      lazyCode.replaceChildren();
+    });
+    root.append(lazyCode);
+    click(glyph);
+    await settle();
+
+    expect(copied).toEqual(["from the demo"]);
+    expect(glyph.textContent).toBe("check");
+    root.remove();
+  });
+
   test("abort removes the listener", async () => {
     const root = document.createElement("div");
     document.body.append(root);
