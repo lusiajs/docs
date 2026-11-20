@@ -5,6 +5,7 @@ import RefCard from "../components/RefCard.lusia";
 import RefIndex from "../components/RefIndex.lusia";
 import { buildKeywordIndex, tokenize } from "../keywords.ts";
 import { pageMotion } from "../motion/page.ts";
+import { sidebarMotion } from "../motion/sidebar.ts";
 import { kindSections, kindsOf } from "../reference-model.ts";
 
 const keywordIndex = buildKeywordIndex(api, []);
@@ -37,7 +38,7 @@ const kinds = kindsOf(api);
 </script>
 
 <div class="page-root docs reference">
-	<aside class="sidebar" id="sidebar" aria-label="Reference">
+	<aside class="sidebar" id="sidebar" aria-label="Reference" animate={sidebarMotion}>
 		<span class="nav-indicator" aria-hidden="true"></span>
 		<RefIndex groups={indexGroups} />
 	</aside>

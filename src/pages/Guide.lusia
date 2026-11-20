@@ -1,10 +1,11 @@
 <script>
 import Docs from "../components/Docs.lusia";
 import { pageMotion } from "../motion/page.ts";
+import { sidebarMotion } from "../motion/sidebar.ts";
 </script>
 
 <div class="page-root docs">
-	<aside class="sidebar" id="sidebar" aria-label="Docs">
+	<aside class="sidebar" id="sidebar" aria-label="Docs" animate={sidebarMotion}>
 		<span class="nav-indicator" aria-hidden="true"></span>
 		<div id="nav-groups"></div>
 	</aside>
