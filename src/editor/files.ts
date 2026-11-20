@@ -1,5 +1,5 @@
-import { findComponentImport } from "./imports.ts";
-import { parsePropDefs, type PropDef } from "./props.ts";
+import { findComponentImport } from "../../../editors/shared/imports.ts";
+import { parsePropDefs, type PropDef } from "../../../editors/shared/props.ts";
 
 export interface EditorFile {
   name: string;

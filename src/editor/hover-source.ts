@@ -3,7 +3,7 @@ import type { Extension } from "@codemirror/state";
 import { docsElement } from "./docs-dom.ts";
 import { editorHover } from "./editor-hover.ts";
 import type { EditorFile } from "./files.ts";
-import { hoverMarkdown } from "./markdown.ts";
+import { hoverMarkdown } from "../../../editors/shared/markdown.ts";
 
 const HOVER_DELAY_MS = 300;
 

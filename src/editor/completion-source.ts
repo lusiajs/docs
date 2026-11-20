@@ -6,13 +6,13 @@ import {
   type CompletionSource,
 } from "@codemirror/autocomplete";
 import type { EditorView } from "@codemirror/view";
-import type { CompletionKind } from "./completion-data.ts";
-import type { CompletionResult } from "./completions.ts";
+import type { CompletionKind } from "../../../editors/shared/completion-data.ts";
+import type { CompletionResult } from "../../../editors/shared/completions.ts";
 import { editorCompletions } from "./editor-completions.ts";
 import type { EditorFile } from "./files.ts";
-import { findApiById } from "./api-lookup.ts";
+import { findApiById } from "../../../editors/shared/api-lookup.ts";
 import { docsElement } from "./docs-dom.ts";
-import { hoverMarkdown } from "./markdown.ts";
+import { hoverMarkdown } from "../../../editors/shared/markdown.ts";
 
 const WORD = /[\w$-]*/;
 

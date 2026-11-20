@@ -1,11 +1,11 @@
 import { LusiaError } from "../../../src/compiler/errors.ts";
 import { formatWhere } from "../../../src/compiler/errors/where.ts";
 import { compileWithoutStyles } from "./compile-check.ts";
-import { errorPosition } from "./error-position.ts";
+import { errorPosition } from "../../../editors/shared/error-position.ts";
 import { typescriptLanguage } from "./lang/language.ts";
-import { lintLusia, type LintIssue } from "./lint.ts";
-import type { PropDef } from "./props.ts";
-import { scriptSection } from "./sections.ts";
+import { lintLusia, type LintIssue } from "../../../editors/shared/lint.ts";
+import type { PropDef } from "../../../editors/shared/props.ts";
+import { scriptSection } from "../../../editors/shared/sections.ts";
 
 export interface EditorDiagnostic {
   /** 1-based. */

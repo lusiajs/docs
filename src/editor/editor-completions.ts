@@ -1,11 +1,20 @@
-import { scriptItems, type CompletionItemData, type ScriptItem } from "./completion-data.ts";
-import { completionsAt, type CompletionResult } from "./completions.ts";
+import {
+  scriptItems,
+  type CompletionItemData,
+  type ScriptItem,
+} from "../../../editors/shared/completion-data.ts";
+import { completionsAt, type CompletionResult } from "../../../editors/shared/completions.ts";
 import { childProps, type EditorFile } from "./files.ts";
-import { planLusiaImport } from "./auto-import.ts";
-import { expressionEnd } from "./format-expressions.ts";
-import { localItems, receiverAt, variableMemberItems, variableNames } from "./locals.ts";
-import { regionAt } from "./regions.ts";
-import { scriptSection } from "./sections.ts";
+import { planLusiaImport } from "../../../editors/shared/auto-import.ts";
+import { expressionEnd } from "../../../editors/shared/format-expressions.ts";
+import {
+  localItems,
+  receiverAt,
+  variableMemberItems,
+  variableNames,
+} from "../../../editors/shared/locals.ts";
+import { regionAt } from "../../../editors/shared/regions.ts";
+import { scriptSection } from "../../../editors/shared/sections.ts";
 
 /** Everything the editor offers at `offset`: API names, markup items, file names, variable members. */
 export function editorCompletions(

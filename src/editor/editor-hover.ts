@@ -1,5 +1,5 @@
 import { childProps, type EditorFile } from "./files.ts";
-import { hoverAt, scriptHover, type HoverResult } from "./hover.ts";
+import { hoverAt, scriptHover, type HoverResult } from "../../../editors/shared/hover.ts";
 
 /** The hover for `offset`. A .ts file is all script, so it skips the markup rules. */
 export function editorHover(
