@@ -1,0 +1,107 @@
+<script>
+import { props } from "lucia";
+import type { ApiEntry } from "../../../reference/api.ts";
+import { guidePath, pageLink, referencePath } from "../page-link.ts";
+import {
+  flattenMembers,
+  languageOf,
+  searchText,
+  wrapSignature,
+} from "../reference-model.ts";
+import CodeCopy from "./CodeCopy.lucia";
+
+const emptyEntry: ApiEntry = {
+  id: "",
+  name: "",
+  kind: "value",
+  group: "basics",
+  signature: "",
+  summary: "",
+  bullets: [],
+  example: "",
+};
+const { entry, block } = props({ entry: emptyEntry, block: "" });
+
+// The entry never changes after mount, so everything derived from it is computed once.
+const shown = entry.peek();
+const shownBlock = block.peek();
+const members = flattenMembers(shown.members);
+const language = languageOf(shown);
+const signature = wrapSignature(shown.signature);
+const search = searchText(shown);
+const anchor = location.origin + pageLink(referencePath, shown.id);
+</script>
+
+<article
+  class="ref-card"
+  id={shown.id}
+  data-ref-entry
+  data-group={shown.group}
+  data-block={shownBlock}
+  data-kind={shown.kind}
+  data-search={search}
+>
+  <header class="ref-head">
+    <h3 class="ref-name"><code>{shown.name}</code></h3>
+    <span class="chip" data-kind={shown.kind}>{shown.kind}</span>
+    <button
+      class="copy-button ref-anchor"
+      type="button"
+      data-copy={anchor}
+      aria-label={"Copy the link to " + shown.name}
+    >
+      <span class="material-symbols-rounded" aria-hidden="true">numbers</span>
+    </button>
+  </header>
+
+  <p class="ref-summary">{shown.summary}</p>
+
+  <CodeCopy
+    text={signature}
+    copy={shown.signature}
+    language={language}
+    className="ref-code"
+  />
+
+  <IF {members.length > 0}>
+    <div class="ref-members-wrap">
+      <table class="ref-members">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Summary</th>
+          </tr>
+        </thead>
+        <tbody>
+          <EACH {members} as={member}>
+            <tr data-depth={member.depth}>
+              <td><code>{member.name}</code></td>
+              <td>{member.summary}</td>
+            </tr>
+          </EACH>
+        </tbody>
+      </table>
+    </div>
+  </IF>
+
+  <details class="ref-example">
+    <summary>
+      <span class="material-symbols-rounded chevron" aria-hidden="true">
+        chevron_right
+      </span>
+      Example
+    </summary>
+    <CodeCopy
+      text={shown.example}
+      copy={shown.example}
+      language={language}
+      className="ref-code"
+    />
+  </details>
+
+  <footer class="ref-foot">
+    <a class="ref-guide" href={pageLink(guidePath, shown.id)}>
+      Guide <span aria-hidden="true">→</span>
+    </a>
+  </footer>
+</article>
