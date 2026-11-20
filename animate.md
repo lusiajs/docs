@@ -83,7 +83,7 @@ An element can have one `ATTACH` item and one `DETACH` item, so it has different
 | `when`                          | When it plays                                      | Notes                                                                                                                                                                    |
 | ------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `WHEN.ATTACH` (default)         | 0 to 1 once, when attached                         | Nothing on detach                                                                                                                                                        |
-| `WHEN.DETACH`                   | Its own keyframes, when detaching                  | Detach waits for it. Nothing on attach                                                                                                                                   |
+| `WHEN.DETACH`                   | Its own keyframes, when detaching                  | Detach waits for it. Nothing on attach. The space closes with it, unless `more.keepSpace` is set. See [Leave](#leave)                                                    |
 | `WHEN.VIEW`                     | 0 to 1 when at least 15% is visible                | Once by default. `more: { reverse: true }` plays 1 to 0 when it leaves the view                                                                                          |
 | `WHEN.HOVER`                    | 0 to 1 on pointer enter, 1 to 0 on leave           | Leave plays from the current progress. `more` sets delays and a separate way out. Touch: a tap toggles, a tap outside plays out. Focus counts as enter and blur as leave |
 | `WHEN.SCROLL`                   | The progress follows the element's place on screen | Scroll-linked. `duration`, `delay`, `once` and `loop` do not apply. `loop` is an error                                                                                   |
@@ -121,6 +121,7 @@ An element can have one `ATTACH` item and one `DETACH` item, so it has different
 | `WHEN.SCROLL` | `end`         | `SCROLL_AT` or `{ element, window }` | `SCROLL_AT.LEAVE` | Where the progress is 1. Same form as `start`                                                                                                                                   |
 | `WHEN.SCROLL` | `follow`      | variable of an element               | none              | The tall element that drives the progress. Its scroll position is used instead of the item's own. Not with `start` or `end`. See [Pinned scroll](#pinned-scroll)                |
 | `WHEN.SCROLL` | `part`        | `[from, to]`                         | `[0, 1]`          | Plays only that slice of the progress. `[0.5, 1]` plays in the second half. Needs `0 <= from < to <= 1`                                                                         |
+| `WHEN.DETACH` | `keepSpace`   | boolean                              | `false`           | Keeps the space the element holds until it is removed. Without it, the space closes with the leave. See [Leave](#leave)                                                         |
 
 ```html
 <section animate={{ style: PRESET.SLIDE_UP, when: WHEN.VIEW, more: { margin: "10%", amount: 0.5, reverse: true } }}>...</section>
@@ -684,6 +685,25 @@ await card.detach(); // the nodes are gone when this resolves
 | No `DETACH` items                                  | Nodes are removed at once, and the promise resolves at once |
 | `DETACH` starts while an `ATTACH` is still running | It plays its own keyframes from the current style           |
 | A child component has `DETACH` items               | The parent waits for them too                               |
+
+### Closing the space
+
+A removed row would leave a gap until it is gone, and then the rows below jump. So a `DETACH` item also closes the space the element holds. Its width or height, and its margins and padding on that axis, shrink to `0` over the same `duration`, `delay` and ease as the leave. The rows below slide up while the row fades out.
+
+| Element                       | Space that closes                                            |
+| ----------------------------- | ------------------------------------------------------------ |
+| Item in a column, block, grid | Height, and top and bottom margin and padding                |
+| Item in a `display: flex` row | Width, and left and right margin and padding                 |
+| Inline element                | Nothing. Only block and flex items take space along the axis |
+
+The element is not scaled. It keeps its size and is clipped (`overflow: clip`) while the space closes.
+
+```html
+<li animate={{ style: fadeOut, when: WHEN.DETACH, duration: 300 }}>...</li>
+<li animate={{ style: fadeOut, when: WHEN.DETACH, more: { keepSpace: true } }}>...</li>
+```
+
+`more: { keepSpace: true }` keeps the old behaviour, where the space stays until the row is removed.
 
 ## Reduced motion
 
