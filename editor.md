@@ -144,7 +144,7 @@ The docs site has a code editor component, `examples/web/src/components/CodeEdit
 | Copy       | The copy button copies the file that is shown                                                                                            |
 
 > [!NOTE]
-> Errors and warnings appear about 300 ms after you stop typing. Style errors are not checked in the browser, because Sass does not run there.
+> Errors and warnings appear about 300 ms after you stop typing. Style errors are not checked here. The preview shows them.
 
 ### Keys
 
@@ -173,3 +173,28 @@ The editor code loads when the component is placed on the page. Prettier loads t
 | Command                         | Checks                                                                         |
 | ------------------------------- | ------------------------------------------------------------------------------ |
 | `bun test test/examples/editor` | Completions, diagnostics and their positions, format, docs and highlight marks |
+
+## Live demos
+
+The Guide demos can be edited too. Each demo shows its code first. Near the screen, or on a click, the code editor opens.
+
+| Step   | What happens                                                                              |
+| ------ | ----------------------------------------------------------------------------------------- |
+| Edit   | 300 ms after the last key, the demo's files build in the browser and run in a sandbox      |
+| Error  | The error shows under the preview. The last good preview stays                             |
+| Reset  | The original code and the original demo come back                                          |
+
+The build is the same one the [playground](playground.md) uses. It lives in `examples/web/src/live/`.
+
+| File              | Job                                                                                    |
+| ----------------- | -------------------------------------------------------------------------------------- |
+| `build.ts`        | `buildLive(files, { entries, styles })`: compiles every file and links the imports     |
+| `imports.ts`      | Resolves `./` and `../` imports against the importing file, and finds the root files  |
+| `scss.ts`         | The Sass importer. `@use` finds the files in the build, never the disk                 |
+| `demo-build.ts`   | `buildDemo(files)`: adds the site's shared files and theme. Loaded on the first edit   |
+| `demo-session.ts` | `createDemoSession`: edits, the 300 ms delay, reset and the latest-run check           |
+| `preview.ts`      | `Preview`: a new sandboxed frame per run. It replaces the shown frame only after it mounts |
+| `runtime-source.ts` | Loads the runtime that `scripts/playground-runtime.ts` writes                        |
+
+> [!NOTE]
+> The frame has an opaque origin (`sandbox="allow-scripts"`), so a demo cannot read the docs site's storage or cookies.

@@ -45,7 +45,7 @@ files -> compile each .lucia -> remove TypeScript -> link imports
 
 | Topic      | Limit                                                                                                                 |
 | ---------- | --------------------------------------------------------------------------------------------------------------------- |
-| Styles     | Sass does not run in the browser. Styles are used as plain CSS, so write `<style lang="css">`. Otherwise a note shows |
+| Styles     | Sass runs in the browser. `@use` finds the playground files, such as `_theme.scss`. Files on disk are not read       |
 | TypeScript | Types are removed, not checked                                                                                        |
 | Imports    | Only `lucia` and the playground files. npm packages do not load                                                       |
 | Errors     | Compile errors show a position. Errors that happen while the app runs show a message only                             |
