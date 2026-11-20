@@ -692,15 +692,28 @@ await card.detach(); // the nodes are gone when this resolves
 
 ### Closing the space
 
-A removed row would leave a gap until it is gone, and then the rows below jump. So a `DETACH` item also closes the space the element holds. Its width or height, and its margins and padding on that axis, shrink to `0` over the same `duration`, `delay` and ease as the leave. The rows below slide up while the row fades out.
+A removed row would leave a gap until it is gone, and then the rows below jump. So a `DETACH` item also closes the space the element holds. The rows below slide up while the row leaves, over the same `duration`, `delay` and ease as the leave.
 
-| Element                       | Space that closes                                            |
-| ----------------------------- | ------------------------------------------------------------ |
-| Item in a column, block, grid | Height, and top and bottom margin and padding                |
-| Item in a `display: flex` row | Width, and left and right margin and padding                 |
-| Inline element                | Nothing. Only block and flex items take space along the axis |
+When the leave starts, the element leaves the flow and stays where it was. A placeholder takes its place in the layout:
 
-The element is not scaled. It keeps its size and is clipped (`overflow: clip`) while the space closes.
+1. The placeholder has the element's size, margins and grid or flex cell.
+2. Its size on the layout axis shrinks to `0`.
+3. Its margins go to `0`, and its end margin goes to minus the parent's gap. The gap closes too.
+4. When the leave ends, the placeholder and the element are removed together.
+
+The element keeps its own size, rotation and other keyframes, because it is out of the flow and not clipped.
+
+| Element                                        | Space that closes                                  |
+| ---------------------------------------------- | -------------------------------------------------- |
+| Item in a column or block                      | Height, top and bottom margin, and the row gap     |
+| Item in a `display: flex` row                  | Width, left and right margin, and the column gap   |
+| Item in a grid                                 | Its height in the row. See the note below          |
+| Inline element, or `position: absolute` / fixed | Nothing. It fades in place                         |
+
+> [!NOTE]
+> In a grid, a row that holds only the leaving item keeps one row gap until the item is removed. A row shared with other items does not move. CSS does not let a margin remove a grid row gap.
+
+If the leave is cancelled before it ends, for example when the component is torn down mid-leave, the space reopens from where it is. The siblings slide back, and the element returns to the flow with no jump.
 
 ```html
 <li animate={{ style: fadeOut, when: WHEN.DETACH, duration: 300 }}>...</li>
