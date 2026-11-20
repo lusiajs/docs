@@ -238,8 +238,10 @@ animate={...}  -->  __animate(node, () => (expr), cleanups, leaves)   // compile
 | `dev.ts`             | Builds in memory, watches the folder and rebuilds one at a time                                                             |
 | `dev-server.ts`      | Serves the latest build, `public/` and the reload WebSocket                                                                 |
 | `dev-build.ts`       | One in-memory build, with the reload client added to the HTML                                                               |
-| `reload-client.ts`   | Browser script: reloads on a build, shows errors as an overlay                                                              |
-| `watch.ts`           | Recursive watch with a 50 ms debounce. Skips `node_modules` and dot folders                                                 |
+| `reload-client.ts`   | Browser script: reloads on a build, swaps changed component css in place, shows errors as an overlay                        |
+| `watch.ts`           | Recursive watch with a 15 ms debounce. Skips `node_modules` and dot folders                                                 |
+| `update.ts`          | Picks a css swap or a reload for each rebuild                                                                               |
+| `timings.ts`         | Step timings and the `rebuilt in` and step table lines                                                                      |
 | `log.ts`, `color.ts` | Logger. Colors only in a terminal, off with `NO_COLOR`. Category color is a pastel hue from the FNV-1a hash of the category |
 
 Both commands call `Bun.build` on the app's `index.html`. Bun bundles the script and stylesheet tags it finds there, so the plugin runs on every `.lucia` file.
@@ -276,8 +278,8 @@ The generated code keeps the `.lucia` positions as comments, and a step removes 
 
 - The map lists the `.lucia` file in `sources` and its text in `sourcesContent`.
 - `compile()` returns `code` (markers removed) and `map` (JSON string).
-- The dev build (`src/bun-plugin/index.ts`) appends the map as a base64 `data:` URL in `sourceMappingURL`, so the browser can map the code back to the `.lucia` source.
-- A production build uses the code only. The map is not emitted.
+- The plugin does not inline the map yet. Bun 1.4 composes an inline input map wrongly, so stack traces point at the wrong line. The map is built and tested, ready for when that is fixed.
+- A production build uses the code only.
 
 ## Expr positions
 

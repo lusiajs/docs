@@ -19,7 +19,7 @@
 | Everything before a commit: typecheck, tests, site build, extension build | `bun run check`                              |
 
 > [!NOTE]
-> The dev server rebuilds on each save and reloads the browser. Build errors show in the page and in the terminal.
+> The dev server rebuilds on each save. Style-only changes update the page without a reload. Other changes reload the browser. Build errors show in the page and in the terminal.
 
 ## CLI
 
@@ -43,8 +43,61 @@ Any stylesheets go in `<link>` tags. An optional `public/` folder is copied as i
 | `--no-minify`      | build   | minified          | Keep the bundle readable                                                                     |
 | `--port <n>`       | dev     | `3000`, or `PORT` | Port for the dev server. `0` picks a free port                                               |
 | `--routes <paths>` | build   | none              | Comma-separated client routes, such as `/guide,/reference`. Each gets a copy of `index.html` |
+| `--quiet`          | both    | off               | Hides the timing output. Errors still show                                                   |
 
 Run it with Bun: `bun src/cli/index.ts build examples/web`.
+
+### Timing output
+
+`lucia build` prints a table of where the time went, before the file sizes:
+
+```text
+Step           Time
+-------------------
+compile       23 ms
+sass         216 ms
+bundle        10 ms
+write        7.9 ms
+copy public  0.1 ms
+-------------------
+total        258 ms
+```
+
+`lucia dev` prints one line per rebuild, then one line when the browser reports back:
+
+```text
+rebuilt in 11 ms  wait 15 · sass 2.3 · compile 0.5 · bundle 8.1 · send 0.1  (css swap)
+browser ready in 0.5 ms
+```
+
+| Step                       | Meaning                                                             |
+| -------------------------- | ------------------------------------------------------------------- |
+| `wait`                     | Time from the first file change to the start of the rebuild         |
+| `sass`                     | Time in the Sass compiler. Zero when the styles came from the cache |
+| `compile`                  | Time in the `.lucia` compiler, without Sass                         |
+| `bundle`                   | Bun's own work: linking and the rest of the bundle                  |
+| `send`                     | Time to send the update to the browser                              |
+| `write`                    | Time to write the files to the output folder (build only)           |
+| `copy`                     | Time to copy `public/` (build only)                                 |
+| `(reload)` or `(css swap)` | What the browser did with the update                                |
+| `browser ready`            | Time from the update to the page's `load` event                     |
+
+Use `--quiet` to hide these lines.
+
+### Dev update rules
+
+| Change                                                  | What the browser does    |
+| ------------------------------------------------------- | ------------------------ |
+| A `<style>` block in a `.lucia` file                    | Swaps its css, no reload |
+| A `.scss` or `.sass` partial that a style imports       | Swaps the css, no reload |
+| A script or markup change in a `.lucia` file            | Reloads                  |
+| A `.ts` file, `index.html`, `public/` or any other file | Reloads                  |
+
+A css swap replaces the text of the component's `<style data-lucia="...">` element. If that component is not on the page yet, the page reloads.
+
+### Dynamic imports
+
+`import()` in the app creates a separate chunk file, loaded when the code runs. `lucia build` writes it to the output folder, and `lucia dev` serves it.
 
 ## Client routes
 
