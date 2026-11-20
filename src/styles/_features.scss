@@ -51,31 +51,11 @@
     grid-column: span 2;
   }
 
-  // The glow follows the pointer. It sits under the card text (z-index -1 inside the card's own stacking context).
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: radial-gradient(
-      circle 180px at var(--glow-x, 50%) var(--glow-y, 50%),
-      color-mix(in srgb, var(--tone) 40%, transparent),
-      transparent 70%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
-
   &:hover {
     border-color: var(--tone);
     box-shadow:
       0 0 28px color-mix(in srgb, var(--tone) 55%, transparent),
       var(--shadow);
-
-    &::before {
-      opacity: 1;
-    }
   }
 
   h3 {

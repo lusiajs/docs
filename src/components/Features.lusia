@@ -1,7 +1,6 @@
 <script>
 import { EASE, EDGE, SCROLL_AT, variable } from "lusia";
 import { scrollAcross } from "../motion/home-scroll.ts";
-import { glow } from "../motion/pointer.ts";
 import FeatureCounter from "./FeatureCounter.lusia";
 
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -82,7 +81,6 @@ const helloSnippet = "<p>Hi {name}</p>";
     <div class="feature-grid">
       <article
         class="feature-card feature-card--wide"
-        onpointermove={glow}
         style="--tone: var(--pink)"
         animate={cardMotion(0)}
       >
@@ -112,7 +110,6 @@ count.value++;</code></pre>
       </article>
       <article
         class="feature-card"
-        onpointermove={glow}
         style="--tone: var(--lavender)"
         animate={cardMotion(1)}
       >
@@ -132,7 +129,6 @@ import {"{"} variable {"}"} from "lusia";
       </article>
       <article
         class="feature-card"
-        onpointermove={glow}
         style="--tone: var(--mint)"
         animate={cardMotion(2)}
       >
@@ -152,7 +148,6 @@ import {"{"} variable {"}"} from "lusia";
       </article>
       <article
         class="feature-card"
-        onpointermove={glow}
         style="--tone: var(--sky)"
         animate={cardMotion(3)}
       >
@@ -171,7 +166,6 @@ import {"{"} variable {"}"} from "lusia";
       </article>
       <article
         class="feature-card"
-        onpointermove={glow}
         style="--tone: var(--lemon)"
         animate={cardMotion(4)}
       >
@@ -191,7 +185,6 @@ bun dev</code></pre>
       </article>
       <article
         class="feature-card"
-        onpointermove={glow}
         style="--tone: var(--pink)"
         animate={cardMotion(5)}
       >

@@ -17,11 +17,3 @@ export function pull(event: PointerEvent): void {
 export function release(event: PointerEvent): void {
   (event.currentTarget as HTMLElement).style.translate = "";
 }
-
-// Sets the glow position on a card, in px from its top left corner.
-export function glow(event: PointerEvent): void {
-  const card = event.currentTarget as HTMLElement;
-  const box = card.getBoundingClientRect();
-  card.style.setProperty("--glow-x", `${event.clientX - box.left}px`);
-  card.style.setProperty("--glow-y", `${event.clientY - box.top}px`);
-}
