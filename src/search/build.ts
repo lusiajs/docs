@@ -1,9 +1,9 @@
 import { api, type ApiEntry } from "../../../reference/api.ts";
 import { catalog, entryIcon } from "../catalog.ts";
-import { blockTitle, placedRows, placeGroups, type PlacedRow } from "../guide-placement.ts";
+import { blockTitle, placedRows, type PlacedRow } from "../guide-placement.ts";
 import { guideGroups } from "../render.ts";
 import { guidePath, pageLink, playgroundPath, referencePath } from "../page-link.ts";
-import { flattenMembers } from "../reference-model.ts";
+import { flattenMembers, kindSections, type KindSection } from "../reference-model.ts";
 import { field, type Field } from "./fuzzy.ts";
 
 // The pages a result can come from, in the order their groups show.
@@ -56,15 +56,21 @@ function guideDemos(): SearchEntry[] {
 }
 
 function referenceEntries(): SearchEntry[] {
-  return placedRows(placeGroups()).map((row) => ({
+  return kindSections(api).flatMap((section) =>
+    section.entries.map((entry) => referenceEntry(section, entry)),
+  );
+}
+
+function referenceEntry(section: KindSection, entry: ApiEntry): SearchEntry {
+  return {
     page: "Reference",
-    section: rowSection(row),
-    href: pageLink(referencePath, row.entry.id),
-    icon: entryIcon(row.entry.id),
-    title: field(row.entry.name),
-    summary: field(row.entry.summary),
-    keywords: field(referenceKeywords(row.entry)),
-  }));
+    section: section.label,
+    href: pageLink(referencePath, entry.id),
+    icon: entryIcon(entry.id),
+    title: field(entry.name),
+    summary: field(entry.summary),
+    keywords: field(referenceKeywords(entry)),
+  };
 }
 
 function playgroundEntry(): SearchEntry {

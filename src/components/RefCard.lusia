@@ -1,6 +1,7 @@
 <script>
 import { props } from "lusia";
 import type { ApiEntry } from "../../../reference/api.ts";
+import type { Part } from "../keywords.ts";
 import { guidePath, pageLink, referencePath } from "../page-link.ts";
 import {
   flattenMembers,
@@ -9,6 +10,7 @@ import {
   wrapSignature,
 } from "../reference-model.ts";
 import CodeCopy from "./CodeCopy.lusia";
+import RichText from "./RichText.lusia";
 
 const emptyEntry: ApiEntry = {
   id: "",
@@ -20,11 +22,11 @@ const emptyEntry: ApiEntry = {
   bullets: [],
   example: "",
 };
-const { entry, block } = props({ entry: emptyEntry, block: "" });
+const { entry, parts } = props({ entry: emptyEntry, parts: [] as Part[][] });
 
 // The entry never changes after mount, so everything derived from it is computed once.
 const shown = entry.peek();
-const shownBlock = block.peek();
+const shownParts = parts.peek();
 const members = flattenMembers(shown.members);
 const language = languageOf(shown);
 const signature = wrapSignature(shown.signature);
@@ -36,8 +38,7 @@ const anchor = location.origin + pageLink(referencePath, shown.id);
   class="ref-card"
   id={shown.id}
   data-ref-entry
-  data-group={shown.group}
-  data-block={shownBlock}
+  data-group={shown.kind}
   data-kind={shown.kind}
   data-search={search}
 >
@@ -62,6 +63,14 @@ const anchor = location.origin + pageLink(referencePath, shown.id);
     language={language}
     className="ref-code"
   />
+
+  <IF {shownParts.length > 0}>
+    <ul class="notes">
+      <EACH {shownParts} as={line}>
+        <li><RichText parts={line} base={referencePath} /></li>
+      </EACH>
+    </ul>
+  </IF>
 
   <IF {members.length > 0}>
     <div class="ref-members-wrap">

@@ -1,7 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import type { ApiEntry } from "../../reference/api.ts";
+import { api, type ApiEntry } from "../../reference/api.ts";
 import {
+  countLabel,
   flattenMembers,
+  KIND_INFO,
+  KIND_ORDER,
+  kindSections,
   kindsOf,
   matchesFilter,
   searchText,
@@ -73,13 +77,71 @@ describe("flattenMembers", () => {
   });
 });
 
+describe("kindSections", () => {
+  test("puts every entry in exactly one section", () => {
+    const sections = kindSections(api);
+    const ids = sections.flatMap((section) => section.entries.map((item) => item.id));
+    expect(ids).toHaveLength(api.length);
+    expect(new Set(ids).size).toBe(api.length);
+  });
+
+  test("follows the kind order with its label, icon and color", () => {
+    const sections = kindSections(api);
+    expect(sections.map((section) => section.kind)).toEqual(KIND_ORDER);
+    expect(sections.map((section) => section.label)).toEqual(
+      KIND_ORDER.map((kind) => KIND_INFO[kind].label),
+    );
+    expect(sections.map((section) => section.icon)).toEqual(
+      KIND_ORDER.map((kind) => KIND_INFO[kind].icon),
+    );
+  });
+
+  test("skips a kind without entries", () => {
+    const sections = kindSections([entry("two", { kind: "type" }), entry("one")]);
+    expect(sections.map((section) => section.kind)).toEqual(["function", "type"]);
+  });
+
+  test("keeps each entry in its own kind", () => {
+    for (const section of kindSections(api)) {
+      for (const item of section.entries) expect(item.kind).toBe(section.kind);
+    }
+  });
+
+  test("sorts the entries of a section by name", () => {
+    for (const section of kindSections(api)) {
+      const names = section.entries.map((item) => item.name);
+      expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+    }
+  });
+});
+
+describe("countLabel", () => {
+  test("shows the total when every entry shows", () => {
+    expect(countLabel(53, 53)).toBe("53 entries");
+    expect(countLabel(1, 1)).toBe("1 entry");
+  });
+
+  test("shows how many of the total show", () => {
+    expect(countLabel(1, 53)).toBe("1 of 53 entries");
+    expect(countLabel(0, 53)).toBe("0 of 53 entries");
+  });
+});
+
 describe("filter", () => {
-  test("searches the name, summary and member names, ignoring case", () => {
+  test("searches the name, summary, signature, bullets and member rows, ignoring case", () => {
     const search = searchText(
-      entry("easing", { name: "EASE", members: [{ name: "QUART", summary: "Strong." }] }),
+      entry("easing", {
+        name: "EASE",
+        signature: "EASE.STYLE",
+        bullets: ["Runs the tween on every update."],
+        members: [{ name: "QUART", summary: "A strong curve." }],
+      }),
     );
     expect(search).toContain("ease");
+    expect(search).toContain("style");
+    expect(search).toContain("tween");
     expect(search).toContain("quart");
+    expect(search).toContain("strong curve");
   });
 
   test("matches the query and the picked kinds", () => {
@@ -93,5 +155,10 @@ describe("filter", () => {
   test("lists each kind once", () => {
     const kinds = kindsOf([entry("a"), entry("b", { kind: "value" }), entry("c")]);
     expect(kinds).toEqual(["function", "value"]);
+  });
+
+  test("returns the kinds in the fixed order", () => {
+    expect(kindsOf(api)).toEqual(KIND_ORDER);
+    expect(kindsOf([entry("b", { kind: "type" }), entry("a")])).toEqual(["function", "type"]);
   });
 });

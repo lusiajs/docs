@@ -1,9 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import { api } from "../../../reference/api.ts";
 import { catalog } from "../catalog.ts";
+import { KIND_INFO, KIND_ORDER } from "../reference-model.ts";
 import { buildSearchIndex } from "./build.ts";
 
 const index = buildSearchIndex();
+const KIND_LABELS = KIND_ORDER.map((kind) => KIND_INFO[kind].label);
 
 describe("search index", () => {
   test("has one entry for every reference entry", () => {
@@ -32,6 +34,11 @@ describe("search index", () => {
       expect(entry.icon).toMatch(/^[a-z0-9_]+$/);
       expect(entry.section.length).toBeGreaterThan(0);
     }
+  });
+
+  test("labels every Reference result with one of the kind sections", () => {
+    const reference = index.filter((entry) => entry.page === "Reference");
+    for (const entry of reference) expect(KIND_LABELS).toContain(entry.section);
   });
 
   test("includes the playground page", () => {

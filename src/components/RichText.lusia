@@ -7,7 +7,8 @@ import type { Part } from "../keywords.ts";
 // Lets the browser start scrolling before the heading flashes.
 const SCROLL_WAIT_MS = 350;
 const noParts: Part[] = [];
-const { parts } = props({ parts: noParts });
+const { parts, base } = props({ parts: noParts, base: guidePath });
+const basePath = base.peek();
 
 function followChip(event: MouseEvent) {
   const link = event.currentTarget as HTMLAnchorElement;
@@ -20,7 +21,7 @@ function followChip(event: MouseEvent) {
     <a
       class="chip"
       data-kind={part.kind}
-      href={pageLink(guidePath, part.target.id)}
+      href={pageLink(basePath, part.target.id)}
       title={part.target.summary}
       onclick={followChip}
     >{part.text}</a>
