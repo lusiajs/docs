@@ -11,23 +11,24 @@ const { parts, base } = props({ parts: noParts, base: guidePath });
 const basePath = base.peek();
 
 function followChip(event: MouseEvent) {
-  const link = event.currentTarget as HTMLAnchorElement;
-  setTimeout(() => flashHeading(link.hash.slice(1)), SCROLL_WAIT_MS);
+	const link = event.currentTarget as HTMLAnchorElement;
+	setTimeout(() => flashHeading(link.hash.slice(1)), SCROLL_WAIT_MS);
 }
 </script>
 
 <EACH {parts} as={part}>
-  <IF {part.target}>
-    <a
-      class="chip"
-      data-kind={part.kind}
-      href={pageLink(basePath, part.target.id)}
-      title={part.target.summary}
-      onclick={followChip}
-    >{part.text}</a>
-  </IF>
-  <ELSEIF {part.chip}>
-    <code class="chip" data-kind={part.kind}>{part.text}</code>
-  </ELSEIF>
-  <ELSE>{part.text}</ELSE>
+	<IF {part.target}>
+		<a
+			class="chip"
+			data-kind={part.kind}
+			href={pageLink(basePath, part.target.id)}
+			title={part.target.summary}
+			onclick={followChip}
+			>{part.text}</a
+		>
+	</IF>
+	<ELSEIF {part.chip}>
+		<code class="chip" data-kind={part.kind}>{part.text}</code>
+	</ELSEIF>
+	<ELSE>{part.text}</ELSE>
 </EACH>

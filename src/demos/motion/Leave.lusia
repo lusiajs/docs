@@ -7,35 +7,35 @@ let box: Instance | null = null;
 
 // detach() waits for the OUT animation, then removes the box.
 function toggleBox() {
-  if (box) {
-    box.detach();
-    box = null;
-  } else if (slot.value) {
-    box = attach(Shrink, slot.value);
-  }
+	if (box) {
+		box.detach();
+		box = null;
+	} else if (slot.value) {
+		box = attach(Shrink, slot.value);
+	}
 }
 </script>
 
 <div class="motion-stage">
-  <button onclick={toggleBox} type="button">Show or hide the box</button>
-  <div class="slot" bind-element={slot}></div>
+	<button onclick={toggleBox} type="button">Show or hide the box</button>
+	<div class="slot" bind-element={slot}></div>
 </div>
 
 <style>
 @use "../../styles/demo" as demo;
 
 .motion-stage {
-  display: grid;
-  justify-items: center;
-  gap: 1rem;
-  color: var(--fg);
+	display: grid;
+	justify-items: center;
+	gap: 1rem;
+	color: var(--fg);
 
-  .slot {
-    min-height: 3rem;
-  }
+	.slot {
+		min-height: 3rem;
+	}
 
-  button {
-    @include demo.button;
-  }
+	button {
+		@include demo.button;
+	}
 }
 </style>

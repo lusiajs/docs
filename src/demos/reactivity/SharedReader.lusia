@@ -6,19 +6,23 @@ const doubled = variable.compute(() => clicks.value * 2);
 </script>
 
 <div class="reader">
-  <p class="label">Reader</p>
-  <p>Clicks: {clicks}</p>
-  <p>Doubled: {doubled}</p>
+	<p class="label">Reader</p>
+	<p>Clicks: {clicks}</p>
+	<p>Doubled: {doubled}</p>
 </div>
 
 <style>
 .reader {
-  display: grid;
-  gap: 0.5rem;
-  color: var(--fg);
+	display: grid;
+	gap: 0.5rem;
+	color: var(--fg);
 
-  p { margin: 0; }
+	p {
+		margin: 0;
+	}
 
-  .label { font-weight: 700; }
+	.label {
+		font-weight: 700;
+	}
 }
 </style>

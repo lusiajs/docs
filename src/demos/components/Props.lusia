@@ -7,35 +7,40 @@ const tone = variable.compute(() => (warn.value ? "warn" : "info"));
 const label = variable.compute(() => `Tone is ${tone.value}`);
 
 function toggleTone() {
-  warn.value = !warn.value;
+	warn.value = !warn.value;
 }
 </script>
 
 <div class="props-demo">
-  <div class="actions">
-    <button onclick={toggleTone} type="button">Toggle tone</button>
-  </div>
-  <p>Passed value, read by the child: <badge label={label} tone={tone} /></p>
-  <p>No value passed, so the defaults are used: <badge /></p>
+	<div class="actions">
+		<button onclick={toggleTone} type="button">Toggle tone</button>
+	</div>
+	<p>
+		Passed value, read by the child:
+		<badge label={label} tone={tone} />
+	</p>
+	<p>No value passed, so the defaults are used: <badge /></p>
 </div>
 
 <style>
 @use "../../styles/demo" as demo;
 
 .props-demo {
-  display: grid;
-  gap: 0.5rem;
-  color: var(--fg);
+	display: grid;
+	gap: 0.5rem;
+	color: var(--fg);
 
-  p { margin: 0; }
+	p {
+		margin: 0;
+	}
 
-  .actions {
-    @include demo.row;
-    margin-bottom: 0.5rem;
-  }
+	.actions {
+		@include demo.row;
+		margin-bottom: 0.5rem;
+	}
 
-  button {
-    @include demo.button;
-  }
+	button {
+		@include demo.button;
+	}
 }
 </style>

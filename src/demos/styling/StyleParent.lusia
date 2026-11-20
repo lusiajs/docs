@@ -6,32 +6,36 @@ const slot = variable<Element | null>(null);
 
 // Mounts the child once the slot exists. Its return value detaches the child.
 setup(() => {
-  const instance: Instance = attach(Child, slot.value!);
-  return () => instance.detach();
+	const instance: Instance = attach(Child, slot.value!);
+	return () => instance.detach();
 });
 </script>
 
 <div class="style-parent">
-  <p class="note">Parent note: underlined by the @scoped rule</p>
-  <p>Parent paragraph: red by the tree rule</p>
-  <div class="slot" bind-element={slot}></div>
+	<p class="note">Parent note: underlined by the @scoped rule</p>
+	<p>Parent paragraph: red by the tree rule</p>
+	<div class="slot" bind-element={slot}></div>
 </div>
 
 <style>
 @use "../../styles/theme" as theme;
 
 .style-parent {
-  display: grid;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  border-radius: 10px;
-  background: var(--bg);
-  color: var(--fg);
+	display: grid;
+	gap: 0.5rem;
+	padding: 0.75rem;
+	border-radius: 10px;
+	background: var(--bg);
+	color: var(--fg);
 }
 
-p { color: theme.$accent; }
+p {
+	color: theme.$accent;
+}
 
 @scoped {
-  .note { text-decoration: underline; }
+	.note {
+		text-decoration: underline;
+	}
 }
 </style>

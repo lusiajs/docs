@@ -4,30 +4,30 @@ import { PRESET, WHEN, controller, props } from "lusia";
 const { onReload } = props({ onReload: () => {} });
 const spin = controller();
 const spinMotion = {
-  style: PRESET.SPIN,
-  when: WHEN.MANUAL,
-  control: spin,
-  duration: 600,
-  keep: false,
+	style: PRESET.SPIN,
+	when: WHEN.MANUAL,
+	control: spin,
+	duration: 600,
+	keep: false,
 };
 
 function reloadNow() {
-  void spin.play();
-  onReload.peek()();
+	void spin.play();
+	onReload.peek()();
 }
 </script>
 
 <button
-  class="icon-button"
-  type="button"
-  aria-label="Run again"
-  title="Run again"
-  onclick={reloadNow}
+	class="icon-button"
+	type="button"
+	aria-label="Run again"
+	title="Run again"
+	onclick={reloadNow}
 >
-  <span
-    class="material-symbols-rounded"
-    aria-hidden="true"
-    animate={spinMotion}
-    >refresh</span
-  >
+	<span
+		class="material-symbols-rounded"
+		aria-hidden="true"
+		animate={spinMotion}
+		>refresh</span
+	>
 </button>

@@ -6,9 +6,9 @@ const { sparks } = props({ sparks: [] as Spark[] });
 </script>
 
 <EACH {sparks} as="{spark}">
-  <span
-    class="spark {spark.kind}"
-    style="left: {spark.x}px; top: {spark.y}px; --tone: {spark.tone}"
-    animate={spark.motion}
-  ></span>
+	<span
+		class="spark {spark.kind}"
+		style="left: {spark.x}px; top: {spark.y}px; --tone: {spark.tone}"
+		animate={spark.motion}
+	></span>
 </EACH>

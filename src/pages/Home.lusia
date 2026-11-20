@@ -18,38 +18,38 @@ const STORM_MS = 6000;
 
 // The Konami code calls up a petal storm for a few seconds.
 function startStorm(): void {
-  storm.value = true;
-  setTimeout(() => (storm.value = false), STORM_MS);
+	storm.value = true;
+	setTimeout(() => (storm.value = false), STORM_MS);
 }
 
 setup(() => {
-  const stopCursor = trackCursor(sparks);
-  const stopKonami = watchKonami(() => {
-    startStorm();
-    spawnSparks(sparks, {
-      kind: "petal",
-      tones: ["var(--pink)", "var(--lavender)", "var(--mint)"],
-      count: 24,
-      x: window.innerWidth / 2,
-      y: window.innerHeight / 3,
-      spread: 420,
-      lift: 120,
-      duration: 2600,
-    });
-  });
-  return () => {
-    stopCursor();
-    stopKonami();
-  };
+	const stopCursor = trackCursor(sparks);
+	const stopKonami = watchKonami(() => {
+		startStorm();
+		spawnSparks(sparks, {
+			kind: "petal",
+			tones: ["var(--pink)", "var(--lavender)", "var(--mint)"],
+			count: 24,
+			x: window.innerWidth / 2,
+			y: window.innerHeight / 3,
+			spread: 420,
+			lift: 120,
+			duration: 2600,
+		});
+	});
+	return () => {
+		stopCursor();
+		stopKonami();
+	};
 });
 </script>
 
 <div class="page-root home" animate={pageMotion} bind-element={homeEl}>
-  <HomeBackground follow={homeEl} storm={storm} />
-  <ScrollProgress follow={homeEl} />
-  <div class="cursor-layer" aria-hidden="true">
-    <Sparks sparks={sparks} />
-  </div>
-  <Hero follow={homeEl} />
-  <Features />
+	<HomeBackground follow={homeEl} storm={storm} />
+	<ScrollProgress follow={homeEl} />
+	<div class="cursor-layer" aria-hidden="true">
+		<Sparks sparks={sparks} />
+	</div>
+	<Hero follow={homeEl} />
+	<Features />
 </div>

@@ -6,28 +6,34 @@ import type { PlayFile } from "./types.ts";
 const KEY = "lusia-playground-files";
 
 export function loadFiles(): PlayFile[] {
-  const saved = readSaved();
-  return saved && saved.some((file) => file.name === ENTRY_FILE) ? saved : starterFiles();
+	const saved = readSaved();
+	return saved && saved.some((file) => file.name === ENTRY_FILE)
+		? saved
+		: starterFiles();
 }
 
 export function saveFiles(files: readonly PlayFile[]): void {
-  try {
-    localStorage.setItem(KEY, JSON.stringify(files));
-  } catch {
-    // Private windows and full storage: the files still work for this visit.
-  }
+	try {
+		localStorage.setItem(KEY, JSON.stringify(files));
+	} catch {
+		// Private windows and full storage: the files still work for this visit.
+	}
 }
 
 function readSaved(): PlayFile[] | undefined {
-  try {
-    const parsed: unknown = JSON.parse(localStorage.getItem(KEY) ?? "null");
-    return Array.isArray(parsed) && parsed.every(isPlayFile) ? parsed : undefined;
-  } catch {
-    return undefined;
-  }
+	try {
+		const parsed: unknown = JSON.parse(
+			localStorage.getItem(KEY) ?? "null",
+		);
+		return Array.isArray(parsed) && parsed.every(isPlayFile)
+			? parsed
+			: undefined;
+	} catch {
+		return undefined;
+	}
 }
 
 function isPlayFile(value: unknown): value is PlayFile {
-  const file = value as Partial<PlayFile> | null;
-  return typeof file?.name === "string" && typeof file.code === "string";
+	const file = value as Partial<PlayFile> | null;
+	return typeof file?.name === "string" && typeof file.code === "string";
 }

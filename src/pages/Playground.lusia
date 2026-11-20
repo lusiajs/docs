@@ -6,18 +6,25 @@ import PlayErrors from "../components/PlayErrors.lusia";
 import ReloadButton from "../components/ReloadButton.lusia";
 import { pageMotion } from "../motion/page.ts";
 import {
-  addFile,
-  changeCode,
-  deleteActive,
-  formatActive,
-  jumpTo,
-  renameActive,
-  resetFiles,
-  selectFile,
+	addFile,
+	changeCode,
+	deleteActive,
+	formatActive,
+	jumpTo,
+	renameActive,
+	resetFiles,
+	selectFile,
 } from "../playground/actions.ts";
 import { ENTRY_FILE } from "../playground/names.ts";
 import { runNow } from "../playground/run.ts";
-import { active, autoRun, errors, files, jump, notice } from "../playground/state.ts";
+import {
+	active,
+	autoRun,
+	errors,
+	files,
+	jump,
+	notice,
+} from "../playground/state.ts";
 
 // "add" and "rename" open one name form at a time. "" means no form is open.
 const formMode = variable<"" | "add" | "rename">("");
@@ -28,219 +35,245 @@ const manual = variable.compute(() => !autoRun.value);
 const hasNotice = variable.compute(() => notice.value !== "");
 
 function openAdd() {
-  formMode.value = "add";
+	formMode.value = "add";
 }
 
 function openRename() {
-  formMode.value = "rename";
+	formMode.value = "rename";
 }
 
 function closeForm() {
-  formMode.value = "";
+	formMode.value = "";
 }
 
 // Returns the problem with the name, or nothing when the name was accepted and the form closes.
 function submitName(name: string): string | undefined {
-  const problem = formMode.peek() === "add" ? addFile(name) : renameActive(name);
-  if (problem === undefined) formMode.value = "";
-  return problem;
+	const problem =
+		formMode.peek() === "add" ? addFile(name) : renameActive(name);
+	if (problem === undefined) formMode.value = "";
+	return problem;
 }
 
 function removeActive() {
-  if (confirm(`Delete ${active.peek()}?`)) deleteActive();
+	if (confirm(`Delete ${active.peek()}?`)) deleteActive();
 }
 
 function toggleAutoRun() {
-  autoRun.value = !autoRun.value;
+	autoRun.value = !autoRun.value;
 }
 
 function run() {
-  void runNow();
+	void runNow();
 }
 
 function format() {
-  void formatActive();
+	void formatActive();
 }
 
 function reset() {
-  if (confirm("Reset to the starter example? Your files will be replaced.")) resetFiles();
+	if (confirm("Reset to the starter example? Your files will be replaced."))
+		resetFiles();
 }
 </script>
 
 <main class="playground" animate={pageMotion}>
-  <div class="play-toolbar" role="toolbar" aria-label="Playground">
-    <button
-      class="chip"
-      type="button"
-      aria-pressed={String(autoRun.value)}
-      onclick={toggleAutoRun}
-    >
-      <span class="material-symbols-rounded" aria-hidden="true">autorenew</span>
-      Auto run {autoRun.value ? "on" : "off"}
-    </button>
-    <IF {manual}>
-      <button class="chip" type="button" onclick={run}>
-        <span class="material-symbols-rounded" aria-hidden="true">play_arrow</span>
-        Run
-      </button>
-    </IF>
-    <button class="chip" type="button" onclick={format}>
-      <span class="material-symbols-rounded" aria-hidden="true">format_align_left</span>
-      Format
-    </button>
-    <button class="chip" type="button" onclick={reset}>
-      <span class="material-symbols-rounded" aria-hidden="true">restart_alt</span>
-      Reset
-    </button>
-  </div>
+	<div class="play-toolbar" role="toolbar" aria-label="Playground">
+		<button
+			class="chip"
+			type="button"
+			aria-pressed={String(autoRun.value)}
+			onclick={toggleAutoRun}
+		>
+			<span class="material-symbols-rounded" aria-hidden="true"
+				>autorenew</span
+			>
+			Auto run {autoRun.value ? "on" : "off"}
+		</button>
+		<IF {manual}>
+			<button class="chip" type="button" onclick={run}>
+				<span class="material-symbols-rounded" aria-hidden="true"
+					>play_arrow</span
+				>
+				Run
+			</button>
+		</IF>
+		<button class="chip" type="button" onclick={format}>
+			<span class="material-symbols-rounded" aria-hidden="true"
+				>format_align_left</span
+			>
+			Format
+		</button>
+		<button class="chip" type="button" onclick={reset}>
+			<span class="material-symbols-rounded" aria-hidden="true"
+				>restart_alt</span
+			>
+			Reset
+		</button>
+	</div>
 
-  <div class="play-split">
-    <section class="play-pane play-editor" aria-label="Code">
-      <div class="play-files">
-        <button class="chip" type="button" onclick={openAdd}>
-          <span class="material-symbols-rounded" aria-hidden="true">add</span>
-          New file
-        </button>
-        <button class="chip" type="button" disabled={isEntry} onclick={openRename}>
-          <span class="material-symbols-rounded" aria-hidden="true">edit</span>
-          Rename
-        </button>
-        <button class="chip" type="button" disabled={isEntry} onclick={removeActive}>
-          <span class="material-symbols-rounded" aria-hidden="true">delete</span>
-          Delete
-        </button>
-      </div>
-      <IF {adding}>
-        <FileNameForm
-          label="New file name"
-          initial=""
-          submitText="Add"
-          onSubmit={submitName}
-          onCancel={closeForm}
-        />
-      </IF>
-      <IF {renaming}>
-        <FileNameForm
-          label="New name"
-          initial={active}
-          submitText="Rename"
-          onSubmit={submitName}
-          onCancel={closeForm}
-        />
-      </IF>
-      <CodeEditor
-        files={files}
-        active={active}
-        onChange={changeCode}
-        onSelect={selectFile}
-        jump={jump}
-      />
-      <p class="play-notice" role="status">{notice}</p>
-    </section>
+	<div class="play-split">
+		<section class="play-pane play-editor" aria-label="Code">
+			<div class="play-files">
+				<button class="chip" type="button" onclick={openAdd}>
+					<span class="material-symbols-rounded" aria-hidden="true"
+						>add</span
+					>
+					New file
+				</button>
+				<button
+					class="chip"
+					type="button"
+					disabled={isEntry}
+					onclick={openRename}
+				>
+					<span class="material-symbols-rounded" aria-hidden="true"
+						>edit</span
+					>
+					Rename
+				</button>
+				<button
+					class="chip"
+					type="button"
+					disabled={isEntry}
+					onclick={removeActive}
+				>
+					<span class="material-symbols-rounded" aria-hidden="true"
+						>delete</span
+					>
+					Delete
+				</button>
+			</div>
+			<IF {adding}>
+				<FileNameForm
+					label="New file name"
+					initial=""
+					submitText="Add"
+					onSubmit={submitName}
+					onCancel={closeForm}
+				/>
+			</IF>
+			<IF {renaming}>
+				<FileNameForm
+					label="New name"
+					initial={active}
+					submitText="Rename"
+					onSubmit={submitName}
+					onCancel={closeForm}
+				/>
+			</IF>
+			<CodeEditor
+				files={files}
+				active={active}
+				onChange={changeCode}
+				onSelect={selectFile}
+				jump={jump}
+			/>
+			<p class="play-notice" role="status">{notice}</p>
+		</section>
 
-    <section class="play-pane play-preview" aria-label="Preview">
-      <div class="play-head">
-        <p class="play-label">Preview</p>
-        <ReloadButton onReload={run} />
-      </div>
-      <div class="play-stage" data-preview></div>
-      <PlayErrors errors={errors} onJump={jumpTo} />
-    </section>
-  </div>
+		<section class="play-pane play-preview" aria-label="Preview">
+			<div class="play-head">
+				<p class="play-label">Preview</p>
+				<ReloadButton onReload={run} />
+			</div>
+			<div class="play-stage" data-preview></div>
+			<PlayErrors errors={errors} onJump={jumpTo} />
+		</section>
+	</div>
 </main>
 
 <style>
 @use "../styles/theme" as *;
 
 .playground {
-  display: grid;
-  gap: 0.75rem;
-  max-width: 96rem;
-  margin: 0 auto;
-  padding: 1rem clamp(1rem, 3vw, 2rem) 2rem;
+	display: grid;
+	gap: 0.75rem;
+	max-width: 96rem;
+	margin: 0 auto;
+	padding: 1rem clamp(1rem, 3vw, 2rem) 2rem;
 }
 
 .play-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
 }
 
 .play-split {
-  display: grid;
-  gap: 1rem;
-  align-items: start;
+	display: grid;
+	gap: 1rem;
+	align-items: start;
 }
 
 .play-pane {
-  display: grid;
-  gap: 0.75rem;
-  min-width: 0;
-  padding: 0.75rem;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--card);
+	display: grid;
+	gap: 0.75rem;
+	min-width: 0;
+	padding: 0.75rem;
+	border: 1px solid var(--line);
+	border-radius: 14px;
+	background: var(--card);
 }
 
 .play-files {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
 }
 
 .play-head {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
 }
 
 // Same look as the sandbox label on the docs page.
 .play-label {
-  flex: 1;
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+	flex: 1;
+	margin: 0;
+	color: var(--muted);
+	font-size: 0.78rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
 }
 
 .play-notice {
-  margin: 0;
-  color: var(--link);
-  font-size: 0.85rem;
+	margin: 0;
+	color: var(--link);
+	font-size: 0.85rem;
 }
 
 // The stage holds one frame while a new one loads on top of it.
 .play-stage {
-  position: relative;
-  height: 60vh;
-  min-height: 18rem;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #ffffff;
+	position: relative;
+	height: 60vh;
+	min-height: 18rem;
+	border-radius: 10px;
+	overflow: hidden;
+	background: #ffffff;
 
-  :global(.preview-frame) {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
+	:global(.preview-frame) {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
 
-  :global(.preview-frame.is-pending) {
-    visibility: hidden;
-  }
+	:global(.preview-frame.is-pending) {
+		visibility: hidden;
+	}
 }
 
 // Side by side from the tablet width up. Stacked below that: the editor first, then the preview.
 @media (min-width: 60em) {
-  .play-split {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
+	.play-split {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	}
 
-  .play-stage {
-    height: calc(100vh - #{$topbar-height} - 14rem);
-  }
+	.play-stage {
+		height: calc(100vh - #{$topbar-height} - 14rem);
+	}
 }
 </style>

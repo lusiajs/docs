@@ -1,7 +1,7 @@
 import { attach, type Instance } from "lusia";
-import Site from "./components/Site.lusia";
 import Loader from "./components/Loader.lusia";
 import SearchPalette from "./components/SearchPalette.lusia";
+import Site from "./components/Site.lusia";
 import ThemeToggle from "./components/ThemeToggle.lusia";
 import { pageSpecs } from "./pages.ts";
 import { startRouter } from "./router.ts";
@@ -24,25 +24,28 @@ void start(loader);
 
 // The page attaches after the loader has left, so the hero's entrance plays where it can be seen.
 async function start(loaderInstance: Instance): Promise<void> {
-  await hideLoader(loaderInstance);
-  await startRouter(document.getElementById("outlet")!, pageSpecs);
+	await hideLoader(loaderInstance);
+	await startRouter(document.getElementById("outlet")!, pageSpecs);
 }
 
 // Waits for the fonts, but never longer than LOADER_MAX_MS, so a slow font cannot hold the page.
 async function hideLoader(instance: Instance): Promise<void> {
-  await Promise.race([document.fonts.ready, wait(LOADER_MAX_MS)]);
-  await instance.detach();
-  document.documentElement.classList.remove("is-loading");
+	await Promise.race([document.fonts.ready, wait(LOADER_MAX_MS)]);
+	await instance.detach();
+	document.documentElement.classList.remove("is-loading");
 }
 
 function wait(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // Full screen sections subtract the real topbar height, which changes on narrow screens.
 function trackTopbarHeight(): void {
-  const topbar = document.querySelector<HTMLElement>(".topbar")!;
-  const update = () =>
-    document.documentElement.style.setProperty("--topbar-h", `${topbar.offsetHeight}px`);
-  new ResizeObserver(update).observe(topbar);
+	const topbar = document.querySelector<HTMLElement>(".topbar")!;
+	const update = () =>
+		document.documentElement.style.setProperty(
+			"--topbar-h",
+			`${topbar.offsetHeight}px`,
+		);
+	new ResizeObserver(update).observe(topbar);
 }

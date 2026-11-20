@@ -76,5 +76,5 @@ li {
 `;
 
 export function starterFiles(): PlayFile[] {
-  return [{ name: ENTRY_FILE, code: STARTER_APP }];
+	return [{ name: ENTRY_FILE, code: STARTER_APP }];
 }

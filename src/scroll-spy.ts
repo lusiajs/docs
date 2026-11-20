@@ -6,8 +6,8 @@ const SPY_LINE_PX = 200;
 
 // The CSS selectors of the page's section and demo targets. Each target's id matches the hash of a sidebar link.
 export interface SpyTargets {
-  sections: string;
-  demos?: string;
+	sections: string;
+	demos?: string;
 }
 
 let indicator: HTMLElement;
@@ -22,121 +22,142 @@ let frame = 0;
 
 // Runs while a page with a #sidebar is attached. The signal removes every listener and pending frame.
 export function initScrollSpy(signal: AbortSignal, targets: SpyTargets): void {
-  indicator = document.querySelector<HTMLElement>(".nav-indicator")!;
-  const sidebar = document.querySelector<HTMLElement>("#sidebar")!;
-  linksById = groupLinksById(sidebar);
-  selectors = targets;
-  sections = queryAll(targets.sections);
-  demos = targets.demos ? queryAll(targets.demos) : [];
-  window.addEventListener("scroll", () => scheduleUpdate(signal), { passive: true, signal });
-  window.addEventListener("resize", () => scheduleUpdate(signal), { signal });
-  sidebar.addEventListener("transitionend", () => placeIndicator(activeLinks.at(-1)), { signal });
-  // Lazy components mount after the page, so their sections and demos join the targets later.
-  observer = new MutationObserver(() => recollect(signal));
-  observer.observe(document.getElementById("outlet") ?? document.body, {
-    childList: true,
-    subtree: true,
-  });
-  signal.addEventListener("abort", () => {
-    observer?.disconnect();
-    observer = undefined;
-    cancelAnimationFrame(frame);
-    frame = 0;
-    currentKey = "";
-    activeLinks = [];
-  });
-  update();
+	indicator = document.querySelector<HTMLElement>(".nav-indicator")!;
+	const sidebar = document.querySelector<HTMLElement>("#sidebar")!;
+	linksById = groupLinksById(sidebar);
+	selectors = targets;
+	sections = queryAll(targets.sections);
+	demos = targets.demos ? queryAll(targets.demos) : [];
+	window.addEventListener("scroll", () => scheduleUpdate(signal), {
+		passive: true,
+		signal,
+	});
+	window.addEventListener("resize", () => scheduleUpdate(signal), {
+		signal,
+	});
+	sidebar.addEventListener(
+		"transitionend",
+		() => placeIndicator(activeLinks.at(-1)),
+		{ signal },
+	);
+	// Lazy components mount after the page, so their sections and demos join the targets later.
+	observer = new MutationObserver(() => recollect(signal));
+	observer.observe(document.getElementById("outlet") ?? document.body, {
+		childList: true,
+		subtree: true,
+	});
+	signal.addEventListener("abort", () => {
+		observer?.disconnect();
+		observer = undefined;
+		cancelAnimationFrame(frame);
+		frame = 0;
+		currentKey = "";
+		activeLinks = [];
+	});
+	update();
 }
 
 // Call after targets are shown or hidden, so the current link follows the change without a scroll.
 export function refreshScrollSpy(): void {
-  update();
+	update();
 }
 
 function recollect(signal: AbortSignal): void {
-  const nextSections = queryAll(selectors.sections);
-  const nextDemos = selectors.demos ? queryAll(selectors.demos) : [];
-  if (sameTargets(sections, nextSections) && sameTargets(demos, nextDemos)) return;
-  sections = nextSections;
-  demos = nextDemos;
-  scheduleUpdate(signal);
+	const nextSections = queryAll(selectors.sections);
+	const nextDemos = selectors.demos ? queryAll(selectors.demos) : [];
+	if (sameTargets(sections, nextSections) && sameTargets(demos, nextDemos))
+		return;
+	sections = nextSections;
+	demos = nextDemos;
+	scheduleUpdate(signal);
 }
 
 function sameTargets(before: HTMLElement[], after: HTMLElement[]): boolean {
-  return before.length === after.length && before.every((target, index) => target === after[index]);
+	return (
+		before.length === after.length &&
+		before.every((target, index) => target === after[index])
+	);
 }
 
 function queryAll(selector: string): HTMLElement[] {
-  return [...document.querySelectorAll<HTMLElement>(selector)];
+	return [...document.querySelectorAll<HTMLElement>(selector)];
 }
 
 function scheduleUpdate(signal: AbortSignal): void {
-  if (frame || signal.aborted) return;
-  frame = requestAnimationFrame(() => {
-    frame = 0;
-    update();
-  });
+	if (frame || signal.aborted) return;
+	frame = requestAnimationFrame(() => {
+		frame = 0;
+		update();
+	});
 }
 
 function update(): void {
-  const section = currentTarget(sections);
-  const demo = currentTarget(demos);
-  activate(section, demo && section?.contains(demo) ? demo : undefined);
+	const section = currentTarget(sections);
+	const demo = currentTarget(demos);
+	activate(section, demo && section?.contains(demo) ? demo : undefined);
 }
 
 // The last visible target whose top is above the line. Targets are in document order, so the scan stops early.
 function currentTarget(targets: HTMLElement[]): HTMLElement | undefined {
-  if (atPageBottom()) return lastVisible(targets);
-  let current: HTMLElement | undefined;
-  for (const target of targets) {
-    if (target.hidden) continue;
-    if (target.getBoundingClientRect().top > SPY_LINE_PX) break;
-    current = target;
-  }
-  return current;
+	if (atPageBottom()) return lastVisible(targets);
+	let current: HTMLElement | undefined;
+	for (const target of targets) {
+		if (target.hidden) continue;
+		if (target.getBoundingClientRect().top > SPY_LINE_PX) break;
+		current = target;
+	}
+	return current;
 }
 
 function lastVisible(targets: HTMLElement[]): HTMLElement | undefined {
-  return targets.findLast((target) => !target.hidden);
+	return targets.findLast((target) => !target.hidden);
 }
 
 function atPageBottom(): boolean {
-  return window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+	return (
+		window.innerHeight + window.scrollY >=
+		document.documentElement.scrollHeight - 2
+	);
 }
 
-function groupLinksById(sidebar: HTMLElement): Map<string, HTMLAnchorElement[]> {
-  const map = new Map<string, HTMLAnchorElement[]>();
-  for (const link of sidebar.querySelectorAll<HTMLAnchorElement>("a")) {
-    const id = link.hash.slice(1);
-    map.set(id, [...(map.get(id) ?? []), link]);
-  }
-  return map;
+function groupLinksById(
+	sidebar: HTMLElement,
+): Map<string, HTMLAnchorElement[]> {
+	const map = new Map<string, HTMLAnchorElement[]>();
+	for (const link of sidebar.querySelectorAll<HTMLAnchorElement>("a")) {
+		const id = link.hash.slice(1);
+		map.set(id, [...(map.get(id) ?? []), link]);
+	}
+	return map;
 }
 
-function activate(section: HTMLElement | undefined, demo: HTMLElement | undefined): void {
-  const key = `${section?.id}|${demo?.id}`;
-  if (key === currentKey) return;
-  currentKey = key;
-  const links = [...linksFor(section), ...linksFor(demo)];
-  for (const link of activeLinks) link.removeAttribute("aria-current");
-  for (const link of links) link.setAttribute("aria-current", "true");
-  activeLinks = links;
-  const current = links.at(-1);
-  if (current) expandAround(current);
-  placeIndicator(current);
-  if (current) keepInView(current);
+function activate(
+	section: HTMLElement | undefined,
+	demo: HTMLElement | undefined,
+): void {
+	const key = `${section?.id}|${demo?.id}`;
+	if (key === currentKey) return;
+	currentKey = key;
+	const links = [...linksFor(section), ...linksFor(demo)];
+	for (const link of activeLinks) link.removeAttribute("aria-current");
+	for (const link of links) link.setAttribute("aria-current", "true");
+	activeLinks = links;
+	const current = links.at(-1);
+	if (current) expandAround(current);
+	placeIndicator(current);
+	if (current) keepInView(current);
 }
 
 function linksFor(target: HTMLElement | undefined): HTMLAnchorElement[] {
-  return target ? (linksById.get(target.id) ?? []) : [];
+	return target ? (linksById.get(target.id) ?? []) : [];
 }
 
 // The indicator sits on the guide line of the link's list: the group's, or the sub-list's.
 function placeIndicator(link: HTMLAnchorElement | undefined): void {
-  if (!link) return;
-  const guide = link.closest<HTMLElement>(".nav-links, .nav-sub")!;
-  indicator.classList.add("is-ready");
-  indicator.style.left = `${guide.offsetLeft - 1}px`;
-  indicator.style.transform = `translateY(${link.offsetTop}px)`;
-  indicator.style.height = `${link.offsetHeight}px`;
+	if (!link) return;
+	const guide = link.closest<HTMLElement>(".nav-links, .nav-sub")!;
+	indicator.classList.add("is-ready");
+	indicator.style.left = `${guide.offsetLeft - 1}px`;
+	indicator.style.transform = `translateY(${link.offsetTop}px)`;
+	indicator.style.height = `${link.offsetHeight}px`;
 }

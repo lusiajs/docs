@@ -6,4 +6,7 @@ const noParts: Part[] = [];
 const { parts } = props({ parts: noParts });
 </script>
 
-<EACH {parts} as={p}><IF {p.hit}><mark>{p.text}</mark></IF><ELSE>{p.text}</ELSE></EACH>
+<EACH {parts} as={p}>
+	<IF {p.hit}><mark>{p.text}</mark></IF>
+	<ELSE>{p.text}</ELSE>
+</EACH>

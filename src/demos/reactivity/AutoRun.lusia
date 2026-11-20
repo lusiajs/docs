@@ -8,53 +8,59 @@ const updates = variable(0);
 
 // peek() reads without tracking, so this counter does not re-run the function.
 function showCount() {
-  updates.value = updates.peek() + 1;
-  message.value = detailsOn.value ? `Count is ${count.value}` : "Details are hidden";
+	updates.value = updates.peek() + 1;
+	message.value = detailsOn.value
+		? `Count is ${count.value}`
+		: "Details are hidden";
 }
 
 function addOne() {
-  count.value++;
+	count.value++;
 }
 
 function setSameCount() {
-  count.value = count.value;
+	count.value = count.value;
 }
 
 function toggleDetails() {
-  detailsOn.value = !detailsOn.value;
+	detailsOn.value = !detailsOn.value;
 }
 
 variable.autoRun(showCount);
 </script>
 
 <div class="auto-run-demo">
-  <p>Count: {count}</p>
-  <p>Runs so far: {updates}</p>
-  <p>Message: {message}</p>
-  <div class="actions">
-    <button onclick={addOne} type="button">Add 1</button>
-    <button onclick={setSameCount} type="button">Set the same count</button>
-    <button onclick={toggleDetails} type="button">Toggle details</button>
-  </div>
+	<p>Count: {count}</p>
+	<p>Runs so far: {updates}</p>
+	<p>Message: {message}</p>
+	<div class="actions">
+		<button onclick={addOne} type="button">Add 1</button>
+		<button onclick={setSameCount} type="button">
+			Set the same count
+		</button>
+		<button onclick={toggleDetails} type="button">Toggle details</button>
+	</div>
 </div>
 
 <style>
 @use "../../styles/demo" as demo;
 
 .auto-run-demo {
-  display: grid;
-  gap: 0.5rem;
-  color: var(--fg);
+	display: grid;
+	gap: 0.5rem;
+	color: var(--fg);
 
-  p { margin: 0; }
+	p {
+		margin: 0;
+	}
 
-  .actions {
-    @include demo.row;
-    margin-top: 0.5rem;
-  }
+	.actions {
+		@include demo.row;
+		margin-top: 0.5rem;
+	}
 
-  button {
-    @include demo.button;
-  }
+	button {
+		@include demo.button;
+	}
 }
 </style>
