@@ -1,13 +1,14 @@
 import type { LiveError } from "../live/types.ts";
 import { ENTRY_FILE, nameProblem } from "./names.ts";
 import { starterFiles } from "./starter.ts";
-import { active, files, jump, notice } from "./state.ts";
+import { active, files, jump, notice, view } from "./state.ts";
 import type { PlayFile } from "./types.ts";
 
 const FORMAT_FAILED = "Could not format this file. Fix the syntax first.";
 
 export function selectFile(name: string): void {
 	active.value = name;
+	view.value = "code";
 }
 
 export function changeCode(name: string, code: string): void {
@@ -22,6 +23,7 @@ export function addFile(name: string): string | undefined {
 	if (problem) return problem;
 	files.value = [...files.peek(), { name, code: "" }];
 	active.value = name;
+	view.value = "code";
 	return undefined;
 }
 
@@ -49,12 +51,14 @@ export function deleteActive(): void {
 export function resetFiles(): void {
 	files.value = starterFiles();
 	active.value = ENTRY_FILE;
+	view.value = "code";
 	notice.value = "";
 }
 
 export function jumpTo(error: LiveError): void {
 	if (!error.file) return;
 	active.value = error.file;
+	view.value = "code";
 	jump.value = {
 		file: error.file,
 		line: error.line ?? 1,
@@ -70,6 +74,7 @@ export async function formatActive(): Promise<void> {
 	try {
 		const formatted = await formatFile(file.name, file.code);
 		changeCode(file.name, formatted);
+		view.value = "code";
 		notice.value = "";
 	} catch {
 		notice.value = FORMAT_FAILED;

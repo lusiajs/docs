@@ -2,13 +2,15 @@
 import { props, setup, variable } from "lusia";
 import type { EditorFile, EditorJump } from "../editor/files.ts";
 import type { EditorSession } from "../editor/session.ts";
+import EditorTabs from "./EditorTabs.lusia";
 
-const { files, active, readOnly, edited, onChange, onSelect, onReset, jump } =
+const { files, active, readOnly, edited, toolbar, onChange, onSelect, onReset, jump } =
 	props({
 		files: [] as EditorFile[],
 		active: "",
 		readOnly: false,
 		edited: false,
+		toolbar: true,
 		onChange: (name: string, code: string) => {},
 		onSelect: (name: string) => {},
 		onReset: () => {},
@@ -17,7 +19,6 @@ const { files, active, readOnly, edited, onChange, onSelect, onReset, jump } =
 
 const selected = variable("");
 const host = variable<HTMLElement | null>(null);
-const multiple = variable.compute(() => files.value.length > 1);
 const copied = variable(false);
 const copyIcon = variable.compute(() =>
 	copied.value ? "check" : "content_copy",
@@ -82,26 +83,6 @@ function select(name: string) {
 	onSelect.peek()(name);
 }
 
-function nextIndex(key: string, current: number, count: number): number | null {
-	if (key === "ArrowRight") return (current + 1) % count;
-	if (key === "ArrowLeft") return (current - 1 + count) % count;
-	if (key === "Home") return 0;
-	if (key === "End") return count - 1;
-	return null;
-}
-
-// Arrow keys move between tabs, like a native tab list.
-function onTabKey(event: KeyboardEvent) {
-	const list = files.peek();
-	const current = list.findIndex((file) => file.name === selected.peek());
-	const next = nextIndex(event.key, current, list.length);
-	if (next === null) return;
-	event.preventDefault();
-	select(list[next]?.name ?? "");
-	const tabs = (event.currentTarget as HTMLElement).children;
-	(tabs[next] as HTMLElement | undefined)?.focus();
-}
-
 const formatFailed = "Could not format this file. Fix the syntax first.";
 
 function reset() {
@@ -127,72 +108,46 @@ async function copyCode() {
 </script>
 
 <div class="code-panel code-editor">
-	<div class="code-head">
-		<IF {multiple}>
-			<div
-				class="code-tabs"
-				role="tablist"
-				aria-label="Files"
-				onkeydown={onTabKey}
+	<IF {toolbar.value}>
+		<div class="code-head">
+			<EditorTabs files={files} active={selected} onSelect={select} />
+			<IF {edited.value}>
+				<span class="edited-mark">Edited</span>
+				<button class="reset-button" type="button" onclick={reset}>
+					Reset
+				</button>
+			</IF>
+			<button
+				class="icon-button"
+				type="button"
+				aria-label="Format the code"
+				title="Format (Shift+Alt+F)"
+				disabled={readOnly}
+				onclick={formatCode}
 			>
-				<EACH {files} as={file} key={file.name}>
-					<button
-						class="code-tab"
-						type="button"
-						role="tab"
-						aria-selected={String(selected.value === file.name)}
-						onclick={() => select(file.name)}
-					>
-						<span
-							class="material-symbols-rounded"
-							aria-hidden="true"
-							>description</span
-						>
-						{file.name}
-					</button>
-				</EACH>
-			</div>
-		</IF>
-		<ELSE>
-			<span class="material-symbols-rounded" aria-hidden="true"
-				>description</span
-			>
-			<span class="file-name">{selected}</span>
-		</ELSE>
-		<IF {edited.value}>
-			<span class="edited-mark">Edited</span>
-			<button class="reset-button" type="button" onclick={reset}>
-				Reset
+				<span class="material-symbols-rounded" aria-hidden="true"
+					>format_align_left</span
+				>
 			</button>
-		</IF>
-		<button
-			class="icon-button"
-			type="button"
-			aria-label="Format the code"
-			title="Format (Shift+Alt+F)"
-			disabled={readOnly}
-			onclick={formatCode}
-		>
-			<span class="material-symbols-rounded" aria-hidden="true"
-				>format_align_left</span
+			<button
+				class="icon-button"
+				type="button"
+				aria-label="Copy the code"
+				onclick={copyCode}
 			>
-		</button>
-		<button
-			class="icon-button"
-			type="button"
-			aria-label="Copy the code"
-			onclick={copyCode}
-		>
-			<span class="material-symbols-rounded" aria-hidden="true"
-				>{copyIcon}</span
-			>
-		</button>
-	</div>
+				<span class="material-symbols-rounded" aria-hidden="true"
+					>{copyIcon}</span
+				>
+			</button>
+		</div>
+	</IF>
 	<div class="editor-body" bind-element={host}></div>
-	<p class="editor-hint">
-		Tab indents. Press Esc to leave the editor. Shift+Alt+F formats.
-	</p>
-	<p class="editor-status" role="status">{status}</p>
+	<IF {toolbar.value}>
+		<p class="editor-hint">
+			Tab indents. Press Esc to leave the editor. Shift+Alt+F formats.
+		</p>
+		<p class="editor-status" role="status">{status}</p>
+	</IF>
 </div>
 
 <style>

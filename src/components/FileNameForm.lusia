@@ -1,5 +1,5 @@
 <script>
-import { props, variable } from "lusia";
+import { props, setup, variable } from "lusia";
 
 const { label, initial, submitText, onSubmit, onCancel } = props({
 	label: "",
@@ -12,6 +12,14 @@ const { label, initial, submitText, onSubmit, onCancel } = props({
 const value = variable(initial.peek());
 const problem = variable("");
 const hasProblem = variable.compute(() => problem.value !== "");
+const field = variable<HTMLInputElement | null>(null);
+
+// The form opens from a click, so the name field takes focus with its text selected.
+setup(() => {
+	const input = field.peek();
+	input?.focus();
+	input?.select();
+});
 
 // The parent returns a problem with the name, or nothing to accept it and close the form.
 function submit(event: SubmitEvent) {
@@ -30,6 +38,7 @@ function cancel() {
 		<input
 			type="text"
 			bind-value={value}
+			bind-element={field}
 			autocomplete="off"
 			spellcheck="false"
 		/>

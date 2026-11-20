@@ -1,5 +1,15 @@
 @use "theme" as *;
 
+// The playground is an app view: it owns the viewport, so the page never scrolls.
+html[data-route="playground"] {
+	overflow: hidden;
+
+	.status-strip,
+	.site-footer {
+		display: none;
+	}
+}
+
 .docs {
 	display: grid;
 	grid-template-columns: 17rem minmax(0, 1fr);
