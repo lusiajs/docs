@@ -7,8 +7,8 @@ An error code is a short name, such as `L1016`, that tells you which check faile
 | Range              | When it shows                                                                | Raised by    |
 | ------------------ | ---------------------------------------------------------------------------- | ------------ |
 | `L1001` to `L1034` | While the app builds, for a problem in a `.lucia` file                       | The compiler |
-| `L2001` to `L2046` | While the app runs, for a value passed to `animate`, `bind`, `EACH` or `FOR` | The runtime  |
-| `L3001` to `L3003` | While the app builds, for an import or file that the bundler cannot build | The build |
+| `L2001` to `L2050` | While the app runs, for a value passed to `animate`, `bind`, `EACH` or `FOR` | The runtime  |
+| `L3001` to `L3003` | While the app builds, for an import or file that the bundler cannot build    | The build    |
 
 In messages, `<name>` stands for a value filled in when the error is raised, such as a tag or attribute name.
 
@@ -37,91 +37,95 @@ hint: Add the closing tag, such as </div>, after the content.
 
 ## Index
 
-| Code            | Message                                                                                           | Hint                                                                             |
-| --------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| [L1001](#l1001) | `unclosed <tag>`                                                                                  | Add the closing tag, such as `</tag>`, after the content.                        |
-| [L1002](#l1002) | `only one <script> is allowed`                                                                    | Move the code into one `<script>` section.                                       |
-| [L1003](#l1003) | `a component's <script> cannot export`                                                            | Move shared values into a `.ts` file and import them.                            |
-| [L1004](#l1004) | `<name>` is a reserved tag name and cannot be a component                                         | Rename the component. `IF`, `ELSEIF`, `ELSE`, `EACH` and `FOR` are built in.     |
-| [L1005](#l1005) | `<message>`                                                                                       | Check the Sass syntax in this `<style>` section.                                 |
-| [L1006](#l1006) | `unclosed <!-- comment`                                                                           | Add `-->` to close the comment.                                                  |
-| [L1007](#l1007) | `unclosed <name>`                                                                                 | Add `>` to close the tag, or `/>` if it has no content.                          |
-| [L1008](#l1008) | `unclosed closing tag`                                                                            | Add `>` after the closing tag name.                                              |
-| [L1009](#l1009) | `<name>` cannot have child content yet                                                            | Write `<name />` with nothing between the tags.                                  |
-| [L1010](#l1010) | `unclosed {`                                                                                      | Add `}` to close the expression.                                                 |
-| [L1011](#l1011) | `empty {}`                                                                                        | Put an expression between the braces, such as `{count}`.                         |
-| [L1012](#l1012) | `expected an attribute name`                                                                      | Remove the stray character, or add a name.                                       |
-| [L1013](#l1013) | `unclosed attribute value`                                                                        | Add the closing quote after the value.                                           |
-| [L1014](#l1014) | `bind-<property>` needs a property name                                                           | Write the property after the dash, such as `bind-value`.                         |
-| [L1015](#l1015) | `<attr>` needs `{store}`                                                                          | Put a store in braces, such as `<attr>={name}`.                                  |
-| [L1016](#l1016) | `<attr>` needs one `{handler}`                                                                    | Put one function in braces, such as `onclick={increment}`.                       |
-| [L1017](#l1017) | an element can have only one `animate`                                                            | Put several animations in one array inside `animate`.                            |
-| [L1018](#l1018) | `animate` needs `{keyframes}`                                                                     | Put the keyframes in braces, such as `animate={fadeIn}`.                         |
-| [L1019](#l1019) | `<tag>` takes no attributes                                                                       | Remove the attributes from `<tag>`.                                              |
-| [L1020](#l1020) | `<tag>` has no `<attr>` attribute                                                                 | Check the spelling. Only the attributes listed in the docs are allowed.          |
-| [L1021](#l1021) | `<attr>` is given twice                                                                           | Keep one `<attr>` attribute.                                                     |
-| [L1022](#l1022) | `<attr>` needs `{expression}`                                                                     | Put a value in braces, such as `<attr>={value}`.                                 |
-| [L1023](#l1023) | `bind` works on elements only                                                                     | Pass the store as a prop, such as `value={name}`, and bind inside the component. |
-| [L1024](#l1024) | `bind` works on input, textarea and select                                                        | Use `bind-value`, `bind-checked` and so on for other elements.                   |
-| [L1025](#l1025) | `<attr>` needs a name in `{}`, like `<attr>={item}`                                               | Use one plain name, with no dots or symbols.                                     |
-| [L1026](#l1026) | `<name>` needs a closing `</name>`                                                                | Write `<name> ... </name>` instead of `<name />`.                                |
-| [L1027](#l1027) | expected `</name>`                                                                                | Close the block with `</name>` after its content.                                |
-| [L1028](#l1028) | expected `</name>`, found `</found>`                                                              | Close the block with `</name>` before the other closing tag.                     |
-| [L1029](#l1029) | `<name>` needs `{condition}`                                                                      | Put the condition in braces first, such as `<IF {loggedIn}>`.                    |
-| [L1030](#l1030) | `EACH` needs `{list}`                                                                             | Put the list in braces first, such as `<EACH {items} as={item}>`.                |
-| [L1031](#l1031) | `FOR` needs a name in `{}`, like `{i}`                                                            | Put the loop name in braces first, such as `<FOR {i} to={10}>`.                  |
-| [L1032](#l1032) | `FOR` needs `to={end}`                                                                            | Add the end value, such as `to={10}`.                                            |
-| [L1033](#l1033) | unexpected `</tag>`                                                                               | Remove it, or open the block it closes.                                          |
-| [L1034](#l1034) | `<tag>` must directly follow `</IF>` or `</ELSEIF>`                                               | Put `ELSEIF` or `ELSE` right after the branch before it.                         |
-| [L2001](#l2001) | animate item needs a style                                                                        | Add `style` to the item, such as `{ style: fadeIn }`.                            |
-| [L2002](#l2002) | animate `when` must be `WHEN.ATTACH`, `DETACH`, `VIEW`, `HOVER`, `SCROLL` or `MANUAL`, or a store | Pass one of the `WHEN` values, or a store.                                       |
-| [L2003](#l2003) | animate `<name>` must be a time in ms                                                             | Use a number of milliseconds, such as `300`.                                     |
-| [L2004](#l2004) | animate `loop` must be `true` or a count                                                          | Use `true`, or a number of times such as `3`.                                    |
-| [L2005](#l2005) | ease moved into the keyframes: `default: [...]`                                                   | Write `default: [EASE.STYLE.QUART, EASE.INOUT]` inside the keyframes.            |
-| [L2006](#l2006) | curve/transition moved into the keyframes: `default: [EASE.STYLE.X, EASE.Y]`                      | Write `default: [EASE.STYLE.X, EASE.Y]` inside the keyframes.                    |
-| [L2007](#l2007) | `alternate` was renamed to `backAndForth`                                                         | Write `backAndForth: true` instead.                                              |
-| [L2008](#l2008) | `reverse` moved into `more: { reverse: true }`                                                    | Write `more: { reverse: true }` instead.                                         |
-| [L2009](#l2009) | `loop` does not work with `WHEN.SCROLL`                                                           | Remove `loop`, or use another `WHEN` value.                                      |
-| [L2010](#l2010) | `more` is not used with `<when>`                                                                  | Remove `more`, or use an `WHEN` value that takes it.                             |
-| [L2011](#l2011) | animate `more` must be an object with `<keys>`                                                    | Pass an object with the keys listed.                                             |
-| [L2012](#l2012) | `more` has an unknown key `"<key>"`, use `<keys>`                                                 | Check the spelling of the key.                                                   |
-| [L2013](#l2013) | animate `more` `outDuration` needs `out`                                                          | Add `out` with the keyframes for leaving, or remove `outDuration`.               |
-| [L2014](#l2014) | animate `more` `out` must be keyframes                                                            | Give `out` an object of keyframes.                                               |
-| [L2015](#l2015) | animate `more` `start` and `end` cannot be used with `follow`                                     | Remove `start` and `end`. `follow` sets the progress.                            |
-| [L2016](#l2016) | animate `more` `follow` must be a store that holds an element                                     | Use a store that `bind-element` writes to.                                       |
-| [L2017](#l2017) | animate `more` `start` and `end` must be numbers                                                  | Use numbers, such as `start: 1` and `end: 0.2`.                                  |
-| [L2018](#l2018) | animate `more` `start` and `end` must be different lines                                          | Use two different numbers for `start` and `end`.                                 |
-| [L2019](#l2019) | animate `more` `part` must be `[from, to]` with `0 <= from < to <= 1`                             | Use a pair such as `[0, 0.5]`.                                                   |
-| [L2020](#l2020) | animate `more` `reverse` must be `true` or `false`                                                | Use `true` or `false`.                                                           |
-| [L2021](#l2021) | animate `more` `margin` must be a number of px or a CSS length                                    | Use a number of px, such as `40`, or a string such as `"10%"`.                   |
-| [L2022](#l2022) | animate `more` `amount` must be a number from 0 to 1                                              | Use a number from 0 to 1, such as `0.5`.                                         |
-| [L2023](#l2023) | animate `midway` must be a `MIDWAY` member or an object                                           | Use a `MIDWAY` member, or an object with `play`.                                 |
-| [L2024](#l2024) | `midway` has an unknown key `"<key>"`                                                             | Check the spelling of the key.                                                   |
-| [L2025](#l2025) | animate `midway.play` must be a `MIDWAY` member                                                   | Use a member of `MIDWAY`, such as `MIDWAY.FINISH`.                               |
-| [L2026](#l2026) | animate `midway.turn` must be a `TURN` member, or a function                                      | Use a member of `TURN`, such as `TURN.SMOOTH`, or a function.                    |
-| [L2027](#l2027) | animate `midway.turnDuration` must be a time in ms                                                | Use a number of milliseconds, such as `200`.                                     |
-| [L2028](#l2028) | animate `midway.turnStyle` must be an `EASE.STYLE` member                                         | Use a member of `EASE.STYLE`, such as `EASE.STYLE.CUBIC`.                        |
-| [L2029](#l2029) | animate `midway.turnEase` must be an `EASE` member                                                | Use a member of `EASE`, such as `EASE.INOUT`.                                    |
-| [L2030](#l2030) | `setAnimateDefault` has an unknown key `"<key>"`                                                  | Check the spelling of the key.                                                   |
-| [L2031](#l2031) | `setAnimateDefault` `duration` must be a time in ms                                               | Use a number of milliseconds, such as `300`.                                     |
-| [L2032](#l2032) | animate `default` must be one of the three listed forms                                           | Use one of the three listed forms.                                               |
-| [L2033](#l2033) | animate key must be a style object or one of the listed forms                                     | Use a style object, or one of the listed forms with it.                          |
-| [L2034](#l2034) | animate easing style must be a function of t                                                      | Use a member of `EASE.STYLE`, such as `EASE.STYLE.QUART`.                        |
-| [L2035](#l2035) | animate ease must be `EASE.IN`, `EASE.OUT` or `EASE.INOUT`                                        | Use a member of `EASE`, such as `EASE.INOUT`.                                    |
-| [L2036](#l2036) | animate keyframe `<at>` is outside 0..1                                                           | Keyframe keys are fractions of the animation, from 0 to 1.                       |
-| [L2037](#l2037) | animate keyframe `<at>` is listed twice                                                           | Keep one entry for each key.                                                     |
-| [L2038](#l2038) | animate keyframes must include the keys 0 and 1                                                   | Add a key `0` for the start and a key `1` for the end.                           |
-| [L2039](#l2039) | animate list changed length after it was attached                                                 | Keep the number of animate items fixed. Only their values can change.            |
-| [L2040](#l2040) | `props()` can only be called in a component's `<script>`                                          | Call `props()` at the top level of a `.lucia` `<script>`.                        |
-| [L2041](#l2041) | `EACH` keys must be unique, but `<key>` appears twice                                             | Give each row a key that no other row has.                                       |
-| [L2042](#l2042) | `FOR` needs a step that is not 0                                                                  | Use a step such as `1`, or `-1` to count down.                                   |
-| [L2043](#l2043) | `<attr>` needs a writable store                                                                   | Bind to a store made with `store()`, not to a computed value.                    |
-| [L2044](#l2044) | `ACTIVE.IN` and `ACTIVE.OUT` were renamed to `ACTIVE.ATTACH` and `ACTIVE.DETACH`                  | Replace `IN` with `ATTACH` and `OUT` with `DETACH`.                              |
-| [L2045](#l2045) | animation was renamed to style                                                                    | Write `style: keyframes` instead of `animation: keyframes`.                      |
-| [L2046](#l2046) | active was renamed to when                                                                        | Write `when:` instead of `active:`.                                              |
-| [L3001](#l3001) | `"<name>"` is not exported by `"<module>"` | Check the name, or see `reference/api.ts`. Renamed names get the new name. |
-| [L3002](#l3002) | cannot resolve `"<name>"` | Check the spelling of the path or package name, and that the file exists. |
-| [L3003](#l3003) | `<message>` | Fix the code on this line, then build again. |
+| Code            | Message                                                                                           | Hint                                                                                                |
+| --------------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| [L1001](#l1001) | `unclosed <tag>`                                                                                  | Add the closing tag, such as `</tag>`, after the content.                                           |
+| [L1002](#l1002) | `only one <script> is allowed`                                                                    | Move the code into one `<script>` section.                                                          |
+| [L1003](#l1003) | `a component's <script> cannot export`                                                            | Move shared values into a `.ts` file and import them.                                               |
+| [L1004](#l1004) | `<name>` is a reserved tag name and cannot be a component                                         | Rename the component. `IF`, `ELSEIF`, `ELSE`, `EACH` and `FOR` are built in.                        |
+| [L1005](#l1005) | `<message>`                                                                                       | Check the Sass syntax in this `<style>` section.                                                    |
+| [L1006](#l1006) | `unclosed <!-- comment`                                                                           | Add `-->` to close the comment.                                                                     |
+| [L1007](#l1007) | `unclosed <name>`                                                                                 | Add `>` to close the tag, or `/>` if it has no content.                                             |
+| [L1008](#l1008) | `unclosed closing tag`                                                                            | Add `>` after the closing tag name.                                                                 |
+| [L1009](#l1009) | `<name>` cannot have child content yet                                                            | Write `<name />` with nothing between the tags.                                                     |
+| [L1010](#l1010) | `unclosed {`                                                                                      | Add `}` to close the expression.                                                                    |
+| [L1011](#l1011) | `empty {}`                                                                                        | Put an expression between the braces, such as `{count}`.                                            |
+| [L1012](#l1012) | `expected an attribute name`                                                                      | Remove the stray character, or add a name.                                                          |
+| [L1013](#l1013) | `unclosed attribute value`                                                                        | Add the closing quote after the value.                                                              |
+| [L1014](#l1014) | `bind-<property>` needs a property name                                                           | Write the property after the dash, such as `bind-value`.                                            |
+| [L1015](#l1015) | `<attr>` needs `{store}`                                                                          | Put a store in braces, such as `<attr>={name}`.                                                     |
+| [L1016](#l1016) | `<attr>` needs one `{handler}`                                                                    | Put one function in braces, such as `onclick={increment}`.                                          |
+| [L1017](#l1017) | an element can have only one `animate`                                                            | Put several animations in one array inside `animate`.                                               |
+| [L1018](#l1018) | `animate` needs `{keyframes}`                                                                     | Put the keyframes in braces, such as `animate={fadeIn}`.                                            |
+| [L1019](#l1019) | `<tag>` takes no attributes                                                                       | Remove the attributes from `<tag>`.                                                                 |
+| [L1020](#l1020) | `<tag>` has no `<attr>` attribute                                                                 | Check the spelling. Only the attributes listed in the docs are allowed.                             |
+| [L1021](#l1021) | `<attr>` is given twice                                                                           | Keep one `<attr>` attribute.                                                                        |
+| [L1022](#l1022) | `<attr>` needs `{expression}`                                                                     | Put a value in braces, such as `<attr>={value}`.                                                    |
+| [L1023](#l1023) | `bind` works on elements only                                                                     | Pass the store as a prop, such as `value={name}`, and bind inside the component.                    |
+| [L1024](#l1024) | `bind` works on input, textarea and select                                                        | Use `bind-value`, `bind-checked` and so on for other elements.                                      |
+| [L1025](#l1025) | `<attr>` needs a name in `{}`, like `<attr>={item}`                                               | Use one plain name, with no dots or symbols.                                                        |
+| [L1026](#l1026) | `<name>` needs a closing `</name>`                                                                | Write `<name> ... </name>` instead of `<name />`.                                                   |
+| [L1027](#l1027) | expected `</name>`                                                                                | Close the block with `</name>` after its content.                                                   |
+| [L1028](#l1028) | expected `</name>`, found `</found>`                                                              | Close the block with `</name>` before the other closing tag.                                        |
+| [L1029](#l1029) | `<name>` needs `{condition}`                                                                      | Put the condition in braces first, such as `<IF {loggedIn}>`.                                       |
+| [L1030](#l1030) | `EACH` needs `{list}`                                                                             | Put the list in braces first, such as `<EACH {items} as={item}>`.                                   |
+| [L1031](#l1031) | `FOR` needs a name in `{}`, like `{i}`                                                            | Put the loop name in braces first, such as `<FOR {i} to={10}>`.                                     |
+| [L1032](#l1032) | `FOR` needs `to={end}`                                                                            | Add the end value, such as `to={10}`.                                                               |
+| [L1033](#l1033) | unexpected `</tag>`                                                                               | Remove it, or open the block it closes.                                                             |
+| [L1034](#l1034) | `<tag>` must directly follow `</IF>` or `</ELSEIF>`                                               | Put `ELSEIF` or `ELSE` right after the branch before it.                                            |
+| [L2001](#l2001) | animate item needs a style                                                                        | Add `style` to the item, such as `{ style: fadeIn }`.                                               |
+| [L2002](#l2002) | animate `when` must be `WHEN.ATTACH`, `DETACH`, `VIEW`, `HOVER`, `SCROLL` or `MANUAL`, or a store | Pass one of the `WHEN` values, or a store.                                                          |
+| [L2003](#l2003) | animate `<name>` must be a time in ms                                                             | Use a number of milliseconds, such as `300`.                                                        |
+| [L2004](#l2004) | animate `loop` must be `true` or a count                                                          | Use `true`, or a number of times such as `3`.                                                       |
+| [L2005](#l2005) | ease moved into the keyframes: `default: [...]`                                                   | Write `default: [EASE.STYLE.QUART, EASE.INOUT]` inside the keyframes.                               |
+| [L2006](#l2006) | curve/transition moved into the keyframes: `default: [EASE.STYLE.X, EASE.Y]`                      | Write `default: [EASE.STYLE.X, EASE.Y]` inside the keyframes.                                       |
+| [L2007](#l2007) | `alternate` was renamed to `backAndForth`                                                         | Write `backAndForth: true` instead.                                                                 |
+| [L2008](#l2008) | `reverse` moved into `more: { reverse: true }`                                                    | Write `more: { reverse: true }` instead.                                                            |
+| [L2009](#l2009) | `loop` does not work with `WHEN.SCROLL`                                                           | Remove `loop`, or use another `WHEN` value.                                                         |
+| [L2010](#l2010) | `more` is not used with `<when>`                                                                  | Remove `more`, or use an `WHEN` value that takes it.                                                |
+| [L2011](#l2011) | animate `more` must be an object with `<keys>`                                                    | Pass an object with the keys listed.                                                                |
+| [L2012](#l2012) | `more` has an unknown key `"<key>"`, use `<keys>`                                                 | Check the spelling of the key.                                                                      |
+| [L2013](#l2013) | animate `more` `outDuration` needs `out`                                                          | Add `out` with the keyframes for leaving, or remove `outDuration`.                                  |
+| [L2014](#l2014) | animate `more` `out` must be keyframes                                                            | Give `out` an object of keyframes.                                                                  |
+| [L2015](#l2015) | animate `more` `start` and `end` cannot be used with `follow`                                     | Remove `start` and `end`. `follow` sets the progress.                                               |
+| [L2016](#l2016) | animate `more` `follow` must be a store that holds an element                                     | Use a store that `bind-element` writes to.                                                          |
+| [L2017](#l2017) | animate `more` `start` or `end` must be SCROLL_AT or { element, window }                          | Use a SCROLL_AT member, such as `SCROLL_AT.ENTER`, or `{ element: EDGE.TOP, window: EDGE.BOTTOM }`. |
+| [L2018](#l2018) | animate `more` `start` and `end` must be different moments                                        | Use two different SCROLL_AT members, or two different points.                                       |
+| [L2019](#l2019) | animate `more` `part` must be `[from, to]` with `0 <= from < to <= 1`                             | Use a pair such as `[0, 0.5]`.                                                                      |
+| [L2020](#l2020) | animate `more` `reverse` must be `true` or `false`                                                | Use `true` or `false`.                                                                              |
+| [L2021](#l2021) | animate `more` `margin` must be a number of px or a CSS length                                    | Use a number of px, such as `40`, or a string such as `"10%"`.                                      |
+| [L2022](#l2022) | animate `more` `amount` must be a number from 0 to 1                                              | Use a number from 0 to 1, such as `0.5`.                                                            |
+| [L2023](#l2023) | animate `midway` must be a `MIDWAY` member or an object                                           | Use a `MIDWAY` member, or an object with `play`.                                                    |
+| [L2024](#l2024) | `midway` has an unknown key `"<key>"`                                                             | Check the spelling of the key.                                                                      |
+| [L2025](#l2025) | animate `midway.play` must be a `MIDWAY` member                                                   | Use a member of `MIDWAY`, such as `MIDWAY.FINISH`.                                                  |
+| [L2026](#l2026) | animate `midway.turn` must be a `TURN` member, or a function                                      | Use a member of `TURN`, such as `TURN.SMOOTH`, or a function.                                       |
+| [L2027](#l2027) | animate `midway.turnDuration` must be a time in ms                                                | Use a number of milliseconds, such as `200`.                                                        |
+| [L2028](#l2028) | animate `midway.turnStyle` must be an `EASE.STYLE` member                                         | Use a member of `EASE.STYLE`, such as `EASE.STYLE.CUBIC`.                                           |
+| [L2029](#l2029) | animate `midway.turnEase` must be an `EASE` member                                                | Use a member of `EASE`, such as `EASE.INOUT`.                                                       |
+| [L2030](#l2030) | `setAnimateDefault` has an unknown key `"<key>"`                                                  | Check the spelling of the key.                                                                      |
+| [L2031](#l2031) | `setAnimateDefault` `duration` must be a time in ms                                               | Use a number of milliseconds, such as `300`.                                                        |
+| [L2032](#l2032) | animate `default` must be one of the three listed forms                                           | Use one of the three listed forms.                                                                  |
+| [L2033](#l2033) | animate key must be a style object or one of the listed forms                                     | Use a style object, or one of the listed forms with it.                                             |
+| [L2034](#l2034) | animate easing style must be a function of t                                                      | Use a member of `EASE.STYLE`, such as `EASE.STYLE.QUART`.                                           |
+| [L2035](#l2035) | animate ease must be `EASE.IN`, `EASE.OUT` or `EASE.INOUT`                                        | Use a member of `EASE`, such as `EASE.INOUT`.                                                       |
+| [L2036](#l2036) | animate keyframe `<at>` is outside 0..1                                                           | Keyframe keys are fractions of the animation, from 0 to 1.                                          |
+| [L2037](#l2037) | animate keyframe `<at>` is listed twice                                                           | Keep one entry for each key.                                                                        |
+| [L2038](#l2038) | animate keyframes must include the keys 0 and 1                                                   | Add a key `0` for the start and a key `1` for the end.                                              |
+| [L2039](#l2039) | animate list changed length after it was attached                                                 | Keep the number of animate items fixed. Only their values can change.                               |
+| [L2040](#l2040) | `props()` can only be called in a component's `<script>`                                          | Call `props()` at the top level of a `.lucia` `<script>`.                                           |
+| [L2041](#l2041) | `EACH` keys must be unique, but `<key>` appears twice                                             | Give each row a key that no other row has.                                                          |
+| [L2042](#l2042) | `FOR` needs a step that is not 0                                                                  | Use a step such as `1`, or `-1` to count down.                                                      |
+| [L2043](#l2043) | `<attr>` needs a writable store                                                                   | Bind to a store made with `store()`, not to a computed value.                                       |
+| [L2044](#l2044) | `ACTIVE.IN` and `ACTIVE.OUT` were renamed to `ACTIVE.ATTACH` and `ACTIVE.DETACH`                  | Replace `IN` with `ATTACH` and `OUT` with `DETACH`.                                                 |
+| [L2045](#l2045) | animation was renamed to style                                                                    | Write `style: keyframes` instead of `animation: keyframes`.                                         |
+| [L2046](#l2046) | active was renamed to when                                                                        | Write `when:` instead of `active:`.                                                                 |
+| [L2047](#l2047) | animate `more` `start` or `end` is a number, which is no longer used                              | Write `SCROLL_AT.ENTER`, or `{ element: EDGE.TOP, window: EDGE.BOTTOM }`.                           |
+| [L2048](#l2048) | animate `more` `start.element` or `start.window` (or `end.`) must be an EDGE member or 0 to 1     | Use an `EDGE` member, such as `EDGE.CENTER`, or a number from 0 to 1.                               |
+| [L2049](#l2049) | animate `more` `start` or `end` has an unknown key                                                | Use only `element` and `window`.                                                                    |
+| [L2050](#l2050) | animate `more` `start` or `end` needs both `element` and `window`                                 | Write `{ element: EDGE.TOP, window: EDGE.BOTTOM }`.                                                 |
+| [L3001](#l3001) | `"<name>"` is not exported by `"<module>"`                                                        | Check the name, or see `reference/api.ts`. Renamed names get the new name.                          |
+| [L3002](#l3002) | cannot resolve `"<name>"`                                                                         | Check the spelling of the path or package name, and that the file exists.                           |
+| [L3003](#l3003) | `<message>`                                                                                       | Fix the code on this line, then build again.                                                        |
 
 ## L1001
 
@@ -1113,40 +1117,40 @@ Fixed (`const sectionEl = store(null)`, then on the section):
 
 ## L2017
 
-|         |                                                                             |
-| ------- | --------------------------------------------------------------------------- |
-| Message | animate `more` `start` and `end` must be numbers, got `<start>` and `<end>` |
-| Hint    | Use numbers, such as `start: 1` and `end: 0.2`.                             |
+|         |                                                                                                 |
+| ------- | ----------------------------------------------------------------------------------------------- |
+| Message | animate `more` `<name>` must be SCROLL_AT or { element, window }, got `<value>`                 |
+| Hint    | Use a SCROLL_AT member, such as SCROLL_AT.ENTER, or { element: EDGE.TOP, window: EDGE.BOTTOM }. |
 
 Bad:
 
 ```html
-<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: "top", end: 0.8 } }}>Title</h1>
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: "top", end: SCROLL_AT.LEAVE } }}>Title</h1>
 ```
 
 Fixed:
 
 ```html
-<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: 1, end: 0.2 } }}>Title</h1>
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: SCROLL_AT.ENTER, end: SCROLL_AT.LEAVE } }}>Title</h1>
 ```
 
 ## L2018
 
-|         |                                                          |
-| ------- | -------------------------------------------------------- |
-| Message | animate `more` `start` and `end` must be different lines |
-| Hint    | Use two different numbers for `start` and `end`.         |
+|         |                                                               |
+| ------- | ------------------------------------------------------------- |
+| Message | animate `more` `start` and `end` must be different moments    |
+| Hint    | Use two different SCROLL_AT members, or two different points. |
 
 Bad:
 
 ```html
-<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: 0.5, end: 0.5 } }}>Title</h1>
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: SCROLL_AT.ENTER, end: SCROLL_AT.ENTER } }}>Title</h1>
 ```
 
 Fixed:
 
 ```html
-<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: 0.8, end: 0.2 } }}>Title</h1>
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: SCROLL_AT.ENTER, end: SCROLL_AT.LEAVE } }}>Title</h1>
 ```
 
 ## L2019
@@ -1690,18 +1694,94 @@ Fixed:
 <div animate={{ style: fadeUp, when: WHEN.VIEW }}>...</div>
 ```
 
+## L2047
+
+|         |                                                                                           |
+| ------- | ----------------------------------------------------------------------------------------- |
+| Message | animate `more` `<name>` is a number, which is no longer used                              |
+| Hint    | Write `<name>: SCROLL_AT.ENTER`, or `<name>: { element: EDGE.TOP, window: EDGE.BOTTOM }`. |
+
+Bad:
+
+```html
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: 0 } }}>Title</h1>
+```
+
+Fixed:
+
+```html
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: SCROLL_AT.ENTER } }}>Title</h1>
+```
+
+## L2048
+
+|         |                                                                                                                 |
+| ------- | --------------------------------------------------------------------------------------------------------------- |
+| Message | animate `more` `<name>` must be `EDGE.TOP`, `EDGE.CENTER`, `EDGE.BOTTOM` or a number from 0 to 1, got `<value>` |
+| Hint    | Use an `EDGE` member, such as `EDGE.CENTER`, or a number from 0 to 1.                                           |
+
+Bad:
+
+```html
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: { element: 2, window: EDGE.TOP } } }}>Title</h1>
+```
+
+Fixed:
+
+```html
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: { element: EDGE.TOP, window: EDGE.TOP } } }}>Title</h1>
+```
+
+## L2049
+
+|         |                                                                             |
+| ------- | --------------------------------------------------------------------------- |
+| Message | animate `more` `<name>` has an unknown key `"<key>"`, use element or window |
+| Hint    | Check the spelling of the key.                                              |
+
+Bad:
+
+```html
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { end: { element: EDGE.TOP, top: EDGE.TOP } } }}>Title</h1>
+```
+
+Fixed:
+
+```html
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { end: { element: EDGE.TOP, window: EDGE.TOP } } }}>Title</h1>
+```
+
+## L2050
+
+|         |                                                       |
+| ------- | ----------------------------------------------------- |
+| Message | animate `more` `<name>` needs both element and window |
+| Hint    | Write `{ element: EDGE.TOP, window: EDGE.BOTTOM }`.   |
+
+Bad:
+
+```html
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: { element: EDGE.TOP } } }}>Title</h1>
+```
+
+Fixed:
+
+```html
+<h1 animate={{ style: fade, when: WHEN.SCROLL, more: { start: { element: EDGE.TOP, window: EDGE.BOTTOM } } }}>Title</h1>
+```
+
 ## L3001
 
-|         |                                                                 |
-| ------- | --------------------------------------------------------------- |
-| Message | `"<name>"` is not exported by `"<module>"`                      |
+|         |                                                                                                                   |
+| ------- | ----------------------------------------------------------------------------------------------------------------- |
+| Message | `"<name>"` is not exported by `"<module>"`                                                                        |
 | Hint    | A renamed name gets its new name. Otherwise, the closest real name, or `Check the name, or see reference/api.ts.` |
 
 Bad:
 
 ```html
 <script>
-import { ACTIVE } from "lucia";
+  import { ACTIVE } from "lucia";
 </script>
 ```
 
@@ -1709,22 +1789,22 @@ Fixed:
 
 ```html
 <script>
-import { WHEN } from "lucia";
+  import { WHEN } from "lucia";
 </script>
 ```
 
 ## L3002
 
-|         |                                                              |
-| ------- | ------------------------------------------------------------ |
-| Message | cannot resolve `"<name>"`                                    |
+|         |                                                                           |
+| ------- | ------------------------------------------------------------------------- |
+| Message | cannot resolve `"<name>"`                                                 |
 | Hint    | Check the spelling of the path or package name, and that the file exists. |
 
 Bad:
 
 ```html
 <script>
-import { Card } from "./Crad.lucia";
+  import { Card } from "./Crad.lucia";
 </script>
 ```
 
@@ -1732,15 +1812,15 @@ Fixed:
 
 ```html
 <script>
-import { Card } from "./Card.lucia";
+  import { Card } from "./Card.lucia";
 </script>
 ```
 
 ## L3003
 
-|         |                                                  |
-| ------- | ------------------------------------------------ |
-| Message | `<message>` (the bundler's own message)          |
-| Hint    | Fix the code on this line, then build again.     |
+|         |                                              |
+| ------- | -------------------------------------------- |
+| Message | `<message>` (the bundler's own message)      |
+| Hint    | Fix the code on this line, then build again. |
 
 The bundler could not read the code it got from a `.lucia` file. The message is the bundler's text, such as `Unexpected )`.

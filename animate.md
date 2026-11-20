@@ -102,24 +102,24 @@ An element can have one `ATTACH` item and one `DETACH` item, so it has different
 
 `more` holds the options of one trigger. Each trigger takes only its own keys. A key from another trigger is an error that lists the allowed keys.
 
-| Trigger       | Key           | Type                 | Default         | Effect                                                                                                                                                                          |
-| ------------- | ------------- | -------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `WHEN.VIEW`   | `margin`      | number or CSS length | `0`             | How far inside the screen edge the element must be before it counts as in view. A number is px. A string such as `"10%"` works too. Positive values need the element further in |
-| `WHEN.VIEW`   | `amount`      | number, 0 to 1       | `0.15`          | Share of the screen the element must cover. A tall element counts against the screen, so it can still reach the amount                                                          |
-| `WHEN.VIEW`   | `reverse`     | boolean              | `false`         | Play back out when the element leaves the view, and again on re-entry                                                                                                           |
-| `WHEN.HOVER`  | `inDelay`     | ms                   | `0`             | Wait after pointer enter before playing in. Leaving inside the wait cancels it                                                                                                  |
-| `WHEN.HOVER`  | `outDelay`    | ms                   | `0`             | Wait after pointer leave before playing back. Entering again inside the wait cancels it                                                                                         |
-| `WHEN.HOVER`  | `out`         | keyframes            | none            | The animation for leaving. It starts from the look the element has at that moment, so nothing jumps. Without it, the in plays backward                                          |
-| `WHEN.HOVER`  | `outDuration` | ms                   | item `duration` | Length of the way out. Needs `out`                                                                                                                                              |
-| `WHEN.SCROLL` | `start`       | number               | `0`             | The line where the progress is 0. Fraction of the screen height, counted from the bottom edge                                                                                   |
-| `WHEN.SCROLL` | `end`         | number               | `1`             | The line where the progress is 1. Same units as `start`. `0` is the bottom edge, `1` the top edge                                                                               |
-| `WHEN.SCROLL` | `follow`      | store of an element  | none            | The tall element that drives the progress. Its scroll position is used instead of the item's own. Not with `start` or `end`. See [Pinned scroll](#pinned-scroll)                |
-| `WHEN.SCROLL` | `part`        | `[from, to]`         | `[0, 1]`        | Plays only that slice of the progress. `[0.5, 1]` plays in the second half. Needs `0 <= from < to <= 1`                                                                         |
+| Trigger       | Key           | Type                                 | Default           | Effect                                                                                                                                                                          |
+| ------------- | ------------- | ------------------------------------ | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `WHEN.VIEW`   | `margin`      | number or CSS length                 | `0`               | How far inside the screen edge the element must be before it counts as in view. A number is px. A string such as `"10%"` works too. Positive values need the element further in |
+| `WHEN.VIEW`   | `amount`      | number, 0 to 1                       | `0.15`            | Share of the screen the element must cover. A tall element counts against the screen, so it can still reach the amount                                                          |
+| `WHEN.VIEW`   | `reverse`     | boolean                              | `false`           | Play back out when the element leaves the view, and again on re-entry                                                                                                           |
+| `WHEN.HOVER`  | `inDelay`     | ms                                   | `0`               | Wait after pointer enter before playing in. Leaving inside the wait cancels it                                                                                                  |
+| `WHEN.HOVER`  | `outDelay`    | ms                                   | `0`               | Wait after pointer leave before playing back. Entering again inside the wait cancels it                                                                                         |
+| `WHEN.HOVER`  | `out`         | keyframes                            | none              | The animation for leaving. It starts from the look the element has at that moment, so nothing jumps. Without it, the in plays backward                                          |
+| `WHEN.HOVER`  | `outDuration` | ms                                   | item `duration`   | Length of the way out. Needs `out`                                                                                                                                              |
+| `WHEN.SCROLL` | `start`       | `SCROLL_AT` or `{ element, window }` | `SCROLL_AT.ENTER` | Where the progress is 0. See [SCROLL points](#scroll-points)                                                                                                                    |
+| `WHEN.SCROLL` | `end`         | `SCROLL_AT` or `{ element, window }` | `SCROLL_AT.LEAVE` | Where the progress is 1. Same form as `start`                                                                                                                                   |
+| `WHEN.SCROLL` | `follow`      | store of an element                  | none              | The tall element that drives the progress. Its scroll position is used instead of the item's own. Not with `start` or `end`. See [Pinned scroll](#pinned-scroll)                |
+| `WHEN.SCROLL` | `part`        | `[from, to]`                         | `[0, 1]`          | Plays only that slice of the progress. `[0.5, 1]` plays in the second half. Needs `0 <= from < to <= 1`                                                                         |
 
 ```html
 <section animate={{ style: PRESET.SLIDE_UP, when: WHEN.VIEW, more: { margin: "10%", amount: 0.5, reverse: true } }}>...</section>
 <button animate={{ style: glow, when: WHEN.HOVER, more: { outDelay: 200 } }}>Hover me</button>
-<div animate={{ style: fadeOut, when: WHEN.SCROLL, more: { start: 0.2, end: 0.8 } }}>...</div>
+<div animate={{ style: fadeOut, when: WHEN.SCROLL, more: { start: SCROLL_AT.CENTER, end: SCROLL_AT.LEAVE } }}>...</div>
 ```
 
 > [!NOTE]
@@ -128,15 +128,61 @@ An element can have one `ATTACH` item and one `DETACH` item, so it has different
 > [!NOTE]
 > `reverse` at the top level of an item is an error: `reverse moved into more: { reverse: true }`.
 
-### SCROLL lines
+### SCROLL points
 
-| `start` / `end` | Where the element is                        |
-| --------------- | ------------------------------------------- |
-| `0`             | Its top is at the bottom edge of the screen |
-| `0.5`           | Its top is at the middle of the screen      |
-| `1`             | Its top is at the top edge of the screen    |
+`start` and `end` each name a moment: when a point on the element meets a point on the window.
 
-Progress is clamped to 0 to 1, and it is linear in the element's position. Keyframe curves still shape each segment. With reduced motion, a scroll item shows its end state (progress 1) and does not listen for scroll.
+| Member             | Element point          | Window point           | Default for |
+| ------------------ | ---------------------- | ---------------------- | ----------- |
+| `SCROLL_AT.ENTER`  | top (`EDGE.TOP`)       | bottom (`EDGE.BOTTOM`) | `start`     |
+| `SCROLL_AT.CENTER` | centre (`EDGE.CENTER`) | centre (`EDGE.CENTER`) | none        |
+| `SCROLL_AT.LEAVE`  | bottom (`EDGE.BOTTOM`) | top (`EDGE.TOP`)       | `end`       |
+
+Write your own pair with an object. `element` is the point on the element, `window` the point on the window:
+
+```html
+<div animate={{ style: fadeOut, when: WHEN.SCROLL, more: { start: { element: EDGE.TOP, window: EDGE.CENTER } } }}>...</div>
+```
+
+| Field     | Type                                  | Meaning                                       |
+| --------- | ------------------------------------- | --------------------------------------------- |
+| `element` | `EDGE` member or a number from 0 to 1 | `0` is the top of the element, `1` the bottom |
+| `window`  | `EDGE` member or a number from 0 to 1 | `0` is the top of the window, `1` the bottom  |
+
+`EDGE` values: `EDGE.TOP` (0), `EDGE.CENTER` (0.5), `EDGE.BOTTOM` (1).
+
+> [!NOTE]
+> Numbers for `start` and `end` (such as `start: 0.2`) are an error. Use `SCROLL_AT` or `{ element, window }`.
+
+```text
+ENTER: element top meets window bottom (progress 0)
+
+   +------------------+  window top
+   |                  |
+   +==================+  window bottom = element top
+   |  element         |
+   +------------------+
+
+
+CENTER: element centre meets window centre (progress 0.5)
+
+   +------------------+  window top
+   |  +------------+  |
+   |==|  element   |==|  window centre = element centre
+   |  +------------+  |
+   +------------------+  window bottom
+
+
+LEAVE: element bottom meets window top (progress 1)
+
+   +------------------+
+   |  element         |
+   +==================+  window top = element bottom
+   |                  |
+   +------------------+  window bottom
+```
+
+Progress is linear between the two moments and clamped to 0 to 1. Keyframe curves still shape each segment. With reduced motion, a scroll item shows its end state (progress 1) and does not listen for scroll.
 
 ### Pinned scroll
 
@@ -164,6 +210,125 @@ const section = store(null);
 
 > [!NOTE]
 > Many items can follow the same section. The section is measured once per frame, not once per item.
+
+## SCROLL guide
+
+Each example below has a live demo in the [Guide](../README.md), under Motion. The demo shows a readout, from 0 to 1, that moves as you scroll.
+
+### The default range
+
+With no `start` or `end`, the range is `SCROLL_AT.ENTER` to `SCROLL_AT.LEAVE`. The item moves for the whole time the element is on screen.
+
+```html
+<div animate={{ style: rise, when: WHEN.SCROLL }}>Card</div>
+```
+
+- Progress 0 when the element's top meets the bottom of the window.
+- Progress 1 when its bottom meets the top of the window.
+
+### Finish in the middle
+
+```html
+<div animate={{ style: rise, when: WHEN.SCROLL, more: { start: SCROLL_AT.ENTER, end: SCROLL_AT.CENTER } }}>Card</div>
+```
+
+The item reaches 1 when the element's centre reaches the middle of the window. After that it stays at its end style.
+
+### Fade out as it leaves
+
+```html
+<div animate={{ style: fadeOut, when: WHEN.SCROLL, more: { start: SCROLL_AT.CENTER, end: SCROLL_AT.LEAVE } }}>Card</div>
+```
+
+### Presets side by side
+
+Presets move the element, so they use a lane: a tall section with the cards in a sticky box. The cards follow the section, and the section's own box stays still:
+
+```html
+<section bind-element={lane} style="height: 220vh">
+  <div style="position: sticky; top: 0; height: 100vh">
+    <div animate={{ style: PRESET.SLIDE_UP, when: WHEN.SCROLL, more: { follow: lane } }}>Up</div>
+    <div animate={{ style: PRESET.SLIDE_DOWN, when: WHEN.SCROLL, more: { follow: lane } }}>Down</div>
+  </div>
+</section>
+```
+
+### Points with EDGE or numbers
+
+An object takes a point on the element and a point on the window. `EDGE` members and numbers from 0 to 1 both work:
+
+```html
+<div animate={{ style: fadeIn, when: WHEN.SCROLL, more: {
+  start: { element: EDGE.TOP, window: EDGE.CENTER },
+  end: { element: 0.75, window: 0.25 },
+} }}>Card</div>
+```
+
+| Point          | Example       | Meaning                  |
+| -------------- | ------------- | ------------------------ |
+| `element: 0`   | `EDGE.TOP`    | the element's top        |
+| `element: 0.5` | `EDGE.CENTER` | the element's middle     |
+| `element: 1`   | `EDGE.BOTTOM` | the element's bottom     |
+| `window: 0`    | `EDGE.TOP`    | the top of the window    |
+| `window: 1`    | `EDGE.BOTTOM` | the bottom of the window |
+
+### Start and end lines
+
+The window line and the element line meet at a start or end. In the Guide, the lines turn red when they meet.
+
+```text
+window top     ----------------  the window line
+element top    ================  the element line, meets the window line
+```
+
+### Two items on one element
+
+An array can give one element two items, one for each half of the scroll. Each item must set a different CSS property. If two items set the same property, the later item wins.
+
+```html
+<div animate={[
+  { style: fadeIn, when: WHEN.SCROLL, more: { start: SCROLL_AT.ENTER, end: SCROLL_AT.CENTER } },
+  { style: blurOut, when: WHEN.SCROLL, more: { start: SCROLL_AT.CENTER, end: SCROLL_AT.LEAVE } },
+]}>Card</div>
+```
+
+Here `fadeIn` sets `opacity` and `blurOut` sets `filter`, so they do not fight.
+
+### Slices with part and a pinned scene
+
+`part` plays one slice of a section's progress. With `follow`, the section drives the progress and a sticky box holds the scene on screen. This example plays three steps, each in its own third of the section:
+
+```html
+<section bind-element={section} style="height: 300vh">
+  <div style="position: sticky; top: 0; height: 100vh">
+    <p animate={{ style: pulse, when: WHEN.SCROLL, more: { follow: section, part: [0, 0.33] } }}>Step 1</p>
+    <p animate={{ style: pulse, when: WHEN.SCROLL, more: { follow: section, part: [0.33, 0.66] } }}>Step 2</p>
+    <p animate={{ style: pulse, when: WHEN.SCROLL, more: { follow: section, part: [0.66, 1] } }}>Step 3</p>
+  </div>
+</section>
+```
+
+A step with `pulse` keys that go back to 0 at the end of its slice is hidden outside it.
+
+### Progress bar, parallax and colour
+
+- A page progress bar: `follow` a store that holds `document.documentElement`. The root is the tall element, so the bar fills over the whole page.
+- Parallax: layers with different `translate` ends, both with `follow` on a tall lane. The one that moves more looks nearer.
+- Rotate, scale and colour: put them on a card in the same lane, with `follow`. Colour and opacity can also use the default range.
+
+### Reverse
+
+A scroll item follows the position, not time. Scrolling back up plays the item in reverse, and nothing needs to be set. A scroll item never loops, so `loop` is an error.
+
+### Common mistakes
+
+| Mistake                                                    | What you see                                                                                   | Fix                                                                                    |
+| ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| A number for `start` or `end`                              | `animate more start is a number, which is no longer used`                                      | Write `start: SCROLL_AT.ENTER`, or `start: { element: EDGE.TOP, window: EDGE.BOTTOM }` |
+| The same start and end                                     | `animate more start and end must be different moments`                                         | Use two different points                                                               |
+| `start` after `end` in scroll order                        | No error. The progress still goes 0 to 1, so the motion runs the other way                     | Swap the two if you expected the other order                                           |
+| A tall element with a short range                          | The range is the window height plus the element height. The item plays slowly                  | Use `follow` with a sticky box for a scene that is taller than the window              |
+| `translate`, `scale` or `rotate` on the item's own element | The progress reads the element's box, and the transform moves that box, so the progress drifts | Use `follow` with a lane, or use `opacity`, `filter` and colour on the element itself  |
 
 ## Midway
 
