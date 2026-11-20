@@ -1,10 +1,10 @@
 <script>
-import { variable } from "lusia";
+import { setup, variable } from "lusia";
 
 const keys = variable(0);
 
-// setup(root) runs once when the demo mounts. Its return value runs on detach.
-function setup(root: Element) {
+// setup runs once when the demo mounts. Its return value runs on detach.
+setup((root) => {
   function countKey() {
     keys.value++;
   }
@@ -13,7 +13,7 @@ function setup(root: Element) {
   return function cleanup() {
     root.removeEventListener("keydown", countKey);
   };
-}
+});
 </script>
 
 <div class="setup-demo">
