@@ -14,7 +14,7 @@ const LOADER_MAX_MS = 2500;
 const loader = attach(Loader, document.body);
 document.getElementById("loader")?.remove();
 
-trackTopbarHeight();
+trackChromeHeight();
 attach(Site, document.body);
 attach(ThemeToggle, document.getElementById("theme-slot")!);
 attach(SearchPalette, document.getElementById("search-slot")!);
@@ -39,13 +39,18 @@ function wait(ms: number): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// Full screen sections subtract the real topbar height, which changes on narrow screens.
-function trackTopbarHeight(): void {
-	const topbar = document.querySelector<HTMLElement>(".topbar")!;
+// Full screen sections subtract the real banner and topbar heights, which change on narrow screens.
+function trackChromeHeight(): void {
+	trackHeight(".status-strip", "--strip-h");
+	trackHeight(".topbar", "--topbar-h");
+}
+
+function trackHeight(selector: string, property: string): void {
+	const element = document.querySelector<HTMLElement>(selector)!;
 	const update = () =>
 		document.documentElement.style.setProperty(
-			"--topbar-h",
-			`${topbar.offsetHeight}px`,
+			property,
+			`${element.offsetHeight}px`,
 		);
-	new ResizeObserver(update).observe(topbar);
+	new ResizeObserver(update).observe(element);
 }

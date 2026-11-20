@@ -3,8 +3,8 @@
 .playground {
 	display: grid;
 	grid-template-rows: auto minmax(0, 1fr) auto;
-	height: calc(100vh - var(--topbar-h, 4rem));
-	height: calc(100dvh - var(--topbar-h, 4rem));
+	height: calc(100vh - var(--strip-h, 0px) - var(--topbar-h, 4rem));
+	height: calc(100dvh - var(--strip-h, 0px) - var(--topbar-h, 4rem));
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
