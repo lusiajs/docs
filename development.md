@@ -46,6 +46,8 @@ Any stylesheets go in `<link>` tags. An optional `public/` folder is copied as i
 | `--routes <paths>` | build   | none              | Comma-separated client routes, such as `/guide,/reference`. Each gets a copy of `index.html` |
 | `--quiet`          | both    | off               | Hides the timing output. Errors still show                                                   |
 
+A `lucia.config.json` in the app folder sets the same options. Flags win over it. See [Config](config.md).
+
 Run it with Bun: `bun src/cli/index.ts build examples/web`. The [playground](playground.md) needs `public/playground/lucia.js`. `bun run build` and `bun run dev` write it first, so run `bun scripts/playground-runtime.ts` before using the command above.
 
 ### Timing output
@@ -102,10 +104,10 @@ A css swap replaces the text of the component's `<style data-lucia="...">` eleme
 
 A hot update re-renders each mounted copy of the edited component, in the same place, with the same props.
 
-| Kept                                                                                 | Lost                                                                        |
-| ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| Position, props and child slots                                                      | DOM state inside the component, such as focus and input text                |
-| Variables declared at the top of the script (`const count = variable(0)`), matched by name | Variables whose name is new start from their first value                       |
+| Kept                                                                                       | Lost                                                                          |
+| ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| Position, props and child slots                                                            | DOM state inside the component, such as focus and input text                  |
+| Variables declared at the top of the script (`const count = variable(0)`), matched by name | Variables whose name is new start from their first value                      |
 | `variable.compute` values (they run again)                                                 | Effects from `variable.autoRun` of the old copy (they stop; the new ones run) |
 
 - Leave and attach animations are skipped on a hot update.
@@ -152,23 +154,23 @@ To add a code:
 
 ## Layout
 
-| Path                                                           | What it holds                                                                                    |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `src/runtime`                                                  | The runtime: variables and DOM helpers                                                              |
-| `src/compiler`                                                 | The `.lucia` compiler                                                                            |
-| `src/bun-plugin`                                               | The Bun loader for `.lucia` files and `?raw` imports                                             |
-| `src/cli`                                                      | The `lucia` command: `build` and `dev`                                                           |
-| `test/runtime`, `test/compiler`, `test/bun-plugin`, `test/cli` | Tests. Each folder mirrors its `src/` folder                                                     |
-| `examples/web`                                                 | A docs-style page: every feature with live demos and source                                      |
-| `examples/web/src/App.lucia`                                   | A minimal starter component: variable, `bind` and flow in one file                                  |
-| `examples/web/src/playground`                                  | The [playground](playground.md) page: file list and live run                                     |
+| Path                                                           | What it holds                                                                                                                 |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `src/runtime`                                                  | The runtime: variables and DOM helpers                                                                                        |
+| `src/compiler`                                                 | The `.lucia` compiler                                                                                                         |
+| `src/bun-plugin`                                               | The Bun loader for `.lucia` files and `?raw` imports                                                                          |
+| `src/cli`                                                      | The `lucia` command: `build` and `dev`                                                                                        |
+| `test/runtime`, `test/compiler`, `test/bun-plugin`, `test/cli` | Tests. Each folder mirrors its `src/` folder                                                                                  |
+| `examples/web`                                                 | A docs-style page: every feature with live demos and source                                                                   |
+| `examples/web/src/App.lucia`                                   | A minimal starter component: variable, `bind` and flow in one file                                                            |
+| `examples/web/src/playground`                                  | The [playground](playground.md) page: file list and live run                                                                  |
 | `examples/web/src/live`                                        | The shared browser build and preview frame, used by the playground and the Guide demos. See [editor.md](editor.md#live-demos) |
-| `examples/web/public/playground`                               | The preview frame (`frame.html`, `frame.js`). `lucia.js` is generated, not committed             |
-| `scripts`                                                      | Build helpers, such as `playground-runtime.ts`, which writes the preview runtime                 |
-| `examples/stress`                                              | Scenarios that push the limits and report timings                                                |
-| `editors/vscode`                                               | The VS Code extension: `.lucia` grammar, snippets and language settings. See [Editor](editor.md) |
-| `test/setup.ts`                                                | Preloaded by `bun test`: sets up a fake DOM (happy-dom) and the `.lucia` loader                  |
-| `lucia.d.ts`                                                   | Type declaration so TypeScript accepts `import App from "./App.lucia"`                           |
+| `examples/web/public/playground`                               | The preview frame (`frame.html`, `frame.js`). `lucia.js` is generated, not committed                                          |
+| `scripts`                                                      | Build helpers, such as `playground-runtime.ts`, which writes the preview runtime                                              |
+| `examples/stress`                                              | Scenarios that push the limits and report timings                                                                             |
+| `editors/vscode`                                               | The VS Code extension: `.lucia` grammar, snippets and language settings. See [Editor](editor.md)                              |
+| `test/setup.ts`                                                | Preloaded by `bun test`: sets up a fake DOM (happy-dom) and the `.lucia` loader                                               |
+| `lucia.d.ts`                                                   | Type declaration so TypeScript accepts `import App from "./App.lucia"`                                                        |
 
 ## Import paths
 

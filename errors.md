@@ -4,11 +4,11 @@
 
 An error code is a short name, such as `L1016`, that tells you which check failed. Each code has a fixed message and a hint on how to fix it.
 
-| Range              | When it shows                                                                | Raised by    |
-| ------------------ | ---------------------------------------------------------------------------- | ------------ |
-| `L1001` to `L1037` | While the app builds, for a problem in a `.lucia` file                       | The compiler |
-| `L2001` to `L2058` | While the app runs, for a value passed to `animate`, `bind`, `EACH`, `FOR` or `lazy` | The runtime  |
-| `L3001` to `L3003` | While the app builds, for an import or file that the bundler cannot build    | The build    |
+| Range              | When it shows                                                                            | Raised by    |
+| ------------------ | ---------------------------------------------------------------------------------------- | ------------ |
+| `L1001` to `L1037` | While the app builds, for a problem in a `.lucia` file                                   | The compiler |
+| `L2001` to `L2058` | While the app runs, for a value passed to `animate`, `bind`, `EACH`, `FOR` or `lazy`     | The runtime  |
+| `L3001` to `L3004` | While the app builds, for an import, a file the bundler cannot build, or the config file | The build    |
 
 In messages, `<name>` stands for a value filled in when the error is raised, such as a tag or attribute name.
 
@@ -42,7 +42,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L1001](#l1001) | `unclosed <tag>`                                                                                                                         | Add the closing tag, such as `</tag>`, after the content.                                           |
 | [L1002](#l1002) | `only one <script> is allowed`                                                                                                           | Move the code into one `<script>` section.                                                          |
 | [L1003](#l1003) | `a component's <script> cannot export`                                                                                                   | Move shared values into a `.ts` file and import them.                                               |
-| [L1004](#l1004) | `<name>` is a reserved tag name and cannot be a component                                                                                | Rename the component. `IF`, `ELSEIF`, `ELSE`, `EACH`, `FOR`, `CONTENT` and `HTML` are built in.   |
+| [L1004](#l1004) | `<name>` is a reserved tag name and cannot be a component                                                                                | Rename the component. `IF`, `ELSEIF`, `ELSE`, `EACH`, `FOR`, `CONTENT` and `HTML` are built in.     |
 | [L1005](#l1005) | `<message>`                                                                                                                              | Check the Sass syntax in this `<style>` section.                                                    |
 | [L1006](#l1006) | `unclosed <!-- comment`                                                                                                                  | Add `-->` to close the comment.                                                                     |
 | [L1007](#l1007) | `unclosed <name>`                                                                                                                        | Add `>` to close the tag, or `/>` if it has no content.                                             |
@@ -61,7 +61,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L1020](#l1020) | `<tag>` has no `<attr>` attribute                                                                                                        | Check the spelling. Only the attributes listed in the docs are allowed.                             |
 | [L1021](#l1021) | `<attr>` is given twice                                                                                                                  | Keep one `<attr>` attribute.                                                                        |
 | [L1022](#l1022) | `<attr>` needs `{expression}`                                                                                                            | Put a value in braces, such as `<attr>={value}`.                                                    |
-| [L1023](#l1023) | `bind-element` works on elements only                                                                                                    | Use `bind-element` on an element inside the component, not on its tag.                             |
+| [L1023](#l1023) | `bind-element` works on elements only                                                                                                    | Use `bind-element` on an element inside the component, not on its tag.                              |
 | [L1024](#l1024) | `bind` works on input, textarea and select                                                                                               | Use `bind-value`, `bind-checked` and so on for other elements.                                      |
 | [L1025](#l1025) | `<attr>` needs a name in `{}`, like `<attr>={item}`                                                                                      | Use one plain name, with no dots or symbols.                                                        |
 | [L1026](#l1026) | `<name>` needs a closing `</name>`                                                                                                       | Write `<name> ... </name>` instead of `<name />`.                                                   |
@@ -74,7 +74,7 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L1033](#l1033) | unexpected `</tag>`                                                                                                                      | Remove it, or open the block it closes.                                                             |
 | [L1034](#l1034) | `<tag>` must directly follow `</IF>` or `</ELSEIF>`                                                                                      | Put `ELSEIF` or `ELSE` right after the branch before it.                                            |
 | [L1035](#l1035) | `<CONTENT /> is used more than once`                                                                                                     | Keep one `<CONTENT />` in the component's markup.                                                   |
-| [L1036](#l1036) | `<CONTENT> needs />`                                                                                                                     | Write `<CONTENT />` with no children. The children go between the component's tags.                |
+| [L1036](#l1036) | `<CONTENT> needs />`                                                                                                                     | Write `<CONTENT />` with no children. The children go between the component's tags.                 |
 | [L1037](#l1037) | `<HTML> needs one {expression}`                                                                                                          | Put one expression in braces between the tags, such as `<HTML>{html}</HTML>`.                       |
 | [L2001](#l2001) | animate item needs a style                                                                                                               | Add `style` to the item, such as `{ style: fadeIn }`.                                               |
 | [L2002](#l2002) | animate `when` must be `WHEN.ATTACH`, `DETACH`, `VIEW`, `HOVER`, `SCROLL`, `MOVE`, `RESIZE`, `MOVE_OR_RESIZE` or `MANUAL`, or a variable | Pass one of the `WHEN` values, or a variable.                                                       |
@@ -132,11 +132,12 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L2054](#l2054) | unknown keyframes key `'<key>'`. Keys are numbers from 0 to 1 or `'default'`                                                             | A close name, such as `did you mean 'default'?`, or use a number from 0 to 1, or `'default'`.       |
 | [L2055](#l2055) | unknown animate key `'<key>'`                                                                                                            | A close name, such as `did you mean 'duration'?`, or check the spelling of the key.                 |
 | [L2056](#l2056) | animate `more` `keepSpace` must be true or false, got `<value>`                                                                          | Use `true` to keep the space, or `false` to let it close.                                           |
-| [L2057](#l2057) | lazy component failed to load: `<message>`                                                                                              | Check the import path, and that the file builds. The fallback stays on the page.                    |
+| [L2057](#l2057) | lazy component failed to load: `<message>`                                                                                               | Check the import path, and that the file builds. The fallback stays on the page.                    |
 | [L2058](#l2058) | `<prop>` is read-only in this component                                                                                                  | The parent can let it write back: pass it with `bind-<prop>={variable}`.                            |
 | [L3001](#l3001) | `"<name>"` is not exported by `"<module>"`                                                                                               | Check the name, or see `reference/api.ts`. Renamed names get the new name.                          |
 | [L3002](#l3002) | cannot resolve `"<name>"`                                                                                                                | Check the spelling of the path or package name, and that the file exists.                           |
 | [L3003](#l3003) | `<message>`                                                                                                                              | Fix the code on this line, then build again.                                                        |
+| [L3004](#l3004) | `lucia.config.json: <detail>`                                                                                                            | Fix lucia.config.json, then run the command again.                                                  |
 
 ## L1001
 
@@ -213,9 +214,9 @@ Fixed (in `config.ts`, `export const max = 10;`, then in the component):
 
 ## L1004
 
-|         |                                                                              |
-| ------- | ---------------------------------------------------------------------------- |
-| Message | `<name>` is a reserved tag name and cannot be a component                    |
+|         |                                                                                                 |
+| ------- | ----------------------------------------------------------------------------------------------- |
+| Message | `<name>` is a reserved tag name and cannot be a component                                       |
 | Hint    | Rename the component. `IF`, `ELSEIF`, `ELSE`, `EACH`, `FOR`, `CONTENT` and `HTML` are built in. |
 
 Bad:
@@ -320,16 +321,15 @@ Fixed:
 
 ## L1009
 
-|         |                                                 |
-| ------- | ----------------------------------------------- |
+|         |                                                                       |
+| ------- | --------------------------------------------------------------------- |
 | Message | `<name>` needs a closing `</name>`                                    |
 | Hint    | Add `</name>` after its content, or write `<name />` with no content. |
 
 Bad:
 
 ```html
-<Card>
-  <p>Hi</p>
+<Card> <p>Hi</p></Card>
 ```
 
 Fixed:
@@ -589,9 +589,9 @@ Fixed:
 
 ## L1023
 
-|         |                                                                    |
-| ------- | ------------------------------------------------------------------ |
-| Message | `bind-element` works on elements only                              |
+|         |                                                                        |
+| ------- | ---------------------------------------------------------------------- |
+| Message | `bind-element` works on elements only                                  |
 | Hint    | Use `bind-element` on an element inside the component, not on its tag. |
 
 Bad:
@@ -827,60 +827,64 @@ Fixed:
 
 ## L1035
 
-|         |                                                      |
-| ------- | ---------------------------------------------------- |
-| Message | `<CONTENT /> is used more than once`                 |
-| Hint    | Keep one `<CONTENT />` in the component's markup.    |
+|         |                                                   |
+| ------- | ------------------------------------------------- |
+| Message | `<CONTENT /> is used more than once`              |
+| Hint    | Keep one `<CONTENT />` in the component's markup. |
 
 Bad:
 
 ```html
-<div><CONTENT /></div>
-<footer><CONTENT /></footer>
+<div><content /></div>
+<footer><content /></footer>
 ```
 
 Fixed:
 
 ```html
-<div><CONTENT /></div>
+<div><content /></div>
 ```
 
 ## L1036
 
-|         |                                                                                    |
-| ------- | ---------------------------------------------------------------------------------- |
-| Message | `<CONTENT> needs />`                                                               |
+|         |                                                                                     |
+| ------- | ----------------------------------------------------------------------------------- |
+| Message | `<CONTENT> needs />`                                                                |
 | Hint    | Write `<CONTENT />` with no children. The children go between the component's tags. |
 
 Bad:
 
 ```html
-<section><CONTENT></CONTENT></section>
+<section><content></content></section>
 ```
 
 Fixed:
 
 ```html
-<section><CONTENT /></section>
+<section><content /></section>
 ```
 
 ## L1037
 
-|         |                                                                  |
-| ------- | ---------------------------------------------------------------- |
-| Message | `<HTML> needs one {expression}`                                  |
+|         |                                                                               |
+| ------- | ----------------------------------------------------------------------------- |
+| Message | `<HTML> needs one {expression}`                                               |
 | Hint    | Put one expression in braces between the tags, such as `<HTML>{html}</HTML>`. |
 
 Bad:
 
 ```html
-<HTML>Hello</HTML>
+<html>
+  Hello
+</html>
 ```
 
 Fixed:
 
 ```html
-<HTML>{greeting}</HTML>
+<html>
+  {greeting}
+</html>
 ```
 
 ## L2001
@@ -1964,9 +1968,9 @@ Fixed:
 
 ## L2057
 
-|         |                                                                   |
-| ------- | ----------------------------------------------------------------- |
-| Message | lazy component failed to load: $message                           |
+|         |                                                                                  |
+| ------- | -------------------------------------------------------------------------------- |
+| Message | lazy component failed to load: $message                                          |
 | Hint    | Check the import path, and that the file builds. The fallback stays on the page. |
 
 Bad:
@@ -1983,9 +1987,9 @@ const Chart = lazy(() => import("./Chart.lucia"));
 
 ## L2058
 
-|         |                                                                       |
-| ------- | --------------------------------------------------------------------- |
-| Message | `<prop>` is read-only in this component                               |
+|         |                                                                          |
+| ------- | ------------------------------------------------------------------------ |
+| Message | `<prop>` is read-only in this component                                  |
 | Hint    | The parent can let it write back: pass it with `bind-<prop>={variable}`. |
 
 Bad: the parent passes a value, and the child writes it.
@@ -2054,3 +2058,24 @@ Fixed:
 | Hint    | Fix the code on this line, then build again. |
 
 The bundler could not read the code it got from a `.lucia` file. The message is the bundler's text, such as `Unexpected )`.
+
+## L3004
+
+|         |                                                    |
+| ------- | -------------------------------------------------- |
+| Message | `lucia.config.json: <detail>`                      |
+| Hint    | Fix lucia.config.json, then run the command again. |
+
+The config file in the app folder has a key that is not known, or a value that is not allowed. The detail names the key and lists the allowed values.
+
+Bad:
+
+```json
+{ "lazy": { "mode": "some" } }
+```
+
+Fixed:
+
+```json
+{ "lazy": { "mode": "smart" } }
+```
