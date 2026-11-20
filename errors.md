@@ -7,7 +7,7 @@ An error code is a short name, such as `L1016`, that tells you which check faile
 | Range              | When it shows                                                                            | Raised by    |
 | ------------------ | ---------------------------------------------------------------------------------------- | ------------ |
 | `L1001` to `L1042` | While the app builds, for a problem in a `.lucia` file                                   | The compiler |
-| `L2001` to `L2058` | While the app runs, for a value passed to `animate`, `bind`, `EACH`, `FOR` or `lazy`     | The runtime  |
+| `L2001` to `L2059` | While the app runs, for `animate`, `bind`, `EACH`, `FOR` or a lazy component             | The runtime  |
 | `L3001` to `L3004` | While the app builds, for an import, a file the bundler cannot build, or the config file | The build    |
 
 In messages, `<name>` stands for a value filled in when the error is raised, such as a tag or attribute name.
@@ -2080,14 +2080,18 @@ Fixed:
 
 Bad:
 
-```ts
-const Chart = lazy(() => import("./Chartt.lucia"));
+```html
+<script>
+  import Chart from "./Chartt.lucia";
+</script>
 ```
 
 Fixed: check the file name. The error is reported to the console and the fallback stays on the page.
 
-```ts
-const Chart = lazy(() => import("./Chart.lucia"));
+```html
+<script>
+  import Chart from "./Chart.lucia";
+</script>
 ```
 
 ## L2058
@@ -2107,6 +2111,36 @@ Fixed: the parent binds the variable.
 
 ```html
 <Field bind-label="{name}" />
+```
+
+## L2059
+
+|         |                                                                                                                     |
+| ------- | ------------------------------------------------------------------------------------------------------------------- |
+| Message | `lazy()` was removed                                                                                                |
+| Hint    | Import the component normally. It loads later by itself. Put its loading view in a `<FALLBACK>` block in that file. |
+
+Bad: `lazy()` wraps the import and supplies its own fallback.
+
+```html
+<script>
+  import { lazy } from "lucia";
+  const Chart = lazy(() => import("./Chart.lucia"), { fallback: Spinner });
+</script>
+```
+
+Fixed: import the component normally. Put the loading view in a `<FALLBACK>` block in `Chart.lucia`.
+
+```html
+<script>
+  import Chart from "./Chart.lucia";
+</script>
+```
+
+```html
+<FALLBACK>
+  <p>Loading the chart...</p>
+</FALLBACK>
 ```
 
 ## L3001
