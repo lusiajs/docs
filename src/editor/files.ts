@@ -1,5 +1,5 @@
-import { findComponentImport } from "../../../editors/shared/imports.ts";
-import { parsePropDefs, type PropDef } from "../../../editors/shared/props.ts";
+import { findComponentImport } from "@language/imports.ts";
+import { parsePropDefs, type PropDef } from "@language/props.ts";
 import { exportedSymbols, type ScriptSymbol } from "../../../editors/shared/script/symbols.ts";
 
 const SYMBOL_SUFFIXES = ["", ".ts", ".tsx", "/index.ts", "/index.tsx"];

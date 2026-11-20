@@ -1,8 +1,8 @@
 import type { Range } from "@codemirror/state";
 import { Decoration, type DecorationSet, ViewPlugin, type ViewUpdate } from "@codemirror/view";
 import { highlightTree } from "@lezer/highlight";
-import { expressionEnd } from "../../../../editors/shared/format-expressions.ts";
-import { findSections } from "../../../../editors/shared/sections.ts";
+import { expressionEnd } from "@language/format-expressions.ts";
+import { findSections } from "@language/sections.ts";
 import { lusiaHighlight } from "./highlight.ts";
 import { typescriptLanguage } from "./language.ts";
 

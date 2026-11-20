@@ -2,7 +2,7 @@ import type { Plugin } from "prettier";
 import {
   protectExpressions,
   restoreExpressions,
-} from "../../../editors/shared/format-expressions.ts";
+} from "@language/format-expressions.ts";
 
 type Formatter = {
   format: (code: string, options: { parser: string; plugins: Plugin[] }) => Promise<string>;
