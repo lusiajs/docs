@@ -19,7 +19,7 @@
 | Everything before a commit: typecheck, tests, site build, extension build | `bun run check`                              |
 
 > [!NOTE]
-> The dev server rebuilds on each save. Style-only changes update the page without a reload. Other changes reload the browser. Build errors show in the page and in the terminal.
+> The dev server rebuilds on each save. Style changes and component changes update the page without a reload. Other changes reload the browser. Build errors show in the page and in the terminal.
 
 ## CLI
 
@@ -86,14 +86,31 @@ Use `--quiet` to hide these lines.
 
 ### Dev update rules
 
-| Change                                                  | What the browser does    |
-| ------------------------------------------------------- | ------------------------ |
-| A `<style>` block in a `.lucia` file                    | Swaps its css, no reload |
-| A `.scss` or `.sass` partial that a style imports       | Swaps the css, no reload |
-| A script or markup change in a `.lucia` file            | Reloads                  |
-| A `.ts` file, `index.html`, `public/` or any other file | Reloads                  |
+| Change                                                  | What the browser does                     |
+| ------------------------------------------------------- | ----------------------------------------- |
+| A `<style>` block in a `.lucia` file                    | Swaps its css, no reload                  |
+| A `.scss` or `.sass` partial that a style imports       | Swaps the css, no reload                  |
+| A script or markup change in a `.lucia` file            | Swaps the component in place (hot update) |
+| A `.lucia` file that imports a `.ts` file or a package  | Reloads                                   |
+| A `.ts` file, `index.html`, `public/` or any other file | Reloads                                   |
+| Any change right after a build error                    | Reloads                                   |
 
 A css swap replaces the text of the component's `<style data-lucia="...">` element. If that component is not on the page yet, the page reloads.
+
+### Hot updates
+
+A hot update re-renders each mounted copy of the edited component, in the same place, with the same props.
+
+| Kept                                                                                 | Lost                                                                        |
+| ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| Position, props and child slots                                                      | DOM state inside the component, such as focus and input text                |
+| Stores declared at the top of the script (`const count = store(0)`), matched by name | Stores whose name is new start from their first value                       |
+| `store.from` values (they run again)                                                 | Effects from `store.onUpdate` of the old copy (they stop; the new ones run) |
+
+- Leave and attach animations are skipped on a hot update.
+- If the new script or markup throws, the old copy stays and an overlay shows the error. The next good edit swaps.
+- A component that uses another component is re-created with it. Each child keeps its stores by name too.
+- Only top-level `store(...)` declarations keep their value. A store made inside a function or an `if` starts fresh.
 
 ### Dynamic imports
 
