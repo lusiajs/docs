@@ -45,11 +45,11 @@ Declare the props this component accepts, with their defaults.
 <span class="badge {tone}">{label}</span>
 ```
 
-| Rule  | Detail                                                                                              |
-| ----- | --------------------------------------------------------------------------------------------------- |
-| Value | The passed value. The default is used when nothing is passed, or the value is `null` or `undefined` |
+| Rule  | Detail                                                                                                                    |
+| ----- | ------------------------------------------------------------------------------------------------------------------------- |
+| Value | The passed value. The default is used when nothing is passed, or the value is `null` or `undefined`                       |
 | Type  | Each prop is a variable. Use it as `{label}` or `label.value`. Writing it needs a bind, see [Two-way bind](#two-way-bind) |
-| Where | Only in the script, at top level. Calling it elsewhere throws                                       |
+| Where | Only in the script, at top level. Calling it elsewhere throws                                                             |
 
 ### `setup(root)`
 
@@ -81,24 +81,24 @@ function setup(root: Element) {
 
 Plain HTML. Put any TypeScript expression inside `{}`.
 
-| Where                | Example                                                           | Result                                                                  |
-| -------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| Text                 | `<p>Hi {name}</p>`                                                | Text that updates                                                       |
-| Whole attribute      | `<button disabled={isDone}>`                                      | See the value rules below                                               |
-| Part of an attribute | `<p class="status {kind}">`                                       | Joined into one string                                                  |
-| Event                | `<button onclick={increment}>`                                    | Runs the function. See [Events and bind](events.md)                     |
+| Where                | Example                                                           | Result                                                                     |
+| -------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Text                 | `<p>Hi {name}</p>`                                                | Text that updates                                                          |
+| Whole attribute      | `<button disabled={isDone}>`                                      | See the value rules below                                                  |
+| Part of an attribute | `<p class="status {kind}">`                                       | Joined into one string                                                     |
+| Event                | `<button onclick={increment}>`                                    | Runs the function. See [Events and bind](events.md)                        |
 | Two-way link         | `<input bind={name} />`                                           | Keeps the field and the variable in sync. See [Events and bind](events.md) |
-| Show, repeat or skip | `<IF {loggedIn}>`, `<EACH {todos} as={todo}>`, `<FOR {i} to={5}>` | See [Flow](flow.md)                                                     |
-| Animation            | `<div animate={fadeUp}>`                                          | Animates the element. See [Animate](animate.md)                         |
+| Show, repeat or skip | `<IF {loggedIn}>`, `<EACH {todos} as={todo}>`, `<FOR {i} to={5}>` | See [Flow](flow.md)                                                        |
+| Animation            | `<div animate={fadeUp}>`                                          | Animates the element. See [Animate](animate.md)                            |
 
 ### Value rules
 
-| Value                        | In text           | In a whole attribute                        |
-| ---------------------------- | ----------------- | ------------------------------------------- |
-| `null`, `undefined`, `false` | Empty             | Attribute removed                           |
-| `true`                       | `true`            | Attribute set with no value (`disabled=""`) |
-| Variable or computed variable          | Its current value | Its current value                           |
-| Anything else                | `String(value)`   | `String(value)`                             |
+| Value                         | In text           | In a whole attribute                        |
+| ----------------------------- | ----------------- | ------------------------------------------- |
+| `null`, `undefined`, `false`  | Empty             | Attribute removed                           |
+| `true`                        | `true`            | Attribute set with no value (`disabled=""`) |
+| Variable or computed variable | Its current value | Its current value                           |
+| Anything else                 | `String(value)`   | `String(value)`                             |
 
 In a partial attribute, `null`, `undefined` and `false` become an empty string.
 
@@ -117,18 +117,20 @@ Text is inserted as text, not HTML, so values cannot inject markup.
 `<HTML>{expr}</HTML>` inserts the value as HTML. Use it only for HTML you trust.
 
 ```html
-<HTML>{note}</HTML>
+<html>
+  {note}
+</html>
 ```
 
 > [!WARNING]
 > Never pass user input to `<HTML>`. The value runs as HTML, so a `<script>` or an `onerror` attribute can run code. This is called XSS. Escape the text first, or use `{expr}` instead.
 
-| Rule        | Detail                                                             |
-| ----------- | ------------------------------------------------------------------ |
-| Content     | Exactly one `{expression}`. Text or a second `{}` is error L1037    |
-| Case        | Uppercase only. `<html>` is a normal tag                           |
-| Updates     | Each update replaces the nodes. Lucia markup in the value is not compiled |
-| Attributes  | None                                                               |
+| Rule       | Detail                                                                    |
+| ---------- | ------------------------------------------------------------------------- |
+| Content    | Exactly one `{expression}`. Text or a second `{}` is error L1037          |
+| Case       | Uppercase only. `<html>` is a normal tag                                  |
+| Updates    | Each update replaces the nodes. Lucia markup in the value is not compiled |
+| Attributes | None                                                                      |
 
 ### Braces inside expressions
 
@@ -149,20 +151,20 @@ Import another `.lucia` file, then use its name as a tag. The file name does not
 
 Pass props as attributes.
 
-| Attribute           | The child gets                                       |
-| ------------------- | ---------------------------------------------------- |
-| `label="Done"`      | The string `Done`                                    |
-| `label={mailLabel}` | The variable's value. It updates when the variable updates |
-| `flag`              | `true`                                               |
-| `onclick={fn}`      | The function. The child reads it with `props()`      |
+| Attribute           | The child gets                                                                        |
+| ------------------- | ------------------------------------------------------------------------------------- |
+| `label="Done"`      | The string `Done`                                                                     |
+| `label={mailLabel}` | The variable's value. It updates when the variable updates                            |
+| `flag`              | `true`                                                                                |
+| `onclick={fn}`      | The function. The child reads it with `props()`                                       |
 | `bind={name}`       | The variable's value, and the child can write back. See [Two-way bind](#two-way-bind) |
-| `bind-value={name}` | The same, for the prop named `value`. Any `bind-<prop>` works |
+| `bind-value={name}` | The same, for the prop named `value`. Any `bind-<prop>` works                         |
 
-| Rule          | Detail                                                                                                                            |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| Name          | The tag name must match the import name exactly, so `<Badge />` needs `import Badge`                                              |
-| Children      | Markup between the tags. The component places it with `<CONTENT />`. See [Children](#children) |
-| Unknown tags  | Any tag without a matching import is plain HTML                                                                                   |
+| Rule         | Detail                                                                                         |
+| ------------ | ---------------------------------------------------------------------------------------------- |
+| Name         | The tag name must match the import name exactly, so `<Badge />` needs `import Badge`           |
+| Children     | Markup between the tags. The component places it with `<CONTENT />`. See [Children](#children) |
+| Unknown tags | Any tag without a matching import is plain HTML                                                |
 
 ### Two-way bind
 
@@ -176,7 +178,7 @@ Pass props as attributes.
   const name = variable("Ada");
 </script>
 
-<Field bind-value={name} />
+<Field bind-value="{name}" />
 <p>Hello {name}</p>
 ```
 
@@ -188,17 +190,17 @@ Pass props as attributes.
   const { value } = props({ value: "" });
 </script>
 
-<input bind={value} />
+<input bind="{value}" />
 ```
 
-| Rule             | Detail                                                                                                  |
-| ---------------- | ------------------------------------------------------------------------------------------------------- |
-| `bind={name}`    | Same as `bind-value={name}`, like a form field                                                          |
-| Child side       | `props()` gives a writable prop for a bound name. Writing it sets the parent's variable                |
-| Not bound        | A prop the parent did not bind is read-only. Writing it throws L2058                                    |
-| Writable only    | The variable must come from `variable()`. A plain value throws `bind-value needs a writable variable`  |
-| Default          | The default is used when the parent's variable is `null` or `undefined`                                 |
-| `bind-element`   | Not allowed on a component tag. Use it on an element inside the child (error L1023)                    |
+| Rule           | Detail                                                                                                |
+| -------------- | ----------------------------------------------------------------------------------------------------- |
+| `bind={name}`  | Same as `bind-value={name}`, like a form field                                                        |
+| Child side     | `props()` gives a writable prop for a bound name. Writing it sets the parent's variable               |
+| Not bound      | A prop the parent did not bind is read-only. Writing it throws L2058                                  |
+| Writable only  | The variable must come from `variable()`. A plain value throws `bind-value needs a writable variable` |
+| Default        | The default is used when the parent's variable is `null` or `undefined`                               |
+| `bind-element` | Not allowed on a component tag. Use it on an element inside the child (error L1023)                   |
 
 ### Children
 
@@ -220,7 +222,7 @@ Put markup between a component's tags. The component decides where it goes with 
 
 <Card title="Clicks">
   <p>{count} clicks</p>
-  <button onclick={add}>Add</button>
+  <button onclick="{add}">Add</button>
 </Card>
 ```
 
@@ -234,19 +236,19 @@ Put markup between a component's tags. The component decides where it goes with 
 
 <section>
   <h2>{title}</h2>
-  <CONTENT />
+  <content />
 </section>
 ```
 
-| Rule         | Detail                                                                                              |
-| ------------ | --------------------------------------------------------------------------------------------------- |
-| Scope        | The children use the parent's variables, events, `animate`, blocks and scoped styles               |
-| Reactive     | Children update like any markup in the parent. They are removed with the component                  |
-| No children  | `<CONTENT />` renders nothing                                                                       |
-| One CONTENT  | A component file has one `<CONTENT />`. A second one is error L1035                                 |
-| Self-closing | Write `<CONTENT />`. `<CONTENT></CONTENT>` is error L1036                                           |
-| Attributes   | `<CONTENT />` takes none                                                                            |
-| Inside flow  | `<CONTENT />` works inside `<IF>`, `<EACH>` and `<FOR>`. Each place shows the children again          |
+| Rule         | Detail                                                                                       |
+| ------------ | -------------------------------------------------------------------------------------------- |
+| Scope        | The children use the parent's variables, events, `animate`, blocks and scoped styles         |
+| Reactive     | Children update like any markup in the parent. They are removed with the component           |
+| No children  | `<CONTENT />` renders nothing                                                                |
+| One CONTENT  | A component file has one `<CONTENT />`. A second one is error L1035                          |
+| Self-closing | Write `<CONTENT />`. `<CONTENT></CONTENT>` is error L1036                                    |
+| Attributes   | `<CONTENT />` takes none                                                                     |
+| Inside flow  | `<CONTENT />` works inside `<IF>`, `<EACH>` and `<FOR>`. Each place shows the children again |
 
 > [!NOTE]
 > `CONTENT` is a built-in tag, like `IF`. Lowercase `<content>` is a plain HTML element.
@@ -268,8 +270,8 @@ A component can import itself. Its own tag then works inside its markup, so it c
   <IF {item.value.children}>
     <span>{item.value.name}</span>
     <ul>
-      <EACH {children} as={child} key={child.name}>
-        <Folder item={child} />
+      <EACH {children} as="{child}" key="{child.name}">
+        <Folder item="{child}" />
       </EACH>
     </ul>
   </IF>
@@ -279,20 +281,30 @@ A component can import itself. Its own tag then works inside its markup, so it c
 </li>
 ```
 
-| Rule         | Detail                                                                                                  |
-| ------------ | ------------------------------------------------------------------------------------------------------- |
-| Stop         | The recursion stops when the data ends, or when an `IF` hides the tag. Without one, it goes as deep as the data |
-| Depth limit  | None built in. Pass a `depth` prop and check it in an `IF`                                              |
-| Keys         | Give each `EACH` row a `key` from the data. Keys must be unique among siblings                          |
-| State        | Each instance has its own state                                                                         |
-| Live demo    | `examples/web` Guide, Components: Recursive components                                                  |
+| Rule        | Detail                                                                                                          |
+| ----------- | --------------------------------------------------------------------------------------------------------------- |
+| Stop        | The recursion stops when the data ends, or when an `IF` hides the tag. Without one, it goes as deep as the data |
+| Depth limit | None built in. Pass a `depth` prop and check it in an `IF`                                                      |
+| Keys        | Give each `EACH` row a `key` from the data. Keys must be unique among siblings                                  |
+| State       | Each instance has its own state                                                                                 |
+| Live demo   | `examples/web` Guide, Components: Recursive components                                                          |
 
 > [!NOTE]
 > A child inside a hidden `IF` branch is not created. Its own children are not created either.
 
-### Lazy components
+### Top-level markers
 
-A component can load only when it is first shown. Declare it with `lazy(...)`, then use its name as a tag. See [Lazy components](lazy.md).
+Two markers sit at the top level of a file, not inside another element.
+
+| Marker                     | What it does                                                               |
+| -------------------------- | -------------------------------------------------------------------------- |
+| `<FALLBACK>...</FALLBACK>` | Shown in the component's place while its code loads. Optional              |
+| `<NOLAZY />`               | Keeps this component in the file that imports it. It is never loaded later |
+
+Inside `<FALLBACK>`, use plain elements and text only. `{expr}`, events and components are not allowed, because the script has not run yet.
+
+> [!NOTE]
+> Which components load later is set by `lazy.mode` in [Config](config.md). See [Lazy components](lazy.md).
 
 ## Style
 

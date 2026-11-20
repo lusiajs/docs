@@ -22,7 +22,7 @@ The VS Code extension lives in `editors/vscode`. It gives `.lucia` files colours
 | Where                                   | Offers                                                                                                                                                       |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `<script>`                              | Lucia API names, with `import` added to the `lucia` import, and a `props({ ... })` snippet                                                                   |
-| Markup, after `<`                       | Default imports of `.lucia` files, with `/>`. Also the flow tags `IF`, `ELSEIF`, `ELSE`, `EACH` and `FOR`, and `CONTENT`, as snippets                                       |
+| Markup, after `<`                       | Default imports of `.lucia` files, with `/>`. Also the flow tags `IF`, `ELSEIF`, `ELSE`, `EACH` and `FOR`, and `CONTENT`, `HTML`, `FALLBACK` and `NOLAZY`, as snippets                                       |
 | In an `<EACH>` tag                      | `as=`, `index=`, `key=`                                                                                                                                      |
 | In a `<FOR>` tag                        | `from=`, `to=`, `step=`                                                                                                                                      |
 | On a component tag                      | Prop names from the child's `props({ ... })`                                                                                                                 |
