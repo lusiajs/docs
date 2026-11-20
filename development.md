@@ -161,7 +161,8 @@ To add a code:
 | `test/runtime`, `test/compiler`, `test/bun-plugin`, `test/cli` | Tests. Each folder mirrors its `src/` folder                                                     |
 | `examples/web`                                                 | A docs-style page: every feature with live demos and source                                      |
 | `examples/web/src/App.lucia`                                   | A minimal starter component: store, `bind` and flow in one file                                  |
-| `examples/web/src/playground`                                  | The [playground](playground.md) page: file list, live run and the preview frame                  |
+| `examples/web/src/playground`                                  | The [playground](playground.md) page: file list and live run                                     |
+| `examples/web/src/live`                                        | The shared browser build and preview frame, used by the playground and the Guide demos. See [editor.md](editor.md#live-demos) |
 | `examples/web/public/playground`                               | The preview frame (`frame.html`, `frame.js`). `lucia.js` is generated, not committed             |
 | `scripts`                                                      | Build helpers, such as `playground-runtime.ts`, which writes the preview runtime                 |
 | `examples/stress`                                              | Scenarios that push the limits and report timings                                                |
