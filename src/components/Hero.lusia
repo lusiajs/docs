@@ -183,7 +183,7 @@ function setup() {
       </a>
       <a
         class="button github magnetic"
-        href="https://github.com/AzPepoze/luciajs"
+        href="https://github.com/AzPepoze/lusia"
         target="_blank"
         rel="noopener noreferrer"
         onpointermove={pull}
