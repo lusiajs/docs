@@ -206,7 +206,14 @@ setup(() => {
 }
 
 // The add button sits right after the last tab, not at the far end of the bar.
+// The strip takes the bar height, so the selected tab's underline meets the border.
+.play-bar .code-tabs-wrap {
+	align-self: stretch;
+	align-items: center;
+}
+
 .play-bar .code-tabs {
+	align-self: stretch;
 	flex: 0 1 auto;
 }
 
@@ -319,6 +326,28 @@ summary.play-icon {
 }
 
 @media (pointer: coarse) {
+	.play-icon {
+		width: 2.5rem;
+		height: 2.5rem;
+	}
+}
+
+// A phone has one wide tab: it reads as the open file and is easy to tap.
+@media (max-width: 59.99em) {
+	.play-bar .code-tabs {
+		flex: 1;
+	}
+
+	.play-bar .code-tab {
+		flex: 1;
+	}
+
+	.play-bar .code-tab[aria-selected="true"] {
+		background: var(--code);
+		border-radius: 8px 8px 0 0;
+	}
+
+	.play-bar .code-tab-add,
 	.play-icon {
 		width: 2.5rem;
 		height: 2.5rem;
