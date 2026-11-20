@@ -3,6 +3,7 @@ import { api } from "../../../reference/api.ts";
 import { entryIcon } from "../catalog.ts";
 import RefCard from "../components/RefCard.lusia";
 import RefIndex from "../components/RefIndex.lusia";
+import { navLabel } from "../nav-label.ts";
 import { buildKeywordIndex, tokenize } from "../keywords.ts";
 import { pageMotion } from "../motion/page.ts";
 import { sidebarMotion } from "../motion/sidebar.ts";
@@ -28,7 +29,7 @@ const indexGroups = sections.map((section) => ({
 			id: section.kind,
 			links: section.entries.map((entry) => ({
 				id: entry.id,
-				name: entry.name,
+				name: navLabel(entry.name),
 				icon: entryIcon(entry.id),
 			})),
 		},

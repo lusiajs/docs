@@ -7,6 +7,7 @@ import {
 	type PlacedBlock,
 	type PlacedGroup,
 } from "./guide-placement.ts";
+import { navLabel } from "./nav-label.ts";
 import { guidePath, pageLink } from "./page-link.ts";
 
 // The Guide's groups and blocks, without the type-only entries: they are noise for beginners.
@@ -92,7 +93,7 @@ function entryLink(entry: ApiEntry): HTMLAnchorElement {
 	link.href = pageLink(guidePath, entry.id);
 	link.append(
 		glyph(entryIcon(entry.id)),
-		codeOrText(entry.name, "nav-label"),
+		codeOrText(navLabel(entry.name), "nav-label"),
 	);
 	return link;
 }
