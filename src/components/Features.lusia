@@ -21,9 +21,9 @@ const ENTER = SCROLL_AT.ENTER;
 const TOP_THIRD = 1 / 3;
 const LAST_CARD = 5;
 // Cards play as the section crosses the viewport middle.
-const CARD_START = { element: EDGE.TOP, window: 0.8 };
-const FIRST_CARD_LINE = 0.5;
-const LAST_CARD_LINE = 0.2;
+const CARD_START = { element: EDGE.TOP, window: 0.7 };
+const FIRST_CARD_LINE = 0.35;
+const LAST_CARD_LINE = 0.1;
 
 // The content rises into place as the page scrolls, then rests.
 const contentDrift = reduced
