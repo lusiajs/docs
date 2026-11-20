@@ -8,11 +8,15 @@ An error code is a short name, such as `L1016`, that tells you which check faile
 | ------------------ | ---------------------------------------------------------------------------- | ------------ |
 | `L1001` to `L1034` | While the app builds, for a problem in a `.lucia` file                       | The compiler |
 | `L2001` to `L2046` | While the app runs, for a value passed to `animate`, `bind`, `EACH` or `FOR` | The runtime  |
+| `L3001` to `L3003` | While the app builds, for an import or file that the bundler cannot build | The build |
 
 In messages, `<name>` stands for a value filled in when the error is raised, such as a tag or attribute name.
 
 > [!NOTE]
 > Dev builds add the file, line and column to runtime errors. Production builds do not, so those errors only have the message and hint.
+
+> [!NOTE]
+> In a dev build, a runtime error message ends with its location, such as `(src/Card.lucia:4:3)`. Production builds leave the location out.
 
 ## Printed output
 
@@ -115,6 +119,9 @@ hint: Add the closing tag, such as </div>, after the content.
 | [L2044](#l2044) | `ACTIVE.IN` and `ACTIVE.OUT` were renamed to `ACTIVE.ATTACH` and `ACTIVE.DETACH`                  | Replace `IN` with `ATTACH` and `OUT` with `DETACH`.                              |
 | [L2045](#l2045) | animation was renamed to style                                                                    | Write `style: keyframes` instead of `animation: keyframes`.                      |
 | [L2046](#l2046) | active was renamed to when                                                                        | Write `when:` instead of `active:`.                                              |
+| [L3001](#l3001) | `"<name>"` is not exported by `"<module>"` | Check the name, or see `reference/api.ts`. Renamed names get the new name. |
+| [L3002](#l3002) | cannot resolve `"<name>"` | Check the spelling of the path or package name, and that the file exists. |
+| [L3003](#l3003) | `<message>` | Fix the code on this line, then build again. |
 
 ## L1001
 
@@ -1682,3 +1689,58 @@ Fixed:
 ```html
 <div animate={{ style: fadeUp, when: WHEN.VIEW }}>...</div>
 ```
+
+## L3001
+
+|         |                                                                 |
+| ------- | --------------------------------------------------------------- |
+| Message | `"<name>"` is not exported by `"<module>"`                      |
+| Hint    | A renamed name gets its new name. Otherwise, the closest real name, or `Check the name, or see reference/api.ts.` |
+
+Bad:
+
+```html
+<script>
+import { ACTIVE } from "lucia";
+</script>
+```
+
+Fixed:
+
+```html
+<script>
+import { WHEN } from "lucia";
+</script>
+```
+
+## L3002
+
+|         |                                                              |
+| ------- | ------------------------------------------------------------ |
+| Message | cannot resolve `"<name>"`                                    |
+| Hint    | Check the spelling of the path or package name, and that the file exists. |
+
+Bad:
+
+```html
+<script>
+import { Card } from "./Crad.lucia";
+</script>
+```
+
+Fixed:
+
+```html
+<script>
+import { Card } from "./Card.lucia";
+</script>
+```
+
+## L3003
+
+|         |                                                  |
+| ------- | ------------------------------------------------ |
+| Message | `<message>` (the bundler's own message)          |
+| Hint    | Fix the code on this line, then build again.     |
+
+The bundler could not read the code it got from a `.lucia` file. The message is the bundler's text, such as `Unexpected )`.
