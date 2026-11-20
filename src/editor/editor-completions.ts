@@ -1,79 +1,37 @@
+import { scriptItems, type ScriptItem } from "../../../editors/shared/completion-data.ts";
 import {
-  scriptItems,
-  type CompletionItemData,
-  type ScriptItem,
-} from "../../../editors/shared/completion-data.ts";
-import { completionsAt, type CompletionResult } from "../../../editors/shared/completions.ts";
-import { childProps, type EditorFile } from "./files.ts";
+  completionsAt,
+  scriptMemberItems,
+  withScriptNames,
+  type CompletionResult,
+} from "../../../editors/shared/completions.ts";
+import type { SymbolLookup } from "../../../editors/shared/script/imported-symbols.ts";
 import { planLusiaImport } from "../../../editors/shared/auto-import.ts";
-import { expressionEnd } from "../../../editors/shared/format-expressions.ts";
-import {
-  localItems,
-  receiverAt,
-  variableMemberItems,
-  variableNames,
-} from "../../../editors/shared/locals.ts";
-import { regionAt } from "../../../editors/shared/regions.ts";
-import { scriptSection } from "../../../editors/shared/sections.ts";
+import { childProps, childSymbols, type EditorFile } from "./files.ts";
 
-/** Everything the editor offers at `offset`: API names, markup items, file names, variable members. */
+/** Everything the editor offers at `offset`: API names, markup items, imported and local names. */
 export function editorCompletions(
   text: string,
   offset: number,
   fileName: string,
   files: readonly EditorFile[],
 ): CompletionResult[] {
-  if (fileName.endsWith(".ts")) return typescriptCompletions(text, offset);
-  const script = scriptText(text);
-  if (isVariableMember(script, text, offset)) return variableMemberItems();
-  const base = completionsAt(text, offset, (component) => {
-    return childProps(files, fileName, text, component) ?? [];
-  });
-  return [...base, ...localResults(text, offset, script, base)];
+  const symbolsOf: SymbolLookup = (specifier) => childSymbols(files, fileName, specifier);
+  if (fileName.endsWith(".ts")) return typescriptCompletions(text, offset, symbolsOf);
+  const propsOf = (component: string) => childProps(files, fileName, text, component) ?? [];
+  return completionsAt(text, offset, propsOf, symbolsOf);
 }
 
-/** A .ts file is all script: API names with their imports, and the names in the file. */
-function typescriptCompletions(text: string, offset: number): CompletionResult[] {
-  if (isVariableMember(text, text, offset)) return variableMemberItems();
-  const base = scriptItems().map((item) => withImportEdit(item, text));
-  return [...base, ...localItems(text, takenLabels(base))];
-}
-
-function isVariableMember(script: string, text: string, offset: number): boolean {
-  const receiver = receiverAt(text, offset);
-  return receiver !== undefined && variableNames(script).has(receiver);
-}
-
-/** Names of this file, offered in script and in `{...}` expressions. */
-function localResults(
+/** A .ts file is all script: API names with their imports, and the imported and local names. */
+function typescriptCompletions(
   text: string,
   offset: number,
-  script: string,
-  base: readonly CompletionItemData[],
-): CompletionItemData[] {
-  if (!inCode(text, offset)) return [];
-  return localItems(script, takenLabels(base));
-}
-
-function takenLabels(items: readonly CompletionItemData[]): Set<string> {
-  return new Set(items.map((item) => item.label));
-}
-
-function inCode(text: string, offset: number): boolean {
-  return regionAt(text, offset).kind === "script" || inExpression(text, offset);
-}
-
-function inExpression(text: string, offset: number): boolean {
-  if (offset <= 0) return false;
-  const open = text.lastIndexOf("{", offset - 1);
-  if (open === -1) return false;
-  const end = expressionEnd(text, open);
-  return end === -1 || end >= offset;
-}
-
-function scriptText(text: string): string {
-  const section = scriptSection(text);
-  return section ? text.slice(section.contentStart, section.contentEnd) : "";
+  symbolsOf: SymbolLookup,
+): CompletionResult[] {
+  const members = scriptMemberItems(text, offset);
+  if (members) return members;
+  const base = scriptItems().map((item) => withImportEdit(item, text));
+  return withScriptNames(base, text, symbolsOf);
 }
 
 function withImportEdit(item: ScriptItem, text: string): CompletionResult {

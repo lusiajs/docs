@@ -10,9 +10,8 @@ import type { CompletionKind } from "../../../editors/shared/completion-data.ts"
 import type { CompletionResult } from "../../../editors/shared/completions.ts";
 import { editorCompletions } from "./editor-completions.ts";
 import type { EditorFile } from "./files.ts";
-import { findApiById } from "../../../editors/shared/api-lookup.ts";
 import { docsElement } from "./docs-dom.ts";
-import { hoverMarkdown } from "../../../editors/shared/markdown.ts";
+import { completionMarkdown } from "../../../editors/shared/markdown.ts";
 
 const WORD = /[\w$-]*/;
 
@@ -51,13 +50,12 @@ function toOption(item: CompletionResult): Completion {
   };
 }
 
-/** The popup docs: the signature and description of the API entry, when the item has one. */
+/** The popup docs: the item's JSDoc, or the API entry it points at, when it has one. */
 function docsInfo(item: CompletionResult): (() => Node | null) | undefined {
-  if (item.entryId === undefined) return undefined;
-  const entryId = item.entryId;
+  if (item.documentation === undefined && item.entryId === undefined) return undefined;
   return () => {
-    const entry = findApiById(entryId);
-    return entry ? docsElement(hoverMarkdown({ kind: "api", entry })) : null;
+    const markdown = completionMarkdown(item);
+    return markdown === undefined ? null : docsElement(markdown);
   };
 }
 

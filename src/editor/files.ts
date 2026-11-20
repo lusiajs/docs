@@ -1,5 +1,8 @@
 import { findComponentImport } from "../../../editors/shared/imports.ts";
 import { parsePropDefs, type PropDef } from "../../../editors/shared/props.ts";
+import { exportedSymbols, type ScriptSymbol } from "../../../editors/shared/script/symbols.ts";
+
+const SYMBOL_SUFFIXES = ["", ".ts", ".tsx", "/index.ts", "/index.tsx"];
 
 export interface EditorFile {
   name: string;
@@ -44,4 +47,29 @@ export function childProps(
   if (!found) return undefined;
   const target = findImportedFile(files, fromName, found.specifier);
   return target ? parsePropDefs(target.code) : undefined;
+}
+
+/** The symbols a relative import specifier points at. None for a .lusia, a bare or a missing file. */
+export function childSymbols(
+  files: readonly EditorFile[],
+  fromName: string,
+  specifier: string,
+): ScriptSymbol[] {
+  if (!isRelative(specifier)) return [];
+  const base = resolveName(fromName, specifier);
+  const file = findSymbolFile(files, base);
+  if (!file || file.name.endsWith(".lusia")) return [];
+  return exportedSymbols(file.code, specifier);
+}
+
+function findSymbolFile(files: readonly EditorFile[], base: string): EditorFile | undefined {
+  for (const suffix of SYMBOL_SUFFIXES) {
+    const found = files.find((file) => file.name === `${base}${suffix}`);
+    if (found) return found;
+  }
+  return undefined;
+}
+
+function isRelative(specifier: string): boolean {
+  return specifier.startsWith("./") || specifier.startsWith("../");
 }
