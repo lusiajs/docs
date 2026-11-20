@@ -145,6 +145,7 @@ Pass props as attributes.
 | Child content | Not supported yet. `<badge />` and `<badge></badge>` are fine. Anything other than whitespace between the tags is a compile error |
 | Unknown tags  | Any tag without a matching import is plain HTML                                                                                   |
 
+<<<<<<< HEAD
 ### Recursive components
 
 A component can import itself. Its own tag then works inside its markup, so it can show a tree or nested replies.
@@ -183,6 +184,10 @@ A component can import itself. Its own tag then works inside its markup, so it c
 
 > [!NOTE]
 > A child inside a hidden `IF` branch is not created. Its own children are not created either.
+
+### Lazy components
+
+A component can load only when it is first shown. Declare it with `lazy(...)`, then use its name as a tag. See [Lazy components](lazy.md).
 
 ## Style
 
