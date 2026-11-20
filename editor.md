@@ -137,7 +137,7 @@ The docs site has a code editor component, `examples/web/src/components/CodeEdit
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | Colours    | `.lucia` and `.ts`. Light and dark mode use the site's `--tok-*` colours                                                                 |
 | Completion | Lucia API names with imports, enums, `animate` keys, CSS properties, flow tags, HTML tags, names in the file, and `.value` and `.peek()` |
-| Docs popup | The signature and description from `reference/api.ts`, for completions and hover                                                         |
+| Docs popup | The signature and description from `reference/api.ts`, for completions and hover. Code is coloured like the editor. Popups float above the page, so the demo card never cuts them off |
 | Errors     | Compile errors with code, message and hint, plus TypeScript syntax errors in the script                                                  |
 | Warnings   | The lint rules in [Warnings](#warnings)                                                                                                  |
 | Format     | Shift+Alt+F, or the format button. Same rules as the extension's [Format](#format)                                                       |
