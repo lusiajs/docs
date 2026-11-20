@@ -56,6 +56,8 @@ Animation is the only special attribute. Everything else lives inside its value.
 | `loop`         | boolean or count            | none                             | `true` repeats forever, `3` repeats three times                                                                                                                                                       |
 | `backAndForth` | boolean                     | `false`                          | With `loop`: each repeat plays 0 to 1, then 1 to 0 (one loop pass = there and back)                                                                                                                   |
 
+> A looping item pauses while its element is off screen, and picks up where its time has got to when it comes back. A one-off item always finishes.
+
 Missing `style`, an unknown `when` value and keyframes without 0 or 1 throw an error. The layout triggers (`MOVE`, `RESIZE`, `MOVE_OR_RESIZE`) are the one exception: their `style` is optional.
 
 > [!NOTE]
@@ -339,7 +341,9 @@ A scroll item follows the position, not time. Scrolling back up plays the item i
 
 ## Layout
 
-`WHEN.MOVE`, `WHEN.RESIZE` and `WHEN.MOVE_OR_RESIZE` glide an element from its old box to its new one. You do not write any keyframes. The change can come from anything: a class toggle, a flex reflow, a sibling inserted, a switch to `position: fixed`, or a window resize.
+`WHEN.MOVE`, `WHEN.RESIZE` and `WHEN.MOVE_OR_RESIZE` glide an element from its old box to its new one. You do not write any keyframes. The change can come from a class toggle, a sibling inserted or removed, a flex reflow, or a window resize.
+
+> Inline `style` changes are not watched, so a move that only comes from an inline style is seen at the next scroll or resize. Put the change in a class to glide it at once.
 
 | `when`                | The glide runs when                  |
 | --------------------- | ------------------------------------ |
