@@ -21,7 +21,10 @@ const section = variable<HTMLElement | null>(null);
 const ENTER = SCROLL_AT.ENTER;
 const TOP_THIRD = 1 / 3;
 const LAST_CARD = 5;
-const FIRST_CARD_LINE = 0.55;
+// Cards play as the section passes through the middle of the screen, so the motion is visible.
+const CARD_START = { element: EDGE.TOP, window: 0.8 };
+const FIRST_CARD_LINE = 0.5;
+const LAST_CARD_LINE = 0.2;
 
 // The content rises into place as the page scrolls, then rests.
 const contentDrift = reduced
@@ -45,19 +48,6 @@ const titleSlide = reduced
       { element: EDGE.TOP, window: 0.6 },
     );
 
-// The bar under the title swipes out once the title has landed.
-const swipeMotion = reduced
-  ? []
-  : scrollAcross(
-      section,
-      { scale: "0 1" },
-      { scale: "1 1" },
-      { element: EDGE.TOP, window: 0.6 },
-      { element: EDGE.TOP, window: 0.45 },
-    );
-
-// Each card fades up, tilts and grows into place. Card 1 is full at 0.55 of the screen,
-// the last card at the top third, so all are in before the section reaches that third.
 function cardMotion(index: number) {
   if (reduced) return [];
   const start = {
@@ -67,8 +57,8 @@ function cardMotion(index: number) {
     scale: "0.96",
   };
   const end = { opacity: 1, translate: "0 0", rotate: "0deg", scale: "1" };
-  const line = FIRST_CARD_LINE - ((FIRST_CARD_LINE - TOP_THIRD) * index) / LAST_CARD;
-  return scrollAcross(section, start, end, ENTER, { element: EDGE.TOP, window: line });
+  const line = FIRST_CARD_LINE - ((FIRST_CARD_LINE - LAST_CARD_LINE) * index) / LAST_CARD;
+  return scrollAcross(section, start, end, CARD_START, { element: EDGE.TOP, window: line });
 }
 
 const childrenSnippet = [
@@ -85,11 +75,7 @@ const helloSnippet = "<p>Hi {name}</p>";
 
 <section class="features" id="features" bind-element={section}>
   <div class="features-inner" animate={contentDrift}>
-    <h2 class="section-title" animate={titleSlide}>
-      <span class="swipe">
-        <span class="swipe-bar" animate={swipeMotion}></span>Features
-      </span>
-    </h2>
+    <h2 class="section-title" animate={titleSlide}>Features</h2>
     <div class="feature-grid">
       <article
         class="feature-card feature-card--wide"

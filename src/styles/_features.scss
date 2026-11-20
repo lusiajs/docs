@@ -22,26 +22,6 @@
   text-align: center;
 }
 
-// Highlighter swipe under the heading.
-.swipe {
-  position: relative;
-  display: inline-block;
-  z-index: 0;
-
-  // The bar is an animate element in Features.lucia.
-  .swipe-bar {
-    position: absolute;
-    right: -0.1em;
-    bottom: 0.08em;
-    left: -0.1em;
-    z-index: -1;
-    height: 0.42em;
-    border-radius: 6px;
-    background: var(--swipe);
-    transform-origin: left;
-  }
-}
-
 // Bento grid: one big card on the left, smaller cards around it.
 .feature-grid {
   display: grid;
