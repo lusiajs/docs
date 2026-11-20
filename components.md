@@ -145,6 +145,45 @@ Pass props as attributes.
 | Child content | Not supported yet. `<badge />` and `<badge></badge>` are fine. Anything other than whitespace between the tags is a compile error |
 | Unknown tags  | Any tag without a matching import is plain HTML                                                                                   |
 
+### Recursive components
+
+A component can import itself. Its own tag then works inside its markup, so it can show a tree or nested replies.
+
+```html
+<script>
+  import { props, variable } from "lucia";
+  import Folder from "./Folder.lucia";
+
+  const { item } = props({ item: { name: "" } });
+  const children = variable.compute(() => item.value.children ?? []);
+</script>
+
+<li>
+  <IF {item.value.children}>
+    <span>{item.value.name}</span>
+    <ul>
+      <EACH {children} as={child} key={child.name}>
+        <Folder item={child} />
+      </EACH>
+    </ul>
+  </IF>
+  <ELSE>
+    <span>{item.value.name}</span>
+  </ELSE>
+</li>
+```
+
+| Rule         | Detail                                                                                                  |
+| ------------ | ------------------------------------------------------------------------------------------------------- |
+| Stop         | The recursion stops when the data ends, or when an `IF` hides the tag. Without one, it goes as deep as the data |
+| Depth limit  | None built in. Pass a `depth` prop and check it in an `IF`                                              |
+| Keys         | Give each `EACH` row a `key` from the data. Keys must be unique among siblings                          |
+| State        | Each instance has its own state                                                                         |
+| Live demo    | `examples/web` Guide, Components: Recursive components                                                  |
+
+> [!NOTE]
+> A child inside a hidden `IF` branch is not created. Its own children are not created either.
+
 ## Style
 
 `<style>` is SCSS by default. Use `lang="css"` for plain CSS. A component can have several `<style>` blocks.
