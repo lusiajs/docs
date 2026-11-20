@@ -1,0 +1,301 @@
+@use "theme" as *;
+
+// The Reference uses the Guide's grid, sidebar and drawer. This file adds the page's own parts.
+.reference {
+  .content {
+    max-width: 58rem;
+    width: 100%;
+  }
+}
+
+.ref-page-title {
+  margin: 0 0 1.25rem;
+}
+
+.ref-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.ref-search {
+  display: flex;
+  flex: 1 1 16rem;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 0.45rem 0.9rem;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--muted);
+
+  &:focus-within {
+    border-color: var(--accent);
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: none;
+    color: var(--fg);
+    font: inherit;
+    outline: none;
+  }
+}
+
+.ref-kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+// A kind toggle. A pressed one gets an outline, the others stay plain.
+.kind-chip {
+  border: 2px solid transparent;
+  font-size: 0.8rem;
+  cursor: pointer;
+
+  &[aria-pressed="true"] {
+    border-color: var(--fg);
+  }
+}
+
+.ref-group {
+  margin-bottom: 2.5rem;
+}
+
+.ref-group-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+
+  &::before {
+    flex: none;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 4px;
+    background: var(--group);
+    content: "";
+  }
+}
+
+.ref-block {
+  margin-bottom: 1rem;
+}
+
+.ref-block-title {
+  margin: 1.5rem 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ref-card {
+  scroll-margin-top: 5.5rem;
+  min-width: 0;
+  margin-bottom: 1.25rem;
+  padding: 1.25rem 1.4rem 1rem;
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.ref-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.6rem;
+}
+
+.ref-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-size: 1.15rem;
+  overflow-wrap: anywhere;
+
+  code {
+    padding: 0;
+    background: none;
+    font-family: $font-mono;
+  }
+}
+
+.ref-head .chip {
+  font-size: 0.78rem;
+}
+
+.ref-anchor {
+  flex: none;
+  color: var(--muted);
+}
+
+.ref-summary {
+  margin: 0.6rem 0 0;
+  line-height: 1.6;
+}
+
+// The code block and its copy button. The button sits on the top right corner of the block.
+.code-copy {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.ref-code {
+  margin: 0;
+  padding: 0.85rem 3rem 0.85rem 1.1rem;
+  overflow-x: auto;
+  border: 2px solid var(--lavender-soft);
+  border-radius: 16px;
+  background: var(--code);
+  color: var(--fg);
+  font-family: $font-mono;
+  font-size: 0.83rem;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.code-copy-button {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+}
+
+.ref-members-wrap {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+.ref-members {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+
+  th,
+  td {
+    padding: 0.45rem 0.6rem;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    color: var(--muted);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  td:first-child code {
+    padding: 0;
+    background: none;
+  }
+
+  tr[data-depth="1"] td:first-child {
+    padding-left: 1.6rem;
+  }
+
+  tr[data-depth="2"] td:first-child {
+    padding-left: 2.6rem;
+  }
+}
+
+.ref-example {
+  margin-top: 1rem;
+
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    width: fit-content;
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:hover {
+      color: var(--fg);
+    }
+  }
+
+  .chevron {
+    font-size: 1.05rem;
+    transition: transform 0.2s ease;
+  }
+
+  &[open] .chevron {
+    transform: rotate(90deg);
+  }
+}
+
+.ref-foot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+}
+
+.ref-guide {
+  color: var(--link);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.ref-empty {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 2.5rem 1.5rem;
+  border: 2px dashed var(--line);
+  border-radius: 20px;
+  color: var(--muted);
+  text-align: center;
+
+  p {
+    margin: 0;
+  }
+}
+
+.ref-clear {
+  padding: 0.4rem 1rem;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--fg);
+  font: inherit;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--accent);
+  }
+}
+
+@media (max-width: 719px) {
+  .ref-card {
+    padding: 1rem 1rem 0.85rem;
+  }
+
+  .ref-name {
+    font-size: 1.05rem;
+  }
+}

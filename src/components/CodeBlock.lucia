@@ -1,0 +1,18 @@
+<script>
+import { props, variable } from "lucia";
+import { highlightInto } from "../highlight/highlight.ts";
+
+const { text, language, className } = props({
+  text: "",
+  language: "none",
+  className: "",
+});
+const code = variable<HTMLElement | null>(null);
+
+// The text never changes after mount, so it is highlighted once.
+function setup() {
+  highlightInto(code.value!, text.peek(), language.peek());
+}
+</script>
+
+<pre class={className}><code bind-element={code}></code></pre>
