@@ -5,8 +5,8 @@ import {
 	ViewPlugin,
 	type ViewUpdate,
 } from "@codemirror/view";
-import { expressionEnd } from "@language/format-expressions.ts";
-import { findSections } from "@language/sections.ts";
+import { expressionEnd } from "@language/format/format-expressions.ts";
+import { findSections } from "@language/parse/sections.ts";
 import { highlightTree } from "@lezer/highlight";
 import { lusiaHighlight } from "./highlight.ts";
 import { typescriptLanguage } from "./language.ts";

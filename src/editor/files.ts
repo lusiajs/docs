@@ -1,5 +1,5 @@
-import { findComponentImport } from "@language/imports.ts";
-import { parsePropDefs, type PropDef } from "@language/props.ts";
+import { findComponentImport } from "@language/parse/imports.ts";
+import { parsePropDefs, type PropDef } from "@language/parse/props.ts";
 import {
 	exportedSymbols,
 	type ScriptSymbol,

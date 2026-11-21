@@ -1,6 +1,6 @@
-import { lintLusia, type LintIssue } from "@language/lint.ts";
-import type { PropDef } from "@language/props.ts";
-import { scriptSection } from "@language/sections.ts";
+import { lintLusia, type LintIssue } from "@language/lint/lint.ts";
+import type { PropDef } from "@language/parse/props.ts";
+import { scriptSection } from "@language/parse/sections.ts";
 import { errorPosition } from "../../../editors/shared/error-position.ts";
 import { LusiaError } from "../../../src/compiler/errors/error.ts";
 import { formatWhere } from "../../../src/compiler/errors/where.ts";
