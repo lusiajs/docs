@@ -1,5 +1,5 @@
 <script>
-import { EASE } from "lusia";
+import { EASE } from "lusiajs";
 
 // Key 0 is where it starts. Key 1 sets the motion into place:
 // CUBIC, slowing down at the end.

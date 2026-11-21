@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE } from "lusia";
+import { WHEN, EASE } from "lusiajs";
 
 // It plays in after 250 ms. Leaving plays its own keys, for 700 ms.
 const glow = {

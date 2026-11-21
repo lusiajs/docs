@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE } from "lusia";
+import { WHEN, EASE } from "lusiajs";
 
 // An easing is any function from 0 to 1 that starts at 0 and ends at 1.
 function squared(t: number) {

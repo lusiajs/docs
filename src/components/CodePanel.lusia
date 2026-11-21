@@ -1,5 +1,5 @@
 <script>
-import { props, variable } from "lusia";
+import { props, variable } from "lusiajs";
 import type { SourceFile } from "../catalog.ts";
 import { languageFor } from "../highlight/highlight.ts";
 import CodeBlock from "./CodeBlock.lusia";

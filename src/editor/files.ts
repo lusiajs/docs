@@ -1,9 +1,9 @@
-import { findComponentImport } from "lusia/language/parse/imports.ts";
-import { parsePropDefs, type PropDef } from "lusia/language/parse/props.ts";
+import { findComponentImport } from "lusiajs/language/parse/imports.ts";
+import { parsePropDefs, type PropDef } from "lusiajs/language/parse/props.ts";
 import {
 	exportedSymbols,
 	type ScriptSymbol,
-} from "lusia/editor/script/symbols.ts";
+} from "lusiajs/editor/script/symbols.ts";
 
 const SYMBOL_SUFFIXES = ["", ".ts", ".tsx", "/index.ts", "/index.tsx"];
 

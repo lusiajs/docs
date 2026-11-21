@@ -1,5 +1,5 @@
 <script>
-import { onAttach } from "lusia";
+import { onAttach } from "lusiajs";
 import { onScrollFrame, meets } from "./scroll-readout.ts";
 
 // A window line lights up when an element line is on it, and the other way round.

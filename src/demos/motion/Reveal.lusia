@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE } from "lusia";
+import { WHEN, EASE } from "lusiajs";
 
 const rise = {
 	0: { opacity: 0, translate: "0px 20px" },

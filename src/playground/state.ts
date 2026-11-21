@@ -1,4 +1,4 @@
-import { variable } from "lusia";
+import { variable } from "lusiajs";
 import type { EditorJump } from "../editor/files.ts";
 import type { LiveError } from "../live/types.ts";
 import { ENTRY_FILE } from "./names.ts";

@@ -1,5 +1,5 @@
 <script>
-import { variable } from "lusia";
+import { variable } from "lusiajs";
 import { clicks } from "../../variable.ts";
 
 const doubled = variable.compute(() => clicks.value * 2);

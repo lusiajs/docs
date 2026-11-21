@@ -1,4 +1,4 @@
-import { variable } from "lusia";
+import { variable } from "lusiajs";
 
 export type Theme = "light" | "dark";
 

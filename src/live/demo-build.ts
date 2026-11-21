@@ -1,4 +1,4 @@
-import { compileScssText } from "lusia/compiler/style/sass-browser.ts";
+import { compileScssText } from "lusiajs/compiler/style/sass-browser.ts";
 import scrollReadoutTs from "../demos/motion/scroll-readout.ts?raw";
 import type { EditorFile } from "../editor/files.ts";
 import demoScss from "../styles/_demo.scss?raw";

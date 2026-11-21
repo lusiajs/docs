@@ -19,7 +19,7 @@ describe("linkImports", () => {
   });
 
   test("keeps imports of other modules, such as lusia", () => {
-    const code = `import { variable } from "lusia";\nimport Missing from "./Missing.lusia";`;
+    const code = `import { variable } from "lusiajs";\nimport Missing from "./Missing.lusia";`;
     expect(linkImports(code, "App.lusia", names)).toBe(code);
   });
 });

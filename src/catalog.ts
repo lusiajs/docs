@@ -1,4 +1,4 @@
-import type { Component } from "lusia";
+import type { Component } from "lusiajs";
 import Attributes from "./demos/basics/Attributes.lusia";
 import attributesSource from "./demos/basics/Attributes.lusia?raw";
 import BindElement from "./demos/basics/BindElement.lusia";

@@ -1,5 +1,5 @@
 <script>
-import { EASE } from "lusia";
+import { EASE } from "lusiajs";
 
 // Three keys: the color and size change at 0, at 0.5 and at 1.
 const pulse = {

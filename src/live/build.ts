@@ -3,8 +3,8 @@ import {
 	compileForBrowser,
 	LusiaError,
 	stripTypes,
-} from "lusia/compiler/browser.ts";
-import { plainFrame } from "lusia/errors/frame.ts";
+} from "lusiajs/compiler/browser.ts";
+import { plainFrame } from "lusiajs/errors/frame.ts";
 import type { EditorFile } from "../editor/files.ts";
 import { findBrokenImports, linkImports, rootNames } from "./imports.ts";
 import { scssImporter } from "./scss.ts";

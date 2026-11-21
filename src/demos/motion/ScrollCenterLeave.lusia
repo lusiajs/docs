@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, SCROLL_AT, onAttach } from "lusia";
+import { WHEN, EASE, SCROLL_AT, onAttach } from "lusiajs";
 import { AT, watchProgress } from "./scroll-readout.ts";
 
 // Starts at the middle and fades out as the card leaves the top of the screen.

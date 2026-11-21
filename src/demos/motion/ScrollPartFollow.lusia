@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, variable } from "lusia";
+import { WHEN, EASE, variable } from "lusiajs";
 
 // The tall section drives three steps. Each step plays in its own slice of the section.
 const section = variable(null);

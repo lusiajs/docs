@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { editorCompletions } from "../../src/editor/editor-completions.ts";
-import type { CompletionResult } from "lusia/editor/completions.ts";
+import type { CompletionResult } from "lusiajs/editor/completions.ts";
 
 const FILE = "App.lusia";
 const BADGE_SCRIPT = `<script>\nimport Badge from "./Badge.lusia";\nconst count = variable(0);\n`;
@@ -23,7 +23,7 @@ describe("script completions", () => {
     expect(variable?.importEdit).toEqual({
       start: 8,
       end: 8,
-      text: 'import { variable } from "lusia";\n',
+      text: 'import { variable } from "lusiajs";\n',
     });
   });
 
@@ -102,7 +102,7 @@ describe("markup completions", () => {
 describe(".ts files", () => {
   test("offer the names in the file, and no import for a name already imported", () => {
     const items = completeAt(
-      'import { variable } from "lusia";\nconst total = 1;\n|',
+      'import { variable } from "lusiajs";\nconst total = 1;\n|',
       [],
       "util.ts",
     );
@@ -118,7 +118,7 @@ describe(".ts files", () => {
     expect(onAttach?.importEdit).toEqual({
       start: 0,
       end: 0,
-      text: 'import { onAttach } from "lusia";\n',
+      text: 'import { onAttach } from "lusiajs";\n',
     });
   });
 
@@ -128,7 +128,7 @@ describe(".ts files", () => {
     expect(props?.importEdit).toEqual({
       start: 0,
       end: 0,
-      text: 'import { props } from "lusia";\n',
+      text: 'import { props } from "lusiajs";\n',
     });
   });
 });

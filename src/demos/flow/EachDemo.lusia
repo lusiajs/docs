@@ -1,5 +1,5 @@
 <script>
-import { WHEN, PRESET, variable } from "lusia";
+import { WHEN, PRESET, variable } from "lusiajs";
 
 interface Task {
 	id: number;

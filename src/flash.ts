@@ -1,4 +1,4 @@
-import { controller, type Controller } from "lusia";
+import { controller, type Controller } from "lusiajs";
 
 const headings = new Map<string, Controller>();
 

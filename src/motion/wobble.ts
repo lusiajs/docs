@@ -1,4 +1,4 @@
-import { EASE } from "lusia";
+import { EASE } from "lusiajs";
 
 // Same wobble as the title letters. Static logos use the matching CSS keyframes.
 export const wobbleStyle = {

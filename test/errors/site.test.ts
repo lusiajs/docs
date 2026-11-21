@@ -1,12 +1,12 @@
 import { describe, expect, test } from "bun:test";
-import { CODES } from "lusia/errors/codes.ts";
+import { CODES } from "lusiajs/errors/codes.ts";
 
 const PAGE = new URL("../../src/pages/Errors.lusia", import.meta.url).pathname;
 
 describe("site Errors page", () => {
   test("reads the code table and renders every field", async () => {
     const source = await Bun.file(PAGE).text();
-    expect(source).toContain('from "lusia/errors/codes.ts"');
+    expect(source).toContain('from "lusiajs/errors/codes.ts"');
     expect(source).toContain("<EACH {groups} as={group}>");
     expect(source).toContain("<EACH {group.codes} as={code}>");
     expect(source).toContain("{code.id}");

@@ -1,5 +1,5 @@
 <script>
-import { props } from "lusia";
+import { props } from "lusiajs";
 import { scrollBetween } from "../motion/home-scroll.ts";
 
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;

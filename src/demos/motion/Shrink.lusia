@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE } from "lusia";
+import { WHEN, EASE } from "lusiajs";
 
 // Only an OUT item: the box is visible at once, and plays this when it is detached.
 const shrinkOut = {

@@ -1,5 +1,5 @@
 <script>
-import { CODES } from "lusia/errors/codes.ts";
+import { CODES } from "lusiajs/errors/codes.ts";
 import { pageMotion } from "../motion/page.ts";
 
 // The page reads the code table directly, so it can never drift from the compiler.

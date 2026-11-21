@@ -1,5 +1,5 @@
 <script>
-import { WHEN, variable } from "lusia";
+import { WHEN, variable } from "lusiajs";
 
 // The card keeps its place. When the text opens, its size changes,
 // and WHEN.RESIZE glides the card to the new size.

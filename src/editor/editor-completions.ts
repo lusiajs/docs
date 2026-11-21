@@ -1,15 +1,15 @@
-import { planLusiaImport } from "lusia/editor/auto-import.ts";
+import { planLusiaImport } from "lusiajs/editor/auto-import.ts";
 import {
 	scriptItems,
 	type ScriptItem,
-} from "lusia/editor/completion-data.ts";
+} from "lusiajs/editor/completion-data.ts";
 import {
 	completionsAt,
 	scriptMemberItems,
 	withScriptNames,
 	type CompletionResult,
-} from "lusia/editor/completions.ts";
-import type { SymbolLookup } from "lusia/editor/script/imported-symbols.ts";
+} from "lusiajs/editor/completions.ts";
+import type { SymbolLookup } from "lusiajs/editor/script/imported-symbols.ts";
 import { childProps, childSymbols, type EditorFile } from "./files.ts";
 
 /** Everything the editor offers at `offset`: API names, markup items, imported and local names. */

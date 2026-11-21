@@ -1,9 +1,9 @@
 # CLAUDE.md
 
-This repo is the docs site of Lusia (lusiajs/docs), served at https://lusia.azpepoze.com. It uses the published `lusia` npm package.
+This repo is the docs site of Lusia (lusiajs/docs), served at https://lusia.azpepoze.com. It uses the published `lusiajs` npm package.
 
 # 1. Framework changes come by release
-The site imports `lusia/api`, `lusia/language/*`, `lusia/editor/*`, `lusia/errors/*` and `lusia/compiler/*`. A framework change reaches the site only after a release. Then bump the `lusia` version in `package.json`.
+The site imports `lusiajs/api`, `lusiajs/language/*`, `lusiajs/editor/*`, `lusiajs/errors/*` and `lusiajs/compiler/*`. A framework change reaches the site only after a release. Then bump the `lusiajs` version in `package.json`.
 
 # 2. Guide is a learning path
 Order groups and entries simplest first. A beginner meets each idea before anything that uses it.

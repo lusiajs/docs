@@ -1,4 +1,4 @@
-import { defineConfig } from "lusia/config";
+import { defineConfig } from "lusiajs/config";
 
 export default defineConfig({
   outdir: "dist",

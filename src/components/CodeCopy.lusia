@@ -1,5 +1,5 @@
 <script>
-import { props } from "lusia";
+import { props } from "lusiajs";
 import CodeBlock from "./CodeBlock.lusia";
 
 // `copy` is what the button copies. It can differ from the wrapped `text` shown.

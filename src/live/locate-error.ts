@@ -1,4 +1,4 @@
-import { plainFrame } from "lusia/errors/frame.ts";
+import { plainFrame } from "lusiajs/errors/frame.ts";
 import type { LiveError } from "./types.ts";
 
 // A dev runtime error ends its message with its location, such as "(Card.lusia:3:9)".

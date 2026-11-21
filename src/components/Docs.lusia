@@ -1,6 +1,6 @@
 <script>
-import { WHEN, PRESET } from "lusia";
-import type { ApiEntry } from "lusia/api";
+import { WHEN, PRESET } from "lusiajs";
+import type { ApiEntry } from "lusiajs/api";
 import { catalog } from "../catalog.ts";
 import { headingFlash } from "../flash.ts";
 import { buildKeywordIndex, tokenize } from "../keywords.ts";

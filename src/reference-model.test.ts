@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { api, type ApiEntry } from "lusia/api";
+import { api, type ApiEntry } from "lusiajs/api";
 import {
 	countLabel,
 	flattenMembers,

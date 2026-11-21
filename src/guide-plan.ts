@@ -1,4 +1,4 @@
-import type { ApiGroup } from "lusia/api";
+import type { ApiGroup } from "lusiajs/api";
 
 // A named sub-group inside a group. Its entries are api ids, in learning order.
 export interface GuideSubgroup {

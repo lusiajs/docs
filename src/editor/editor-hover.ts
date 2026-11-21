@@ -2,8 +2,8 @@ import {
 	hoverAt,
 	scriptHover,
 	type HoverResult,
-} from "lusia/editor/hover.ts";
-import type { SymbolLookup } from "lusia/editor/script/imported-symbols.ts";
+} from "lusiajs/editor/hover.ts";
+import type { SymbolLookup } from "lusiajs/editor/script/imported-symbols.ts";
 import { childProps, childSymbols, type EditorFile } from "./files.ts";
 
 /** The hover for `offset`. A .ts file is all script, so it skips the markup rules. */

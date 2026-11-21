@@ -1,5 +1,5 @@
 <script>
-import { onAttach, props, variable } from "lusia";
+import { onAttach, props, variable } from "lusiajs";
 
 const { label, initial, submitText, onSubmit, onCancel } = props({
 	label: "",

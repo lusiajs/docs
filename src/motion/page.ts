@@ -1,4 +1,4 @@
-import { EASE, WHEN } from "lusia";
+import { EASE, WHEN } from "lusiajs";
 
 // Page transitions. The engine names are wrapped here, so a rename is a one-place change.
 // The old page leaves first (250 ms), then the new page enters (450 ms). They never overlap,

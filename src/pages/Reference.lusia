@@ -1,5 +1,5 @@
 <script>
-import { api } from "lusia/api";
+import { api } from "lusiajs/api";
 import { entryIcon } from "../catalog.ts";
 import RefCard from "../components/RefCard.lusia";
 import RefIndex from "../components/RefIndex.lusia";

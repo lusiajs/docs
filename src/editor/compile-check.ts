@@ -1,8 +1,8 @@
-import { splitImports } from "lusia/compiler/parse/imports.ts";
-import { parse } from "lusia/compiler/parse/sections.ts";
-import { compileTemplate } from "lusia/compiler/template/scan/scanner.ts";
-import { scriptRange } from "lusia/compiler/template/check/script-range.ts";
-import { generate } from "lusia/compiler/template/codegen/generate.ts";
+import { splitImports } from "lusiajs/compiler/parse/imports.ts";
+import { parse } from "lusiajs/compiler/parse/sections.ts";
+import { compileTemplate } from "lusiajs/compiler/template/scan/scanner.ts";
+import { scriptRange } from "lusiajs/compiler/template/check/script-range.ts";
+import { generate } from "lusiajs/compiler/template/codegen/generate.ts";
 
 /**
  * The compiler's script, markup and codegen steps, as `compile()` runs them.

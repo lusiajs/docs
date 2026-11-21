@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, MIDWAY, variable, TURN } from "lusia";
+import { WHEN, EASE, MIDWAY, variable, TURN } from "lusiajs";
 
 // Hover in and out quickly. Each box turns its own way when you change your mind.
 const grow = {

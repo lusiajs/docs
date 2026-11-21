@@ -1,5 +1,5 @@
 <script>
-import { attach, variable, type Instance } from "lusia";
+import { attach, variable, type Instance } from "lusiajs";
 import { clicks } from "../../variable.ts";
 import Chip from "./Chip.lusia";
 

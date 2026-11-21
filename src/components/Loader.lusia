@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE } from "lusia";
+import { WHEN, EASE } from "lusiajs";
 
 // Reduced motion keeps the loader still. Only the fade-out still plays.
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;

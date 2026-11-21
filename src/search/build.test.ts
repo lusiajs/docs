@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { api } from "lusia/api";
+import { api } from "lusiajs/api";
 import { catalog } from "../catalog.ts";
 import { KIND_INFO, KIND_ORDER } from "../reference-model.ts";
 import { buildSearchIndex } from "./build.ts";

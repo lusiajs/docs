@@ -1,4 +1,4 @@
-import { EASE, EDGE, WHEN, type AnimateItem, type Style } from "lusia";
+import { EASE, EDGE, WHEN, type AnimateItem, type Style } from "lusiajs";
 import { scrollAcross, type Follow } from "./home-scroll.ts";
 
 // The hero sinks with the page, so it moves at 1 - PUSH speed while the page scrolls through the zone.

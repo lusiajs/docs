@@ -1,5 +1,5 @@
 <script>
-import { onAttach, variable, WHEN, EASE } from "lusia";
+import { onAttach, variable, WHEN, EASE } from "lusiajs";
 import { wobbleStyle } from "../motion/wobble.ts";
 
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;

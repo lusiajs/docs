@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE } from "lusia";
+import { WHEN, EASE } from "lusiajs";
 
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 

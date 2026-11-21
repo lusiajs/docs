@@ -1,5 +1,5 @@
 <script>
-import { onAttach, variable } from "lusia";
+import { onAttach, variable } from "lusiajs";
 import Hero from "../components/Hero.lusia";
 import Features from "../components/Features.lusia";
 import HomeBackground from "../components/HomeBackground.lusia";

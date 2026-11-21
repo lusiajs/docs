@@ -5,12 +5,12 @@ import CodeCopy from "./CodeCopy.lusia";
 import DocTable from "./DocTable.lusia";
 import Note from "./Note.lusia";
 
-const createCommands = "bun create lusia my-app\ncd my-app\nbun install\nbun run dev";
-const addCommands = "bun add lusia\nbunx lusia dev .\nbunx lusia build .";
+const createCommands = "bun create lusiajs my-app\ncd my-app\nbun install\nbun run dev";
+const addCommands = "bun add lusiajs\nbunx lusiajs dev .\nbunx lusiajs build .";
 
 const starterHead = ["File", "What it does"];
 const starterRows = [
-	["package.json", "Lists the lusia package and the dev and build scripts."],
+	["package.json", "Lists the lusiajs package and the dev and build scripts."],
 	["lusia.config.ts", "Sets the build options with defineConfig."],
 	["index.html", "The page the browser opens. It loads src/main.ts."],
 	["tsconfig.json", "TypeScript settings for the project."],

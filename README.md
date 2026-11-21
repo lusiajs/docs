@@ -5,7 +5,7 @@
 The source of the Lusia docs site. It shows the guide, the API reference, the error list and an online playground.
 
 > [!NOTE]
-> The site is built with [Lusia](https://github.com/lusiajs/lusia) itself, from the `lusia` npm package.
+> The site is built with [Lusia](https://github.com/lusiajs/lusia) itself, from the `lusiajs` npm package.
 
 Read the guide: https://lusia.azpepoze.com/guide
 

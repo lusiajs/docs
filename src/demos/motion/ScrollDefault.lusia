@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, onAttach } from "lusia";
+import { WHEN, EASE, onAttach } from "lusiajs";
 import { AT, watchProgress } from "./scroll-readout.ts";
 
 // With no start or end, the range is SCROLL_AT.ENTER to SCROLL_AT.LEAVE.

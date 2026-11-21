@@ -1,5 +1,5 @@
 <script>
-import { attach, variable, type Instance } from "lusia";
+import { attach, variable, type Instance } from "lusiajs";
 import { detachedBoxes } from "../../variable.ts";
 import DetachBox from "./DetachBox.lusia";
 

@@ -1,5 +1,5 @@
-import { defineConfig } from "lusia/config";
-import { EASE, MIDWAY, TURN } from "lusia";
+import { defineConfig } from "lusiajs/config";
+import { EASE, MIDWAY, TURN } from "lusiajs";
 
 export default defineConfig({
   outdir: "dist",

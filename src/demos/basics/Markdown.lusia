@@ -1,5 +1,5 @@
 <script>
-import { variable } from "lusia";
+import { variable } from "lusiajs";
 
 const source = variable("Some **bold**, *soft* and `code` text.");
 

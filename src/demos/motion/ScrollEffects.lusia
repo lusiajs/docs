@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, onAttach, variable } from "lusia";
+import { WHEN, EASE, onAttach, variable } from "lusiajs";
 import { watchPinned } from "./scroll-readout.ts";
 
 // The tall lane drives every effect. The effects move the cards, not the lane.

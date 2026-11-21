@@ -1,5 +1,5 @@
 <script>
-import { variable } from "lusia";
+import { variable } from "lusiajs";
 import CodeEditor from "../components/CodeEditor.lusia";
 import PlayBar from "../components/PlayBar.lusia";
 import PlayErrors from "../components/PlayErrors.lusia";

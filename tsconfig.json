@@ -17,6 +17,6 @@
     "test",
     "scripts",
     "lusia.config.ts",
-    "node_modules/lusia/lusia.d.ts"
+    "node_modules/lusiajs/lusia.d.ts"
   ]
 }

@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, SCROLL_AT, onAttach } from "lusia";
+import { WHEN, EASE, SCROLL_AT, onAttach } from "lusiajs";
 import { AT, watchProgress } from "./scroll-readout.ts";
 
 // Finishes in the middle: progress 1 when the card's centre reaches the screen's middle.

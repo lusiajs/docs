@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, variable } from "lusia";
+import { WHEN, EASE, variable } from "lusiajs";
 
 // The tall element drives the progress. The box stays on screen while it scrolls past.
 const pinDemo = variable<Element | null>(null);

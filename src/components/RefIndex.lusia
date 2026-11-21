@@ -1,5 +1,5 @@
 <script>
-import { props } from "lusia";
+import { props } from "lusiajs";
 import { pageLink, referencePath } from "../page-link.ts";
 
 // The index mirrors the Guide sidebar's markup, so both share its styles and scripts.

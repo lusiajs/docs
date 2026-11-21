@@ -4,7 +4,7 @@ import {
 	type AnimateItem,
 	type ComputedVariable,
 	type Style,
-} from "lusia";
+} from "lusiajs";
 
 // Scroll motion for the Home page. All Home scroll motion lives here.
 export type Follow = ComputedVariable<HTMLElement | null>;

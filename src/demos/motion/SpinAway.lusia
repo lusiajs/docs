@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, variable } from "lusia";
+import { WHEN, EASE, variable } from "lusiajs";
 
 const shown = variable(true);
 

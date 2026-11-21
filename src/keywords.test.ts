@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { ApiEntry } from "lusia/api";
+import type { ApiEntry } from "lusiajs/api";
 import { buildKeywordIndex, tokenize } from "./keywords.ts";
 
 const entries: ApiEntry[] = [

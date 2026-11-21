@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, EDGE } from "lusia";
+import { WHEN, EASE, EDGE } from "lusiajs";
 
 // The bar fills and the card turns as the demo crosses the middle of the screen.
 const fill = {

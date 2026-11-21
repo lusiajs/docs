@@ -1,5 +1,5 @@
 <script>
-import { props, type Style } from "lusia";
+import { props, type Style } from "lusiajs";
 import { scrollBetween } from "../motion/home-scroll.ts";
 import LogoTunnel from "./LogoTunnel.lusia";
 

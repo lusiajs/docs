@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, EDGE, SCROLL_AT, onAttach } from "lusia";
+import { WHEN, EASE, EDGE, SCROLL_AT, onAttach } from "lusiajs";
 import { watchProgress } from "./scroll-readout.ts";
 
 const fadeIn = {

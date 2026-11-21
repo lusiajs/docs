@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { api, type ApiGroup } from "lusia/api";
+import { api, type ApiGroup } from "lusiajs/api";
 import { catalog } from "./catalog.ts";
 import { guidePages } from "./guide-pages.ts";
 import { isGuideEntry, placedRows, placeGroups } from "./guide-placement.ts";

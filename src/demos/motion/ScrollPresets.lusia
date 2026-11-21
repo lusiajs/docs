@@ -1,5 +1,5 @@
 <script>
-import { WHEN, PRESET, onAttach, variable } from "lusia";
+import { WHEN, PRESET, onAttach, variable } from "lusiajs";
 import { watchPinned } from "./scroll-readout.ts";
 
 // One tall lane drives all four presets, so they play side by side at the same progress.

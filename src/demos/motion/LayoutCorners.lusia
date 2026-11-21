@@ -1,5 +1,5 @@
 <script>
-import { WHEN, variable } from "lusia";
+import { WHEN, variable } from "lusiajs";
 
 // The box has no keyframes. Its class moves it to another corner,
 // and WHEN.MOVE glides it there.

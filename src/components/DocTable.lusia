@@ -1,5 +1,5 @@
 <script>
-import { props } from "lusia";
+import { props } from "lusiajs";
 
 const { head, rows } = props({ head: [] as string[], rows: [] as string[][] });
 </script>

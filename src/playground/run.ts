@@ -1,4 +1,4 @@
-import { variable } from "lusia";
+import { variable } from "lusiajs";
 import { Preview } from "../live/preview.ts";
 import { loadRuntime } from "../live/runtime-source.ts";
 import type { LiveBundle } from "../live/types.ts";

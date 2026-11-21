@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE } from "lusia";
+import { WHEN, EASE } from "lusiajs";
 
 // The box stays lit for 300 ms after the pointer leaves,
 // so a quick pass does not flicker.

@@ -5,7 +5,7 @@ const SAMPLE = `<style scoped>
 .card{padding:1rem}
 </style>
 <script>
-import {variable} from "lusia";
+import {variable} from "lusiajs";
 const name=variable("Ada");
 </script>
 <p class="a {name}">Hi {name.value}</p>

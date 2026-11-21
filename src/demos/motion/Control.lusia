@@ -1,5 +1,5 @@
 <script>
-import { WHEN, controller, EASE } from "lusia";
+import { WHEN, controller, EASE } from "lusiajs";
 
 // A controller plays the animation on demand: play, reverse or stop.
 const ctl = controller();

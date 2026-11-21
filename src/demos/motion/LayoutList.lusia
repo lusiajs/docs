@@ -1,5 +1,5 @@
 <script>
-import { WHEN, variable } from "lusia";
+import { WHEN, variable } from "lusiajs";
 
 // Each row glides to its new place when the list reorders.
 const names = variable(["Ada", "Grace", "Linus", "Ken"]);

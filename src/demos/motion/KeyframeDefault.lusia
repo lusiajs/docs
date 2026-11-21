@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE } from "lusia";
+import { WHEN, EASE } from "lusiajs";
 
 // With no default, the keys use the engine default: QUART and INOUT.
 const plain = {

@@ -1,5 +1,5 @@
 <script>
-import { WHEN, variable } from "lusia";
+import { WHEN, variable } from "lusiajs";
 import Highlight from "./Highlight.lusia";
 import { buildSearchIndex } from "../search/build.ts";
 import { groupJump, groupStarts, moveIndex } from "../search/keys.ts";

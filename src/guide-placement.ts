@@ -1,4 +1,4 @@
-import { api, type ApiEntry, type ApiGroup } from "lusia/api";
+import { api, type ApiEntry, type ApiGroup } from "lusiajs/api";
 import { guidePages } from "./guide-pages.ts";
 import { guidePlan, type GuideGroup } from "./guide-plan.ts";
 

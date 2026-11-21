@@ -1,5 +1,5 @@
 <script>
-import { EASE, EDGE, SCROLL_AT, variable } from "lusia";
+import { EASE, EDGE, SCROLL_AT, variable } from "lusiajs";
 import { scrollAcross } from "../motion/home-scroll.ts";
 import FeatureCounter from "./FeatureCounter.lusia";
 
@@ -145,7 +145,7 @@ count.value++;</code></pre>
 				</div>
 				<p>Script, markup and styles live in one file.</p>
 				<pre class="snippet"><code data-lang="lusia">&lt;script&gt;
-import {"{"} variable {"}"} from "lusia";
+import {"{"} variable {"}"} from "lusiajs";
 &lt;/script&gt;
 &lt;p&gt;Hi {"{"}name{"}"}&lt;/p&gt;</code></pre>
 			</article>

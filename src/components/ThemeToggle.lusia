@@ -1,5 +1,5 @@
 <script>
-import { variable } from "lusia";
+import { variable } from "lusiajs";
 import { theme, toggleTheme } from "../theme.ts";
 
 const icon = variable.compute(() =>

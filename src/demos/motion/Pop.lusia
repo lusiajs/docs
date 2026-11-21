@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE } from "lusia";
+import { WHEN, EASE } from "lusiajs";
 
 // Two items: a pop when attached (IN) and a spin when detached (OUT).
 const popIn = {

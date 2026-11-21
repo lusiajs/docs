@@ -1,4 +1,4 @@
-import { controller, EASE, PRESET, WHEN } from "lusia";
+import { controller, EASE, PRESET, WHEN } from "lusiajs";
 
 // The detail card fades in and rises 16 px each time it is shown.
 const cardKeys = {

@@ -18,10 +18,10 @@
     return URL.createObjectURL(new Blob([code], { type: "text/javascript" }));
   }
 
-  // "lusia" and "lusia/internal" share one blob, so the runtime is a single module instance.
+  // "lusiajs" and "lusiajs/internal" share one blob, so the runtime is a single module instance.
   function addImportMap(run) {
-    var imports = { lusia: blobUrl(run.runtime) };
-    imports["lusia/internal"] = imports.lusia;
+    var imports = { "lusiajs": blobUrl(run.runtime) };
+    imports["lusiajs/internal"] = imports["lusiajs"];
     for (var name in run.modules) {
       imports[MODULE_PREFIX + name] = blobUrl(run.modules[name]);
     }
@@ -44,7 +44,7 @@
     try {
       addImportMap(data);
       applyLook(data);
-      var runtime = await import("lusia");
+      var runtime = await import("lusiajs");
       for (var i = 0; i < data.entries.length; i++) {
         var app = await import(MODULE_PREFIX + data.entries[i]);
         var root = document.createElement("div");

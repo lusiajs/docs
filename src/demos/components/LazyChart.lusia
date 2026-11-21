@@ -1,5 +1,5 @@
 <script>
-import { variable } from "lusia";
+import { variable } from "lusiajs";
 
 const bars = variable([40, 70, 55, 90]);
 </script>

@@ -1,4 +1,4 @@
-import { attach, type Instance } from "lusia";
+import { attach, type Instance } from "lusiajs";
 import Loader from "./components/Loader.lusia";
 import SearchPalette from "./components/SearchPalette.lusia";
 import Site from "./components/Site.lusia";

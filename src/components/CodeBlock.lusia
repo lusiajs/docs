@@ -1,5 +1,5 @@
 <script>
-import { onAttach, props, variable } from "lusia";
+import { onAttach, props, variable } from "lusiajs";
 import { highlightInto } from "../highlight/highlight.ts";
 
 const { text, language, className } = props({

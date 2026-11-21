@@ -1,5 +1,5 @@
 <script>
-import { attach, onAttach, variable, type Instance } from "lusia";
+import { attach, onAttach, variable, type Instance } from "lusiajs";
 import Child from "./StyleChild.lusia";
 
 const slot = variable<Element | null>(null);

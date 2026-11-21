@@ -1,5 +1,5 @@
 <script>
-import { attach, variable, type Instance } from "lusia";
+import { attach, variable, type Instance } from "lusiajs";
 import Box from "./Box.lusia";
 
 const slot = variable<Element | null>(null);

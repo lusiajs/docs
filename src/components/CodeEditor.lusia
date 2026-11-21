@@ -1,5 +1,5 @@
 <script>
-import { onAttach, props, variable } from "lusia";
+import { onAttach, props, variable } from "lusiajs";
 import type { EditorFile, EditorJump } from "../editor/files.ts";
 import type { EditorSession } from "../editor/session.ts";
 import EditorTabs from "./EditorTabs.lusia";

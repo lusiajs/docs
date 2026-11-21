@@ -1,4 +1,4 @@
-import { EASE, type AnimateItem, type Keyframes, type Variable } from "lusia";
+import { EASE, type AnimateItem, type Keyframes, type Variable } from "lusiajs";
 
 export type SparkKind = "petal" | "star";
 

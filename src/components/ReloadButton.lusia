@@ -1,5 +1,5 @@
 <script>
-import { PRESET, WHEN, controller, props } from "lusia";
+import { PRESET, WHEN, controller, props } from "lusiajs";
 
 const { onReload } = props({ onReload: () => {} });
 const spin = controller();

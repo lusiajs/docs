@@ -1,5 +1,5 @@
 <script>
-import { props } from "lusia";
+import { props } from "lusiajs";
 import type { Part } from "../search/fuzzy.ts";
 
 const noParts: Part[] = [];

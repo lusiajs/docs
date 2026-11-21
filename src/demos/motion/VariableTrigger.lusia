@@ -1,5 +1,5 @@
 <script>
-import { EASE, variable } from "lusia";
+import { EASE, variable } from "lusiajs";
 
 // A variable is a trigger: true plays the animation forward, false plays it back.
 const open = variable(false);

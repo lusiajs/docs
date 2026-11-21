@@ -1,5 +1,5 @@
 <script>
-import { EASE } from "lusia";
+import { EASE } from "lusiajs";
 
 const spin = {
 	0: { rotate: "0deg" },
