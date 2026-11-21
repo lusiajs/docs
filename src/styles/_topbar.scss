@@ -66,6 +66,13 @@
 		width: 28px;
 		height: 28px;
 	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		&:hover img {
+			transform-origin: center;
+			animation: logo-wobble 500ms ease-out;
+		}
+	}
 }
 
 .main-menu {
