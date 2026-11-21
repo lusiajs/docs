@@ -113,6 +113,11 @@ export const guidePlan: GuideGroup[] = [
 				],
 			},
 			{
+				id: "configuration",
+				label: "Configuration",
+				entries: ["config"],
+			},
+			{
 				id: "triggers",
 				label: "Triggers",
 				entries: ["when", "controller"],

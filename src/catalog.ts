@@ -42,6 +42,8 @@ import ForDemo from "./demos/flow/ForDemo.lusia";
 import forSource from "./demos/flow/ForDemo.lusia?raw";
 import IfDemo from "./demos/flow/IfDemo.lusia";
 import ifSource from "./demos/flow/IfDemo.lusia?raw";
+import lusiaConfigSource from "./config-files/lusia.config.ts?raw";
+import lusiaConfigJsonSource from "./config-files/lusia.config.json?raw";
 import Both from "./demos/motion/Both.lusia";
 import bothSource from "./demos/motion/Both.lusia?raw";
 import boxSource from "./demos/motion/Box.lusia?raw";
@@ -155,6 +157,7 @@ export interface CatalogEntry {
 	icon: string;
 	demos?: Demo[];
 	table?: CatalogTable;
+	files?: SourceFile[];
 }
 
 // Keyed by the api entry id. Entries without a demo show no live card.
@@ -730,7 +733,7 @@ export const catalog: Record<string, CatalogEntry> = {
 			{
 				id: "animate-leave-space",
 				title: "Leave closes the space",
-				caption: "A removed row fades out in place. By default the gap closes at once, so the rows below jump up. Turn Animate space on (more: { animateSpace: true }) to slide them up as the row fades.",
+				caption: "A removed row fades out in place. The rows below slide up to close the gap. Animate space is on by default. Set more: { animateSpace: false } to make them jump.",
 				components: [LeaveList],
 				sources: [
 					{
@@ -767,6 +770,46 @@ export const catalog: Record<string, CatalogEntry> = {
 					},
 				],
 			},
+		],
+	},
+	config: {
+		icon: "tune",
+		table: {
+			head: ["Key", "Value", "Default", "What it does"],
+			rows: [
+				["animate.duration", "number, ms", "300", "Length of one play"],
+				["animate.delay", "number, ms", "0", "Wait before each forward play"],
+				["animate.ease", "[style, direction], e.g. [\"QUART\", \"INOUT\"]", "[\"QUART\", \"INOUT\"]", "Easing curve and direction"],
+				["animate.keep", "true or false", "true", "Remove the inline styles when a play ends"],
+				["animate.midway.play", "TURN, FINISH, RESTART, SKIP, IGNORE", "TURN", "What a new play does while one runs"],
+				["animate.midway.turn", "SUDDEN, SMOOTH, STOP", "SUDDEN", "How the motion turns around"],
+				["animate.midway.turnDuration", "number, ms", "200", "Length of the turn"],
+				["animate.midway.turnStyle", "easing style, e.g. CUBIC", "CUBIC", "Curve of the turn"],
+				["animate.midway.turnEase", "IN, OUT, INOUT", "INOUT", "Direction of the turn"],
+				["animate.view.margin", "number, or a CSS length such as \"10%\"", "\"0px\"", "How far inside the screen edge the view starts"],
+				["animate.view.amount", "number, 0 to 1", "0.15", "Share of the element that must be visible"],
+				["animate.view.reverse", "true or false", "false", "Play back out when it leaves the view"],
+				["animate.hover.inDelay", "number, ms", "0", "Wait after pointer enter before playing in"],
+				["animate.hover.outDelay", "number, ms", "0", "Wait after pointer leave before playing out"],
+				["animate.hover.outDuration", "number, ms", "item duration", "Length of the play out. Used only when the item sets out"],
+				["animate.scroll.start", "ENTER, CENTER, LEAVE, or { element, window }", "ENTER", "Where the progress starts"],
+				["animate.scroll.end", "ENTER, CENTER, LEAVE, or { element, window }", "LEAVE", "Where the progress ends"],
+				["animate.scroll.part", "[from, to], 0 to 1", "[0, 1]", "The part of the progress to play"],
+				["animate.space.animateSpace", "true or false", "true", "Slide the siblings when an item attaches or detaches. false: they jump"],
+				["animate.in", "preset name, e.g. \"FADE_IN\"", "none", "Preset for items with no style, on attach and other triggers"],
+				["animate.out", "preset name, e.g. \"FADE_OUT\"", "none", "Preset for items with no style, on detach"],
+				["outdir", "text", "dist", "Output folder for lusia build"],
+				["minify", "true or false", "true", "Minify the build"],
+				["routes", "list of paths, e.g. [\"/guide\"]", "none", "Routes that get their own index.html"],
+				["dev.port", "number, 0 to 65535", "3000", "Dev server port"],
+				["lazy.mode", "smart, all, off", "smart", "Which imported components load later"],
+				["lazy.prefetch", "idle, view, none", "idle", "When split components start to download"],
+				["lint.rules", "rule name: off, warn, error", "each rule's own level", "Severity of each lint rule"],
+			],
+		},
+		files: [
+			{ path: "lusia.config.ts", text: lusiaConfigSource },
+			{ path: "lusia.config.json", text: lusiaConfigJsonSource },
 		],
 	},
 	"scroll-at": {

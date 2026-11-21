@@ -16,6 +16,7 @@ const GROUP_ORDER: ApiGroup[] = [
 const MOTION_SUBGROUP_ORDER = [
 	"motion-first-animation",
 	"motion-timing",
+	"motion-configuration",
 	"motion-triggers",
 	"motion-scroll",
 	"motion-layout",

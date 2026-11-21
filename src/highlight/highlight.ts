@@ -3,6 +3,7 @@ import Prism from "./languages.ts";
 export function languageFor(path: string): string {
 	if (path.endsWith(".lusia")) return "lusia";
 	if (path.endsWith(".ts")) return "typescript";
+	if (path.endsWith(".json")) return "json";
 	if (path.endsWith(".scss")) return "scss";
 	return "none";
 }
