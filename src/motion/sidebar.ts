@@ -16,6 +16,7 @@ const sidebarInKeys = {
 export const sidebarIn = {
 	style: sidebarInKeys,
 	when: WHEN.ATTACH,
+	more: { animateSpace: true },
 	duration: 400,
 	keep: false,
 };

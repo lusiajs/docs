@@ -31,6 +31,7 @@ function letterMotion(index: number) {
 		{
 			style: letterIn,
 			when: WHEN.ATTACH,
+			more: { animateSpace: true },
 			duration: 600,
 			delay: 80 + index * 70,
 		},
@@ -80,30 +81,35 @@ const ctaIn = {
 const eyebrowMotion = {
 	style: fadeIn,
 	when: WHEN.ATTACH,
+	more: { animateSpace: true },
 	duration: 600,
 	delay: 500,
 };
 const taglineMotion = {
 	style: fadeIn,
 	when: WHEN.ATTACH,
+	more: { animateSpace: true },
 	duration: 600,
 	delay: 600,
 };
 const installMotion = {
 	style: ctaIn,
 	when: WHEN.ATTACH,
+	more: { animateSpace: true },
 	duration: 600,
 	delay: 700,
 };
 const ctaMotion = {
 	style: ctaIn,
 	when: WHEN.ATTACH,
+	more: { animateSpace: true },
 	duration: 600,
 	delay: 800,
 };
 const noteMotion = {
 	style: fadeIn,
 	when: WHEN.ATTACH,
+	more: { animateSpace: true },
 	duration: 600,
 	delay: 900,
 };
