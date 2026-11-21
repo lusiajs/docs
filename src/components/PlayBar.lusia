@@ -1,16 +1,24 @@
 <script>
-import { onAttach, variable } from "lusiajs";
+import { PRESET, WHEN, onAttach, variable } from "lusiajs";
 import {
 	addFile,
+	copyActive,
 	deleteActive,
 	formatActive,
 	renameActive,
 	resetFiles,
 	selectFile,
 } from "../playground/actions.ts";
-import { ENTRY_FILE } from "../playground/names.ts";
+import { ENTRY_FILE, FILE_TYPES } from "../playground/names.ts";
 import { runNow } from "../playground/run.ts";
-import { active, autoRun, files, view } from "../playground/state.ts";
+import {
+	active,
+	autoRun,
+	files,
+	notice,
+	view,
+	wrap,
+} from "../playground/state.ts";
 import EditorTabs from "./EditorTabs.lusia";
 import FileNameForm from "./FileNameForm.lusia";
 
@@ -20,6 +28,24 @@ const adding = variable.compute(() => formMode.value === "add");
 const renaming = variable.compute(() => formMode.value === "rename");
 const isEntry = variable.compute(() => active.value === ENTRY_FILE);
 const menu = variable<HTMLDetailsElement | null>(null);
+const copied = variable(false);
+const copyLabel = variable.compute(() =>
+	copied.value ? "Copied" : "Copy file",
+);
+const copyIcon = variable.compute(() =>
+	copied.value ? "check" : "content_copy",
+);
+// A false attribute is removed, so aria-pressed takes the text "false".
+const wrapPressed = variable.compute(() => String(wrap.value));
+
+// The name form pops in under the tabs and shrinks away when it closes.
+const formMotion = [
+	{ style: PRESET.POP_IN, when: WHEN.ATTACH, duration: 200 },
+	{ style: PRESET.POP_OUT, when: WHEN.DETACH, duration: 150 },
+];
+
+const COPY_FAILED = "Copy failed. Select the code and copy it instead.";
+const COPIED_MS = 1500;
 
 function pick(name: string) {
 	closeMenu();
@@ -57,9 +83,22 @@ function run() {
 	void runNow();
 }
 
+function toggleWrap() {
+	wrap.value = !wrap.value;
+}
+
 function format() {
 	closeMenu();
 	void formatActive();
+}
+
+async function copy() {
+	if (!(await copyActive())) {
+		notice.value = COPY_FAILED;
+		return;
+	}
+	copied.value = true;
+	setTimeout(() => (copied.value = false), COPIED_MS);
 }
 
 function removeActive() {
@@ -129,10 +168,21 @@ onAttach(() => {
 				>play_arrow</span
 			>
 		</button>
+		<span class="play-sep" aria-hidden="true"></span>
 		<button
 			class="play-icon"
 			type="button"
-			aria-label="Format"
+			aria-label="Wrap lines"
+			title="Wrap lines"
+			aria-pressed={wrapPressed}
+			onclick={toggleWrap}
+		>
+			<span class="material-symbols-rounded" aria-hidden="true">wrap_text</span>
+		</button>
+		<button
+			class="play-icon"
+			type="button"
+			aria-label="Format the file"
 			title="Format"
 			onclick={format}
 		>
@@ -140,6 +190,16 @@ onAttach(() => {
 				>format_align_left</span
 			>
 		</button>
+		<button
+			class="play-icon"
+			type="button"
+			aria-label={copyLabel}
+			title={copyLabel}
+			onclick={copy}
+		>
+			<span class="material-symbols-rounded" aria-hidden="true">{copyIcon}</span>
+		</button>
+		<span class="play-sep" aria-hidden="true"></span>
 		<details class="play-more" bind-element={menu}>
 			<summary
 				class="play-icon"
@@ -163,22 +223,25 @@ onAttach(() => {
 		</details>
 	</div>
 	<IF {adding}>
-		<div class="play-form">
+		<div class="play-form" animate={formMotion}>
 			<FileNameForm
 				label="New file name"
+				placeholder="Card.lusia"
 				initial={""}
 				submitText="Add"
+				types={FILE_TYPES}
 				onSubmit={submitName}
 				onCancel={closeForm}
 			/>
 		</div>
 	</IF>
 	<IF {renaming}>
-		<div class="play-form">
+		<div class="play-form" animate={formMotion}>
 			<FileNameForm
 				label="New name"
 				initial={active}
 				submitText="Rename"
+				types={FILE_TYPES}
 				onSubmit={submitName}
 				onCancel={closeForm}
 			/>
@@ -213,6 +276,7 @@ onAttach(() => {
 .play-bar .code-tabs-wrap {
 	align-self: stretch;
 	align-items: center;
+	min-width: 0;
 }
 
 .play-bar .code-tabs {
@@ -228,8 +292,18 @@ onAttach(() => {
 	margin-left: auto;
 }
 
+.play-sep {
+	flex: none;
+	width: 1px;
+	height: 1.25rem;
+	margin: 0 0.25rem;
+	background: var(--line);
+}
+
+// Icon buttons: a soft tint on hover, a ring on keyboard focus, a small press on click.
 .play-icon {
 	display: inline-grid;
+	flex: none;
 	place-items: center;
 	width: 2.25rem;
 	height: 2.25rem;
@@ -239,6 +313,10 @@ onAttach(() => {
 	background: transparent;
 	color: var(--muted);
 	cursor: pointer;
+	transition:
+		background-color 0.15s ease,
+		color 0.15s ease,
+		transform 0.1s ease;
 
 	.material-symbols-rounded {
 		font-size: 1.2rem;
@@ -247,6 +325,15 @@ onAttach(() => {
 	&:hover {
 		background: var(--accent-soft);
 		color: var(--fg);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 1px;
+	}
+
+	&:active {
+		transform: scale(0.92);
 	}
 
 	&[aria-pressed="true"] {
@@ -300,6 +387,11 @@ summary.play-icon {
 		background: var(--accent-soft);
 	}
 
+	&:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: -2px;
+	}
+
 	&:disabled {
 		color: var(--muted);
 		cursor: default;
@@ -313,6 +405,7 @@ summary.play-icon {
 	background: var(--line);
 }
 
+// The name form floats under the tab bar, on the left.
 .play-form {
 	position: absolute;
 	top: calc(100% + 0.35rem);

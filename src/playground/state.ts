@@ -9,6 +9,7 @@ export const files = variable<PlayFile[]>(loadFiles());
 export const active = variable(ENTRY_FILE);
 export const view = variable<"code" | "preview">("code");
 export const autoRun = variable(true);
+export const wrap = variable(false);
 export const compileErrors = variable<LiveError[]>([]);
 export const runtimeErrors = variable<LiveError[]>([]);
 export const jump = variable<EditorJump | null>(null);
