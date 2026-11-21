@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, SCROLL_AT, setup } from "lusia";
+import { WHEN, EASE, SCROLL_AT, onAttach } from "lusia";
 import { AT, watchProgress } from "./scroll-readout.ts";
 
 // Starts at the middle and fades out as the card leaves the top of the screen.
@@ -14,7 +14,7 @@ const fadeOutMotion = {
 	more: { start: SCROLL_AT.CENTER, end: SCROLL_AT.LEAVE },
 };
 
-setup((root) => {
+onAttach((root) => {
 	const slot = root.querySelector(".slot");
 	const out = root.querySelector("output");
 	return watchProgress(slot, AT.CENTER, AT.LEAVE, out);

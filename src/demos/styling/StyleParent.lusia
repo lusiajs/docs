@@ -1,11 +1,11 @@
 <script>
-import { attach, setup, variable, type Instance } from "lusia";
+import { attach, onAttach, variable, type Instance } from "lusia";
 import Child from "./StyleChild.lusia";
 
 const slot = variable<Element | null>(null);
 
 // Mounts the child once the slot exists. Its return value detaches the child.
-setup(() => {
+onAttach(() => {
 	const instance: Instance = attach(Child, slot.value!);
 	return () => instance.detach();
 });

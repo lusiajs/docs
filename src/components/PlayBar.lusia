@@ -1,5 +1,5 @@
 <script>
-import { setup, variable } from "lusia";
+import { onAttach, variable } from "lusia";
 import {
 	addFile,
 	deleteActive,
@@ -90,7 +90,7 @@ function onDocumentKey(event: KeyboardEvent) {
 }
 
 // The menu closes on an outside click or Escape, like every other popup.
-setup(() => {
+onAttach(() => {
 	document.addEventListener("click", onDocumentClick);
 	document.addEventListener("keydown", onDocumentKey);
 	return () => {
