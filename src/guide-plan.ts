@@ -1,4 +1,4 @@
-import type { ApiGroup } from "../../reference/api.ts";
+import type { ApiGroup } from "lusia/api";
 
 // A named sub-group inside a group. Its entries are api ids, in learning order.
 export interface GuideSubgroup {
@@ -108,7 +108,7 @@ export const guidePlan: GuideGroup[] = [
       {
         id: "triggers",
         label: "Triggers",
-        entries: ["when", "controller"],
+        entries: ["when", "hover-area", "controller"],
       },
       {
         id: "scroll",
