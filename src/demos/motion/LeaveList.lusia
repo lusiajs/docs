@@ -15,8 +15,7 @@ const tasks = variable<Task[]>([
 const animateSpace = variable(true);
 let nextId = 5;
 
-// A removed row fades out. animateSpace is on by default.
-// The two lists below differ only in it.
+// A removed row fades out. The two lists differ only in animateSpace.
 const fadeOut = {
 	0: { opacity: 1 },
 	1: { opacity: 0 },
@@ -48,7 +47,12 @@ function toggleAnimateSpace() {
 			<EACH {tasks} as={task} key={task.id}>
 				<li
 					class="row"
-					animate={{ style: fadeOut, when: WHEN.DETACH, duration: 400 }}
+					animate={{
+						style: fadeOut,
+						when: WHEN.DETACH,
+						duration: 400,
+						more: { animateSpace: true },
+					}}
 				>
 					<span>{task.title}</span>
 					<button type="button" onclick={() => removeTask(task)}>
