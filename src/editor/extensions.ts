@@ -17,6 +17,7 @@ import {
 	foldGutter,
 	foldKeymap,
 	indentOnInput,
+	indentUnit,
 } from "@codemirror/language";
 import { lintGutter, lintKeymap } from "@codemirror/lint";
 import {
@@ -83,6 +84,7 @@ export function editorExtensions(options: EditorStateOptions): Extension[] {
 		dropCursor(),
 		EditorState.allowMultipleSelections.of(true),
 		indentOnInput(),
+		indentUnit.of("\t"),
 		lusiaHighlighting,
 		bracketMatching(),
 		closeBrackets(),
