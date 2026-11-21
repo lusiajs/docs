@@ -1,9 +1,5 @@
 <script>
-import { PRESET, variable } from "lusia";
-
-function createTile(name) {
-	return { name, animation: PRESET[name], hovered: variable(false) };
-}
+import { WHEN, PRESET } from "lusia";
 
 const groups = [
 	{ title: "Fade", names: ["FADE_IN", "FADE_OUT"] },
@@ -14,16 +10,8 @@ const groups = [
 	{ title: "Attention", names: ["SHAKE", "PULSE", "SPIN", "WOBBLE", "HEARTBEAT", "TADA"] },
 ].map((group) => ({
 	title: group.title,
-	tiles: group.names.map(createTile),
+	tiles: group.names.map((name) => ({ name, animation: PRESET[name] })),
 }));
-
-function enter(tile) {
-	tile.hovered.value = true;
-}
-
-function leave(tile) {
-	tile.hovered.value = false;
-}
 </script>
 
 <div class="preset-gallery">
@@ -34,16 +22,10 @@ function leave(tile) {
 			<div class="grid">
 				<EACH {group.tiles} as={tile} key={tile.name}>
 					<div
-						class="cell"
-						onpointerenter={() => enter(tile)}
-						onpointerleave={() => leave(tile)}
+						class="tile"
+						animate={{ style: tile.animation, when: WHEN.HOVER, duration: 500 }}
 					>
-						<div
-							class="tile"
-							animate={{ style: tile.animation, when: tile.hovered, duration: 500 }}
-						>
-							{tile.name}
-						</div>
+						{tile.name}
 					</div>
 				</EACH>
 			</div>
@@ -81,16 +63,9 @@ function leave(tile) {
 		gap: 0.6rem;
 	}
 
-	.cell {
-		display: grid;
-		width: 100%;
-		min-height: 4rem;
-	}
-
 	.tile {
 		display: grid;
-		width: 100%;
-		height: 100%;
+		min-height: 4rem;
 		place-items: center;
 		border-radius: 14px;
 		background: var(--lavender-soft);

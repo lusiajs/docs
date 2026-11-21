@@ -1106,6 +1106,7 @@ export const catalog: Record<string, CatalogEntry> = {
 	turn: { icon: "u_turn_left" },
 	"animate-more": { icon: "more_horiz" },
 	"animate-type": { icon: "movie" },
+	"hover-area": { icon: "mouse" },
 	"keyframes-type": { icon: "timeline" },
 	interpolate: { icon: "linear_scale" },
 };
