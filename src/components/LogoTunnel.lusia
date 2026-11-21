@@ -13,12 +13,9 @@ const firstOpacity = 0.22;
 const lastOpacity = 0.03;
 const scrollShiftVh = 100;
 
-// The logo outline, with the same rotate and nudge as public/logo.svg.
-const outlinePath = [
-	"M26 52L30 20L44 48L48 48L62 20L66 52L66 86L100 86L100 114L26 114Z",
-	"M98 104C116 104 120 86 114 70C111 61 116 54 122 52",
-].join(" ");
-const outlineTransform = "rotate(7 64 64) translate(-8 2)";
+// The outline images use a 108 by 112 box. Sizes below scale the same 128 grid as before.
+const imageWidthShare = 108 / 128;
+const imageHeightShare = 112 / 128;
 
 // Copy 0 is the biggest. Each next copy is smaller by `shrink`.
 function copySize(index: number) {
@@ -33,10 +30,12 @@ function copyOpacity(index: number) {
 
 function copyCss(index: number) {
 	const size = copySize(index);
+	const width = size * imageWidthShare;
+	const height = size * imageHeightShare;
 	return [
-		`width: ${size}vmin`,
-		`height: ${size}vmin`,
-		`margin: ${-size / 2}vmin 0 0 ${-size / 2}vmin`,
+		`width: ${width}vmin`,
+		`height: ${height}vmin`,
+		`margin: ${-height / 2}vmin 0 0 ${-width / 2}vmin`,
 		`opacity: ${copyOpacity(index)}`,
 	].join("; ");
 }
@@ -52,32 +51,39 @@ function copyParallax(index: number) {
 	return scrollBetween(follow, { translate: "0 0", scale: "1" }, to);
 }
 
+// Each stroke bucket shares one outline file, so thin lines stay visible.
+const copiesPerStroke = 3;
+
+function outlineSource(theme: string, index: number) {
+	const bucket = Math.floor(index / copiesPerStroke) + 1;
+	return `/logo-outline-${theme}-${bucket}.svg`;
+}
+
 const copies = Array.from({ length: copyCount }, (_, index) => ({
 	id: index,
 	css: copyCss(index),
 	motion: copyParallax(index),
+	lightSrc: outlineSource("light", index),
+	darkSrc: outlineSource("dark", index),
 }));
 </script>
 
 <div class="logo-tunnel" aria-hidden="true">
 	<EACH {copies} as="{copy}">
-		<svg
-			class="tunnel-copy"
-			style={copy.css}
-			viewBox="0 0 128 128"
-			animate={copy.motion}
-		>
-			<path
-				d={outlinePath}
-				transform={outlineTransform}
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linejoin="round"
-				stroke-linecap="round"
-				vector-effect="non-scaling-stroke"
+		<span class="tunnel-copy" style={copy.css} animate={copy.motion}>
+			<img
+				class="tunnel-image tunnel-image-light"
+				src={copy.lightSrc}
+				alt=""
+				decoding="async"
 			/>
-		</svg>
+			<img
+				class="tunnel-image tunnel-image-dark"
+				src={copy.darkSrc}
+				alt=""
+				decoding="async"
+			/>
+		</span>
 	</EACH>
 </div>
 
@@ -94,8 +100,25 @@ const copies = Array.from({ length: copyCount }, (_, index) => ({
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	color: var(--fg);
-	overflow: visible;
+	pointer-events: none;
 	will-change: translate, scale;
+}
+
+.tunnel-image {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.tunnel-image-dark {
+	display: none;
+}
+
+:root[data-theme="dark"] .tunnel-image-light {
+	display: none;
+}
+
+:root[data-theme="dark"] .tunnel-image-dark {
+	display: block;
 }
 </style>
