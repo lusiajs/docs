@@ -1,12 +1,14 @@
 import { beforeEach, describe, expect, test } from "bun:test";
-import { initCopy } from "./copy.ts";
+import { copyText, initCopy } from "./copy.ts";
 
 let copied: string[] = [];
+let refusing = false;
 
 Object.defineProperty(navigator, "clipboard", {
 	configurable: true,
 	value: {
 		writeText: (text: string) => {
+			if (refusing) return Promise.reject(new Error("refused"));
 			copied.push(text);
 			return Promise.resolve();
 		},
@@ -37,6 +39,20 @@ function settle(): Promise<void> {
 
 beforeEach(() => {
 	copied = [];
+	refusing = false;
+});
+
+describe("copyText", () => {
+	test("writes the text and resolves true", async () => {
+		expect(await copyText("bun add lusiajs")).toBe(true);
+		expect(copied).toEqual(["bun add lusiajs"]);
+	});
+
+	test("resolves false when the browser refuses", async () => {
+		refusing = true;
+		expect(await copyText("bun add lusiajs")).toBe(false);
+		expect(copied).toEqual([]);
+	});
 });
 
 describe("initCopy", () => {

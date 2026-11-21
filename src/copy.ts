@@ -20,14 +20,19 @@ export function initCopy(root: HTMLElement, signal: AbortSignal): void {
 	);
 }
 
+// Resolves to false when the browser refuses the write.
+export async function copyText(text: string): Promise<boolean> {
+	try {
+		await navigator.clipboard.writeText(text);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
 async function copy(button: HTMLButtonElement): Promise<void> {
 	const glyph = button.querySelector(".material-symbols-rounded")!;
-	try {
-		await navigator.clipboard.writeText(textToCopy(button));
-		glyph.textContent = "check";
-	} catch {
-		glyph.textContent = "error";
-	}
+	glyph.textContent = (await copyText(textToCopy(button))) ? "check" : "error";
 	setTimeout(() => (glyph.textContent = copyIcon), resetDelay);
 }
 
