@@ -17,6 +17,17 @@ export const copiedLabelOut = {
 	1: [EASE.STYLE.QUART, EASE.IN, { opacity: 0, translate: "0px -6px" }],
 };
 
+// The new command slides up from below and fades in.
+export const commandIn = {
+	0: { opacity: 0, translate: "0px 8px" },
+	1: [EASE.STYLE.QUART, EASE.OUT, { opacity: 1, translate: "0px 0px" }],
+};
+// The old command slides up and fades out.
+export const commandOut = {
+	0: { opacity: 1, translate: "0px 0px" },
+	1: [EASE.STYLE.QUART, EASE.IN, { opacity: 0, translate: "0px -8px" }],
+};
+
 // The check icon pops in when the copy succeeds.
 export const checkPopIn = {
 	0: { opacity: 0, scale: "0.5" },

@@ -1,10 +1,11 @@
 <script>
 import { onAttach, variable, WHEN } from "lusiajs";
 import { copyText } from "../copy.ts";
-import { typeOnceFrames } from "../motion/typing.ts";
 import { wobbleStyle } from "../motion/wobble.ts";
 import {
 	pillLift,
+	commandIn,
+	commandOut,
 	copiedLabelIn,
 	copiedLabelOut,
 	checkPopIn,
@@ -19,9 +20,6 @@ const commands: Record<Choice, string> = {
 	add: "bun add lusiajs",
 };
 const noticeShownFor = 1500;
-const typeStep = 55;
-// Starts after the hero's install entrance, so the pill is seen first.
-const typeStart = 700;
 
 const choice = variable<Choice>("create");
 // A boolean attribute would only mark presence, so aria-pressed gets the words.
@@ -32,40 +30,33 @@ const addPressed = variable.compute(() =>
 	choice.value === "add" ? "true" : "false",
 );
 const command = variable.compute(() => commands[choice.value]);
+// One row keyed by the choice: a change detaches the old row and attaches the new one.
+const commandRows = variable.compute(() => [
+	{ key: choice.value, text: command.value },
+]);
 
-const typedFrames = variable.compute(() => typeOnceFrames(command.value));
-const frame = variable(0);
-const typed = variable.compute(
-	() => typedFrames.value[Math.min(frame.value, typedFrames.value.length - 1)],
-);
+const createButton = variable<HTMLElement | null>(null);
+const addButton = variable<HTMLElement | null>(null);
+// The highlight is one element. Its left and width follow the chosen button.
+const highlightStyle = variable("");
 
-let typeTimer: ReturnType<typeof setInterval> | undefined;
+function chosenButton(): HTMLElement | null {
+	return choice.value === "create" ? createButton.value : addButton.value;
+}
+
+function placeHighlight() {
+	const button = chosenButton();
+	if (!button) return;
+	highlightStyle.value = `left: ${button.offsetLeft}px; width: ${button.offsetWidth}px`;
+}
+
 let noticeTimer: ReturnType<typeof setTimeout> | undefined;
-
-function stopTyping() {
-	clearInterval(typeTimer);
-}
-
-function typeNextFrame() {
-	if (frame.value < typedFrames.value.length - 1) frame.value++;
-	else stopTyping();
-}
-
-// Reduced motion shows the whole command at once.
-function typeCommand() {
-	stopTyping();
-	frame.value = 0;
-	if (reduced) {
-		frame.value = typedFrames.value.length - 1;
-		return;
-	}
-	typeTimer = setInterval(typeNextFrame, typeStep);
-}
 
 function choose(next: Choice) {
 	if (choice.value === next) return;
 	choice.value = next;
-	typeCommand();
+	// The chosen button turns bold, so measure after the new style is laid out.
+	requestAnimationFrame(placeHighlight);
 }
 
 // The label text. "" hides it. "Press Ctrl+C" shows when the browser refuses the copy.
@@ -91,12 +82,14 @@ async function copyCommand() {
 	await showNotice(copiedOk ? "Copied" : "Press Ctrl+C");
 }
 
+// Fonts can change the button widths after attach, so measure again when they load.
 onAttach(() => {
-	const startTimer = setTimeout(typeCommand, reduced ? 0 : typeStart);
+	placeHighlight();
+	document.fonts.ready.then(placeHighlight);
+	window.addEventListener("resize", placeHighlight);
 	return () => {
-		clearTimeout(startTimer);
+		window.removeEventListener("resize", placeHighlight);
 		clearTimeout(noticeTimer);
-		stopTyping();
 	};
 });
 
@@ -127,15 +120,32 @@ const labelMotion = reduced
 const checkMotion = reduced
 	? []
 	: { style: checkPopIn, when: WHEN.ATTACH, duration: 400 };
+const commandMotion = reduced
+	? []
+	: [
+			{ style: commandIn, when: WHEN.ATTACH, duration: 200 },
+			{ style: commandOut, when: WHEN.DETACH, duration: 150 },
+		];
+// No keyframes: the highlight glides when its left or width changes.
+const highlightMotion = reduced
+	? []
+	: { when: WHEN.MOVE_OR_RESIZE, duration: 300 };
 </script>
 
 <div class="install-command">
 	<div class="install-pill" animate={pillMotion}>
 		<div class="install-switch" role="group" aria-label="Pick a command">
+			<span
+				class="install-highlight"
+				aria-hidden="true"
+				style={highlightStyle}
+				animate={highlightMotion}
+			></span>
 			<button
 				type="button"
 				class="install-choice"
 				aria-pressed={createPressed}
+				bind-element={createButton}
 				onclick={() => choose("create")}
 			>
 				create
@@ -144,6 +154,7 @@ const checkMotion = reduced
 				type="button"
 				class="install-choice"
 				aria-pressed={addPressed}
+				bind-element={addButton}
 				onclick={() => choose("add")}
 			>
 				add
@@ -157,7 +168,11 @@ const checkMotion = reduced
 				<span class="prompt-glyph">$</span>
 			</ELSE>
 		</span>
-		<code class="install-text">{typed}<span class="caret" aria-hidden="true"></span></code>
+		<code class="install-text">
+			<EACH {commandRows} as={row} key={row.key}>
+				<span class="command-line" animate={commandMotion}>{row.text}</span>
+			</EACH>
+		</code>
 		<div class="install-copy-wrap">
 			<span class="copy-status" aria-live="polite">
 				<IF {noticeShown.value}>
@@ -218,6 +233,7 @@ const checkMotion = reduced
 }
 
 .install-switch {
+	position: relative;
 	display: inline-flex;
 	gap: 2px;
 	padding: 2px;
@@ -225,7 +241,18 @@ const checkMotion = reduced
 	background: var(--lavender-soft);
 }
 
+// Sits under the buttons. Its left and width are set in the script.
+.install-highlight {
+	position: absolute;
+	top: 2px;
+	bottom: 2px;
+	border-radius: 999px;
+	background: var(--lavender);
+	pointer-events: none;
+}
+
 .install-choice {
+	position: relative;
 	padding: 0.2rem 0.65rem;
 	border: 0;
 	border-radius: 999px;
@@ -236,7 +263,6 @@ const checkMotion = reduced
 	cursor: pointer;
 
 	&[aria-pressed="true"] {
-		background: var(--lavender);
 		color: #3a2e4a;
 		font-weight: 700;
 	}
@@ -254,11 +280,16 @@ const checkMotion = reduced
 }
 
 // The global code style adds padding. content-box keeps min-width to the text alone.
+// Rows share one grid cell, so a leaving row and its new one overlap while animating.
 .install-text {
-	display: inline-block;
+	display: inline-grid;
 	box-sizing: content-box;
 	min-width: calc(25ch + 4px);
 	color: var(--fg);
+}
+
+.command-line {
+	grid-area: 1 / 1;
 	white-space: pre;
 }
 
