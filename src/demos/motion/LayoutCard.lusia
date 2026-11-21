@@ -47,6 +47,7 @@ function toggleOpen() {
 		max-width: 22rem;
 		padding: 1rem 1.25rem;
 		border-radius: 16px;
+		overflow: hidden;
 		background: var(--pink);
 		color: #3a2e4a;
 
