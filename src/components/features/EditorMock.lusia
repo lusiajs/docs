@@ -1,101 +1,103 @@
 <div
-	class="editor"
-	role="img"
-	aria-label="Editor showing an unclosed brace error and its hint"
+  class="editor"
+  role="img"
+  aria-label="Editor showing an unclosed brace error and its hint"
 >
-	<div class="editor-bar">
-		<span class="dot"></span>
-		<span class="dot"></span>
-		<span class="dot"></span>
-		<span class="file">Counter.lusia</span>
-	</div>
-	<div class="editor-code">
-		<span class="gutter">1</span>
-		<code>&lt;p&gt;<span class="squiggle">{"{"}count</span>&lt;/p&gt;</code>
-	</div>
-	<div class="tooltip">
-		<p class="tooltip-title">
-			<span class="level">Error</span> unclosed {"{"}
-			<span class="code-id">L1010</span>
-		</p>
-		<p>Add {"}"} to close the expression.</p>
-	</div>
+  <div class="editor-bar">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="file">Counter.lusia</span>
+  </div>
+  <div class="editor-code">
+    <span class="gutter">1</span>
+    <code
+      >&lt;p&gt;<span class="squiggle">{"{"}count</span>&lt;/p&gt;</code
+    >
+  </div>
+  <div class="tooltip">
+    <p class="tooltip-title">
+      <span class="level">Error</span> unclosed {"{"}
+      <span class="code-id">L1010</span>
+    </p>
+    <p>Add {"}"} to close the expression.</p>
+  </div>
 </div>
 
 <style scoped>
-@use "../../styles/theme" as *;
+  @use "../../styles/theme" as *;
 
-.editor {
-	display: grid;
-	gap: 0.5rem;
-	padding: 0.6rem;
-	border: 2px solid var(--line);
-	border-radius: 18px;
-	background: var(--code);
-	font-family: $font-mono;
-	font-size: 0.78rem;
-	color: var(--fg);
-}
+  .editor {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.6rem;
+    border: 2px solid var(--line);
+    border-radius: 18px;
+    background: var(--code);
+    font-family: $font-mono;
+    font-size: 0.78rem;
+    color: var(--fg);
+  }
 
-.editor-bar {
-	display: flex;
-	align-items: center;
-	gap: 0.35rem;
-	padding-bottom: 0.4rem;
-	border-bottom: 1px solid var(--line);
+  .editor-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--line);
 
-	.dot {
-		width: 0.6rem;
-		height: 0.6rem;
-		border-radius: 50%;
-		background: var(--line);
-	}
+    .dot {
+      width: 0.6rem;
+      height: 0.6rem;
+      border-radius: 50%;
+      background: var(--line);
+    }
 
-	.file {
-		margin-left: 0.5rem;
-		color: var(--muted);
-	}
-}
+    .file {
+      margin-left: 0.5rem;
+      color: var(--muted);
+    }
+  }
 
-.editor-code {
-	display: flex;
-	gap: 0.7rem;
-	padding: 0.3rem 0.2rem;
-	white-space: pre;
+  .editor-code {
+    display: flex;
+    gap: 0.7rem;
+    padding: 0.3rem 0.2rem;
+    white-space: pre;
 
-	.gutter {
-		color: var(--muted);
-	}
-}
+    .gutter {
+      color: var(--muted);
+    }
+  }
 
-.squiggle {
-	text-decoration: underline wavy #e5484d;
-	text-decoration-skip-ink: none;
-	text-underline-offset: 3px;
-}
+  .squiggle {
+    text-decoration: underline wavy #e5484d;
+    text-decoration-skip-ink: none;
+    text-underline-offset: 3px;
+  }
 
-.tooltip {
-	padding: 0.5rem 0.6rem;
-	border: 2px solid var(--line);
-	border-radius: 12px;
-	background: var(--card);
-	line-height: 1.45;
+  .tooltip {
+    padding: 0.5rem 0.6rem;
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    line-height: 1.45;
 
-	p {
-		margin: 0;
-	}
+    p {
+      margin: 0;
+    }
 
-	.tooltip-title {
-		font-weight: 700;
-	}
+    .tooltip-title {
+      font-weight: 700;
+    }
 
-	.level {
-		color: #e5484d;
-	}
+    .level {
+      color: #e5484d;
+    }
 
-	.code-id {
-		color: var(--muted);
-		font-weight: 400;
-	}
-}
+    .code-id {
+      color: var(--muted);
+      font-weight: 400;
+    }
+  }
 </style>
