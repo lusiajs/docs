@@ -226,7 +226,7 @@ onAttach(() => {
 			</a>
 			<a
 				class="button github magnetic"
-				href="https://github.com/AzPepoze/lusia"
+				href="https://github.com/lusiajs/lusia"
 				target="_blank"
 				rel="noopener noreferrer"
 				onpointermove={pull}
