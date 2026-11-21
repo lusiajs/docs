@@ -6,6 +6,7 @@ import HomeBackground from "../components/HomeBackground.lusia";
 import ScrollProgress from "../components/ScrollProgress.lusia";
 import Sparks from "../components/Sparks.lusia";
 import { pageMotion } from "../motion/page.ts";
+import { heroSlow } from "../motion/hero-slow.ts";
 import { trackCursor } from "../motion/cursor.ts";
 import { spawnSparks, type Spark } from "../motion/sparks.ts";
 import { watchKonami } from "../motion/konami.ts";
@@ -13,6 +14,8 @@ import { watchKonami } from "../motion/konami.ts";
 const homeEl = variable<HTMLElement | null>(null);
 const sparks = variable<Spark[]>([]);
 const storm = variable(false);
+const slowAnchor = variable<HTMLElement | null>(null);
+const heroSlowMotion = heroSlow(slowAnchor);
 
 const STORM_MS = 6000;
 
@@ -50,6 +53,9 @@ onAttach(() => {
 	<div class="cursor-layer" aria-hidden="true">
 		<Sparks sparks={sparks} />
 	</div>
-	<Hero follow={homeEl} />
+	<div class="hero-slow-anchor" aria-hidden="true" bind-element={slowAnchor}></div>
+	<div class="hero-slow" animate={heroSlowMotion}>
+		<Hero follow={slowAnchor} />
+	</div>
 	<Features />
 </div>

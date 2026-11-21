@@ -20,6 +20,33 @@
 	margin: 0 auto;
 }
 
+// Marks where the slow-down zone ends. It sits outside the moving wrapper.
+// The page starts below the status strip, so the strip height is taken off.
+.hero-slow-anchor {
+	position: absolute;
+	top: calc(80vh - var(--strip-h, 0px));
+	left: 0;
+	width: 0;
+	height: 0;
+
+	@media (max-width: 559px) {
+		top: calc(50vh - var(--strip-h, 0px));
+	}
+}
+
+// The room the sinking hero moves into, so Features keeps its gap below the hero.
+.hero-slow {
+	padding-bottom: 48vh;
+
+	@media (max-width: 559px) {
+		padding-bottom: 30vh;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		padding-bottom: 0;
+	}
+}
+
 .scroll-hint {
 	position: absolute;
 	bottom: 1.5rem;
