@@ -1,0 +1,28 @@
+<script>
+import { props } from "lusiajs";
+
+const { code } = props({ code: "" });
+</script>
+
+<pre class="snippet"><code data-lang="lusia">{code}</code></pre>
+
+<style scoped>
+@use "../../styles/theme" as *;
+
+.snippet {
+	margin: auto 0 0;
+	padding: 0.75rem 1rem;
+	overflow: auto;
+	border: 2px solid var(--line);
+	border-radius: 18px;
+	background: var(--code);
+	font-family: $font-mono;
+	font-size: 0.78rem;
+	line-height: 1.5;
+}
+
+.snippet code {
+	font-family: inherit;
+	white-space: pre;
+}
+</style>
