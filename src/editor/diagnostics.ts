@@ -2,7 +2,7 @@ import { lintLusia, type LintIssue } from "@language/lint.ts";
 import type { PropDef } from "@language/props.ts";
 import { scriptSection } from "@language/sections.ts";
 import { errorPosition } from "../../../editors/shared/error-position.ts";
-import { LusiaError } from "../../../src/compiler/errors.ts";
+import { LusiaError } from "../../../src/compiler/errors/error.ts";
 import { formatWhere } from "../../../src/compiler/errors/where.ts";
 import { compileWithoutStyles } from "./compile-check.ts";
 import { typescriptLanguage } from "./lang/language.ts";

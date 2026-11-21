@@ -1,8 +1,8 @@
 import { splitImports } from "../../../src/compiler/parse/imports.ts";
 import { parse } from "../../../src/compiler/parse/sections.ts";
-import { scriptRange } from "../../../src/compiler/template/animate-keys.ts";
-import { generate } from "../../../src/compiler/template/codegen.ts";
-import { compileTemplate } from "../../../src/compiler/template/scanner.ts";
+import { scriptRange } from "../../../src/compiler/template/check/script-range.ts";
+import { generate } from "../../../src/compiler/template/codegen/generate.ts";
+import { compileTemplate } from "../../../src/compiler/template/scan/scanner.ts";
 
 /**
  * The compiler's script, markup and codegen steps, as `compile()` runs them.
