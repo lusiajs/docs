@@ -1,42 +1,42 @@
 <script>
-import { variable } from "lusiajs";
-import Chart from "./LazyChart.lusia";
+  import { variable } from "lusiajs";
+  import Chart from "./LazyChart.lusia";
 
-const shown = variable(false);
+  const shown = variable(false);
 
-function show() {
-	shown.value = true;
-}
+  function show() {
+    shown.value = true;
+  }
 
-function hide() {
-	shown.value = false;
-}
+  function hide() {
+    shown.value = false;
+  }
 </script>
 
 <div class="lazy-demo">
-	<div class="actions">
-		<button onclick={show} type="button">Show chart</button>
-		<button onclick={hide} type="button">Hide chart</button>
-	</div>
-	<IF {shown}>
-		<Chart />
-	</IF>
+  <div class="actions">
+    <button onclick={show} type="button">Show chart</button>
+    <button onclick={hide} type="button">Hide chart</button>
+  </div>
+  <IF {shown}>
+    <Chart />
+  </IF>
 </div>
 
 <style>
-@use "../../styles/demo" as demo;
+  @use "../../styles/demo" as demo;
 
-.lazy-demo {
-	display: grid;
-	gap: 0.75rem;
-	color: var(--fg);
+  .lazy-demo {
+    display: grid;
+    gap: 0.75rem;
+    color: var(--fg);
 
-	.actions {
-		@include demo.row;
-	}
+    .actions {
+      @include demo.row;
+    }
 
-	button {
-		@include demo.button;
-	}
-}
+    button {
+      @include demo.button;
+    }
+  }
 </style>

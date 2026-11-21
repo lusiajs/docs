@@ -1,109 +1,109 @@
 <script>
-import { WHEN, variable } from "lusiajs";
+  import { WHEN, variable } from "lusiajs";
 
-interface Task {
-	id: number;
-	title: string;
-}
+  interface Task {
+    id: number;
+    title: string;
+  }
 
-const tasks = variable<Task[]>([
-	{ id: 1, title: "Read the docs" },
-	{ id: 2, title: "Fix the build" },
-	{ id: 3, title: "Ship the release" },
-]);
-const animateSpace = variable(true);
-let nextId = 4;
+  const tasks = variable<Task[]>([
+    { id: 1, title: "Read the docs" },
+    { id: 2, title: "Fix the build" },
+    { id: 3, title: "Ship the release" },
+  ]);
+  const animateSpace = variable(true);
+  let nextId = 4;
 
-// A new row fades in at the top. The two lists differ only in animateSpace.
-const fadeIn = {
-	0: { opacity: 0 },
-	1: { opacity: 1 },
-};
+  // A new row fades in at the top. The two lists differ only in animateSpace.
+  const fadeIn = {
+    0: { opacity: 0 },
+    1: { opacity: 1 },
+  };
 
-function addTask() {
-	tasks.value = [{ id: nextId, title: `Task ${nextId}` }, ...tasks.value];
-	nextId++;
-}
+  function addTask() {
+    tasks.value = [{ id: nextId, title: `Task ${nextId}` }, ...tasks.value];
+    nextId++;
+  }
 
-function toggleAnimateSpace() {
-	animateSpace.value = !animateSpace.value;
-}
+  function toggleAnimateSpace() {
+    animateSpace.value = !animateSpace.value;
+  }
 </script>
 
 <div class="attach-list">
-	<div class="actions">
-		<button type="button" onclick={addTask}>Add task</button>
-		<button type="button" onclick={toggleAnimateSpace}>
-			Animate space: {animateSpace.value ? "on" : "off"}
-		</button>
-	</div>
-	<IF {animateSpace.value}>
-		<ul class="list">
-			<EACH {tasks} as={task} key={task.id}>
-				<li
-					class="row"
-					animate={{
+  <div class="actions">
+    <button type="button" onclick={addTask}>Add task</button>
+    <button type="button" onclick={toggleAnimateSpace}>
+      Animate space: {animateSpace.value ? "on" : "off"}
+    </button>
+  </div>
+  <IF {animateSpace.value}>
+    <ul class="list">
+      <EACH {tasks} as={task} key={task.id}>
+        <li
+          class="row"
+          animate={{
 						style: fadeIn,
 						when: WHEN.ATTACH,
 						duration: 400,
 						more: { animateSpace: true },
 					}}
-				>
-					<span>{task.title}</span>
-				</li>
-			</EACH>
-		</ul>
-	</IF>
-	<ELSE>
-		<ul class="list">
-			<EACH {tasks} as={task} key={task.id}>
-				<li
-					class="row"
-					animate={{
+        >
+          <span>{task.title}</span>
+        </li>
+      </EACH>
+    </ul>
+  </IF>
+  <ELSE>
+    <ul class="list">
+      <EACH {tasks} as={task} key={task.id}>
+        <li
+          class="row"
+          animate={{
 						style: fadeIn,
 						when: WHEN.ATTACH,
 						duration: 400,
 						more: { animateSpace: false },
 					}}
-				>
-					<span>{task.title}</span>
-				</li>
-			</EACH>
-		</ul>
-	</ELSE>
+        >
+          <span>{task.title}</span>
+        </li>
+      </EACH>
+    </ul>
+  </ELSE>
 </div>
 
 <style>
-@use "../../styles/demo" as demo;
+  @use "../../styles/demo" as demo;
 
-.attach-list {
-	display: grid;
-	gap: 0.6rem;
-	color: var(--fg);
+  .attach-list {
+    display: grid;
+    gap: 0.6rem;
+    color: var(--fg);
 
-	.actions {
-		@include demo.row;
-	}
+    .actions {
+      @include demo.row;
+    }
 
-	button {
-		@include demo.button;
-	}
+    button {
+      @include demo.button;
+    }
 
-	.list {
-		display: flex;
-		flex-direction: column;
-		gap: 0.4rem;
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
 
-	.row {
-		display: flex;
-		align-items: center;
-		padding: 0.4rem 0.6rem;
-		border-radius: 10px;
-		background: var(--lavender-soft);
-	}
-}
+    .row {
+      display: flex;
+      align-items: center;
+      padding: 0.4rem 0.6rem;
+      border-radius: 10px;
+      background: var(--lavender-soft);
+    }
+  }
 </style>

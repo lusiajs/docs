@@ -20,21 +20,21 @@ export const guidePages: ApiEntry[] = [
 			"Use another component by importing its file and writing its tag.",
 		],
 		example: `<script>
-import { variable } from "lusiajs";
+  import { variable } from "lusiajs";
 
-const count = variable(0);
+  const count = variable(0);
 
-function addOne() {
-	count.value++;
-}
+  function addOne() {
+    count.value++;
+  }
 </script>
 
 <button onclick={addOne}>Clicked {count} times</button>
 
 <style>
-button {
-	padding: 0.5rem 1rem;
-}
+  button {
+    padding: 0.5rem 1rem;
+  }
 </style>`,
 	},
 	{
@@ -63,14 +63,14 @@ button {
 			"detach() waits for the DETACH animation. The nodes are removed after it.",
 		],
 		example: `<script>
-import { onAttach, onDetach } from "lusiajs";
+  import { onAttach, onDetach } from "lusiajs";
 
-onAttach((root) => {
-	console.log("placed in", root);
-	return () => console.log("cleanup, before the nodes leave");
-});
+  onAttach((root) => {
+    console.log("placed in", root);
+    return () => console.log("cleanup, before the nodes leave");
+  });
 
-onDetach(() => console.log("the component is gone"));
+  onDetach(() => console.log("the component is gone"));
 </script>`,
 	},
 	{

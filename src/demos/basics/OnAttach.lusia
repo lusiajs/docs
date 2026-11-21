@@ -1,43 +1,43 @@
 <script>
-import { onAttach, variable } from "lusiajs";
+  import { onAttach, variable } from "lusiajs";
 
-const keys = variable(0);
+  const keys = variable(0);
 
-// onAttach runs once when the demo mounts. A function it returns runs on detach.
-onAttach((root) => {
-	function countKey() {
-		keys.value++;
-	}
+  // onAttach runs once when the demo mounts. A function it returns runs on detach.
+  onAttach((root) => {
+    function countKey() {
+      keys.value++;
+    }
 
-	root.addEventListener("keydown", countKey);
-	return function cleanup() {
-		root.removeEventListener("keydown", countKey);
-	};
-});
+    root.addEventListener("keydown", countKey);
+    return function cleanup() {
+      root.removeEventListener("keydown", countKey);
+    };
+  });
 </script>
 
 <div class="on-attach-demo">
-	<input type="text" placeholder="Press keys in this box" />
-	<p>Keys pressed inside this demo: {keys}</p>
+  <input type="text" placeholder="Press keys in this box" />
+  <p>Keys pressed inside this demo: {keys}</p>
 </div>
 
 <style>
-.on-attach-demo {
-	display: grid;
-	gap: 0.5rem;
-	color: var(--fg);
+  .on-attach-demo {
+    display: grid;
+    gap: 0.5rem;
+    color: var(--fg);
 
-	p {
-		margin: 0;
-	}
+    p {
+      margin: 0;
+    }
 
-	input {
-		padding: 0.5rem 0.75rem;
-		border: 1px solid var(--line);
-		border-radius: 8px;
-		background: var(--bg);
-		color: var(--fg);
-		font: inherit;
-	}
-}
+    input {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--fg);
+      font: inherit;
+    }
+  }
 </style>

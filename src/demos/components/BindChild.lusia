@@ -1,34 +1,34 @@
 <script>
-import { variable } from "lusiajs";
-import Field from "./Field.lusia";
+  import { variable } from "lusiajs";
+  import Field from "./Field.lusia";
 
-const name = variable("Ada");
+  const name = variable("Ada");
 
-function reset() {
-	name.value = "Ada";
-}
+  function reset() {
+    name.value = "Ada";
+  }
 </script>
 
 <div class="bind-child-demo">
-	<Field label="Name" bind-value={name} />
-	<p>The parent reads: {name}</p>
-	<button onclick={reset} type="button">Reset</button>
+  <Field label="Name" bind-value={name} />
+  <p>The parent reads: {name}</p>
+  <button onclick={reset} type="button">Reset</button>
 </div>
 
 <style>
-@use "../../styles/demo" as demo;
+  @use "../../styles/demo" as demo;
 
-.bind-child-demo {
-	display: grid;
-	gap: 0.5rem;
+  .bind-child-demo {
+    display: grid;
+    gap: 0.5rem;
 
-	p {
-		margin: 0;
-		color: var(--fg);
-	}
+    p {
+      margin: 0;
+      color: var(--fg);
+    }
 
-	button {
-		@include demo.button;
-	}
-}
+    button {
+      @include demo.button;
+    }
+  }
 </style>
