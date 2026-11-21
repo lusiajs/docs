@@ -1,6 +1,0 @@
-{
-  "$schema": "../config.schema.json",
-  "outdir": "dist",
-  "minify": true,
-  "routes": ["/guide", "/reference", "/playground", "/errors"]
-}
