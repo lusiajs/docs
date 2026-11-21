@@ -47,7 +47,6 @@ const panelMotion = [
 		style: panelOut,
 		when: WHEN.DETACH,
 		duration: 160,
-		more: { keepSpace: true },
 	},
 	{ when: WHEN.RESIZE, duration: 260 },
 ];

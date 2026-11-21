@@ -730,7 +730,7 @@ export const catalog: Record<string, CatalogEntry> = {
 			{
 				id: "animate-leave-space",
 				title: "Leave closes the space",
-				caption: "A removed row keeps its size while it fades, and the gap between rows closes with it, so the rows below slide up smoothly. Turn keepSpace on to keep the gap until the row is gone.",
+				caption: "A removed row fades out in place. By default the gap closes at once, so the rows below jump up. Turn Animate space on (more: { animateSpace: true }) to slide them up as the row fades.",
 				components: [LeaveList],
 				sources: [
 					{
@@ -742,7 +742,7 @@ export const catalog: Record<string, CatalogEntry> = {
 			{
 				id: "animate-leave-spin",
 				title: "Show or hide the box",
-				caption: "The box spins away while the space it held closes. Its size and rotation stay whole until it is gone.",
+				caption: "The box spins away in place. Its size and rotation stay whole until it is gone.",
 				components: [SpinAway],
 				sources: [
 					{

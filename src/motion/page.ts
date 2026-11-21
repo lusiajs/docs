@@ -25,6 +25,5 @@ export const pageOut = {
 	style: pageOutKeys,
 	when: WHEN.DETACH,
 	duration: 250,
-	more: { keepSpace: true },
 };
 export const pageMotion = [pageIn, pageOut];

@@ -23,6 +23,5 @@ export const sidebarOut = {
 	style: sidebarOutKeys,
 	when: WHEN.DETACH,
 	duration: 250,
-	more: { keepSpace: true },
 };
 export const sidebarMotion = [sidebarIn, sidebarOut];

@@ -12,10 +12,10 @@ const tasks = variable<Task[]>([
 	{ id: 3, title: "Ship the release" },
 	{ id: 4, title: "Plan the next sprint" },
 ]);
-const keepSpace = variable(false);
+const animateSpace = variable(false);
 let nextId = 5;
 
-// A removed row fades out. The two lists below differ only in keepSpace.
+// A removed row fades out. The two lists below differ only in animateSpace.
 const fadeOut = {
 	0: { opacity: 1 },
 	1: { opacity: 0 },
@@ -30,19 +30,19 @@ function removeTask(task: Task) {
 	tasks.value = tasks.value.filter((item) => item.id !== task.id);
 }
 
-function toggleKeepSpace() {
-	keepSpace.value = !keepSpace.value;
+function toggleAnimateSpace() {
+	animateSpace.value = !animateSpace.value;
 }
 </script>
 
 <div class="leave-list">
 	<div class="actions">
 		<button type="button" onclick={addTask}>Add task</button>
-		<button type="button" onclick={toggleKeepSpace}>
-			Keep space: {keepSpace.value ? "on" : "off"}
+		<button type="button" onclick={toggleAnimateSpace}>
+			Animate space: {animateSpace.value ? "on" : "off"}
 		</button>
 	</div>
-	<IF {keepSpace.value}>
+	<IF {animateSpace.value}>
 		<ul class="list">
 			<EACH {tasks} as={task} key={task.id}>
 				<li
@@ -51,7 +51,7 @@ function toggleKeepSpace() {
             style: fadeOut,
             when: WHEN.DETACH,
             duration: 400,
-            more: { keepSpace: true },
+            more: { animateSpace: true },
           }}
 				>
 					<span>{task.title}</span>
