@@ -25,9 +25,9 @@
 <div
   class="lifecycle-box"
   animate={[
-		{ style: popIn, duration: 400 },
-		{ style: shrinkOut, when: WHEN.DETACH, duration: 400 },
-	]}
+    { style: popIn, duration: 400 },
+    { style: shrinkOut, when: WHEN.DETACH, duration: 400 },
+  ]}
 >
   <p>Mounted box</p>
 </div>

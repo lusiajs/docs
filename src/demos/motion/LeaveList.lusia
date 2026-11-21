@@ -48,11 +48,11 @@
         <li
           class="row"
           animate={{
-						style: fadeOut,
-						when: WHEN.DETACH,
-						duration: 400,
-						more: { animateSpace: true },
-					}}
+            style: fadeOut,
+            when: WHEN.DETACH,
+            duration: 400,
+            more: { animateSpace: true },
+          }}
         >
           <span>{task.title}</span>
           <button type="button" onclick={() => removeTask(task)}>
@@ -120,3 +120,4 @@
     }
   }
 </style>
+</content>

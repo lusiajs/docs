@@ -43,11 +43,11 @@
         <li
           class="row"
           animate={{
-						style: fadeIn,
-						when: WHEN.ATTACH,
-						duration: 400,
-						more: { animateSpace: true },
-					}}
+            style: fadeIn,
+            when: WHEN.ATTACH,
+            duration: 400,
+            more: { animateSpace: true },
+          }}
         >
           <span>{task.title}</span>
         </li>
@@ -60,11 +60,11 @@
         <li
           class="row"
           animate={{
-						style: fadeIn,
-						when: WHEN.ATTACH,
-						duration: 400,
-						more: { animateSpace: false },
-					}}
+            style: fadeIn,
+            when: WHEN.ATTACH,
+            duration: 400,
+            more: { animateSpace: false },
+          }}
         >
           <span>{task.title}</span>
         </li>
@@ -107,3 +107,4 @@
     }
   }
 </style>
+</content>
