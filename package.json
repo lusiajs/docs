@@ -2,6 +2,13 @@
   "name": "lusia-docs",
   "private": true,
   "type": "module",
+  "scripts": {
+    "dev": "bun scripts/playground-runtime.ts && lusia dev .",
+    "build": "bun scripts/playground-runtime.ts && lusia build .",
+    "test": "bun test --parallel=6",
+    "typecheck": "tsc --noEmit",
+    "check": "bun run typecheck && bun run test && bun run build"
+  },
   "dependencies": {
     "lusia": "link:..",
     "@codemirror/autocomplete": "6.20.4",

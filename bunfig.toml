@@ -1,0 +1,6 @@
+[test]
+preload = ["../test/setup.ts"]
+
+[fmt]
+printWidth = 100
+semi = true
