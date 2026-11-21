@@ -187,7 +187,7 @@ suite("Reference page after the lazy mount", () => {
           },
         });
       });
-      await page.goto(`${site!.base}/reference`);
+      await page.goto(`${site!.base}/reference#attach`);
       await waitForCards(page);
       await page.locator("#attach .ref-anchor").click();
       await page.waitForFunction(
@@ -207,56 +207,40 @@ suite("Reference page after the lazy mount", () => {
   );
 
   test(
-    "scrolls a deep link to its lazy card and marks it in the sidebar",
+    "shows only the deep-linked card in detail view",
     async () => {
       const page = await open("/reference#variable");
       await waitForCards(page);
       await page.waitForTimeout(500);
       const result = await page.evaluate(() => {
         const target = document.getElementById("variable");
-        const link = document.querySelector<HTMLAnchorElement>(
-          '#sidebar a[href="/reference#variable"]',
-        );
         return {
           exists: target !== null,
           top: target?.getBoundingClientRect().top ?? -1,
           hash: location.hash,
-          current: link?.getAttribute("aria-current") ?? null,
         };
       });
       expect(result.exists).toBe(true);
       expect(result.top).toBeGreaterThanOrEqual(0);
       expect(result.top).toBeLessThan(200);
       expect(result.hash).toBe("#variable");
-      expect(result.current).toBe("true");
+      expect(await page.locator("[data-ref-grid]").isVisible()).toBe(false);
       await page.close();
     },
     TEST_TIMEOUT_MS,
   );
 
   test(
-    "marks the sidebar link of a card below the top after scrolling",
+    "opens an entry from its tile and returns with Back",
     async () => {
       const page = await openReference();
-      await page.evaluate(() => {
-        const target = document.getElementById("variable")!;
-        window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - 120);
-      });
-      await page.waitForFunction(
-        () =>
-          document
-            .querySelector('#sidebar a[href="/reference#variable"]')
-            ?.getAttribute("aria-current") === "true",
-        undefined,
-        { timeout: 5_000 },
-      );
-      const current = await page.evaluate(
-        () =>
-          document
-            .querySelector('#sidebar a[href="/reference#variable"]')
-            ?.getAttribute("aria-current") ?? null,
-      );
-      expect(current).toBe("true");
+      await page.locator('a[data-ref-entry="variable"]').click();
+      await page.waitForFunction(() => location.hash === "#variable");
+      expect(await page.locator("[data-ref-grid]").isVisible()).toBe(false);
+      expect(await page.locator("#variable").isVisible()).toBe(true);
+      await page.locator(".ref-back").click();
+      await page.locator("[data-ref-grid]").waitFor({ state: "visible" });
+      expect(await page.locator('a[data-ref-entry="variable"]').isVisible()).toBe(true);
       await page.close();
     },
     TEST_TIMEOUT_MS,
