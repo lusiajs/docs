@@ -6,7 +6,6 @@ import { guidePath, pageLink, referencePath } from "../page-link.ts";
 import {
 	flattenMembers,
 	languageOf,
-	searchText,
 	wrapSignature,
 } from "../reference-model.ts";
 import CodeCopy from "./CodeCopy.lusia";
@@ -22,26 +21,25 @@ const emptyEntry: ApiEntry = {
 	bullets: [],
 	example: "",
 };
-const { entry, parts } = props({ entry: emptyEntry, parts: [] as Part[][] });
+const { entry, parts, previous, next } = props({
+	entry: emptyEntry,
+	parts: [] as Part[][],
+	previous: undefined as ApiEntry | undefined,
+	next: undefined as ApiEntry | undefined,
+});
 
 // The entry never changes after mount, so everything derived from it is computed once.
 const shown = entry.peek();
 const shownParts = parts.peek();
+const shownPrevious = previous.peek();
+const shownNext = next.peek();
 const members = flattenMembers(shown.members);
 const language = languageOf(shown);
 const signature = wrapSignature(shown.signature);
-const search = searchText(shown);
 const anchor = location.origin + pageLink(referencePath, shown.id);
 </script>
 
-<article
-	class="ref-card"
-	id={shown.id}
-	data-ref-entry
-	data-group={shown.kind}
-	data-kind={shown.kind}
-	data-search={search}
->
+<article class="ref-card" id={shown.id} data-ref-card>
 	<header class="ref-head">
 		<h3 class="ref-name"><code>{shown.name}</code></h3>
 		<span class="chip" data-kind={shown.kind}>{shown.kind}</span>
@@ -111,6 +109,19 @@ const anchor = location.origin + pageLink(referencePath, shown.id);
 			className="ref-code"
 		/>
 	</details>
+
+	<nav class="ref-nav">
+		<IF {shownPrevious}>
+			<a class="ref-nav-prev" href={pageLink(referencePath, shownPrevious.id)}
+				>← {shownPrevious.name}</a
+			>
+		</IF>
+		<IF {shownNext}>
+			<a class="ref-nav-next" href={pageLink(referencePath, shownNext.id)}
+				>{shownNext.name} →</a
+			>
+		</IF>
+	</nav>
 
 	<footer class="ref-foot">
 		<a class="ref-guide" href={pageLink(guidePath, shown.id)}>

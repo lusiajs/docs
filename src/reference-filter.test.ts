@@ -204,9 +204,8 @@ function appendCard(root: HTMLElement, spec: CardSpec): void {
 }
 
 function cardElement(spec: CardSpec): HTMLElement {
-	const article = document.createElement("article");
-	article.id = spec.id;
-	article.dataset.refEntry = "";
+	const article = document.createElement("a");
+	article.dataset.refEntry = spec.id;
 	article.dataset.kind = spec.kind;
 	article.dataset.group = spec.group;
 	article.dataset.search = spec.search;
@@ -230,7 +229,7 @@ function empty(root: HTMLElement): HTMLElement {
 }
 
 function card(root: HTMLElement, id: string): HTMLElement {
-	return root.querySelector<HTMLElement>(`[data-ref-entry]#${id}`)!;
+	return root.querySelector<HTMLElement>(`[data-ref-entry="${id}"]`)!;
 }
 
 function link(root: HTMLElement, id: string): HTMLElement {

@@ -1,0 +1,36 @@
+<script>
+import { props } from "lusia";
+import type { ApiEntry } from "../../../reference/api.ts";
+import { searchText } from "../reference-model.ts";
+
+const emptyEntry: ApiEntry = {
+	id: "",
+	name: "",
+	kind: "value",
+	group: "basics",
+	signature: "",
+	summary: "",
+	bullets: [],
+	example: "",
+};
+const { entry, href } = props({ entry: emptyEntry, href: "" });
+
+// The entry never changes after mount, so everything derived from it is computed once.
+const shown = entry.peek();
+const search = searchText(shown);
+</script>
+
+<a
+	class="ref-tile"
+	href={href.peek()}
+	data-ref-entry={shown.id}
+	data-kind={shown.kind}
+	data-group={shown.kind}
+	data-search={search}
+>
+	<span class="ref-tile-head">
+		<code class="ref-tile-name">{shown.name}</code>
+		<span class="chip" data-kind={shown.kind}>{shown.kind}</span>
+	</span>
+	<span class="ref-tile-summary">{shown.summary}</span>
+</a>

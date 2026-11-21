@@ -9,6 +9,7 @@ import {
 	kindsOf,
 	matchesFilter,
 	searchText,
+	withNeighbors,
 	wrapSignature,
 } from "./reference-model.ts";
 
@@ -132,6 +133,40 @@ describe("kindSections", () => {
 				[...names].sort((a, b) => a.localeCompare(b)),
 			);
 		}
+	});
+});
+
+describe("withNeighbors", () => {
+	test("gives the first entry of a kind no previous and the last no next", () => {
+		const rows = withNeighbors([
+			entry("a"),
+			entry("b"),
+			entry("c"),
+		]);
+		expect(rows[0]!.previous).toBeUndefined();
+		expect(rows[0]!.next?.id).toBe("b");
+		expect(rows[1]!.previous?.id).toBe("a");
+		expect(rows[1]!.next?.id).toBe("c");
+		expect(rows[2]!.previous?.id).toBe("b");
+		expect(rows[2]!.next).toBeUndefined();
+	});
+
+	test("gives a kind of one entry neither neighbour", () => {
+		const rows = withNeighbors([entry("solo", { kind: "type" })]);
+		expect(rows[0]!.previous).toBeUndefined();
+		expect(rows[0]!.next).toBeUndefined();
+	});
+
+	test("never links entries across kinds", () => {
+		const rows = withNeighbors([
+			entry("f1"),
+			entry("t1", { kind: "type" }),
+			entry("f2"),
+		]);
+		expect(rows[0]!.next?.id).toBe("f2");
+		expect(rows[2]!.previous?.id).toBe("f1");
+		expect(rows[1]!.previous).toBeUndefined();
+		expect(rows[1]!.next).toBeUndefined();
 	});
 });
 

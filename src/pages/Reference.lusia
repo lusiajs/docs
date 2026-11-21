@@ -3,22 +3,28 @@ import { api } from "../../../reference/api.ts";
 import { entryIcon } from "../catalog.ts";
 import RefCard from "../components/RefCard.lusia";
 import RefIndex from "../components/RefIndex.lusia";
+import RefTile from "../components/RefTile.lusia";
+import { pageLink, referencePath } from "../page-link.ts";
 import { navLabel } from "../nav-label.ts";
 import { buildKeywordIndex, tokenize } from "../keywords.ts";
 import { pageMotion } from "../motion/page.ts";
 import { sidebarMotion } from "../motion/sidebar.ts";
-import { kindSections, kindsOf } from "../reference-model.ts";
+import {
+	kindSections,
+	kindsOf,
+	withNeighbors,
+} from "../reference-model.ts";
 
 const keywordIndex = buildKeywordIndex(api, []);
-const sections = kindSections(api).map((section) => ({
-	...section,
-	cards: section.entries.map((entry) => ({
-		entry,
-		parts: entry.bullets.map((text) =>
-			tokenize(text, keywordIndex, entry.id),
+const sections = kindSections(api);
+const cards = withNeighbors(sections.flatMap((section) => section.entries)).map(
+	(row) => ({
+		...row,
+		parts: row.entry.bullets.map((text) =>
+			tokenize(text, keywordIndex, row.entry.id),
 		),
-	})),
-}));
+	}),
+);
 const indexGroups = sections.map((section) => ({
 	group: section.kind,
 	label: section.label,
@@ -45,63 +51,84 @@ const kinds = kindsOf(api);
 	</aside>
 	<div class="scrim" id="scrim" hidden></div>
 	<main class="content" animate={pageMotion}>
-		<h1 class="ref-page-title">Reference</h1>
-		<p class="ref-lead">
-			Every function, type, markup, style and value, with signatures and
-			examples.
-		</p>
-		<div class="ref-tools">
-			<label class="ref-search">
-				<span class="material-symbols-rounded" aria-hidden="true"
-					>search</span
-				>
-				<input
-					id="ref-filter"
-					type="search"
-					placeholder="Filter the reference"
-					aria-label="Filter the reference"
-					autocomplete="off"
-				/>
-			</label>
-			<div class="ref-kinds" role="group" aria-label="Filter by kind">
-				<EACH {kinds} as={kind}>
-					<button
-						class="chip kind-chip"
-						type="button"
-						data-kind={kind}
-						data-ref-kind={kind}
-						aria-pressed="false"
+		<div data-ref-grid>
+			<h1 class="ref-page-title">Reference</h1>
+			<p class="ref-lead">
+				Every function, type, markup, style and value, with signatures and
+				examples.
+			</p>
+			<div class="ref-tools">
+				<label class="ref-search">
+					<span class="material-symbols-rounded" aria-hidden="true"
+						>search</span
 					>
-						{kind}
-					</button>
-				</EACH>
+					<input
+						id="ref-filter"
+						type="search"
+						placeholder="Filter the reference"
+						aria-label="Filter the reference"
+						autocomplete="off"
+					/>
+				</label>
+				<div class="ref-kinds" role="group" aria-label="Filter by kind">
+					<EACH {kinds} as={kind}>
+						<button
+							class="chip kind-chip"
+							type="button"
+							data-kind={kind}
+							data-ref-kind={kind}
+							aria-pressed="false"
+						>
+							{kind}
+						</button>
+					</EACH>
+				</div>
+				<p class="ref-count" data-ref-count></p>
 			</div>
-			<p class="ref-count" data-ref-count></p>
+
+			<div class="ref-empty" data-ref-empty hidden>
+				<p>Nothing matches your filter.</p>
+				<button class="ref-clear" type="button" data-ref-clear>
+					Clear filters
+				</button>
+			</div>
+
+			<EACH {sections} as={section}>
+				<section
+					class="ref-group"
+					data-ref-group={section.kind}
+					style={"--group: " + section.color}
+				>
+					<h2 class="ref-group-title">
+						{section.label}
+						<span class="ref-group-count"
+							>{section.entries.length}</span
+						>
+					</h2>
+					<div class="ref-tile-grid">
+						<EACH {section.entries} as={entry}>
+							<RefTile entry={entry} href={pageLink(referencePath, entry.id)} />
+						</EACH>
+					</div>
+				</section>
+			</EACH>
 		</div>
 
-		<div class="ref-empty" data-ref-empty hidden>
-			<p>Nothing matches your filter.</p>
-			<button class="ref-clear" type="button" data-ref-clear>
-				Clear filters
-			</button>
+		<div data-ref-details>
+			<a class="ref-back" href={referencePath} data-ref-back hidden>
+				<span class="material-symbols-rounded" aria-hidden="true"
+					>arrow_back</span
+				>
+				Back to Reference
+			</a>
+			<EACH {cards} as={card}>
+				<RefCard
+					entry={card.entry}
+					parts={card.parts}
+					previous={card.previous}
+					next={card.next}
+				/>
+			</EACH>
 		</div>
-
-		<EACH {sections} as={section}>
-			<section
-				class="ref-group"
-				data-ref-group={section.kind}
-				style={"--group: " + section.color}
-			>
-				<h2 class="ref-group-title">
-					{section.label}
-					<span class="ref-group-count"
-						>{section.entries.length}</span
-					>
-				</h2>
-				<EACH {section.cards} as={card}>
-					<RefCard entry={card.entry} parts={card.parts} />
-				</EACH>
-			</section>
-		</EACH>
 	</main>
 </div>

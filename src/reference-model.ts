@@ -57,6 +57,31 @@ export function kindSections(entries: ApiEntry[]): KindSection[] {
 	})).filter((section) => section.entries.length > 0);
 }
 
+export interface EntryWithNeighbors {
+	entry: ApiEntry;
+	previous?: ApiEntry;
+	next?: ApiEntry;
+}
+
+// Each entry's neighbours inside its own kind, so the detail view walks one kind at a time.
+export function withNeighbors(entries: ApiEntry[]): EntryWithNeighbors[] {
+	const byKind = new Map<ApiKind, ApiEntry[]>();
+	for (const entry of entries) {
+		const list = byKind.get(entry.kind) ?? [];
+		list.push(entry);
+		byKind.set(entry.kind, list);
+	}
+	return entries.map((entry) => {
+		const list = byKind.get(entry.kind)!;
+		const index = list.indexOf(entry);
+		return {
+			entry,
+			previous: list[index - 1],
+			next: list[index + 1],
+		};
+	});
+}
+
 // "53 entries" when all show, "1 of 53 entries" when a filter hides some.
 export function countLabel(shown: number, total: number): string {
 	if (shown === total)

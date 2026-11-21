@@ -1,7 +1,6 @@
 import { countLabel, matchesFilter } from "./reference-model.ts";
-import { refreshScrollSpy } from "./scroll-spy.ts";
 
-// Filters the Reference cards and the index by text and kind.
+// Filters the Reference tiles and the index by text and kind.
 export function initReferenceFilter(
 	root: HTMLElement,
 	signal: AbortSignal,
@@ -16,11 +15,11 @@ export function initReferenceFilter(
 	let frame = 0;
 
 	function apply(): void {
-		// The cards load after the page, so re-read them on every run. Before they arrive, leave the page as it is.
-		const cards = [
+		// The tiles load after the page, so re-read them on every run. Before they arrive, leave the page as it is.
+		const tiles = [
 			...root.querySelectorAll<HTMLElement>("[data-ref-entry]"),
 		];
-		if (cards.length === 0) return;
+		if (tiles.length === 0) return;
 		const indexLinks = new Map(
 			[...root.querySelectorAll<HTMLElement>("[data-ref-link]")].map(
 				(link) => [link.dataset.refLink!, link],
@@ -34,16 +33,16 @@ export function initReferenceFilter(
 		];
 		const shownByGroup = new Map<string, boolean>();
 		let shownTotal = 0;
-		for (const card of cards) {
+		for (const tile of tiles) {
 			const shown = matchesFilter(
-				{ kind: card.dataset.kind!, search: card.dataset.search! },
+				{ kind: tile.dataset.kind!, search: tile.dataset.search! },
 				filter.value,
 				picked,
 			);
-			card.hidden = !shown;
-			const link = indexLinks.get(card.id);
+			tile.hidden = !shown;
+			const link = indexLinks.get(tile.dataset.refEntry!);
 			if (link) link.hidden = !shown;
-			const group = card.dataset.group!;
+			const group = tile.dataset.group!;
 			shownByGroup.set(
 				group,
 				(shownByGroup.get(group) ?? false) || shown,
@@ -55,8 +54,7 @@ export function initReferenceFilter(
 		for (const group of indexGroups)
 			group.hidden = !shownByGroup.get(group.dataset.indexGroup!);
 		empty.hidden = shownTotal > 0;
-		if (count) count.textContent = countLabel(shownTotal, cards.length);
-		refreshScrollSpy();
+		if (count) count.textContent = countLabel(shownTotal, tiles.length);
 	}
 
 	function scheduleApply(): void {
@@ -67,11 +65,11 @@ export function initReferenceFilter(
 		});
 	}
 
-	// The cards are lazy components: they mount after the page and stay for good. Watch for that one arrival.
+	// The tiles arrive with the page. Watch for them, in case they mount late.
 	const observer = new MutationObserver((mutations) => {
 		for (const mutation of mutations) {
 			for (const node of mutation.addedNodes) {
-				if (holdsCard(node)) {
+				if (holdsTile(node)) {
 					scheduleApply();
 					return;
 				}
@@ -114,8 +112,8 @@ export function initReferenceFilter(
 	apply();
 }
 
-// A node that is a card, or that brings cards in as its children.
-function holdsCard(node: Node): boolean {
+// A node that is a tile, or that brings tiles in as its children.
+function holdsTile(node: Node): boolean {
 	if (!(node instanceof Element)) return false;
 	return (
 		node.matches("[data-ref-entry]") ||

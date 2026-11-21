@@ -68,6 +68,7 @@ async function show(path: string, hash: string, push: boolean): Promise<void> {
 	if (push && url !== location.pathname + location.hash)
 		history.pushState(null, "", url);
 	if (current?.spec === spec) {
+		window.dispatchEvent(new Event("locationchange"));
 		scrollTo(hash, current.controller.signal);
 		return;
 	}
@@ -83,6 +84,7 @@ async function show(path: string, hash: string, push: boolean): Promise<void> {
 	const instance = attach(component, outlet);
 	current = { spec, instance, controller };
 	spec.mount(outlet, controller.signal);
+	window.dispatchEvent(new Event("locationchange"));
 	document.title = spec.title;
 	document.documentElement.dataset.route = spec.route;
 	markActiveLink(spec.path);
