@@ -8,6 +8,14 @@
 	}
 }
 
+[data-ref-grid][hidden],
+[data-ref-details][hidden],
+.ref-back[hidden],
+.ref-card[hidden],
+.ref-empty[hidden] {
+	display: none !important;
+}
+
 .ref-page-title {
 	margin: 0 0 1.25rem;
 }
@@ -41,9 +49,9 @@
 	gap: 0.5rem;
 	min-width: 0;
 	padding: 0.45rem 0.9rem;
-	border: 2px solid var(--line);
+	border: 1px solid var(--line);
 	border-radius: 999px;
-	background: var(--card);
+	background: transparent;
 	color: var(--muted);
 
 	&:focus-within {
@@ -67,14 +75,16 @@
 	gap: 0.4rem;
 }
 
-// A kind toggle. A pressed one gets an outline, the others stay plain.
+// A kind toggle. A pressed one gets a darker outline and bold text.
 .kind-chip {
-	border: 2px solid transparent;
+	border: 1px solid var(--line);
+	background: transparent;
 	font-size: 0.8rem;
 	cursor: pointer;
 
 	&[aria-pressed="true"] {
 		border-color: var(--fg);
+		font-weight: 700;
 	}
 }
 
@@ -107,15 +117,93 @@
 	font-variant-numeric: tabular-nums;
 }
 
+.ref-tile-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+	gap: 0.75rem;
+}
+
+a.ref-tile {
+	display: block;
+	min-width: 0;
+	padding: 1rem 1.1rem;
+	border: 1px solid var(--line);
+	border-radius: 14px;
+	background: transparent;
+	box-shadow: none;
+	color: var(--fg);
+	text-decoration: none;
+
+	&:hover,
+	&:focus-visible {
+		border-color: var(--group);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+	}
+
+	&:hover .ref-tile-name,
+	&:focus-visible .ref-tile-name {
+		text-decoration: underline;
+	}
+}
+
+.ref-tile-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.ref-tile-name {
+	min-width: 0;
+	font-size: 1rem;
+	font-weight: 700;
+	font-family: $font-mono;
+	overflow-wrap: anywhere;
+}
+
+.ref-tile .chip {
+	font-size: 0.75rem;
+}
+
+.ref-tile-summary {
+	display: -webkit-box;
+	margin: 0.4rem 0 0;
+	overflow: hidden;
+	color: var(--muted);
+	line-height: 1.5;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
+.ref-back {
+	position: sticky;
+	top: calc($topbar-height + 0.5rem);
+	z-index: 10;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
+	align-self: flex-start;
+	padding: 0.5rem 0;
+	background: var(--bg);
+	color: var(--link);
+	font-size: 0.95rem;
+	font-weight: 700;
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
 .ref-card {
 	scroll-margin-top: 5.5rem;
 	min-width: 0;
-	margin-bottom: 1.25rem;
-	padding: 1.25rem 1.4rem 1rem;
-	border: 2px solid var(--line);
-	border-radius: 20px;
-	background: var(--card);
-	box-shadow: var(--shadow);
+	margin: 0;
+	padding: 0;
 }
 
 .ref-head {
@@ -129,7 +217,9 @@
 	flex: 1 1 auto;
 	min-width: 0;
 	margin: 0;
-	font-size: 1.15rem;
+	font-family: $font-display;
+	font-size: 2rem;
+	font-weight: 700;
 	overflow-wrap: anywhere;
 
 	code {
@@ -137,6 +227,10 @@
 		background: none;
 		font-family: $font-mono;
 	}
+}
+
+.ref-card .ref-name {
+	font-size: 2rem;
 }
 
 .ref-head .chip {
@@ -149,12 +243,25 @@
 }
 
 .ref-summary {
+	max-width: 46rem;
 	margin: 0.6rem 0 0;
+	color: var(--muted);
+	font-size: 1.1rem;
 	line-height: 1.6;
 }
 
+// Sections inside a card are separated by a rule, not a box.
+.ref-card .notes,
+.ref-members-wrap,
+.ref-example,
+.ref-nav {
+	margin-top: 1.5rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid var(--line);
+}
+
 .ref-card .notes {
-	margin: 0.75rem 0 0;
+	line-height: 1.6;
 }
 
 // The code block and its copy button. The button sits on the top right corner of the block.
@@ -172,7 +279,7 @@
 	background: var(--code);
 	color: var(--fg);
 	font-family: $font-mono;
-	font-size: 0.83rem;
+	font-size: 0.9rem;
 	line-height: 1.6;
 	white-space: pre;
 }
@@ -185,57 +292,68 @@
 
 .ref-members-wrap {
 	overflow-x: auto;
-	margin-top: 1rem;
 }
 
 .ref-members {
 	width: 100%;
 	border-collapse: collapse;
-	font-size: 0.9rem;
+	font-size: 1rem;
 
 	th,
 	td {
-		padding: 0.45rem 0.6rem;
+		padding: 0.85rem 0.75rem;
 		border-bottom: 1px solid var(--line);
 		text-align: left;
 		vertical-align: top;
 	}
 
 	th {
-		color: var(--muted);
-		font-size: 0.74rem;
+		color: var(--fg);
+		font-size: 1rem;
 		font-weight: 700;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
+		letter-spacing: normal;
+		text-transform: none;
+	}
+
+	td {
+		line-height: 1.5;
+	}
+
+	td:first-child {
+		white-space: nowrap;
 	}
 
 	td:first-child code {
 		padding: 0;
 		background: none;
+		color: var(--fg);
+		font-family: $font-mono;
+		font-size: 0.95rem;
+		font-weight: 700;
 	}
 
 	tr[data-depth="1"] td:first-child {
-		padding-left: 1.6rem;
+		padding-left: 2rem;
+		box-shadow: inset 2px 0 0 var(--line);
 	}
 
 	tr[data-depth="2"] td:first-child {
-		padding-left: 2.6rem;
+		padding-left: 3.2rem;
+		box-shadow: inset 2px 0 0 var(--line);
 	}
 }
 
 .ref-example {
-	margin-top: 1rem;
-
 	summary {
 		display: flex;
 		align-items: center;
 		gap: 0.25rem;
 		width: fit-content;
-		color: var(--muted);
-		font-size: 0.78rem;
+		color: var(--fg);
+		font-size: 1rem;
 		font-weight: 700;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
+		letter-spacing: normal;
+		text-transform: none;
 		cursor: pointer;
 		list-style: none;
 
@@ -244,18 +362,44 @@
 		}
 
 		&:hover {
-			color: var(--fg);
+			color: var(--link);
 		}
 	}
 
 	.chevron {
 		font-size: 1.05rem;
-		transition: transform 0.2s ease;
 	}
 
 	&[open] .chevron {
 		transform: rotate(90deg);
 	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.ref-example .chevron {
+		transition: transform 0.2s ease;
+	}
+}
+
+.ref-nav {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+
+	a {
+		color: var(--link);
+		font-size: 0.95rem;
+		font-weight: 600;
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
+
+.ref-nav-next {
+	margin-left: auto;
 }
 
 .ref-foot {
@@ -280,8 +424,8 @@
 	justify-items: center;
 	gap: 0.75rem;
 	padding: 2.5rem 1.5rem;
-	border: 2px dashed var(--line);
-	border-radius: 20px;
+	border: 1px dashed var(--line);
+	border-radius: 16px;
 	color: var(--muted);
 	text-align: center;
 
@@ -290,15 +434,11 @@
 	}
 }
 
-.ref-empty[hidden] {
-	display: none;
-}
-
 .ref-clear {
 	padding: 0.4rem 1rem;
-	border: 2px solid var(--line);
+	border: 1px solid var(--line);
 	border-radius: 999px;
-	background: var(--card);
+	background: transparent;
 	color: var(--fg);
 	font: inherit;
 	cursor: pointer;
@@ -309,11 +449,15 @@
 }
 
 @media (max-width: 719px) {
-	.ref-card {
-		padding: 1rem 1rem 0.85rem;
+	.ref-tile-grid {
+		grid-template-columns: 1fr;
 	}
 
-	.ref-name {
-		font-size: 1.05rem;
+	.ref-back {
+		position: static;
+	}
+
+	.ref-card .ref-name {
+		font-size: 1.6rem;
 	}
 }
