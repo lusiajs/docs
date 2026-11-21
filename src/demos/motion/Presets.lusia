@@ -1,25 +1,36 @@
 <script>
 import { WHEN, PRESET } from "lusia";
 
-// Every preset in PRESET, in order. Hovering a tile plays its preset.
-const presets = Object.entries(PRESET).map(([name, animation]) => ({
-	name,
-	animation,
+const groups = [
+	{ title: "Fade", names: ["FADE_IN", "FADE_OUT"] },
+	{ title: "Slide", names: ["SLIDE_UP", "SLIDE_DOWN", "SLIDE_LEFT", "SLIDE_RIGHT"] },
+	{ title: "Pop and zoom", names: ["POP_IN", "POP_OUT", "ZOOM_IN", "ZOOM_OUT"] },
+	{ title: "Flip and blur", names: ["FLIP_IN", "FLIP_OUT", "BLUR_IN", "BLUR_OUT"] },
+	{ title: "Bounce", names: ["DROP_IN", "BOUNCE_IN"] },
+	{ title: "Attention", names: ["SHAKE", "PULSE", "SPIN", "WOBBLE", "HEARTBEAT", "TADA"] },
+].map((group) => ({
+	title: group.title,
+	tiles: group.names.map((name) => ({ name, animation: PRESET[name] })),
 }));
 </script>
 
 <div class="preset-gallery">
 	<p>Hover a tile to play its preset.</p>
-	<div class="grid">
-		<EACH {presets} as={preset} key={preset.name}>
-			<div
-				class="tile"
-				animate={{ style: preset.animation, when: WHEN.HOVER, duration: 500 }}
-			>
-				{preset.name}
+	<EACH {groups} as={group} key={group.title}>
+		<section class="group">
+			<h3>{group.title}</h3>
+			<div class="grid">
+				<EACH {group.tiles} as={tile} key={tile.name}>
+					<div
+						class="tile"
+						animate={{ style: tile.animation, when: WHEN.HOVER, duration: 500 }}
+					>
+						{tile.name}
+					</div>
+				</EACH>
 			</div>
-		</EACH>
-	</div>
+		</section>
+	</EACH>
 </div>
 
 <style>
@@ -32,6 +43,18 @@ const presets = Object.entries(PRESET).map(([name, animation]) => ({
 		margin: 0;
 		color: var(--muted);
 		font-size: 0.9rem;
+	}
+
+	.group {
+		display: grid;
+		gap: 0.5rem;
+		margin-top: 0.75rem;
+
+		h3 {
+			margin: 0;
+			color: var(--fg);
+			font-size: 0.95rem;
+		}
 	}
 
 	.grid {
