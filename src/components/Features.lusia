@@ -1,7 +1,7 @@
 <script>
 import { EDGE, PRESET, SCROLL_AT, WHEN, variable } from "lusiajs";
 import { featureSnippets } from "../features.ts";
-import { scrollAcross } from "../motion/home-scroll.ts";
+import { scrollAcross, scrollOwn } from "../motion/home-scroll.ts";
 import EditorMock from "./features/EditorMock.lusia";
 import FeatureCard from "./features/FeatureCard.lusia";
 import FeatureSnippet from "./features/FeatureSnippet.lusia";
@@ -15,11 +15,10 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const section = variable<HTMLElement | null>(null);
 const ENTER = SCROLL_AT.ENTER;
 const CENTER = 0.5;
-const CARD_COUNT = 8;
-// Everything is fully in place when the section's top reaches the middle of the screen.
-const CARD_START = { element: EDGE.TOP, window: 0.95 };
-const FIRST_CARD_LINE = 0.7;
-const LAST_CARD_LINE = CENTER;
+// A card starts when its top enters at the bottom and is whole when its own center
+// reaches the middle of the screen.
+const CARD_START = { element: EDGE.TOP, window: EDGE.BOTTOM };
+const CARD_END = { element: EDGE.CENTER, window: EDGE.CENTER };
 
 // The content rises into place as the page scrolls, then rests.
 const contentDrift = reduced
@@ -52,13 +51,7 @@ function cardMotion(index: number) {
 		scale: "0.96",
 	};
 	const end = { opacity: 1, translate: "0 0", rotate: "0deg", scale: "1" };
-	const line =
-		FIRST_CARD_LINE -
-		((FIRST_CARD_LINE - LAST_CARD_LINE) * index) / (CARD_COUNT - 1);
-	return scrollAcross(section, start, end, CARD_START, {
-		element: EDGE.TOP,
-		window: line,
-	});
+	return scrollOwn(start, end, CARD_START, CARD_END);
 }
 </script>
 

@@ -29,6 +29,20 @@ export function scrollAcross(
 	};
 }
 
+// Plays `from` to `to` on the element's own box, from `start` to `end` on the screen.
+export function scrollOwn(
+	from: Style,
+	to: Style,
+	start: ScrollPoint,
+	end: ScrollPoint,
+): AnimateItem {
+	return {
+		when: WHEN.SCROLL,
+		more: { start, end },
+		style: { 0: from, 1: to },
+	};
+}
+
 // Each item follows a whole section (`follow`), so the progress runs while that section
 // moves past the screen. `part` plays only a slice of that progress.
 export function scrollBetween(
