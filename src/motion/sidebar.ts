@@ -1,4 +1,4 @@
-import { EASE, WHEN } from "lusia";
+import { EASE, WHEN } from "lusiajs";
 
 // The sidebar slides in from the left when its page attaches, and slides back out when it detaches.
 const sidebarOutKeys = {
