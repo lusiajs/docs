@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { host, mount, resetMounts } from "../../test/runtime/dom/fixtures/mount.ts";
+import { host, mount, resetMounts } from "./support/mount.ts";
 import ScrollCenterLeave from "../src/demos/motion/ScrollCenterLeave.lusia";
 import ScrollDefault from "../src/demos/motion/ScrollDefault.lusia";
 import ScrollEffects from "../src/demos/motion/ScrollEffects.lusia";

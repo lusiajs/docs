@@ -2,6 +2,10 @@
   "name": "lusia-docs",
   "private": true,
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lusiajs/docs.git"
+  },
   "scripts": {
     "dev": "bun scripts/playground-runtime.ts && lusia dev .",
     "build": "bun scripts/playground-runtime.ts && lusia build .",
@@ -10,7 +14,6 @@
     "check": "bun run typecheck && bun run test && bun run build"
   },
   "dependencies": {
-    "lusia": "link:..",
     "@codemirror/autocomplete": "6.20.4",
     "@codemirror/commands": "6.11.1",
     "@codemirror/lang-html": "6.4.12",
@@ -23,11 +26,16 @@
     "@codemirror/view": "6.43.15",
     "@lezer/common": "1.5.6",
     "@lezer/highlight": "1.2.5",
-    "prismjs": "^1.30.0",
+    "lusia": "^0.1.0",
     "prettier": "3.10.1",
+    "prismjs": "^1.30.0",
     "sass": "^1.80.0"
   },
   "devDependencies": {
-    "@types/prismjs": "^1.26.6"
+    "@happy-dom/global-registrator": "^15.11.0",
+    "@types/bun": "latest",
+    "@types/prismjs": "^1.26.6",
+    "playwright": "1.63.0",
+    "typescript": "^5.6.0"
   }
 }

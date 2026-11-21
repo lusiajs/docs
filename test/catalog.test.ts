@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { api } from "../../reference/api.ts";
+import { api } from "lusia/api";
 import { entryIcon } from "../src/catalog.ts";
 
 const ICON_NAME = /^[a-z0-9_]+$/;
