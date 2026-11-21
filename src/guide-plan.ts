@@ -108,7 +108,7 @@ export const guidePlan: GuideGroup[] = [
       {
         id: "triggers",
         label: "Triggers",
-        entries: ["when", "hover-area", "controller"],
+        entries: ["when", "hover-area", "controller", "animate-space"],
       },
       {
         id: "scroll",

@@ -5,7 +5,8 @@ import { catalog } from "../catalog.ts";
 import { headingFlash } from "../flash.ts";
 import { buildKeywordIndex, tokenize } from "../keywords.ts";
 import { guideGroups, orderedEntries } from "../render.ts";
-import { startProjectId } from "../guide-pages.ts";
+import { animateSpaceId, startProjectId } from "../guide-pages.ts";
+import AnimateSpace from "./AnimateSpace.lusia";
 import CodeBlock from "./CodeBlock.lusia";
 import CodePanel from "./CodePanel.lusia";
 import DemoRow from "./DemoRow.lusia";
@@ -40,6 +41,7 @@ function sectionOf(entry: ApiEntry) {
 		table: catalog[entry.id]?.table ?? null,
 		files: catalog[entry.id]?.files ?? [],
 		intro: entry.id === startProjectId,
+		detail: entry.id === animateSpaceId,
 		subtitle: tokenize(entry.summary, keywordIndex, entry.id),
 		bullets: entry.bullets.map((text) =>
 			tokenize(text, keywordIndex, entry.id),
@@ -101,6 +103,9 @@ function languageOf(entry: ApiEntry): string {
 				</ul>
 				<IF {section.intro}>
 					<StartProject />
+				</IF>
+				<IF {section.detail}>
+					<AnimateSpace />
 				</IF>
 				<IF {section.table}>
 					<DocTable

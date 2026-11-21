@@ -1,0 +1,194 @@
+<script>
+import animateSpaceConfigSource from "../config-files/animate-space.config.ts?raw";
+import animateSpaceConfigJsonSource from "../config-files/animate-space.config.json?raw";
+import CodeBlock from "./CodeBlock.lusia";
+import CodePanel from "./CodePanel.lusia";
+import DocTable from "./DocTable.lusia";
+import Note from "./Note.lusia";
+
+const defaultHead = ["Trigger", "Default"];
+const defaultRows = [
+	["ATTACH", "false"],
+	["DETACH", "false"],
+];
+
+const wayHead = ["Way", "Where", "Applies to"];
+const wayRows = [
+	["more", "On one element", "That element only"],
+	[
+		"animate.attach, animate.detach",
+		"lusia.config",
+		"Every ATTACH or DETACH element",
+	],
+];
+
+const winHead = ["Order", "Setting", "Used when"];
+const winRows = [
+	["1", "more: { animateSpace } on the element", "The element sets it"],
+	[
+		"2",
+		"animate.attach or animate.detach in lusia.config",
+		"The element does not set it",
+	],
+	["3", "Library default", "Neither is set. The value is false"],
+];
+
+const elementCode = `<li animate={{
+  style: PRESET.FADE_IN,
+  when: WHEN.ATTACH,
+  more: { animateSpace: true },
+}}>`;
+
+const offCode = `<li animate={{
+  style: PRESET.FADE_IN,
+  when: WHEN.ATTACH,
+  more: { animateSpace: false },
+}}>`;
+</script>
+
+<div class="animate-space">
+	<Note text="The default is false. Nothing slides until you turn animateSpace on." />
+
+	<h3>What it does</h3>
+	<p>
+		When an element is added or removed, the elements around it normally jump
+		to their new places. With animateSpace, they slide there instead.
+	</p>
+
+	<h3>Which triggers use it</h3>
+	<ul>
+		<li><code>ATTACH</code>: the slide opens the space for the new element.</li>
+		<li><code>DETACH</code>: the slide closes the space of the removed element.</li>
+		<li>
+			Other triggers never use it. Putting it in the <code>more</code> of
+			another trigger is an error.
+		</li>
+	</ul>
+
+	<h3>The default</h3>
+	<DocTable head={defaultHead} rows={defaultRows} />
+
+	<h3>How to turn it on</h3>
+	<DocTable head={wayHead} rows={wayRows} />
+	<p><strong>On one element:</strong></p>
+	<CodeBlock text={elementCode} language="lusia" />
+	<p><strong>For the whole app:</strong> add this to lusia.config.ts.</p>
+	<CodePanel
+		sources={[
+			{ path: "lusia.config.ts", text: animateSpaceConfigSource },
+			{ path: "lusia.config.json", text: animateSpaceConfigJsonSource },
+		]}
+	/>
+
+	<h3>Which setting wins</h3>
+	<DocTable head={winHead} rows={winRows} />
+	<p>
+		The config sets true, but one element sets false. That element does not
+		slide. The other elements still do.
+	</p>
+	<CodeBlock text={offCode} language="lusia" />
+
+	<h3>Timing</h3>
+	<ul>
+		<li>
+			Duration: the element's duration. Without one, the config duration, then
+			300 ms.
+		</li>
+		<li>
+			Delay: the element's delay. Without one, the config delay, then 0 ms. The
+			slide waits the same delay.
+		</li>
+		<li>
+			Ease: the ease of the end keyframe. If it sets none, the default ease is
+			used.
+		</li>
+		<li>
+			DETACH waits for the slide and for the element's own leave animation.
+		</li>
+	</ul>
+
+	<h3>How it works</h3>
+	<p><strong>ATTACH</strong></p>
+	<ol>
+		<li>
+			Lusia takes the new element out of the flow for a moment and measures the
+			neighbors.
+		</li>
+		<li>It puts the element back in its place and measures again.</li>
+		<li>
+			It moves each neighbor back to its old place with a temporary transform.
+		</li>
+		<li>
+			It animates that transform to nothing, so each neighbor slides into its
+			new place.
+		</li>
+	</ol>
+	<p><strong>DETACH</strong></p>
+	<ol>
+		<li>Lusia measures the neighbors while the element is still there.</li>
+		<li>The removed element stays where it is, out of the flow.</li>
+		<li>
+			The neighbors move back to their old places with a temporary transform.
+		</li>
+		<li>
+			The transform animates to nothing, so the neighbors slide into the gap.
+		</li>
+	</ol>
+	<p>A neighbor keeps its own transform. The slide is added in front of it.</p>
+
+	<h3>Several slides at once</h3>
+	<ul>
+		<li>
+			Each element gets its own slide, with its own duration and delay. Give
+			each item its own delay to make a stagger.
+		</li>
+		<li>Slides on the same element add up.</li>
+	</ul>
+
+	<h3>Limits and cost</h3>
+	<ul>
+		<li>
+			The element itself must be in the flow. A <code>display: none</code>,
+			<code>inline</code> or <code>contents</code> element does not move.
+			Neither does one with <code>absolute</code> or <code>fixed</code>
+			position.
+		</li>
+		<li>With reduced motion turned on in the system, nothing slides.</li>
+		<li>
+			The slide measures the siblings of the element, the siblings of each of
+			its ancestors, and the ancestors.
+		</li>
+		<li>
+			Each add or remove reads these positions from the page. Use it for lists
+			of moderate size.
+		</li>
+	</ul>
+
+	<h3>Demos</h3>
+	<p>Each demo below has a toggle. Switch it to see the neighbors jump or slide.</p>
+</div>
+
+<style>
+.animate-space {
+	color: var(--fg);
+
+	h3 {
+		margin: 1.5rem 0 0.5rem;
+		font-size: 1.1rem;
+	}
+
+	p {
+		margin: 0 0 1rem;
+	}
+
+	ul,
+	ol {
+		margin: 0 0 1rem;
+		padding-left: 1.4rem;
+	}
+
+	li {
+		margin: 0.25rem 0;
+	}
+}
+</style>

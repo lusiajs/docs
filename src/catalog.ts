@@ -47,6 +47,8 @@ import IfDemo from "./demos/flow/IfDemo.lusia";
 import ifSource from "./demos/flow/IfDemo.lusia?raw";
 import lusiaConfigSource from "./config-files/lusia.config.ts?raw";
 import lusiaConfigJsonSource from "./config-files/lusia.config.json?raw";
+import AttachList from "./demos/motion/AttachList.lusia";
+import attachListSource from "./demos/motion/AttachList.lusia?raw";
 import Both from "./demos/motion/Both.lusia";
 import bothSource from "./demos/motion/Both.lusia?raw";
 import boxSource from "./demos/motion/Box.lusia?raw";
@@ -753,19 +755,6 @@ export const catalog: Record<string, CatalogEntry> = {
         ],
       },
       {
-        id: "animate-leave-space",
-        title: "Leave closes the space",
-        caption:
-          "A removed row fades out in place. The rows below slide up to close the gap. The slide is on by default on detach. Set more: { animateSpace: false } to make them jump.",
-        components: [LeaveList],
-        sources: [
-          {
-            path: "src/demos/motion/LeaveList.lusia",
-            text: leaveListSource,
-          },
-        ],
-      },
-      {
         id: "animate-leave-spin",
         title: "Show or hide the box",
         caption: "The box spins away in place. Its size and rotation stay whole until it is gone.",
@@ -862,12 +851,12 @@ export const catalog: Record<string, CatalogEntry> = {
           "animate.attach.animateSpace",
           "true or false",
           "false",
-          "Slide the siblings apart when an item attaches. false: they jump. Was true before the split",
+          "Slide the siblings apart when an item attaches. false: they jump",
         ],
         [
           "animate.detach.animateSpace",
           "true or false",
-          "true",
+          "false",
           "Slide the siblings into the freed space when an item detaches. false: they jump",
         ],
         [
@@ -910,6 +899,37 @@ export const catalog: Record<string, CatalogEntry> = {
     files: [
       { path: "lusia.config.ts", text: lusiaConfigSource },
       { path: "lusia.config.json", text: lusiaConfigJsonSource },
+    ],
+  },
+  "animate-space": {
+    icon: "space_bar",
+    demos: [
+      {
+        id: "animate-space-attach",
+        title: "Attach opens the space",
+        caption:
+          "A new row is added at the top. With animateSpace on, the rows below slide down to make room. Off, they jump.",
+        components: [AttachList],
+        sources: [
+          {
+            path: "src/demos/motion/AttachList.lusia",
+            text: attachListSource,
+          },
+        ],
+      },
+      {
+        id: "animate-leave-space",
+        title: "Detach closes the space",
+        caption:
+          "A removed row fades out in place. With animateSpace on, the rows below slide up to close the gap. Off, they jump.",
+        components: [LeaveList],
+        sources: [
+          {
+            path: "src/demos/motion/LeaveList.lusia",
+            text: leaveListSource,
+          },
+        ],
+      },
     ],
   },
   "scroll-at": {

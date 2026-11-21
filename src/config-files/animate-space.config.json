@@ -1,0 +1,6 @@
+{
+  "animate": {
+    "attach": { "animateSpace": true },
+    "detach": { "animateSpace": true }
+  }
+}
