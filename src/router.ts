@@ -58,7 +58,11 @@ function onClick(event: MouseEvent): void {
 	const path = normalizePath(link.pathname);
 	if (!pages.some((page) => page.path === path)) return;
 	event.preventDefault();
-	void show(path, link.hash, true);
+	navigateTo(path, link.hash);
+}
+
+export function navigateTo(path: string, hash: string): void {
+	void show(path, hash, true);
 }
 
 async function show(path: string, hash: string, push: boolean): Promise<void> {
