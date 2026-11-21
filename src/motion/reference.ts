@@ -34,3 +34,10 @@ export const cardMotion = [
 	{ style: fadeOut, when: WHEN.DETACH, duration: 200 },
 	{ style: cardKeys, when: WHEN.VIEW, duration: 380, more: { reverse: true } },
 ];
+
+const borderKeys = {
+	0: { borderColor: "var(--line)" },
+	1: { borderColor: "var(--group)" },
+};
+
+export const tileHoverMotion = { style: borderKeys, when: WHEN.HOVER, duration: 220 };

@@ -133,11 +133,6 @@ a.ref-tile {
 	color: var(--fg);
 	text-decoration: none;
 
-	&:hover,
-	&:focus-visible {
-		border-color: var(--group);
-	}
-
 	&:focus-visible {
 		outline: 2px solid var(--accent);
 		outline-offset: 2px;
@@ -203,7 +198,8 @@ a.ref-tile {
 }
 
 .ref-card {
-	scroll-margin-top: 5.5rem;
+	// Larger than the page offset, so scrolling to a card stays at the top.
+	scroll-margin-top: 100vh;
 	min-width: 0;
 	margin: 0;
 	padding: 0;

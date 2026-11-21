@@ -2,6 +2,7 @@
 import { props } from "lusia";
 import type { ApiEntry } from "../../../reference/api.ts";
 import { searchText } from "../reference-model.ts";
+import { tileHoverMotion } from "../motion/reference.ts";
 
 const emptyEntry: ApiEntry = {
 	id: "",
@@ -27,6 +28,7 @@ const search = searchText(shown);
 	data-kind={shown.kind}
 	data-group={shown.kind}
 	data-search={search}
+	animate={tileHoverMotion}
 >
 	<span class="ref-tile-head">
 		<span class="chip" data-kind={shown.kind}>{shown.kind}</span>
