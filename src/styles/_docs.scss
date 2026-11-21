@@ -270,8 +270,13 @@
 
 // The edited build runs in a sandboxed frame. Its height follows the content.
 .live-preview {
-	min-width: 0;
+	display: flex;
 	flex: 1;
+	flex-direction: column;
+	justify-content: center;
+	min-width: 0;
+	padding: 1.5rem;
+	box-sizing: border-box;
 
 	.preview-frame {
 		display: block;
