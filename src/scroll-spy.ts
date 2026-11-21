@@ -1,5 +1,4 @@
-import { expandAround } from "./nav-group.ts";
-import { keepInView } from "./sidebar-follow.ts";
+import { currentLinks, setCurrentLinks } from "./sidebar-follow.ts";
 
 // Px from the top of the viewport where a section or demo becomes current. Below the scroll margin, so a clicked target is current.
 const SPY_LINE_PX = 200;
@@ -10,19 +9,15 @@ export interface SpyTargets {
 	demos?: string;
 }
 
-let indicator: HTMLElement;
 let linksById = new Map<string, HTMLAnchorElement[]>();
-let activeLinks: HTMLAnchorElement[] = [];
 let sections: HTMLElement[] = [];
 let demos: HTMLElement[] = [];
 let selectors: SpyTargets;
 let observer: MutationObserver | undefined;
-let currentKey = "";
 let frame = 0;
 
 // Runs while a page with a #sidebar is attached. The signal removes every listener and pending frame.
 export function initScrollSpy(signal: AbortSignal, targets: SpyTargets): void {
-	indicator = document.querySelector<HTMLElement>(".nav-indicator")!;
 	const sidebar = document.querySelector<HTMLElement>("#sidebar")!;
 	linksById = groupLinksById(sidebar);
 	selectors = targets;
@@ -35,11 +30,6 @@ export function initScrollSpy(signal: AbortSignal, targets: SpyTargets): void {
 	window.addEventListener("resize", () => scheduleUpdate(signal), {
 		signal,
 	});
-	sidebar.addEventListener(
-		"transitionend",
-		() => placeIndicator(activeLinks.at(-1)),
-		{ signal },
-	);
 	// Lazy components mount after the page, so their sections and demos join the targets later.
 	observer = new MutationObserver(() => recollect(signal));
 	observer.observe(document.getElementById("outlet") ?? document.body, {
@@ -51,8 +41,6 @@ export function initScrollSpy(signal: AbortSignal, targets: SpyTargets): void {
 		observer = undefined;
 		cancelAnimationFrame(frame);
 		frame = 0;
-		currentKey = "";
-		activeLinks = [];
 	});
 	update();
 }
@@ -65,17 +53,17 @@ export function refreshScrollSpy(): void {
 function recollect(signal: AbortSignal): void {
 	const nextSections = queryAll(selectors.sections);
 	const nextDemos = selectors.demos ? queryAll(selectors.demos) : [];
-	if (sameTargets(sections, nextSections) && sameTargets(demos, nextDemos))
+	if (sameItems(sections, nextSections) && sameItems(demos, nextDemos))
 		return;
 	sections = nextSections;
 	demos = nextDemos;
 	scheduleUpdate(signal);
 }
 
-function sameTargets(before: HTMLElement[], after: HTMLElement[]): boolean {
+function sameItems<T>(before: T[], after: T[]): boolean {
 	return (
 		before.length === after.length &&
-		before.every((target, index) => target === after[index])
+		before.every((item, index) => item === after[index])
 	);
 }
 
@@ -131,33 +119,16 @@ function groupLinksById(
 	return map;
 }
 
+// Runs on every scroll frame, so it only touches the sidebar when the current place changes.
 function activate(
 	section: HTMLElement | undefined,
 	demo: HTMLElement | undefined,
 ): void {
-	const key = `${section?.id}|${demo?.id}`;
-	if (key === currentKey) return;
-	currentKey = key;
 	const links = [...linksFor(section), ...linksFor(demo)];
-	for (const link of activeLinks) link.removeAttribute("aria-current");
-	for (const link of links) link.setAttribute("aria-current", "true");
-	activeLinks = links;
-	const current = links.at(-1);
-	if (current) expandAround(current);
-	placeIndicator(current);
-	if (current) keepInView(current);
+	if (sameItems(links, currentLinks())) return;
+	setCurrentLinks(links);
 }
 
 function linksFor(target: HTMLElement | undefined): HTMLAnchorElement[] {
 	return target ? (linksById.get(target.id) ?? []) : [];
-}
-
-// The indicator sits on the guide line of the link's list: the group's, or the sub-list's.
-function placeIndicator(link: HTMLAnchorElement | undefined): void {
-	if (!link) return;
-	const guide = link.closest<HTMLElement>(".nav-links, .nav-sub")!;
-	indicator.classList.add("is-ready");
-	indicator.style.left = `${guide.offsetLeft - 1}px`;
-	indicator.style.transform = `translateY(${link.offsetTop}px)`;
-	indicator.style.height = `${link.offsetHeight}px`;
 }

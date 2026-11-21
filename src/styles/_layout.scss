@@ -171,9 +171,9 @@ html[data-route="playground"] {
 		color: var(--fg);
 	}
 
-	// Colour and background only, so the text never moves.
-	&[aria-current="true"] {
-		background: var(--card);
+	// The reader's place. Colour and background only, so the text never moves.
+	&[aria-current="page"] {
+		background: color-mix(in srgb, var(--accent) 16%, var(--card));
 		color: var(--accent);
 	}
 }
@@ -205,7 +205,7 @@ html[data-route="playground"] {
 	}
 }
 
-.nav-entry:has(> a[aria-current="true"]) > .nav-sub {
+.nav-entry:has(> a[aria-current="page"]) > .nav-sub {
 	grid-template-rows: 1fr;
 	opacity: 1;
 	visibility: visible;
