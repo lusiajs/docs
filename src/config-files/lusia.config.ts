@@ -6,7 +6,7 @@ export default defineConfig({
   minify: true,
   animate: {
     duration: 400,
-    ease: [EASE.STYLE.CUBIC, EASE.OUT],
+    ease: [EASE.STYLE.QUART, EASE.INOUT],
     midway: { play: MIDWAY.RESTART, turn: TURN.SMOOTH },
     in: "FADE_IN",
     out: "FADE_OUT",

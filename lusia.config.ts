@@ -7,7 +7,7 @@ export default defineConfig({
   routes: ["/guide", "/reference", "/playground", "/errors"],
   animate: {
     duration: 400,
-    ease: [EASE.STYLE.CUBIC, EASE.OUT],
+    ease: [EASE.STYLE.QUART, EASE.INOUT],
     midway: { play: MIDWAY.RESTART, turn: TURN.SMOOTH },
     in: "FADE_IN",
     out: "FADE_OUT",
