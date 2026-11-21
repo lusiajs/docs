@@ -6,9 +6,9 @@ import {
 	type CompletionResult as EditorCompletions,
 } from "@codemirror/autocomplete";
 import type { EditorView } from "@codemirror/view";
-import type { CompletionKind } from "../../../src/editor/completion-data.ts";
-import type { CompletionResult } from "../../../src/editor/completions.ts";
-import { completionMarkdown } from "../../../src/editor/markdown.ts";
+import type { CompletionKind } from "lusia/editor/completion-data.ts";
+import type { CompletionResult } from "lusia/editor/completions.ts";
+import { completionMarkdown } from "lusia/editor/markdown.ts";
 import { docsElement } from "./docs-dom.ts";
 import { editorCompletions } from "./editor-completions.ts";
 import type { EditorFile } from "./files.ts";

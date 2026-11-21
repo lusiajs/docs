@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { editorHover } from "../../src/editor/editor-hover.ts";
-import { hoverMarkdown } from "../../../src/editor/markdown.ts";
+import { hoverMarkdown } from "lusia/editor/markdown.ts";
 
 const UTIL = {
   name: "util.ts",

@@ -1,6 +1,6 @@
 <script>
 import { props } from "lusia";
-import type { ApiEntry } from "../../../reference/api.ts";
+import type { ApiEntry } from "lusia/api";
 import { searchText } from "../reference-model.ts";
 import { tileHoverMotion } from "../motion/reference.ts";
 

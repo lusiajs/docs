@@ -1,6 +1,6 @@
 import type { Extension } from "@codemirror/state";
 import { hoverTooltip, type Tooltip } from "@codemirror/view";
-import { hoverMarkdown } from "../../../src/editor/markdown.ts";
+import { hoverMarkdown } from "lusia/editor/markdown.ts";
 import { docsElement } from "./docs-dom.ts";
 import { editorHover } from "./editor-hover.ts";
 import type { EditorFile } from "./files.ts";

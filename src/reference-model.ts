@@ -1,4 +1,4 @@
-import type { ApiEntry, ApiKind, ApiMember } from "../../reference/api.ts";
+import type { ApiEntry, ApiKind, ApiMember } from "lusia/api";
 
 export interface MemberRow {
 	name: string;

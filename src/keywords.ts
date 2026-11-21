@@ -1,4 +1,4 @@
-import type { ApiEntry, ApiKind } from "../../reference/api.ts";
+import type { ApiEntry, ApiKind } from "lusia/api";
 
 // A demo a chip can link to. Its title is only matched inside backticks.
 export interface DemoRef {

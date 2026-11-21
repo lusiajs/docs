@@ -62,7 +62,7 @@ export async function serveSite(routes: string[]): Promise<SiteServer> {
   const out = await mkdtemp(join(tmpdir(), "lusia-site-"));
   await runBun(["scripts/playground-runtime.ts"]);
   await runBun([
-    "../src/cli/index.ts",
+    "node_modules/lusia/src/cli/index.ts",
     "build",
     SITE,
     "--outdir",

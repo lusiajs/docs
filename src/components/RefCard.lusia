@@ -1,6 +1,6 @@
 <script>
 import { props } from "lusia";
-import type { ApiEntry } from "../../../reference/api.ts";
+import type { ApiEntry } from "lusia/api";
 import { cardMotion } from "../motion/reference.ts";
 import type { Part } from "../keywords.ts";
 import { guidePath, pageLink, referencePath } from "../page-link.ts";

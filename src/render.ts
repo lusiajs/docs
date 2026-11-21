@@ -1,4 +1,4 @@
-import type { ApiEntry } from "../../reference/api.ts";
+import type { ApiEntry } from "lusia/api";
 import { catalog, entryIcon, type Demo } from "./catalog.ts";
 import {
 	isGuideEntry,

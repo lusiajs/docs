@@ -1,4 +1,4 @@
-import { api, type ApiEntry, type ApiGroup } from "../../reference/api.ts";
+import { api, type ApiEntry, type ApiGroup } from "lusia/api";
 import { guidePlan, type GuideGroup } from "./guide-plan.ts";
 
 // Entries that sit together under one heading. A group without sub-groups has one block with no label.

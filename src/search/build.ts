@@ -1,4 +1,4 @@
-import { api, type ApiEntry } from "../../../reference/api.ts";
+import { api, type ApiEntry } from "lusia/api";
 import { catalog, entryIcon } from "../catalog.ts";
 import { blockTitle, placedRows, type PlacedRow } from "../guide-placement.ts";
 import {

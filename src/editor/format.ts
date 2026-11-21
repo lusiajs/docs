@@ -1,5 +1,5 @@
-import { formatLusia as formatLusiaSource } from "@language/format/format.ts";
-import { prettierParts, type PrettierLike } from "@language/format/prettier-parts.ts";
+import { formatLusia as formatLusiaSource } from "lusia/language/format/format.ts";
+import { prettierParts, type PrettierLike } from "lusia/language/format/prettier-parts.ts";
 import type { Options, Plugin } from "prettier";
 
 let formatter: Promise<PrettierLike> | undefined;

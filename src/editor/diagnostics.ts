@@ -1,9 +1,9 @@
-import { lintLusia, type LintIssue } from "@language/lint/lint.ts";
-import type { PropDef } from "@language/parse/props.ts";
-import { scriptSection } from "@language/parse/sections.ts";
-import { errorPosition } from "../../../src/editor/error-position.ts";
-import { LusiaError } from "../../../src/compiler/errors/error.ts";
-import { formatWhere } from "../../../src/compiler/errors/where.ts";
+import { lintLusia, type LintIssue } from "lusia/language/lint/lint.ts";
+import type { PropDef } from "lusia/language/parse/props.ts";
+import { scriptSection } from "lusia/language/parse/sections.ts";
+import { errorPosition } from "lusia/editor/error-position.ts";
+import { LusiaError } from "lusia/errors/error.ts";
+import { formatWhere } from "lusia/errors/where.ts";
 import { compileWithoutStyles } from "./compile-check.ts";
 import { typescriptLanguage } from "./lang/language.ts";
 
