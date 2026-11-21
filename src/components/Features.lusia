@@ -14,12 +14,12 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 // when its top edge reaches the given line (window height from the top, 0 to 1).
 const section = variable<HTMLElement | null>(null);
 const ENTER = SCROLL_AT.ENTER;
-const TOP_THIRD = 1 / 3;
+const CENTER = 0.5;
 const CARD_COUNT = 8;
-// Cards play as the section crosses the viewport middle.
-const CARD_START = { element: EDGE.TOP, window: 0.7 };
-const FIRST_CARD_LINE = 0.35;
-const LAST_CARD_LINE = 0.1;
+// Everything is fully in place when the section's top reaches the middle of the screen.
+const CARD_START = { element: EDGE.TOP, window: 0.95 };
+const FIRST_CARD_LINE = 0.7;
+const LAST_CARD_LINE = CENTER;
 
 // The content rises into place as the page scrolls, then rests.
 const contentDrift = reduced
@@ -29,7 +29,7 @@ const contentDrift = reduced
 			{ translate: "0 6vh" },
 			{ translate: "0 0" },
 			ENTER,
-			{ element: EDGE.TOP, window: TOP_THIRD },
+			{ element: EDGE.TOP, window: CENTER },
 		);
 
 // The title slides in from the left as the section arrives.
@@ -40,7 +40,7 @@ const titleSlide = reduced
 			{ opacity: 0, translate: "-40vw 0" },
 			{ opacity: 1, translate: "0 0" },
 			ENTER,
-			{ element: EDGE.TOP, window: 0.6 },
+			{ element: EDGE.TOP, window: 0.65 },
 		);
 
 function cardMotion(index: number) {
