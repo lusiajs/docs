@@ -260,11 +260,16 @@ const highlightMotion = reduced
 	color: var(--muted);
 	font: inherit;
 	font-size: 0.8rem;
+	font-weight: 700;
 	cursor: pointer;
+	transition: color 300ms ease;
 
 	&[aria-pressed="true"] {
 		color: #3a2e4a;
-		font-weight: 700;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
 	}
 }
 
