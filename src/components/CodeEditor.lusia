@@ -4,25 +4,38 @@ import type { EditorFile, EditorJump } from "../editor/files.ts";
 import type { EditorSession } from "../editor/session.ts";
 import EditorTabs from "./EditorTabs.lusia";
 
-const { files, active, readOnly, edited, toolbar, onChange, onSelect, onReset, jump } =
-	props({
-		files: [] as EditorFile[],
-		active: "",
-		readOnly: false,
-		edited: false,
-		toolbar: true,
-		onChange: (name: string, code: string) => {},
-		onSelect: (name: string) => {},
-		onReset: () => {},
-		jump: null as EditorJump | null,
-	});
+const {
+	files,
+	active,
+	readOnly,
+	edited,
+	toolbar,
+	wrap,
+	onChange,
+	onSelect,
+	onReset,
+	jump,
+} = props({
+	files: [] as EditorFile[],
+	active: "",
+	readOnly: false,
+	edited: false,
+	toolbar: true,
+	// A parent can turn wrapping on. The toolbar button also turns it on.
+	wrap: false,
+	onChange: (name: string, code: string) => {},
+	onSelect: (name: string) => {},
+	onReset: () => {},
+	jump: null as EditorJump | null,
+});
 
 const selected = variable("");
 const host = variable<HTMLElement | null>(null);
 const copied = variable(false);
-const wrap = variable(false);
+const toolbarWrap = variable(false);
+const lineWrap = variable.compute(() => wrap.value || toolbarWrap.value);
 // A false attribute is removed, so aria-pressed takes the text "false".
-const wrapPressed = variable.compute(() => String(wrap.value));
+const wrapPressed = variable.compute(() => String(lineWrap.value));
 const copyIcon = variable.compute(() =>
 	copied.value ? "check" : "content_copy",
 );
@@ -47,7 +60,7 @@ variable.autoRun(() => {
 });
 
 variable.autoRun(() => {
-	const isWrapped = wrap.value;
+	const isWrapped = lineWrap.value;
 	session?.setWrap(isWrapped);
 });
 
@@ -69,7 +82,7 @@ onAttach(() => {
 				files: files.peek(),
 				name: selected.peek(),
 				readOnly: readOnly.peek(),
-				wrap: wrap.peek(),
+				wrap: lineWrap.peek(),
 				onChange: changed,
 			});
 		})
@@ -99,7 +112,7 @@ function reset() {
 }
 
 function toggleWrap() {
-	wrap.value = !wrap.value;
+	toolbarWrap.value = !toolbarWrap.value;
 }
 
 function formatCode() {
