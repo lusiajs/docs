@@ -34,6 +34,7 @@ function dotMotion(delay: number) {
 	animate={{ style: fadeOut, when: WHEN.DETACH, duration: reduced ? 1 : 400 }}
 >
 	<div class="loader-inner">
+		<img class="logo" src="/logo.svg" width="64" height="64" alt="" />
 		<p class="name">Lusia</p>
 		<div class="dots" aria-hidden="true">
 			<span class="dot pink" animate={dotMotion(0)}></span>
@@ -58,6 +59,11 @@ function dotMotion(delay: number) {
 	display: grid;
 	justify-items: center;
 	gap: 0.9rem;
+}
+
+.logo {
+	width: 64px;
+	height: 64px;
 }
 
 .name {

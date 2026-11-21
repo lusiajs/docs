@@ -8,7 +8,16 @@
       name="description"
       content="Learn Lusia fast: guide, API, playground, error codes."
     />
+    <meta property="og:title" content="Lusia" />
+    <meta
+      property="og:description"
+      content="Learn Lusia fast: guide, API, playground, error codes."
+    />
+    <meta property="og:image" content="https://lusia.azpepoze.com/logo-512.png" />
     <title>Lusia</title>
+    <link rel="icon" href="./public/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="./public/favicon.ico" sizes="48x48" />
+    <link rel="apple-touch-icon" href="./public/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -48,6 +57,10 @@
         display: grid;
         justify-items: center;
         gap: 0.9rem;
+      }
+      .loader-static .logo {
+        width: 64px;
+        height: 64px;
       }
       .loader-static .name {
         margin: 0;
@@ -113,6 +126,7 @@
   <body>
     <div id="loader" class="loader-static" role="status" aria-label="Loading Lusia">
       <div class="loader-inner">
+        <img class="logo" src="./public/logo.svg" width="64" height="64" alt="" />
         <p class="name">Lusia</p>
         <div class="dots" aria-hidden="true">
           <span class="dot"></span><span class="dot"></span><span class="dot"></span>
@@ -134,7 +148,7 @@
       >
         <span class="material-symbols-rounded" aria-hidden="true">menu</span>
       </button>
-      <a class="brand" href="/">Lusia</a>
+      <a class="brand" href="/"><img src="./public/logo.svg" width="28" height="28" alt="" />Lusia</a>
       <nav class="main-menu" aria-label="Main">
         <a href="/">Home</a>
         <a href="/guide">Guide</a>
@@ -173,7 +187,7 @@
     <div id="outlet"></div>
 
     <footer class="site-footer">
-      <p class="footer-brand">Lusia</p>
+      <p class="footer-brand"><img src="./public/logo.svg" width="28" height="28" alt="" />Lusia</p>
       <nav aria-label="Footer">
         <a href="/">Home</a>
         <a href="/guide">Guide</a>
