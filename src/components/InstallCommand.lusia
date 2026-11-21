@@ -1,6 +1,5 @@
 <script>
 import { onAttach, variable, WHEN } from "lusiajs";
-import { pageLink, guidePath } from "../page-link.ts";
 import { copyText } from "../copy.ts";
 import { typeOnceFrames } from "../motion/typing.ts";
 import { wobbleStyle } from "../motion/wobble.ts";
@@ -187,9 +186,6 @@ const checkMotion = reduced
 			</button>
 		</div>
 	</div>
-	<p class="install-note">
-		<a href={pageLink(guidePath, "component-tag")}>This pill is a Lusia component.</a>
-	</p>
 </div>
 
 <style scoped>
@@ -313,16 +309,6 @@ const checkMotion = reduced
 	white-space: nowrap;
 	pointer-events: none;
 	transform: translateX(-50%);
-}
-
-.install-note {
-	margin: 0;
-	color: var(--muted);
-	font-size: 0.85rem;
-
-	a {
-		color: inherit;
-	}
 }
 
 @media (max-width: 559px) {

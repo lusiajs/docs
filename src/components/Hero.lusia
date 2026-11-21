@@ -247,10 +247,6 @@ onAttach(() => {
 			</a>
 		</div>
 		<p class="wip-note" animate={noteMotion}>
-			Lusia is in beta. APIs and
-			markup may change without notice.
-		</p>
-		<p class="wip-note" animate={noteMotion}>
 			I wanted to name it Lucia, but that name was taken on npm (╥﹏╥). So
 			it is lusia.
 		</p>
