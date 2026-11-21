@@ -10,7 +10,7 @@ const draft = variable("");
 const label = variable.compute(() => (count.value > 4 ? "Lots of clicks" : "Keep clicking"));
 
 // Each row slides up when it appears in the list.
-const rowMotion = { style: PRESET.SLIDE_UP, when: WHEN.ATTACH, duration: 300 };
+const rowMotion = { style: PRESET.SLIDE_IN_UP, when: WHEN.ATTACH, duration: 300 };
 
 function increment() {
   count.value++;

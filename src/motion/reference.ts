@@ -30,7 +30,7 @@ export const gridMotion = {
 };
 
 export const cardMotion = [
-	{ style: PRESET.SLIDE_UP, when: WHEN.ATTACH, duration: 300 },
+	{ style: PRESET.SLIDE_IN_UP, when: WHEN.ATTACH, duration: 300 },
 	{ style: fadeOut, when: WHEN.DETACH, duration: 200 },
 	{ style: cardKeys, when: WHEN.VIEW, duration: 380, more: { reverse: true } },
 ];

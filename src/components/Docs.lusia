@@ -17,7 +17,7 @@ const keywordIndex = buildKeywordIndex(orderedEntries, demos);
 // Plays in when the section enters the screen, and back out when it leaves.
 // Only opacity: a transform would make this section the box for fixed demo lines.
 const sectionMotion = {
-	style: PRESET.FADE,
+	style: PRESET.FADE_IN,
 	when: WHEN.VIEW,
 	duration: 600,
 	more: { margin: 80, amount: 0.1, reverse: true },
