@@ -733,7 +733,7 @@ export const catalog: Record<string, CatalogEntry> = {
 			{
 				id: "animate-leave-space",
 				title: "Leave closes the space",
-				caption: "A removed row fades out in place. The rows below slide up to close the gap. Animate space is on by default. Set more: { animateSpace: false } to make them jump.",
+				caption: "A removed row fades out in place. The rows below slide up to close the gap. The slide is on by default on detach. Set more: { animateSpace: false } to make them jump.",
 				components: [LeaveList],
 				sources: [
 					{
