@@ -33,3 +33,15 @@ Open the local address that Bun prints.
 ## Deploy
 
 Every push to `main` builds the site and publishes `dist/` to GitHub Pages. See `.github/workflows/deploy.yml`.
+
+## Updating
+
+The site uses the published `lusiajs` package. Updates happen on their own:
+
+| Case | What happens |
+| --- | --- |
+| New `lusiajs` release | The site updates within 6 hours. |
+| Want it now | Run **Update lusiajs** from the Actions tab. |
+| Update fails the tests or the build | The workflow fails and nothing is pushed. A person must fix the docs. |
+
+See `.github/workflows/update-framework.yml`.

@@ -3,7 +3,7 @@
 This repo is the docs site of Lusia (lusiajs/docs), served at https://lusia.azpepoze.com. It uses the published `lusiajs` npm package.
 
 # 1. Framework changes come by release
-The site imports `lusiajs/api`, `lusiajs/language/*`, `lusiajs/editor/*`, `lusiajs/errors/*` and `lusiajs/compiler/*`. A framework change reaches the site only after a release. Then bump the `lusiajs` version in `package.json`.
+The site imports `lusiajs/api`, `lusiajs/language/*`, `lusiajs/editor/*`, `lusiajs/errors/*` and `lusiajs/compiler/*`. A framework change reaches the site only after a release. The update workflow then bumps the version (see rule 10).
 
 # 2. Guide is a learning path
 Order groups and entries simplest first. A beginner meets each idea before anything that uses it.
@@ -28,3 +28,6 @@ Run `bun run check` and make sure it passes.
 
 # 9. Commits
 Use Conventional Commits. One commit per logical change.
+
+# 10. Framework updates are automatic
+Every 6 hours `.github/workflows/update-framework.yml` runs `bun update lusiajs`. If the version changed, it runs typecheck, test and build, then pushes to `main` and deploys. If a check fails, nothing is pushed and a person must fix the docs.
