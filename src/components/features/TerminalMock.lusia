@@ -1,0 +1,48 @@
+<script>
+import { PRESET } from "lusiajs";
+</script>
+
+<div
+	class="terminal"
+	role="img"
+	aria-label="Terminal: bun create lusiajs my-app, then bun run dev"
+>
+	<p animate={PRESET.FADE_IN}>
+		<span class="prompt">$</span> bun create lusiajs my-app
+	</p>
+	<p animate={PRESET.FADE_IN}><span class="prompt">$</span> bun run dev</p>
+	<p class="note" animate={PRESET.FADE_IN}>Then open http://localhost:3000</p>
+</div>
+
+<style scoped>
+@use "../../styles/theme" as *;
+
+.terminal {
+	display: grid;
+	gap: 0.45rem;
+	padding: 0.9rem 1rem;
+	border: 2px solid var(--line);
+	border-radius: 18px;
+	background: var(--code);
+	font-family: $font-mono;
+	font-size: 0.78rem;
+	line-height: 1.5;
+	color: var(--fg);
+
+	p {
+		margin: 0;
+		white-space: pre;
+		overflow: auto;
+	}
+
+	.prompt {
+		color: var(--link);
+		font-weight: 700;
+	}
+
+	.note {
+		color: var(--muted);
+		white-space: normal;
+	}
+}
+</style>
