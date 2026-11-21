@@ -63,6 +63,8 @@ export interface EditorStateOptions {
 	getFiles: () => readonly EditorFile[];
 	readOnly: Compartment;
 	readOnlyValue: boolean;
+	wrap: Compartment;
+	wrapValue: boolean;
 	onEdit: (code: string) => void;
 	format: () => void;
 }
@@ -94,7 +96,7 @@ export function editorExtensions(options: EditorStateOptions): Extension[] {
 		lusiaHover(fileName, getFiles),
 		languageFor(fileName),
 		editorTheme,
-		EditorView.lineWrapping,
+		options.wrap.of(wrapExtensions(options.wrapValue)),
 		// Popups sit on the page, so the demo card and the editor scroller cannot clip them.
 		tooltips({ parent: document.body, position: "fixed" }),
 		options.readOnly.of(readOnlyExtensions(options.readOnlyValue)),
@@ -125,6 +127,10 @@ export function readOnlyExtensions(readOnly: boolean): Extension[] {
 		EditorState.readOnly.of(readOnly),
 		EditorView.editable.of(!readOnly),
 	];
+}
+
+export function wrapExtensions(wrap: boolean): Extension[] {
+	return wrap ? [EditorView.lineWrapping] : [];
 }
 
 function completionSources(

@@ -4,6 +4,7 @@ import {
 	editorExtensions,
 	externalChange,
 	readOnlyExtensions,
+	wrapExtensions,
 } from "./extensions.ts";
 import type { EditorFile } from "./files.ts";
 import { formatFile } from "./format-file.ts";
@@ -20,10 +21,12 @@ export class EditorSession {
 	// The code last seen for each file. A parent that ignores edits keeps the user's text.
 	private readonly known = new Map<string, string>();
 	private readonly readOnlyCompartment = new Compartment();
+	private readonly wrapCompartment = new Compartment();
 	private readonly onChange: ChangeHandler;
 	private files: EditorFile[];
 	private name: string;
 	private readOnly: boolean;
+	private wrap: boolean;
 
 	constructor(
 		parent: HTMLElement,
@@ -31,12 +34,14 @@ export class EditorSession {
 			files: EditorFile[];
 			name: string;
 			readOnly: boolean;
+			wrap?: boolean;
 			onChange: ChangeHandler;
 		},
 	) {
 		this.files = options.files;
 		this.onChange = options.onChange;
 		this.readOnly = options.readOnly;
+		this.wrap = options.wrap ?? false;
 		const file = this.pick(options.files, options.name);
 		this.name = file.name;
 		this.view = new EditorView({ parent, state: this.createState(file) });
@@ -54,6 +59,12 @@ export class EditorSession {
 	setReadOnly(readOnly: boolean): void {
 		this.readOnly = readOnly;
 		this.applyReadOnly();
+	}
+
+	setWrap(wrap: boolean): void {
+		if (wrap === this.wrap) return;
+		this.wrap = wrap;
+		this.applyWrap();
 	}
 
 	/** Moves the cursor to a place in a file, switching to that file first. Unknown files are ignored. */
@@ -118,6 +129,7 @@ export class EditorSession {
 		const state = cached && unchanged ? cached : this.createState(file);
 		this.view.setState(state);
 		this.applyReadOnly();
+		this.applyWrap();
 	}
 
 	private syncCode(file: EditorFile): void {
@@ -147,6 +159,12 @@ export class EditorSession {
 		});
 	}
 
+	private applyWrap(): void {
+		this.view.dispatch({
+			effects: this.wrapCompartment.reconfigure(wrapExtensions(this.wrap)),
+		});
+	}
+
 	private createState(file: EditorFile): EditorState {
 		this.known.set(file.name, file.code);
 		return EditorState.create({
@@ -156,6 +174,8 @@ export class EditorSession {
 				getFiles: () => this.files,
 				readOnly: this.readOnlyCompartment,
 				readOnlyValue: this.readOnly,
+				wrap: this.wrapCompartment,
+				wrapValue: this.wrap,
 				onEdit: (code) => this.edited(file.name, code),
 				format: () => void this.format(),
 			}),

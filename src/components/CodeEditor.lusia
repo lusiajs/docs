@@ -20,6 +20,9 @@ const { files, active, readOnly, edited, toolbar, onChange, onSelect, onReset, j
 const selected = variable("");
 const host = variable<HTMLElement | null>(null);
 const copied = variable(false);
+const wrap = variable(false);
+// A false attribute is removed, so aria-pressed takes the text "false".
+const wrapPressed = variable.compute(() => String(wrap.value));
 const copyIcon = variable.compute(() =>
 	copied.value ? "check" : "content_copy",
 );
@@ -43,6 +46,11 @@ variable.autoRun(() => {
 	session?.setReadOnly(isReadOnly);
 });
 
+variable.autoRun(() => {
+	const isWrapped = wrap.value;
+	session?.setWrap(isWrapped);
+});
+
 // A new jump object moves the cursor, even to the place it was last at.
 variable.autoRun(() => {
 	const target = jump.value;
@@ -61,6 +69,7 @@ setup(() => {
 				files: files.peek(),
 				name: selected.peek(),
 				readOnly: readOnly.peek(),
+				wrap: wrap.peek(),
 				onChange: changed,
 			});
 		})
@@ -87,6 +96,10 @@ const formatFailed = "Could not format this file. Fix the syntax first.";
 
 function reset() {
 	onReset.peek()();
+}
+
+function toggleWrap() {
+	wrap.value = !wrap.value;
 }
 
 function formatCode() {
@@ -117,6 +130,18 @@ async function copyCode() {
 					Reset
 				</button>
 			</IF>
+			<button
+				class="icon-button"
+				type="button"
+				aria-label="Wrap lines"
+				aria-pressed={wrapPressed}
+				title="Wrap lines"
+				onclick={toggleWrap}
+			>
+				<span class="material-symbols-rounded" aria-hidden="true"
+					>wrap_text</span
+				>
+			</button>
 			<button
 				class="icon-button"
 				type="button"
