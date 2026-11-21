@@ -871,13 +871,13 @@ export const catalog: Record<string, CatalogEntry> = {
         ],
         [
           "animate.in",
-          'preset name, e.g. "FADE_IN"',
+          'preset name, e.g. "FADE_IN", or your own keyframes',
           "none",
           "Preset for items with no style, on attach and other triggers",
         ],
         [
           "animate.out",
-          'preset name, e.g. "FADE_OUT"',
+          'preset name, e.g. "FADE_OUT", or your own keyframes',
           "none",
           "Preset for items with no style, on detach",
         ],
@@ -897,6 +897,12 @@ export const catalog: Record<string, CatalogEntry> = {
           "rule name: off, warn, error",
           "each rule's own level",
           "Severity of each lint rule",
+        ],
+        [
+          "format.indentScriptAndStyle",
+          "true or false",
+          "true",
+          "Indent the code inside <script> and <style> by one level in lusia format",
         ],
       ],
     },
