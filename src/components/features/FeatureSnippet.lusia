@@ -1,28 +1,35 @@
 <script>
-import { props } from "lusiajs";
+  import { onAttach, props, variable } from "lusiajs";
+  import { highlightInto } from "../../highlight/highlight.ts";
 
-const { code } = props({ code: "" });
+  const { code, language } = props({ code: "", language: "lusia" });
+  const block = variable<HTMLElement | null>(null);
+
+  onAttach(() => {
+    highlightInto(block.value!, code.peek(), language.peek());
+  });
 </script>
 
-<pre class="snippet"><code data-lang="lusia">{code}</code></pre>
+<pre class="snippet"><code bind-element={block}></code></pre>
 
 <style scoped>
-@use "../../styles/theme" as *;
+  @use "../../styles/theme" as *;
 
-.snippet {
-	margin: auto 0 0;
-	padding: 0.75rem 1rem;
-	overflow: auto;
-	border: 2px solid var(--line);
-	border-radius: 18px;
-	background: var(--code);
-	font-family: $font-mono;
-	font-size: 0.78rem;
-	line-height: 1.5;
-}
+  .snippet {
+    flex: none;
+    margin: 0;
+    padding: 0.75rem 1rem;
+    overflow: auto;
+    border: 2px solid var(--line);
+    border-radius: 18px;
+    background: var(--code);
+    font-family: $font-mono;
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
 
-.snippet code {
-	font-family: inherit;
-	white-space: pre;
-}
+  .snippet code {
+    font-family: inherit;
+    white-space: pre;
+  }
 </style>

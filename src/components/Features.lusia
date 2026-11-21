@@ -1,237 +1,786 @@
 <script>
-import { EDGE, PRESET, SCROLL_AT, WHEN, variable } from "lusiajs";
-import { featureSnippets } from "../features.ts";
-import { scrollAcross, scrollOwn } from "../motion/home-scroll.ts";
-import EditorMock from "./features/EditorMock.lusia";
-import FeatureCard from "./features/FeatureCard.lusia";
-import FeatureSnippet from "./features/FeatureSnippet.lusia";
-import TerminalMock from "./features/TerminalMock.lusia";
-import FeatureCounter from "./FeatureCounter.lusia";
+  import { EDGE, SCROLL_AT, onAttach, variable } from "lusiajs";
+  import { features, featureSources } from "../features.ts";
+  import { scrollOwn } from "../motion/home-scroll.ts";
+  import {
+    CHAR_MS,
+    CHAR_STEP_MS,
+    CODE_MS,
+    COPY_MS,
+    DEMO_MS,
+    FILE_MS,
+    charIn,
+    fileIn,
+    codeIn,
+    copyIn,
+    demoIn,
+  } from "../motion/feature-change.ts";
+  import FeatureSnippet from "./features/FeatureSnippet.lusia";
+  import MotionDemo from "./features/MotionDemo.lusia";
+  import ScrollDemo from "./features/ScrollDemo.lusia";
+  import UpdateDemo from "./features/UpdateDemo.lusia";
+  import FlowDemo from "./features/FlowDemo.lusia";
+  import TreeDemo from "./features/TreeDemo.lusia";
+  import ScopedDemo from "./features/ScopedDemo.lusia";
+  import SizeDemo from "./features/SizeDemo.lusia";
+  import TerminalMock from "./features/TerminalMock.lusia";
 
-const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const PHONE_QUERY = "(max-width: 899px)";
+  // The middle of the screen. The marker that crosses it is the active feature.
+  const ACTIVE_BAND = "-50% 0px -50% 0px";
 
-// Each element starts when its top edge enters at the bottom of the screen and rests
-// when its top edge reaches the given line (window height from the top, 0 to 1).
-const section = variable<HTMLElement | null>(null);
-const ENTER = SCROLL_AT.ENTER;
-const CENTER = 0.5;
-// A card starts when its top enters at the bottom and is whole when its own center
-// reaches the middle of the screen.
-const CARD_START = { element: EDGE.TOP, window: EDGE.BOTTOM };
-const CARD_END = { element: EDGE.CENTER, window: EDGE.CENTER };
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const phone = variable(matchMedia(PHONE_QUERY).matches);
 
-// The content rises into place as the page scrolls, then rests.
-const contentDrift = reduced
-	? []
-	: scrollAcross(
-			section,
-			{ translate: "0 6vh" },
-			{ translate: "0 0" },
-			ENTER,
-			{ element: EDGE.TOP, window: CENTER },
-		);
+  const track = variable<HTMLElement | null>(null);
+  const active = variable(0);
+  // The feature whose panels are played in. It follows `active` after a short gap,
+  // so the old panels leave before the new ones arrive.
+  const shown = variable(0);
+  // The feature whose panels are still playing out. Its demo stays mounted until then.
+  const leaving = variable(-1);
+  const ENTER_GAP_MS = 340;
+  let enterTimer = 0;
 
-// The title slides in from the left as the section arrives.
-const titleSlide = reduced
-	? []
-	: scrollAcross(
-			section,
-			{ opacity: 0, translate: "-40vw 0" },
-			{ opacity: 1, translate: "0 0" },
-			ENTER,
-			{ element: EDGE.TOP, window: 0.65 },
-		);
+  // The header slides in from the left as the section arrives.
+  const titleSlide = reduced
+    ? []
+    : scrollOwn(
+        { opacity: 0, translate: "-40vw 0" },
+        { opacity: 1, translate: "0 0" },
+        SCROLL_AT.ENTER,
+        { element: EDGE.TOP, window: 0.65 },
+      );
 
-function cardMotion(index: number) {
-	if (reduced) return [];
-	const start = {
-		opacity: 0,
-		translate: "0 24px",
-		rotate: `${index % 2 ? 2 : -2}deg`,
-		scale: "0.96",
-	};
-	const end = { opacity: 1, translate: "0 0", rotate: "0deg", scale: "1" };
-	return scrollOwn(start, end, CARD_START, CARD_END);
-}
+  // One trigger per feature: true while it is the active one.
+  const isActive = features.map((_, index) =>
+    variable.compute(() => shown.value === index),
+  );
+
+  // A demo is mounted while active or playing out, so onAttach reruns on each visit.
+  const isMounted = features.map((_, index) =>
+    variable.compute(() => shown.value === index || leaving.value === index),
+  );
+
+  function changeMotion(style: object, duration: number, index: number, delay = 0) {
+    if (reduced) return [];
+    return { style, duration, delay, when: isActive[index] };
+  }
+
+  function copyMotion(index: number) {
+    return changeMotion(copyIn, COPY_MS, index);
+  }
+
+  function titleChars(title: string, index: number) {
+    return title.split("").map((char, at) => ({
+      char,
+      motion: changeMotion(charIn, CHAR_MS, index, at * CHAR_STEP_MS),
+    }));
+  }
+
+  const items = features.map((feature, index) => ({
+    ...feature,
+    code: featureSources[feature.key].code,
+    file: featureSources[feature.key].file,
+    chars: titleChars(feature.title, index),
+  }));
+
+  function fileMotion(index: number) {
+    return changeMotion(fileIn, FILE_MS, index);
+  }
+
+  function codeMotion(index: number) {
+    return changeMotion(codeIn, CODE_MS, index);
+  }
+
+  function demoMotion(index: number) {
+    return changeMotion(demoIn, DEMO_MS, index);
+  }
+
+  function toneStyle(tone: string): string {
+    return `--tone: ${tone}`;
+  }
+
+  function indexStyle(index: number): string {
+    return `--index: ${index}`;
+  }
+
+  function activeItem() {
+    return items[active.value];
+  }
+
+  function windowStyle(): string {
+    return toneStyle(activeItem().tone);
+  }
+
+  function navClass(index: number): string {
+    return active.value === index ? "nav-item is-active" : "nav-item";
+  }
+
+  function fileClass(index: number): string {
+    return `file-name ${slotClass(index)}`;
+  }
+
+  // Only the active panel takes clicks. Its animate plays the change.
+  function slotClass(index: number): string {
+    if (active.value === index) return "slot is-active";
+    return "slot";
+  }
+
+  function markerElements(): HTMLElement[] {
+    const element = track.peek();
+    if (!element) return [];
+    return Array.from(element.querySelectorAll<HTMLElement>(".marker"));
+  }
+
+  function setActive(index: number) {
+    if (index === active.peek()) return;
+    active.value = index;
+    if (shown.peek() !== -1) leaving.value = shown.peek();
+    shown.value = -1;
+    clearTimeout(enterTimer);
+    enterTimer = window.setTimeout(showActive, ENTER_GAP_MS);
+  }
+
+  function showActive() {
+    leaving.value = -1;
+    shown.value = active.peek();
+  }
+
+  function goTo(index: number) {
+    setActive(index);
+    markerElements()[index].scrollIntoView({
+      behavior: reduced ? "auto" : "smooth",
+      block: "center",
+    });
+  }
+
+  function watchMarkers(): IntersectionObserver {
+    const markers = markerElements();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          setActive(markers.indexOf(entry.target as HTMLElement));
+        }
+      },
+      { rootMargin: ACTIVE_BAND },
+    );
+    for (const marker of markers) observer.observe(marker);
+    return observer;
+  }
+
+  onAttach(() => {
+    const phoneQuery = matchMedia(PHONE_QUERY);
+    const onPhoneChange = (event: MediaQueryListEvent) => {
+      phone.value = event.matches;
+    };
+    phoneQuery.addEventListener("change", onPhoneChange);
+    const observer = watchMarkers();
+    return () => {
+      phoneQuery.removeEventListener("change", onPhoneChange);
+      observer.disconnect();
+    };
+  });
 </script>
 
-<section class="features" id="features" bind-element={section}>
-	<div class="features-inner" animate={contentDrift}>
-		<h2 class="section-title" animate={titleSlide}>Features</h2>
-		<div class="feature-grid">
-			<FeatureCard
-				title="Variables"
-				icon="bolt"
-				tag="Reactive"
-				tone="var(--pink)"
-				motion={cardMotion(0)}
-			>
-				<p class="benefit">Only the text that reads a changed variable updates.</p>
-				<div class="feature-demo">
-					<FeatureCounter />
-				</div>
-				<FeatureSnippet code={featureSnippets.variables} />
-			</FeatureCard>
+<section class="features" id="features">
+  <div class="features-inner">
+    <IF {phone.value}>
+      <header class="features-head" animate={titleSlide}>
+        <h2 class="section-title">Features</h2>
+        <p class="section-sub">Eight things Lusia does for you.</p>
+      </header>
+    </IF>
 
-			<FeatureCard
-				title="Flow tags"
-				icon="account_tree"
-				tag="Markup"
-				tone="var(--lavender)"
-				motion={cardMotion(1)}
-			>
-				<p class="benefit">IF, ELSE, EACH and FOR show, hide and repeat markup.</p>
-				<FeatureSnippet code={featureSnippets.flow} />
-			</FeatureCard>
+    <div class="track" bind-element={track}>
+      <EACH {features} as={feature} index={i} key={feature.key}>
+        <div class="marker" style={indexStyle(i.value)}></div>
+      </EACH>
 
-			<FeatureCard
-				title="Animate"
-				icon="motion_photos_auto"
-				tag="Motion"
-				tone="var(--mint)"
-				motion={cardMotion(2)}
-			>
-				<p class="benefit">Entrance and hover motion from one attribute.</p>
-				<div class="feature-demo">
-					<button
-						class="hover-demo"
-						type="button"
-						animate={{ style: PRESET.ZOOM_IN, when: WHEN.HOVER }}
-					>
-						Hover me
-					</button>
-				</div>
-				<FeatureSnippet code={featureSnippets.animate} />
-			</FeatureCard>
+      <IF {!phone.value}>
+        <div class="stage">
+          <nav class="nav" aria-label="Features" style={windowStyle()}>
+            <header class="nav-head">
+              <h2 class="section-title">Features</h2>
+              <p class="section-sub">Eight things Lusia does for you.</p>
+            </header>
+            <div class="nav-list">
+              <EACH {features} as={feature} index={i} key={feature.key}>
+                <button
+                  class={navClass(i.value)}
+                  style={toneStyle(feature.tone)}
+                  type="button"
+                  onclick={() => goTo(i.value)}
+                >
+                  <span class="nav-dot"></span>
+                  <span class="nav-number">{feature.number}</span>
+                  <span class="nav-tag">{feature.tag}</span>
+                </button>
+              </EACH>
+            </div>
+          </nav>
 
-			<FeatureCard
-				title="Single file"
-				icon="description"
-				tag="Format"
-				tone="var(--sky)"
-				motion={cardMotion(3)}
-			>
-				<p class="benefit">Script, markup and styles live in one .lusia file.</p>
-				<FeatureSnippet code={featureSnippets.singleFile} />
-			</FeatureCard>
+          <div class="feature-col">
+            <div class="copy-col">
+              <EACH {items} as={item} index={i} key={item.key}>
+                <div class={slotClass(i.value)} animate={copyMotion(i.value)}>
+                  <p class="copy-index">{item.number}</p>
+                  <h3 class="copy-title" aria-label={item.title}>
+                    <EACH {item.chars} as={letter}><span
+                        class="char"
+                        aria-hidden="true"
+                        animate={letter.motion}>{letter.char}</span></EACH>
+                  </h3>
+                  <p class="benefit">{item.benefit}</p>
+                </div>
+              </EACH>
+            </div>
 
-			<FeatureCard
-				title="Props and children"
-				icon="input"
-				tag="Components"
-				tone="var(--lemon)"
-				motion={cardMotion(4)}
-			>
-				<p class="benefit">
-					Pass values as attributes. Markup between the tags goes where
-					CONTENT is.
-				</p>
-				<FeatureSnippet code={featureSnippets.propsUse} />
-			</FeatureCard>
+            <div class="window" style={windowStyle()}>
+              <div class="titlebar">
+                <div class="titlebar-left">
+                  <span class="dots" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </span>
+                  <span class="file-names">
+                    <EACH {items} as={item} index={i} key={item.key}>
+                      <span class={fileClass(i.value)} animate={fileMotion(i.value)}>
+                        {item.file}
+                      </span>
+                    </EACH>
+                  </span>
+                </div>
+                <div class="titlebar-right">
+                  <span class="pane-label">Preview</span>
+                </div>
+              </div>
 
-			<FeatureCard
-				title="Scoped SCSS"
-				icon="palette"
-				tag="Styles"
-				tone="var(--peach)"
-				motion={cardMotion(5)}
-			>
-				<p class="benefit">Styles stay with their component. Use scoped, tree or global.</p>
-				<FeatureSnippet code={featureSnippets.scoped} />
-			</FeatureCard>
+              <div class="panes">
+                <div class="code-pane">
+                  <EACH {items} as={item} index={i} key={item.key}>
+                    <div class={slotClass(i.value)} animate={codeMotion(i.value)}>
+                      <FeatureSnippet code={item.code} />
+                    </div>
+                  </EACH>
+                </div>
 
-			<FeatureCard
-				title="Bun native"
-				icon="rocket_launch"
-				tag="Tooling"
-				tone="var(--rose)"
-				motion={cardMotion(6)}
-			>
-				<p class="benefit">
-					A Bun plugin compiles .lusia files. Start a project in one
-					command.
-				</p>
-				<TerminalMock />
-			</FeatureCard>
+                <div class="preview">
+                  <div class="demo-col">
+                    <div class={slotClass(0)} animate={demoMotion(0)}>
+                      <IF {isMounted[0].value}><MotionDemo /></IF>
+                    </div>
+                    <div class={slotClass(1)} animate={demoMotion(1)}>
+                      <IF {isMounted[1].value}><ScrollDemo /></IF>
+                    </div>
+                    <div class={slotClass(2)} animate={demoMotion(2)}>
+                      <IF {isMounted[2].value}><UpdateDemo /></IF>
+                    </div>
+                    <div class={slotClass(3)} animate={demoMotion(3)}>
+                      <IF {isMounted[3].value}><FlowDemo /></IF>
+                    </div>
+                    <div class={slotClass(4)} animate={demoMotion(4)}>
+                      <IF {isMounted[4].value}><TreeDemo /></IF>
+                    </div>
+                    <div class={slotClass(5)} animate={demoMotion(5)}>
+                      <IF {isMounted[5].value}><ScopedDemo /></IF>
+                    </div>
+                    <div class={slotClass(6)} animate={demoMotion(6)}>
+                      <IF {isMounted[6].value}><SizeDemo /></IF>
+                    </div>
+                    <div class={slotClass(7)} animate={demoMotion(7)}>
+                      <IF {isMounted[7].value}><TerminalMock /></IF>
+                    </div>
+                  </div>
+                  <span class="try">Try it</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </IF>
+    </div>
 
-			<FeatureCard
-				title="VS Code"
-				icon="code_blocks"
-				tag="Editor"
-				tone="var(--lavender)"
-				motion={cardMotion(7)}
-			>
-				<p class="benefit">Errors and hints show as you type in .lusia files.</p>
-				<EditorMock />
-			</FeatureCard>
-		</div>
-	</div>
+    <IF {phone.value}>
+      <div class="phone-list">
+        <article class="phone-item" style={toneStyle(features[0].tone)}>
+          <p class="copy-index">{features[0].number}</p>
+          <h3 class="copy-title">{features[0].title}</h3>
+          <p class="benefit">{features[0].benefit}</p>
+          <div class="phone-demo"><MotionDemo /></div>
+          <FeatureSnippet code={featureSources.motion.code} />
+        </article>
+        <article class="phone-item" style={toneStyle(features[1].tone)}>
+          <p class="copy-index">{features[1].number}</p>
+          <h3 class="copy-title">{features[1].title}</h3>
+          <p class="benefit">{features[1].benefit}</p>
+          <div class="phone-demo"><ScrollDemo /></div>
+          <FeatureSnippet code={featureSources.scroll.code} />
+        </article>
+        <article class="phone-item" style={toneStyle(features[2].tone)}>
+          <p class="copy-index">{features[2].number}</p>
+          <h3 class="copy-title">{features[2].title}</h3>
+          <p class="benefit">{features[2].benefit}</p>
+          <div class="phone-demo"><UpdateDemo /></div>
+          <FeatureSnippet code={featureSources.updates.code} />
+        </article>
+        <article class="phone-item" style={toneStyle(features[3].tone)}>
+          <p class="copy-index">{features[3].number}</p>
+          <h3 class="copy-title">{features[3].title}</h3>
+          <p class="benefit">{features[3].benefit}</p>
+          <div class="phone-demo"><FlowDemo /></div>
+          <FeatureSnippet code={featureSources.flow.code} />
+        </article>
+        <article class="phone-item" style={toneStyle(features[4].tone)}>
+          <p class="copy-index">{features[4].number}</p>
+          <h3 class="copy-title">{features[4].title}</h3>
+          <p class="benefit">{features[4].benefit}</p>
+          <div class="phone-demo"><TreeDemo /></div>
+          <FeatureSnippet code={featureSources.tree.code} />
+        </article>
+        <article class="phone-item" style={toneStyle(features[5].tone)}>
+          <p class="copy-index">{features[5].number}</p>
+          <h3 class="copy-title">{features[5].title}</h3>
+          <p class="benefit">{features[5].benefit}</p>
+          <div class="phone-demo"><ScopedDemo /></div>
+          <FeatureSnippet code={featureSources.scoped.code} />
+        </article>
+        <article class="phone-item" style={toneStyle(features[6].tone)}>
+          <p class="copy-index">{features[6].number}</p>
+          <h3 class="copy-title">{features[6].title}</h3>
+          <p class="benefit">{features[6].benefit}</p>
+          <div class="phone-demo"><SizeDemo /></div>
+          <FeatureSnippet code={featureSources.size.code} />
+        </article>
+        <article class="phone-item" style={toneStyle(features[7].tone)}>
+          <p class="copy-index">{features[7].number}</p>
+          <h3 class="copy-title">{features[7].title}</h3>
+          <p class="benefit">{features[7].benefit}</p>
+          <div class="phone-demo"><TerminalMock /></div>
+          <FeatureSnippet code={featureSources.start.code} />
+        </article>
+      </div>
+    </IF>
+  </div>
 </section>
 
 <style scoped>
-@use "../styles/theme" as *;
+  @use "../styles/theme" as *;
 
-// A full screen section with no background: the Home backdrop shows through.
-.features {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	padding: 1rem clamp(1.25rem, 3vw, 3rem) 0.5rem;
-}
+  $step-height: 50vh;
+  $nav-width: 14rem;
 
-.features-inner {
-	position: relative;
-	z-index: 1;
-	width: 100%;
-	max-width: 1400px;
-	margin: 0 auto;
-}
+  // The section is opaque, and it fades in from the section above.
+  .features {
+    position: relative;
+    background: var(--bg);
 
-.section-title {
-	margin-bottom: 0.25rem;
-	font-size: clamp(1.8rem, 3.6vw, 2.5rem);
-	text-align: center;
-}
+    &::before {
+      content: "";
+      position: absolute;
+      top: -8rem;
+      right: 0;
+      left: 0;
+      height: 8rem;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+      pointer-events: none;
+    }
+  }
 
-// Eight cards of one size: four per row, two rows.
-.feature-grid {
-	display: grid;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 14px;
-}
+  .features-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 76rem;
+    padding: 0 clamp(1.25rem, 3vw, 3rem);
+    box-sizing: border-box;
+    margin: 0 auto;
+  }
 
-.benefit {
-	margin: 0;
-	color: var(--muted);
-	font-size: 0.95rem;
-}
+  .features-head {
+    margin-bottom: 2.5rem;
+  }
 
-.feature-demo {
-	display: grid;
-	place-items: center;
-	min-height: 6rem;
-}
+  // Left aligned and large. The rainbow runs through the letters and shines slowly.
+  .section-title {
+    display: inline-block;
+    margin: 0 0 0.5rem;
+    font-size: clamp(2.8rem, 8vw, 6.5rem);
+    line-height: 1.05;
+    text-align: left;
+    background: var(--rainbow);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: title-shine 6s linear infinite;
 
-.hover-demo {
-	padding: 0.6rem 1.1rem;
-	border: 2px solid var(--line);
-	border-radius: 999px;
-	background: var(--card);
-	color: var(--fg);
-	font: inherit;
-	font-weight: 700;
-	cursor: pointer;
-}
+    &::after {
+      content: "";
+      display: block;
+      width: 4.5rem;
+      height: 4px;
+      margin-top: 0.4rem;
+      border-radius: 999px;
+      background: var(--rainbow);
+    }
+  }
 
-@media (max-width: 1099px) {
-	.feature-grid {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
-}
+  .section-sub {
+    margin: 0;
+    color: var(--muted);
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+  }
 
-@media (max-width: 619px) {
-	.feature-grid {
-		grid-template-columns: minmax(0, 1fr);
-	}
-}
+  @keyframes title-shine {
+    to {
+      background-position: 200% center;
+    }
+  }
+
+  // Eight steps of scroll. The markers set the active feature, and the stage sticks.
+  .track {
+    position: relative;
+    height: calc(8 * #{$step-height});
+  }
+
+  .marker {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: $step-height;
+    top: calc(var(--index) * #{$step-height});
+  }
+
+  // Nav on the left. The window and its text sit on the right, centered as one block.
+  .stage {
+    position: sticky;
+    top: $topbar-height;
+    display: grid;
+    grid-template-columns: $nav-width minmax(0, 1fr);
+    align-items: center;
+    gap: 3rem;
+    height: calc(100vh - #{$topbar-height});
+    padding: 1.5rem 0;
+    box-sizing: border-box;
+  }
+
+  .feature-col {
+    display: grid;
+    gap: 1.75rem;
+    min-width: 0;
+  }
+
+  .nav {
+    display: grid;
+    gap: 2rem;
+  }
+
+  // On wide screens the header sits in the sticky stage, so it stays in view.
+  .nav-head {
+    .section-title {
+      font-size: 2.6rem;
+    }
+
+    .section-sub {
+      font-size: 0.95rem;
+    }
+  }
+
+  .nav-list {
+    display: grid;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.45rem 0;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: color 0.3s ease;
+
+    &:hover,
+    &.is-active {
+      color: var(--fg);
+    }
+
+    &.is-active {
+      font-weight: 800;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--tone);
+      outline-offset: 2px;
+      border-radius: 6px;
+    }
+  }
+
+  // The current item grows a short bar in front of it.
+  .nav-dot {
+    width: 0;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--fg);
+    transition: width 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    .is-active & {
+      width: 1.4rem;
+    }
+  }
+
+  .nav-number {
+    font-family: $font-display;
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+  }
+
+  // Each column holds all eight items in one cell. Only the active one shows.
+  .copy-col {
+    display: grid;
+    min-width: 0;
+  }
+
+
+  .slot {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: visibility 0s linear 0.38s;
+
+    &.is-active {
+      visibility: visible;
+      pointer-events: auto;
+      transition-delay: 0s;
+    }
+  }
+
+  .char {
+    display: inline-block;
+    white-space: pre;
+  }
+
+  .copy-index {
+    margin: 0;
+    color: var(--muted);
+    font-family: $font-display;
+    font-size: 1.1rem;
+    font-weight: 800;
+  }
+
+  .copy-title {
+    margin: 0.2rem 0 0.6rem;
+    font-family: $font-display;
+    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+    font-weight: 800;
+    line-height: 1.15;
+  }
+
+  .benefit {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  // The mini IDE window.
+  .window {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    height: min(34rem, calc(100vh - #{$topbar-height} - 12rem));
+    min-height: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background: var(--card);
+  }
+
+  .titlebar {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: center;
+    height: 2.6rem;
+    background: var(--code);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .titlebar-left,
+  .titlebar-right {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    min-width: 0;
+    padding: 0 1rem;
+  }
+
+  .titlebar-left {
+    gap: 0.9rem;
+  }
+
+  .titlebar-right {
+    border-left: 1px solid var(--line);
+  }
+
+  .dots {
+    display: flex;
+    flex: none;
+    gap: 0.4rem;
+
+    span {
+      width: 0.6rem;
+      height: 0.6rem;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--fg) 30%, transparent);
+    }
+  }
+
+  // All names share one cell. The clip hides them while they slide.
+  .file-names {
+    display: grid;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  .file-name {
+    grid-area: 1 / 1;
+    overflow: hidden;
+    color: var(--fg);
+    font-family: $font-mono;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pane-label {
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .panes {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .code-pane {
+    display: grid;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    background: var(--code);
+
+    > .slot {
+      height: 100%;
+    }
+  }
+
+  .code-pane :global(.snippet) {
+    box-sizing: border-box;
+    height: 100%;
+    margin: 0;
+    padding: 1rem 1.2rem;
+    overflow: auto;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  // The preview is opaque, so the page art does not show through.
+  .preview {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    padding: 1.5rem 1.25rem 2.25rem;
+    border-left: 1px solid var(--line);
+    background: var(--card);
+  }
+
+  .demo-col {
+    display: grid;
+    width: 100%;
+    max-width: 26rem;
+    min-width: 0;
+  }
+
+  .try {
+    position: absolute;
+    right: 0.9rem;
+    bottom: 0.7rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  // Phone: a plain list. The sticky stage and the markers are not used.
+  .phone-list {
+    display: grid;
+    gap: 2.5rem;
+    min-width: 0;
+  }
+
+  .phone-item {
+    display: grid;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  .phone-demo {
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: 14rem;
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background: var(--code);
+  }
+
+  .phone-item :global(.snippet) {
+    box-sizing: border-box;
+    max-width: 100%;
+    margin: 0;
+    overflow-x: auto;
+  }
+
+  @media (max-width: 899px) {
+    .track {
+      display: none;
+    }
+
+    .copy-title {
+      font-size: clamp(1.6rem, 7vw, 2rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .section-title {
+      animation: none;
+    }
+
+    .window,
+
+    .nav-item,
+    .nav-dot,
+    .slot {
+      transition: none;
+    }
+  }
 </style>

@@ -1,0 +1,32 @@
+<script>
+  import { variable } from "lusiajs";
+  import TreeNode from "./TreeNode.lusia";
+
+  const root = variable({
+    name: "src",
+    children: [
+      {
+        name: "components",
+        children: [{ name: "Button.lusia" }, { name: "Card.lusia" }],
+      },
+      {
+        name: "pages",
+        children: [{ name: "Home.lusia" }, { name: "About.lusia" }],
+      },
+      { name: "main.ts" },
+    ],
+  });
+</script>
+
+<ul class="tree">
+  <TreeNode item={root} />
+</ul>
+
+<style scoped>
+  .tree {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>

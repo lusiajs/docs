@@ -1,0 +1,92 @@
+<script>
+  import { PRESET, variable } from "lusiajs";
+
+  const presets = [
+    { label: "Fade in", motion: PRESET.FADE_IN },
+    { label: "Slide up", motion: PRESET.SLIDE_UP },
+    { label: "Pop in", motion: PRESET.POP_IN },
+    { label: "Zoom", motion: PRESET.ZOOM_IN },
+    { label: "Flip", motion: PRESET.FLIP_IN },
+    { label: "Blur", motion: PRESET.BLUR_IN },
+    { label: "Bounce", motion: PRESET.BOUNCE_IN },
+    { label: "Tada", motion: PRESET.TADA },
+  ];
+
+  // Each play adds a new item with a new id, so the shape is rebuilt and plays again.
+  let nextId = 2;
+  const plays = variable([{ id: 1, label: "Fade in", motion: PRESET.FADE_IN }]);
+
+  function play(preset: { label: string; motion: unknown }) {
+    plays.value = [{ id: nextId, label: preset.label, motion: preset.motion }];
+    nextId++;
+  }
+</script>
+
+<div class="motion">
+  <div class="presets">
+    <EACH {presets} as={preset} key={preset.label}>
+      <button
+        class="chip"
+        type="button"
+        onclick={() => play(preset)}
+      >
+        {preset.label}
+      </button>
+    </EACH>
+  </div>
+  <div class="stage">
+    <EACH {plays} as={run} key={run.id}>
+      <div class="shape" animate={{ style: run.motion }}>{run.label}</div>
+    </EACH>
+  </div>
+</div>
+
+<style scoped>
+  .motion {
+    display: grid;
+    width: 100%;
+    gap: 1.2rem;
+    color: var(--fg);
+  }
+
+  .presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chip {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--line);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--fg);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .chip:hover {
+    border-color: var(--tone, var(--accent));
+  }
+
+  .stage {
+    display: grid;
+    place-items: center;
+    min-height: 14rem;
+    border-radius: 24px;
+    background: color-mix(in srgb, var(--tone, var(--sky)) 16%, var(--card));
+  }
+
+  .shape {
+    display: grid;
+    place-items: center;
+    width: min(60%, 16rem);
+    aspect-ratio: 1;
+    border-radius: 42% 58% 60% 40% / 45% 45% 55% 55%;
+    background: var(--tone, var(--sky));
+    color: #2a2033;
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+</style>

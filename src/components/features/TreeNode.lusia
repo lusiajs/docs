@@ -1,0 +1,88 @@
+<NOLAZY />
+
+<script>
+  import { PRESET, props, variable } from "lusiajs";
+  import TreeNode from "./TreeNode.lusia";
+
+  const { item } = props({ item: { name: "" } });
+  const open = variable(true);
+  const children = variable.compute(() => item.value.children ?? []);
+  const chevronClass = variable.compute(() =>
+    open.value ? "chevron open" : "chevron",
+  );
+
+  function toggle() {
+    open.value = !open.value;
+  }
+</script>
+
+<li class="node">
+  <IF {item.value.children}>
+    <button class="branch" type="button" onclick={toggle}>
+      <span class={chevronClass}>▸</span>
+      {item.value.name}
+    </button>
+    <IF {open}>
+      <ul animate={{ style: PRESET.SLIDE_DOWN }}>
+        <EACH {children} as={child} key={child.name}>
+          <TreeNode item={child} />
+        </EACH>
+      </ul>
+    </IF>
+  </IF>
+  <ELSE>
+    <span class="leaf">{item.value.name}</span>
+  </ELSE>
+</li>
+
+<style scoped>
+  .node {
+    list-style: none;
+  }
+
+  ul {
+    margin: 0.3rem 0 0.3rem 1.1rem;
+    padding: 0;
+    border-left: 2px dashed var(--line);
+  }
+
+  ul ul {
+    margin-left: 0.8rem;
+  }
+
+  .branch,
+  .leaf {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    color: var(--fg);
+    font: inherit;
+    font-size: 1.1rem;
+  }
+
+  .branch {
+    border: none;
+    background: color-mix(in srgb, var(--tone, var(--lemon)) 25%, transparent);
+    cursor: pointer;
+    font-weight: 800;
+  }
+
+  .branch:hover {
+    background: color-mix(in srgb, var(--tone, var(--lemon)) 40%, transparent);
+  }
+
+  .leaf {
+    color: var(--muted);
+  }
+
+  .chevron {
+    display: inline-block;
+    transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .chevron.open {
+    transform: rotate(90deg);
+  }
+</style>

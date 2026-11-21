@@ -1,0 +1,155 @@
+<script>
+  import { PRESET, WHEN, variable } from "lusiajs";
+
+  const loggedIn = variable(false);
+
+  // Each piece eases in when it appears and out when it leaves.
+  const textMotion = [
+    { style: PRESET.SLIDE_UP },
+    { style: PRESET.FADE_OUT, when: WHEN.DETACH },
+  ];
+  const buttonMotion = [
+    { style: PRESET.POP_IN },
+    { style: PRESET.POP_OUT, when: WHEN.DETACH },
+  ];
+  const todos = variable([
+    { id: 1, title: "Write docs" },
+    { id: 2, title: "Ship" },
+  ]);
+  let nextId = 3;
+
+  function addTodo() {
+    todos.value = [...todos.value, { id: nextId, title: `Task ${nextId}` }];
+    nextId++;
+  }
+
+  function removeTodo(id: number) {
+    todos.value = todos.value.filter((todo) => todo.id !== id);
+  }
+
+  function shuffleTodos() {
+    todos.value = [...todos.value].reverse();
+  }
+</script>
+
+<div class="flow">
+  <IF {loggedIn}>
+    <p animate={textMotion}>Welcome back.</p>
+    <button
+      class="login"
+      type="button"
+      onclick={() => (loggedIn.value = false)}
+      animate={buttonMotion}
+    >
+      Log out
+    </button>
+  </IF>
+  <ELSE>
+    <button
+      class="login"
+      type="button"
+      onclick={() => (loggedIn.value = true)}
+      animate={buttonMotion}
+    >
+      Log in
+    </button>
+  </ELSE>
+  <ul>
+    <EACH {todos} as={todo} index={i} key={todo.id}>
+      <li
+        class="item"
+        animate={[
+          { style: PRESET.POP_IN },
+          { style: PRESET.FADE_OUT, when: WHEN.DETACH },
+          { when: WHEN.MOVE },
+        ]}
+      >
+        <span>{i.value + 1}. {todo.title}</span>
+        <button
+          class="remove"
+          type="button"
+          onclick={() => removeTodo(todo.id)}
+        >
+          ×
+        </button>
+      </li>
+    </EACH>
+  </ul>
+  <div class="actions">
+    <button class="login" type="button" onclick={addTodo}>Add</button>
+    <button class="login" type="button" onclick={shuffleTodos}>
+      Shuffle
+    </button>
+  </div>
+</div>
+
+<style scoped>
+  .flow {
+    display: grid;
+    justify-items: start;
+    gap: 0.9rem;
+    width: 100%;
+    color: var(--fg);
+    font-size: 1.1rem;
+
+    p,
+    ul {
+      margin: 0;
+    }
+
+    ul {
+      display: grid;
+      gap: 0.6rem;
+      width: 100%;
+      padding: 0;
+      list-style: none;
+    }
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    width: 100%;
+    padding: 0.6rem 0.6rem 0.6rem 1.1rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--tone, var(--mint)) 28%, var(--card));
+    font-weight: 700;
+  }
+
+  .remove {
+    width: 2.2rem;
+    height: 2.2rem;
+    border: none;
+    border-radius: 50%;
+    background: var(--card);
+    color: var(--fg);
+    font: inherit;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .login {
+    padding: 0.7rem 1.3rem;
+    border: 2px solid var(--line);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--fg);
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .login:hover,
+  .remove:hover {
+    background: color-mix(in srgb, var(--tone, var(--mint)) 35%, var(--card));
+  }
+</style>

@@ -1,0 +1,94 @@
+<script>
+  import { onAttach, variable } from "lusiajs";
+
+  const TARGET = 9;
+  const DURATION = 1000;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const kb = variable(reduced ? TARGET : 0);
+
+  // Counts from 0 to 9 each time the demo is attached.
+  function countUp() {
+    if (reduced) return;
+    const start = performance.now();
+    function frame(now: number) {
+      const t = Math.min(1, (now - start) / DURATION);
+      kb.value = Math.round(TARGET * (1 - (1 - t) ** 3));
+      if (t < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  onAttach(countUp);
+</script>
+
+<div class="size">
+  <div class="stat">
+    <p class="number">
+      <span class="count">{kb}</span><span class="unit">KB</span>
+    </p>
+    <p class="caption">gzipped</p>
+  </div>
+  <div class="stat">
+    <p class="number">
+      <span class="count">0</span>
+    </p>
+    <p class="caption">runtime dependencies</p>
+  </div>
+</div>
+
+<style scoped>
+  .size {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    width: 100%;
+    color: var(--fg);
+  }
+
+  .stat {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 0.3rem;
+    min-height: 14rem;
+    padding: 1rem;
+    border-radius: 24px;
+    background: var(--tone, var(--rose));
+    color: #2a2033;
+    text-align: center;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .number {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .count {
+    font-size: clamp(4rem, 14vw, 7rem);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .unit {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+  }
+
+  .caption {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 480px) {
+    .size {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

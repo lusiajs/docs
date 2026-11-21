@@ -1,94 +1,97 @@
-import { highlightInto } from "./highlight/highlight.ts";
+import flowSource from "./components/features/FlowDemo.lusia?raw";
+import motionSource from "./components/features/MotionDemo.lusia?raw";
+import scopedSource from "./components/features/ScopedDemo.lusia?raw";
+import scrollSource from "./components/features/ScrollDemo.lusia?raw";
+import sizeSource from "./components/features/SizeDemo.lusia?raw";
+import terminalSource from "./components/features/TerminalMock.lusia?raw";
+import treeSource from "./components/features/TreeNode.lusia?raw";
+import updateSource from "./components/features/UpdateDemo.lusia?raw";
 
-// The code shown on the Home feature cards. The test compiles each one, so the cards never show broken code.
-export const featureSnippets = {
-	variables: `<script>
-import { variable } from "lusiajs";
+// The Home features, in scroll order. Each card shows one feature with its demo and code.
+export const features = [
+	{
+		key: "motion",
+		number: "01",
+		tag: "Motion",
+		title: "Motion is built in",
+		benefit: "Pick a preset and a moment: load, hover, scroll or remove. One animate attribute does it.",
+		icon: "motion_photos_auto",
+		tone: "var(--sky)",
+	},
+	{
+		key: "scroll",
+		number: "02",
+		tag: "Scroll",
+		title: "Scroll-driven, no library",
+		benefit: "Elements follow the scroll. They rise, fade and turn as you move.",
+		icon: "swipe_vertical",
+		tone: "var(--lavender)",
+	},
+	{
+		key: "updates",
+		number: "03",
+		tag: "Reactive",
+		title: "Surgical updates",
+		benefit: "Change a variable and only the text that reads it updates.",
+		icon: "bolt",
+		tone: "var(--pink)",
+	},
+	{
+		key: "flow",
+		number: "04",
+		tag: "Lists",
+		title: "Shuffle with grace",
+		benefit: "Keyed EACH items glide to their new place when the list changes.",
+		icon: "shuffle",
+		tone: "var(--mint)",
+	},
+	{
+		key: "tree",
+		number: "05",
+		tag: "Components",
+		title: "Infinite trees",
+		benefit: "A component can use itself. One small file builds a tree of any depth.",
+		icon: "account_tree",
+		tone: "var(--lemon)",
+	},
+	{
+		key: "scoped",
+		number: "06",
+		tag: "Styles",
+		title: "Styles stay home",
+		benefit: "A component's styles stay in that component. Use scoped, tree or global when you need more.",
+		icon: "palette",
+		tone: "var(--peach)",
+	},
+	{
+		key: "size",
+		number: "07",
+		tag: "Size",
+		title: "Tiny and fast",
+		benefit: "About 9 KB gzipped. No runtime dependencies.",
+		icon: "compress",
+		tone: "var(--rose)",
+	},
+	{
+		key: "start",
+		number: "08",
+		tag: "Tooling",
+		title: "Zero to running",
+		benefit: "One command creates a project. bun run dev starts it.",
+		icon: "rocket_launch",
+		tone: "var(--sky)",
+	},
+];
 
-const count = variable(0);
-const double = variable.compute(() => count.value * 2);
-</script>
-
-<button onclick={() => count.value++}>
-  Count {count}, double {double}
-</button>`,
-	flow: `<script>
-import { variable } from "lusiajs";
-
-const loggedIn = variable(false);
-const todos = variable([{ id: 1, title: "Write docs" }]);
-</script>
-
-<IF {loggedIn}>
-  <p>Welcome back.</p>
-</IF>
-<ELSE>
-  <button onclick={() => (loggedIn.value = true)}>Log in</button>
-</ELSE>
-
-<ul>
-  <EACH {todos} as={todo} index={i} key={todo.id}>
-    <li>{i.value + 1}. {todo.title}</li>
-  </EACH>
-</ul>`,
-	animate: `<script>
-import { PRESET, WHEN } from "lusiajs";
-</script>
-
-<h2 animate={PRESET.FADE_IN}>Hello</h2>
-<button animate={{ style: PRESET.ZOOM_IN, when: WHEN.HOVER }}>
-  Hover me
-</button>`,
-	singleFile: `<script>
-import { variable } from "lusiajs";
-
-const name = variable("Ada");
-</script>
-
-<p>Hi {name}</p>
-
-<style scoped>
-p {
-  color: tomato;
-}
-</style>`,
-	propsCard: `<script>
-import { props } from "lusiajs";
-
-const { title } = props({ title: "" });
-</script>
-
-<section>
-  <h2>{title}</h2>
-  <CONTENT />
-</section>`,
-	propsUse: `<script>
-import Card from "./Card.lusia";
-</script>
-
-<Card title="Inbox">
-  <p>3 new messages</p>
-</Card>`,
-	scoped: `<div class="card">
-  <p>Styled here only.</p>
-</div>
-
-<style scoped>
-.card {
-  padding: 1rem;
-  border-radius: 12px;
-  background: #ffe4f1;
-}
-</style>`,
+// The code shown on the Home features. The test compiles each .lusia snippet, so the features never show broken code.
+// Each feature shows the real source of the demo beside it, so the code always matches.
+export const featureSources = {
+	motion: { file: "MotionDemo.lusia", code: motionSource },
+	scroll: { file: "ScrollDemo.lusia", code: scrollSource },
+	updates: { file: "UpdateDemo.lusia", code: updateSource },
+	flow: { file: "FlowDemo.lusia", code: flowSource },
+	tree: { file: "TreeNode.lusia", code: treeSource },
+	scoped: { file: "ScopedDemo.lusia", code: scopedSource },
+	size: { file: "SizeDemo.lusia", code: sizeSource },
+	start: { file: "TerminalMock.lusia", code: terminalSource },
 };
-
-// Snippets in the Home features are highlighted once the page is attached. Motion is handled by animate.
-export function initFeatures(root: ParentNode): void {
-	for (const code of root.querySelectorAll<HTMLElement>("code[data-lang]")) {
-		highlightInto(
-			code,
-			code.textContent ?? "",
-			code.dataset.lang ?? "none",
-		);
-	}
-}

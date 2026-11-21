@@ -1,0 +1,103 @@
+<script>
+  import { variable } from "lusiajs";
+
+  const name = variable("Ada");
+  const letters = variable.compute(() => name.value.length);
+  const nameEl = variable<HTMLElement | null>(null);
+  const lettersEl = variable<HTMLElement | null>(null);
+
+  const pulse = [
+    { transform: "scale(1)" },
+    { transform: "scale(1.2)" },
+    { transform: "scale(1)" },
+  ];
+
+  // Only the two readouts that read the variables flash. The labels never do.
+  function flash(el: HTMLElement | null) {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    el?.animate(pulse, { duration: 450, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" });
+  }
+
+  name.onUpdate(
+    () => {
+      flash(nameEl.peek());
+      flash(lettersEl.peek());
+    },
+    { onInit: false },
+  );
+</script>
+
+<div class="update">
+  <label class="field">
+    <span>Type a name</span>
+    <input type="text" bind-value={name} />
+  </label>
+  <p class="line">
+    <span class="label">Hello,</span>
+    <span class="value" bind-element={nameEl}>{name}</span>
+  </p>
+  <p class="line">
+    <span class="label">Letters:</span>
+    <span class="value" bind-element={lettersEl}>{letters}</span>
+  </p>
+</div>
+
+<style scoped>
+  .update {
+    display: grid;
+    width: 100%;
+    gap: 1rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .field {
+    display: grid;
+    gap: 0.4rem;
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  .field input {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    padding: 0.8rem 1rem;
+    border: 2px solid var(--line);
+    border-radius: 16px;
+    background: var(--card);
+    color: var(--fg);
+    font: inherit;
+    font-size: 1.2rem;
+  }
+
+  .field input:focus-visible {
+    outline: 3px solid var(--tone, var(--pink));
+    outline-offset: 2px;
+  }
+
+  .line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-size: 1.4rem;
+  }
+
+  .label {
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  .value {
+    display: inline-block;
+    padding: 0.1rem 0.7rem;
+    border-radius: 12px;
+    background: var(--tone, var(--pink));
+    color: #2a2033;
+    font-weight: 800;
+  }
+</style>

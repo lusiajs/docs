@@ -1,6 +1,5 @@
 import { initCopy } from "./copy.ts";
 import { initDrawer } from "./drawer.ts";
-import { initFeatures } from "./features.ts";
 import { initGroupToggles } from "./nav-group.ts";
 import { errorsPath, playgroundPath } from "./page-link.ts";
 import { initReferenceClick } from "./reference-click.ts";
@@ -22,7 +21,6 @@ function mountGuide(root: HTMLElement, signal: AbortSignal): void {
 }
 
 function mountHome(root: HTMLElement, signal: AbortSignal): void {
-	initFeatures(root);
 	initCopy(root, signal);
 }
 

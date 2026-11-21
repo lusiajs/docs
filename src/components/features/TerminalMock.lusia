@@ -1,17 +1,69 @@
 <script>
-  import { PRESET } from "lusiajs";
+  import { onAttach, variable } from "lusiajs";
+
+  const COMMANDS = [
+    "bun create lusiajs my-app",
+    "cd my-app",
+    "bun install",
+    "bun run dev",
+  ];
+  const STEP_MS = 55;
+  const PAUSE_MS = 350;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const first = variable(reduced ? COMMANDS[0] : "");
+  const second = variable(reduced ? COMMANDS[1] : "");
+  const third = variable(reduced ? COMMANDS[2] : "");
+  const fourth = variable(reduced ? COMMANDS[3] : "");
+  const lines = [first, second, third, fourth];
+  const root = variable<HTMLElement | null>(null);
+
+  function wait(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  // Types one line a character at a time, then returns once it is done.
+  async function typeLine(line: string, target: typeof first) {
+    for (let count = 1; count <= line.length; count++) {
+      target.value = line.slice(0, count);
+      await wait(STEP_MS);
+    }
+  }
+
+  async function typeAll() {
+    for (const [index, target] of lines.entries()) {
+      await typeLine(COMMANDS[index], target);
+      await wait(PAUSE_MS);
+    }
+  }
+
+  onAttach(() => {
+    const el = root.peek();
+    if (!el || reduced) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        typeAll();
+      },
+      { threshold: 0.5 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  });
 </script>
 
 <div
   class="terminal"
   role="img"
-  aria-label="Terminal: bun create lusiajs my-app, then bun run dev"
+  aria-label="Terminal: the four commands that create and start a project"
+  bind-element={root}
 >
-  <p animate={PRESET.FADE_IN}>
-    <span class="prompt">$</span> bun create lusiajs my-app
-  </p>
-  <p animate={PRESET.FADE_IN}><span class="prompt">$</span> bun run dev</p>
-  <p class="note" animate={PRESET.FADE_IN}>Then open http://localhost:3000</p>
+  <p><span class="prompt">$</span> {first}</p>
+  <p><span class="prompt">$</span> {second}</p>
+  <p><span class="prompt">$</span> {third}</p>
+  <p><span class="prompt">$</span> {fourth}<span class="caret"></span></p>
+  <p class="note">Then open http://localhost:3000</p>
 </div>
 
 <style scoped>
@@ -19,14 +71,15 @@
 
   .terminal {
     display: grid;
-    gap: 0.45rem;
-    padding: 0.9rem 1rem;
+    gap: 0.7rem;
+    width: 100%;
+    padding: 1.2rem 1.4rem;
     border: 2px solid var(--line);
-    border-radius: 18px;
+    border-radius: 24px;
     background: var(--code);
     font-family: $font-mono;
-    font-size: 0.78rem;
-    line-height: 1.5;
+    font-size: 0.95rem;
+    line-height: 1.6;
     color: var(--fg);
 
     p {
@@ -40,9 +93,31 @@
       font-weight: 700;
     }
 
+    .caret {
+      display: inline-block;
+      width: 0.6em;
+      height: 1.1em;
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      background: var(--link);
+      animation: blink 1s steps(1) infinite;
+    }
+
     .note {
       color: var(--muted);
       white-space: normal;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .caret {
+      animation: none;
     }
   }
 </style>
