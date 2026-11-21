@@ -697,6 +697,33 @@ export const catalog: Record<string, CatalogEntry> = {
   },
   preset: {
     icon: "auto_awesome",
+    table: {
+      head: ["Value", "What it does"],
+      rows: [
+        ["PRESET.FADE_IN", "Fades in from transparent."],
+        ["PRESET.FADE_OUT", "Fades out to transparent."],
+        ["PRESET.SLIDE_UP", "Comes up from below, moving up 24px into place while fading in."],
+        ["PRESET.SLIDE_DOWN", "Comes down from above, moving down 24px into place while fading in."],
+        ["PRESET.SLIDE_LEFT", "Comes in from the left, moving right 24px into place while fading in."],
+        ["PRESET.SLIDE_RIGHT", "Comes in from the right, moving left 24px into place while fading in."],
+        ["PRESET.POP_IN", "Grows from 80% size while fading in."],
+        ["PRESET.POP_OUT", "Shrinks to 80% size while fading out."],
+        ["PRESET.ZOOM_IN", "Grows from nothing to full size."],
+        ["PRESET.ZOOM_OUT", "Shrinks from full size to nothing."],
+        ["PRESET.FLIP_IN", "Turns into view around the vertical axis while fading in."],
+        ["PRESET.FLIP_OUT", "Turns away around the vertical axis while fading out."],
+        ["PRESET.BLUR_IN", "Comes into focus from a blur while fading in."],
+        ["PRESET.BLUR_OUT", "Blurs out while fading out."],
+        ["PRESET.DROP_IN", "Falls in from above and settles with a small bounce."],
+        ["PRESET.BOUNCE_IN", "Grows in with a bounce, then settles."],
+        ["PRESET.SHAKE", "Shakes sideways 10px, then settles."],
+        ["PRESET.PULSE", "Grows to 110% and back."],
+        ["PRESET.SPIN", "One full turn."],
+        ["PRESET.WOBBLE", "Wobbles side to side, then settles."],
+        ["PRESET.HEARTBEAT", "Beats twice, then settles."],
+        ["PRESET.TADA", "Grows and wiggles, then settles."],
+      ],
+    },
     demos: [
       {
         id: "preset-gallery",
@@ -1134,6 +1161,20 @@ export const catalog: Record<string, CatalogEntry> = {
   },
   when: {
     icon: "schedule",
+    table: {
+      head: ["Value", "What it does"],
+      rows: [
+        ["WHEN.ATTACH", "Plays 0 to 1 once when attached. The default."],
+        ["WHEN.DETACH", "Plays its own keyframes on detach. Detach waits for it."],
+        ["WHEN.VIEW", "Plays when at least 15% is visible. Once unless more.reverse is set."],
+        ["WHEN.HOVER", "Plays 0 to 1 on pointer enter, 1 to 0 on leave."],
+        ["WHEN.SCROLL", "Moves the animation with the element's place on the screen."],
+        ["WHEN.MOVE", "Glides the element when its place changes."],
+        ["WHEN.RESIZE", "Glides the element when its size changes."],
+        ["WHEN.MOVE_OR_RESIZE", "Glides the element when its place or size changes."],
+        ["WHEN.MANUAL", "No trigger. Only a controller plays it."],
+      ],
+    },
     demos: [
       {
         id: "animate-reveal",
@@ -1234,6 +1275,25 @@ export const catalog: Record<string, CatalogEntry> = {
   "bind-prop": { icon: "swap_horiz" },
   ease: {
     icon: "show_chart",
+    table: {
+      head: ["Value", "What it does"],
+      rows: [
+        ["EASE.STYLE.LINEAR", "Constant speed, no easing."],
+        ["EASE.STYLE.QUAD", "Gentle curve, t squared."],
+        ["EASE.STYLE.CUBIC", "Stronger curve, t cubed. Good for most UI."],
+        ["EASE.STYLE.QUART", "Strong curve, t to the fourth."],
+        ["EASE.STYLE.QUINT", "Very strong curve, t to the fifth."],
+        ["EASE.STYLE.SINE", "Soft curve based on a sine wave."],
+        ["EASE.STYLE.EXPO", "Very fast start, long settle."],
+        ["EASE.STYLE.CIRC", "Round curve, based on a circle."],
+        ["EASE.STYLE.BACK", "Pulls back, then overshoots."],
+        ["EASE.STYLE.ELASTIC", "Springs around the end value."],
+        ["EASE.STYLE.BOUNCE", "Bounces like a ball landing."],
+        ["EASE.IN", "The style as it is: slow start, fast end."],
+        ["EASE.OUT", "The style flipped: fast start, slow end."],
+        ["EASE.INOUT", "Slow at both ends, fast in the middle."],
+      ],
+    },
     demos: [
       {
         id: "animate-easing",
