@@ -1,7 +1,6 @@
 <script>
 import { props } from "lusia";
 import type { ApiEntry } from "../../../reference/api.ts";
-import { tileMotion } from "../motion/reference.ts";
 import { searchText } from "../reference-model.ts";
 
 const emptyEntry: ApiEntry = {
@@ -23,7 +22,6 @@ const search = searchText(shown);
 
 <a
 	class="ref-tile"
-	animate={tileMotion}
 	href={href.peek()}
 	data-ref-entry={shown.id}
 	data-kind={shown.kind}

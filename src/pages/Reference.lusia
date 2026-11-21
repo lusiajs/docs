@@ -115,7 +115,7 @@ const kinds = kindsOf(api);
 		</div>
 
 		<div data-ref-details>
-			<a class="button ref-back" href={referencePath} data-ref-back hidden>
+			<a class="ref-back" href={referencePath} data-ref-back hidden>
 				<span class="material-symbols-rounded" aria-hidden="true"
 					>arrow_back</span
 				>

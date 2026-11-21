@@ -3,7 +3,6 @@
 // The Reference uses the Guide's grid, sidebar and drawer. This file adds the page's own parts.
 .reference {
 	.content {
-		max-width: 58rem;
 		width: 100%;
 	}
 }
@@ -183,9 +182,24 @@ a.ref-tile {
 	position: sticky;
 	top: calc($topbar-height + 0.5rem);
 	z-index: 10;
+	display: inline-block;
 	align-self: flex-start;
 	margin-bottom: 1.5rem;
+	padding: 0.5rem 0;
+	background: var(--bg);
+	color: var(--link);
 	font-size: 0.95rem;
+	font-weight: 700;
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.25em;
+}
+
+.ref-back .material-symbols-rounded {
+	display: inline-block;
+	margin-right: 0.3rem;
+	vertical-align: middle;
+	text-decoration: none;
 }
 
 .ref-card {
