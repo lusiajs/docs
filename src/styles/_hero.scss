@@ -97,6 +97,7 @@
 	font-size: clamp(3.25rem, 10vw, 6rem);
 	font-weight: 800;
 	letter-spacing: -0.02em;
+	padding-left: var(--title-pad, 0px);
 }
 
 // The outer box moves with the scroll. The inner box drops in and wobbles.
