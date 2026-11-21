@@ -15,7 +15,8 @@ const tasks = variable<Task[]>([
 const animateSpace = variable(true);
 let nextId = 5;
 
-// A removed row fades out. animateSpace is on by default. The two lists below differ only in it.
+// A removed row fades out. animateSpace is on by default.
+// The two lists below differ only in it.
 const fadeOut = {
 	0: { opacity: 1 },
 	1: { opacity: 0 },
