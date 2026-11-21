@@ -6,6 +6,16 @@ export interface MemberRow {
 	depth: number;
 }
 
+export interface ValueRow extends MemberRow {
+	note: string;
+}
+
+export interface ParameterRow {
+	name: string;
+	type: string;
+	optional: boolean;
+}
+
 // The Reference reads kind by kind, simplest idea first.
 export const KIND_ORDER: ApiKind[] = [
 	"function",
@@ -98,6 +108,35 @@ export function flattenMembers(
 		{ name: member.name, summary: member.summary, depth },
 		...flattenMembers(member.members, depth + 1),
 	]);
+}
+
+// The table rows of an enum or object entry. The note marks the member the summary calls the default.
+export function valueRows(members: ApiMember[] = []): ValueRow[] {
+	return flattenMembers(members).map((row) => ({
+		...row,
+		note: DEFAULT_PATTERN.test(row.summary) ? "Default" : "-",
+	}));
+}
+
+const DEFAULT_PATTERN = /\bThe default\b/;
+const PARAMETER_PATTERN = /^(\w+)(\?)?:\s*([\s\S]+)$/;
+
+// The name and type of each parameter of a function. Empty when a parameter does not read as "name: type".
+export function parameterRows(entry: ApiEntry): ParameterRow[] {
+	if (entry.kind !== "function") return [];
+	const list = splitParameters(entry.signature);
+	if (!list) return [];
+	const rows: ParameterRow[] = [];
+	for (const param of list.params.filter(Boolean)) {
+		const match = PARAMETER_PATTERN.exec(param);
+		if (!match) return [];
+		rows.push({
+			name: match[1]!,
+			optional: match[2] === "?",
+			type: match[3]!,
+		});
+	}
+	return rows;
 }
 
 // The lower-case text the filter matches: the name, summary, signature, every bullet and every member name and summary.

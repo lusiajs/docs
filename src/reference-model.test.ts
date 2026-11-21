@@ -8,7 +8,9 @@ import {
 	kindSections,
 	kindsOf,
 	matchesFilter,
+	parameterRows,
 	searchText,
+	valueRows,
 	withNeighbors,
 	wrapSignature,
 } from "./reference-model.ts";
@@ -84,6 +86,81 @@ describe("flattenMembers", () => {
 
 	test("returns no rows without members", () => {
 		expect(flattenMembers(undefined)).toEqual([]);
+	});
+});
+
+describe("valueRows", () => {
+	test("marks the member its summary calls the default", () => {
+		expect(
+			valueRows([
+				{ name: "SUDDEN", summary: "Jumps. The default." },
+				{ name: "SMOOTH", summary: "Bends." },
+			]),
+		).toEqual([
+			{ name: "SUDDEN", summary: "Jumps. The default.", depth: 0, note: "Default" },
+			{ name: "SMOOTH", summary: "Bends.", depth: 0, note: "-" },
+		]);
+	});
+
+	test("returns no rows without members", () => {
+		expect(valueRows(undefined)).toEqual([]);
+	});
+});
+
+describe("parameterRows", () => {
+	test("reads each parameter as a name, a type and whether it is optional", () => {
+		expect(
+			parameterRows(
+				entry("attach", {
+					signature:
+						"attach(component: Component, target: Element, props?: Props): Instance",
+				}),
+			),
+		).toEqual([
+			{ name: "component", type: "Component", optional: false },
+			{ name: "target", type: "Element", optional: false },
+			{ name: "props", type: "Props", optional: true },
+		]);
+	});
+
+	test("keeps arrows and brackets inside a parameter type", () => {
+		const [hook] = parameterRows(
+			entry("onAttach", {
+				signature: "onAttach(hook: (root: ParentNode) => unknown): void",
+			}),
+		);
+		expect(hook).toEqual({
+			name: "hook",
+			type: "(root: ParentNode) => unknown",
+			optional: false,
+		});
+	});
+
+	test("returns no rows for a function without parameters", () => {
+		expect(
+			parameterRows(entry("detach", { signature: "detach(): Promise<void>" })),
+		).toEqual([]);
+	});
+
+	test("returns no rows when a parameter is not a name and a type", () => {
+		expect(
+			parameterRows(
+				entry("config", {
+					signature: "export default defineConfig({ animate: {} })",
+				}),
+			),
+		).toEqual([]);
+	});
+
+	test("returns no rows for an entry that is not a function", () => {
+		expect(
+			parameterRows(
+				entry("turn", {
+					kind: "value",
+					signature: "const TURN: { readonly SUDDEN: TurnMode }",
+				}),
+			),
+		).toEqual([]);
 	});
 });
 
