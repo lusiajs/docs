@@ -24,7 +24,7 @@ export const guidePlan: GuideGroup[] = [
     label: "Start",
     icon: "school",
     color: "var(--pink)",
-    entries: ["start-project", "script", "expr"],
+    entries: ["lusia-intro", "start-project", "script", "expr"],
   },
   {
     group: "reactivity",
@@ -64,6 +64,7 @@ export const guidePlan: GuideGroup[] = [
       "component-tag",
       "props",
       "content",
+      "lifecycle",
       "attach",
       "detach",
       "on-attach",

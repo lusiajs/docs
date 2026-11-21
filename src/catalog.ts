@@ -15,6 +15,10 @@ import Text from "./demos/basics/Text.lusia";
 import textSource from "./demos/basics/Text.lusia?raw";
 import Attach from "./demos/components/Attach.lusia";
 import attachSource from "./demos/components/Attach.lusia?raw";
+import Lifecycle from "./demos/components/Lifecycle.lusia";
+import lifecycleSource from "./demos/components/Lifecycle.lusia?raw";
+import lifecycleBoxSource from "./demos/components/LifecycleBox.lusia?raw";
+import lifecycleCountSource from "./demos/components/lifecycle-count.ts?raw";
 import detachBoxSource from "./demos/components/DetachBox.lusia?raw";
 import OnDetach from "./demos/components/OnDetach.lusia";
 import onDetachSource from "./demos/components/OnDetach.lusia?raw";
@@ -167,6 +171,17 @@ export interface CatalogEntry {
 
 // Keyed by the api entry id. Entries without a demo show no live card.
 export const catalog: Record<string, CatalogEntry> = {
+  "lusia-intro": {
+    icon: "info",
+    table: {
+      head: ["Section", "What it holds"],
+      rows: [
+        ["<script>", "TypeScript: imports, variables, functions and props"],
+        ["Markup", "HTML with {expr}, events, IF, EACH and components"],
+        ["<style>", "CSS for this component"],
+      ],
+    },
+  },
   "start-project": { icon: "rocket_launch" },
   expr: {
     icon: "text_fields",
@@ -356,6 +371,41 @@ export const catalog: Record<string, CatalogEntry> = {
           {
             path: "src/demos/components/LazyChart.lusia",
             text: lazyChartSource,
+          },
+        ],
+      },
+    ],
+  },
+  lifecycle: {
+    icon: "sync",
+    table: {
+      head: ["Step", "Who calls it", "When it runs", "Use it for"],
+      rows: [
+        ["attach()", "Your code", "Places the component on the page", "Mount a component by hand"],
+        ["onAttach()", "The component", "After it is placed", "Listeners, timers, data loading"],
+        ["onAttach() return", "Lusia", "When it is detached", "Undo what onAttach set up"],
+        ["detach()", "Your code", "Plays the OUT animation, then removes it", "Unmount a component"],
+        ["onDetach()", "The component", "When it leaves the page", "Final cleanup or counting"],
+      ],
+    },
+    demos: [
+      {
+        id: "lifecycle-mount",
+        title: "Mount and unmount",
+        caption: "Mount places the box and runs onAttach. Unmount plays its OUT animation, then runs onDetach.",
+        components: [Lifecycle],
+        sources: [
+          {
+            path: "src/demos/components/Lifecycle.lusia",
+            text: lifecycleSource,
+          },
+          {
+            path: "src/demos/components/LifecycleBox.lusia",
+            text: lifecycleBoxSource,
+          },
+          {
+            path: "src/demos/components/lifecycle-count.ts",
+            text: lifecycleCountSource,
           },
         ],
       },
