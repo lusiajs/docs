@@ -1,0 +1,87 @@
+name: Update lusiajs
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: update-framework
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Read the locked lusiajs version
+        id: before
+        run: |
+          version=$(grep -oE '"lusiajs": \["lusiajs@[^"]+"' bun.lock | head -n 1 | sed -E 's/.*lusiajs@([^"]+)"/\1/')
+          test -n "$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Update lusiajs
+        run: bun update lusiajs --latest
+
+      - name: Read the lusiajs version after the update
+        id: after
+        run: |
+          version=$(grep -oE '"lusiajs": \["lusiajs@[^"]+"' bun.lock | head -n 1 | sed -E 's/.*lusiajs@([^"]+)"/\1/')
+          test -n "$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Check for a new version
+        id: check
+        env:
+          BEFORE: ${{ steps.before.outputs.version }}
+          AFTER: ${{ steps.after.outputs.version }}
+        run: |
+          if [ "$BEFORE" = "$AFTER" ]; then
+            echo "lusiajs is up to date: $AFTER"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "lusiajs updated: $BEFORE -> $AFTER"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Typecheck, test and build
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          bun run typecheck
+          bun run test
+          bun run build
+
+      - name: Commit and push
+        if: steps.check.outputs.changed == 'true'
+        env:
+          VERSION: ${{ steps.after.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add bun.lock package.json
+          git commit -m "chore: update lusiajs to $VERSION"
+          git push origin HEAD:main
+
+      # Pushes made with the default token do not start other workflows, so the deploy is started here.
+      - name: Start the deploy
+        if: steps.check.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main
