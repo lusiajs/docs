@@ -1,5 +1,5 @@
 <script>
-import { setup, variable } from "lusia";
+import { onAttach, variable } from "lusia";
 import Hero from "../components/Hero.lusia";
 import Features from "../components/Features.lusia";
 import HomeBackground from "../components/HomeBackground.lusia";
@@ -22,7 +22,7 @@ function startStorm(): void {
 	setTimeout(() => (storm.value = false), STORM_MS);
 }
 
-setup(() => {
+onAttach(() => {
 	const stopCursor = trackCursor(sparks);
 	const stopKonami = watchKonami(() => {
 		startStorm();

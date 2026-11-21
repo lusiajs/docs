@@ -111,14 +111,14 @@ describe(".ts files", () => {
     expect(from?.importEdit).toBeUndefined();
   });
 
-  test("setup is now a lusia export with an auto-import", () => {
-    const setup = completeAt("const x = 1;\n|", [], "util.ts").find(
-      (item) => item.label === "setup",
+  test("onAttach is a lusia export with an auto-import", () => {
+    const onAttach = completeAt("const x = 1;\n|", [], "util.ts").find(
+      (item) => item.label === "onAttach",
     );
-    expect(setup?.importEdit).toEqual({
+    expect(onAttach?.importEdit).toEqual({
       start: 0,
       end: 0,
-      text: 'import { setup } from "lusia";\n',
+      text: 'import { onAttach } from "lusia";\n',
     });
   });
 

@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, SCROLL_AT, setup } from "lusia";
+import { WHEN, EASE, SCROLL_AT, onAttach } from "lusia";
 import { AT, watchProgress } from "./scroll-readout.ts";
 
 // Finishes in the middle: progress 1 when the card's centre reaches the screen's middle.
@@ -14,7 +14,7 @@ const riseMotion = {
 	more: { start: SCROLL_AT.ENTER, end: SCROLL_AT.CENTER },
 };
 
-setup((root) => {
+onAttach((root) => {
 	const slot = root.querySelector(".slot");
 	const out = root.querySelector("output");
 	return watchProgress(slot, AT.ENTER, AT.CENTER, out);

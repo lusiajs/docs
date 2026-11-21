@@ -1,5 +1,5 @@
 <script>
-import { props, setup, variable } from "lusia";
+import { onAttach, props, variable } from "lusia";
 
 const { label, initial, submitText, onSubmit, onCancel } = props({
 	label: "",
@@ -15,7 +15,7 @@ const hasProblem = variable.compute(() => problem.value !== "");
 const field = variable<HTMLInputElement | null>(null);
 
 // The form opens from a click, so the name field takes focus with its text selected.
-setup(() => {
+onAttach(() => {
 	const input = field.peek();
 	input?.focus();
 	input?.select();

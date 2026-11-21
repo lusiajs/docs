@@ -1,5 +1,5 @@
 <script>
-import { WHEN, EASE, EDGE, SCROLL_AT, setup } from "lusia";
+import { WHEN, EASE, EDGE, SCROLL_AT, onAttach } from "lusia";
 import { watchProgress } from "./scroll-readout.ts";
 
 const fadeIn = {
@@ -31,7 +31,7 @@ const enterMotion = {
 	more: { start: SCROLL_AT.ENTER, end: SCROLL_AT.LEAVE },
 };
 
-setup((root) => {
+onAttach((root) => {
 	const cards = root.querySelectorAll(".card");
 	const outputs = root.querySelectorAll("output");
 	const stops = [

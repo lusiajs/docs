@@ -9,8 +9,8 @@ import Events from "./demos/basics/Events.lusia";
 import eventsSource from "./demos/basics/Events.lusia?raw";
 import Markdown from "./demos/basics/Markdown.lusia";
 import markdownSource from "./demos/basics/Markdown.lusia?raw";
-import Setup from "./demos/basics/Setup.lusia";
-import setupSource from "./demos/basics/Setup.lusia?raw";
+import OnAttach from "./demos/basics/OnAttach.lusia";
+import onAttachSource from "./demos/basics/OnAttach.lusia?raw";
 import Text from "./demos/basics/Text.lusia";
 import textSource from "./demos/basics/Text.lusia?raw";
 import Attach from "./demos/components/Attach.lusia";
@@ -381,6 +381,7 @@ export const catalog: Record<string, CatalogEntry> = {
 		],
 	},
 	detach: { icon: "link_off" },
+	onDetach: { icon: "link_off" },
 	"variable-type": { icon: "data_object" },
 	"computed-variable-type": { icon: "data_object" },
 	component: { icon: "extension" },
@@ -486,18 +487,18 @@ export const catalog: Record<string, CatalogEntry> = {
 	nolazy: {
 		icon: "push_pin",
 	},
-	setup: {
+	onAttach: {
 		icon: "touch_app",
 		demos: [
 			{
-				id: "setup-cleanup",
-				title: "Setup and cleanup",
-				caption: "setup(root) runs on mount. Its return value runs on detach.",
-				components: [Setup],
+				id: "on-attach-cleanup",
+				title: "onAttach and cleanup",
+				caption: "onAttach(hook) runs when the component is placed. A function it returns runs on detach.",
+				components: [OnAttach],
 				sources: [
 					{
-						path: "src/demos/basics/Setup.lusia",
-						text: setupSource,
+						path: "src/demos/basics/OnAttach.lusia",
+						text: onAttachSource,
 					},
 				],
 			},
