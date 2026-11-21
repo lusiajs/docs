@@ -64,6 +64,7 @@
 }
 
 .hero-title {
+	position: relative;
 	margin-bottom: 0.75rem;
 	color: var(--fg);
 	font-size: clamp(3.25rem, 10vw, 6rem);
