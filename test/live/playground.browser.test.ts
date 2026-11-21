@@ -1,6 +1,12 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { chromium, type Browser, type Page } from "playwright";
-import { BUILD_TIMEOUT_MS, TEST_TIMEOUT_MS, serveSite, type SiteServer } from "./serve.ts";
+import {
+  BUILD_TIMEOUT_MS,
+  TEST_TIMEOUT_MS,
+  openSitePage,
+  serveSite,
+  type SiteServer,
+} from "./serve.ts";
 
 const DESKTOP = { width: 1280, height: 800 };
 const MOBILE = { width: 390, height: 844 };
@@ -26,8 +32,7 @@ afterAll(async () => {
 });
 
 async function openPlayground(viewport: { width: number; height: number }): Promise<Page> {
-  const page = await browser!.newPage();
-  page.setDefaultTimeout(TEST_TIMEOUT_MS);
+  const page = await openSitePage(browser!);
   await page.setViewportSize(viewport);
   await page.goto(`${site!.base}/playground`);
   await page.waitForFunction(() => document.documentElement.dataset.route === "playground");

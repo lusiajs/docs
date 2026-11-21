@@ -1,6 +1,12 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { chromium, type Browser, type ElementHandle, type Locator, type Page } from "playwright";
-import { BUILD_TIMEOUT_MS, TEST_TIMEOUT_MS, serveSite, type SiteServer } from "./serve.ts";
+import {
+  BUILD_TIMEOUT_MS,
+  TEST_TIMEOUT_MS,
+  openSitePage,
+  serveSite,
+  type SiteServer,
+} from "./serve.ts";
 
 // A new frame stays pending until it has mounted. The shown one is the one that is not pending.
 const SHOWN_FRAME = "iframe.preview-frame:not(.is-pending)";
@@ -38,7 +44,7 @@ suite("reload button on a Guide demo", () => {
   test(
     "a normal demo starts over with a fresh instance",
     async () => {
-      const page = await browser!.newPage();
+      const page = await openSitePage(browser!);
       const block = await openDemo(page, "event-handlers");
       await block.locator(".status", { hasText: "Clicked 0 of 5 times." }).waitFor();
       await block.locator(".add").click();
@@ -58,7 +64,7 @@ suite("reload button on a Guide demo", () => {
   test(
     "an edited demo runs its edited code again in a new frame",
     async () => {
-      const page = await browser!.newPage();
+      const page = await openSitePage(browser!);
       const block = await openDemo(page, "event-handlers");
       await block.locator(".cm-content").click();
       await page.keyboard.press("Control+End");

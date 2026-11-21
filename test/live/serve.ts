@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { BunFile } from "bun";
+import type { Browser, Page } from "playwright";
 
 export const BUILD_TIMEOUT_MS = 120_000;
 export const TEST_TIMEOUT_MS = 30_000;
@@ -15,6 +16,14 @@ const SITE = ROOT;
 export interface SiteServer {
   base: string;
   close: () => void;
+}
+
+// Blocks external https requests (Google Fonts) so pages do not wait for the network.
+export async function openSitePage(browser: Browser): Promise<Page> {
+  const page = await browser.newPage();
+  page.setDefaultTimeout(TEST_TIMEOUT_MS);
+  await page.route(/^https:\/\//, (route) => route.abort());
+  return page;
 }
 
 async function runBun(args: string[]): Promise<void> {
@@ -52,7 +61,15 @@ function serveFolder(out: string): Server {
 export async function serveSite(routes: string[]): Promise<SiteServer> {
   const out = await mkdtemp(join(tmpdir(), "lusia-site-"));
   await runBun(["scripts/playground-runtime.ts"]);
-  await runBun(["../src/cli/index.ts", "build", SITE, "--outdir", out, "--routes", routes.join(",")]);
+  await runBun([
+    "../src/cli/index.ts",
+    "build",
+    SITE,
+    "--outdir",
+    out,
+    "--routes",
+    routes.join(","),
+  ]);
   const server = serveFolder(out);
   await new Promise<void>((resolve) => server.listen(0, "localhost", resolve));
   const address = server.address() as AddressInfo;

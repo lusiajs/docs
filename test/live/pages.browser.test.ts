@@ -1,6 +1,12 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { chromium, type Browser, type Page } from "playwright";
-import { BUILD_TIMEOUT_MS, TEST_TIMEOUT_MS, serveSite, type SiteServer } from "./serve.ts";
+import {
+  BUILD_TIMEOUT_MS,
+  TEST_TIMEOUT_MS,
+  openSitePage,
+  serveSite,
+  type SiteServer,
+} from "./serve.ts";
 
 const TOTAL_ENTRIES = 53;
 const KIND_LINKS = [12, 19, 6, 7, 9];
@@ -25,8 +31,7 @@ afterAll(async () => {
 });
 
 async function open(path: string): Promise<Page> {
-  const page = await browser!.newPage();
-  page.setDefaultTimeout(TEST_TIMEOUT_MS);
+  const page = await openSitePage(browser!);
   await page.goto(`${site!.base}${path}`);
   return page;
 }
@@ -106,7 +111,11 @@ suite("Reference page after the lazy mount", () => {
     async () => {
       const page = await openReference();
       await page.fill("#ref-filter", "variable");
-      await page.waitForTimeout(100);
+      await page.waitForFunction(
+        () => document.querySelector("[data-ref-count]")?.textContent?.endsWith(" of 53 entries"),
+        undefined,
+        { timeout: 5_000 },
+      );
       const shown = await page.evaluate(() => {
         const cards = [...document.querySelectorAll<HTMLElement>("[data-ref-entry]:not([hidden])")];
         return {
@@ -167,8 +176,7 @@ suite("Reference page after the lazy mount", () => {
   test(
     "copies the anchor of a card that mounted lazily",
     async () => {
-      const page = await browser!.newPage();
-      page.setDefaultTimeout(TEST_TIMEOUT_MS);
+      const page = await openSitePage(browser!);
       await page.addInitScript(() => {
         Object.defineProperty(navigator, "clipboard", {
           configurable: true,
@@ -234,7 +242,6 @@ suite("Reference page after the lazy mount", () => {
         const target = document.getElementById("variable")!;
         window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - 120);
       });
-      await page.waitForTimeout(400);
       await page.waitForFunction(
         () =>
           document
@@ -279,12 +286,12 @@ suite("Guide page after the lazy mount", () => {
         const demo = document.getElementById(id)!;
         window.scrollTo(0, demo.getBoundingClientRect().top + window.scrollY - 120);
       }, demoId);
-      await page.waitForTimeout(400);
       await page.waitForFunction(
         (id) =>
           document
             .querySelector(`#sidebar a[href="/guide#${id}"]`)
-            ?.getAttribute("aria-current") === "true",
+            ?.getAttribute("aria-current") === "true" &&
+          document.querySelector(".nav-indicator")?.classList.contains("is-ready") === true,
         demoId,
         { timeout: 5_000 },
       );
