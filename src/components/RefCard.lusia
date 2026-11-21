@@ -1,6 +1,7 @@
 <script>
 import { props } from "lusia";
 import type { ApiEntry } from "../../../reference/api.ts";
+import { cardMotion } from "../motion/reference.ts";
 import type { Part } from "../keywords.ts";
 import { guidePath, pageLink, referencePath } from "../page-link.ts";
 import {
@@ -39,7 +40,12 @@ const signature = wrapSignature(shown.signature);
 const anchor = location.origin + pageLink(referencePath, shown.id);
 </script>
 
-<article class="ref-card" id={shown.id} data-ref-card>
+<article
+	class="ref-card"
+	animate={cardMotion}
+	id={shown.id}
+	data-ref-card
+>
 	<header class="ref-head">
 		<h3 class="ref-name"><code>{shown.name}</code></h3>
 		<span class="chip" data-kind={shown.kind}>{shown.kind}</span>
