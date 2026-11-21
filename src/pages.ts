@@ -3,6 +3,7 @@ import { initDrawer } from "./drawer.ts";
 import { initFeatures } from "./features.ts";
 import { initGroupToggles } from "./nav-group.ts";
 import { errorsPath, playgroundPath } from "./page-link.ts";
+import { initReferenceClick } from "./reference-click.ts";
 import { initReferenceFilter } from "./reference-filter.ts";
 import { initReferenceView } from "./reference-view.ts";
 import { renderNav } from "./render.ts";
@@ -32,6 +33,7 @@ function mountReference(root: HTMLElement, signal: AbortSignal): void {
 	initGroupToggles(signal);
 	initReferenceFilter(root, signal);
 	initReferenceView(root, signal);
+	initReferenceClick(root, signal);
 	initCopy(root, signal);
 }
 

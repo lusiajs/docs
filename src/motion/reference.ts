@@ -1,4 +1,4 @@
-import { EASE, PRESET, WHEN } from "lusia";
+import { controller, EASE, PRESET, WHEN } from "lusia";
 
 // The detail card fades in and rises 16 px each time it is shown.
 const cardKeys = {
@@ -11,6 +11,22 @@ const cardKeys = {
 const fadeOut = {
 	0: { opacity: 1 },
 	1: { opacity: 0 },
+};
+
+const gridKeys = {
+	default: [EASE.STYLE.QUART, EASE.IN],
+	0: { opacity: 1, translate: "0px 0px" },
+	1: { opacity: 0, translate: "0px 12px" },
+};
+
+export const gridController = controller();
+
+// The tile grid sinks and fades when a controller plays it, and rises back when reversed.
+export const gridMotion = {
+	style: gridKeys,
+	when: WHEN.MANUAL,
+	control: gridController,
+	duration: 220,
 };
 
 export const cardMotion = [
