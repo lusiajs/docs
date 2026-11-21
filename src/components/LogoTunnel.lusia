@@ -1,0 +1,101 @@
+<script>
+import { props } from "lusia";
+import { scrollBetween } from "../motion/home-scroll.ts";
+
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const { follow } = props({ follow: null as HTMLElement | null });
+
+const copyCount = 12;
+const biggestVmin = 160;
+const shrink = 0.8;
+const firstOpacity = 0.22;
+const lastOpacity = 0.03;
+const scrollShiftVh = 100;
+
+// The logo outline, with the same rotate and nudge as public/logo.svg.
+const outlinePath = [
+	"M26 52L30 20L44 48L48 48L62 20L66 52L66 86L100 86L100 114L26 114Z",
+	"M98 104C116 104 120 86 114 70C111 61 116 54 122 52",
+].join(" ");
+const outlineTransform = "rotate(7 64 64) translate(-8 2)";
+
+// Copy 0 is the biggest. Each next copy is smaller by `shrink`.
+function copySize(index: number) {
+	return biggestVmin * shrink ** index;
+}
+
+// The opacity falls in equal steps from the first copy to the last.
+function copyOpacity(index: number) {
+	const share = index / (copyCount - 1);
+	return firstOpacity + (lastOpacity - firstOpacity) * share;
+}
+
+function copyCss(index: number) {
+	const size = copySize(index);
+	return [
+		`width: ${size}vmin`,
+		`height: ${size}vmin`,
+		`margin: ${-size / 2}vmin 0 0 ${-size / 2}vmin`,
+		`opacity: ${copyOpacity(index)}`,
+	].join("; ");
+}
+
+// The biggest copy moves slowest, the smallest fastest, and each grows a little.
+function copyParallax(index: number) {
+	if (reduced) return [];
+	const shiftFactor = 0.04 + index * 0.03;
+	const to = {
+		translate: `0 -${shiftFactor * scrollShiftVh}vh`,
+		scale: "1.06",
+	};
+	return scrollBetween(follow, { translate: "0 0", scale: "1" }, to);
+}
+
+const copies = Array.from({ length: copyCount }, (_, index) => ({
+	id: index,
+	css: copyCss(index),
+	motion: copyParallax(index),
+}));
+</script>
+
+<div class="logo-tunnel" aria-hidden="true">
+	<EACH {copies} as="{copy}">
+		<svg
+			class="tunnel-copy"
+			style={copy.css}
+			viewBox="0 0 128 128"
+			animate={copy.motion}
+		>
+			<path
+				d={outlinePath}
+				transform={outlineTransform}
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linejoin="round"
+				stroke-linecap="round"
+				vector-effect="non-scaling-stroke"
+			/>
+		</svg>
+	</EACH>
+</div>
+
+<style>
+.logo-tunnel {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	height: 100svh;
+}
+
+.tunnel-copy {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	color: var(--fg);
+	overflow: visible;
+	will-change: translate, scale;
+}
+</style>

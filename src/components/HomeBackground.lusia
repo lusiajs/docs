@@ -1,6 +1,7 @@
 <script>
 import { props, type Style } from "lusia";
 import { scrollBetween } from "../motion/home-scroll.ts";
+import LogoTunnel from "./LogoTunnel.lusia";
 
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -67,6 +68,7 @@ const stormPetals = [
 <div class="home-bg" aria-hidden="true">
 	<span class="bg-rays" animate={rays}></span>
 	<span class="bg-dots" animate={dots}></span>
+	<LogoTunnel follow={follow} />
 	<div class="bg-sparkles" animate={sparkles}>
 		<span class="bg-sparkle s1"></span>
 		<span class="bg-sparkle s2"></span>
