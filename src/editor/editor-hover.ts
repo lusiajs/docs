@@ -2,8 +2,8 @@ import {
 	hoverAt,
 	scriptHover,
 	type HoverResult,
-} from "../../../editors/shared/hover.ts";
-import type { SymbolLookup } from "../../../editors/shared/script/imported-symbols.ts";
+} from "../../../src/editor/hover.ts";
+import type { SymbolLookup } from "../../../src/editor/script/imported-symbols.ts";
 import { childProps, childSymbols, type EditorFile } from "./files.ts";
 
 /** The hover for `offset`. A .ts file is all script, so it skips the markup rules. */

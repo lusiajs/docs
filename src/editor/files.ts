@@ -3,7 +3,7 @@ import { parsePropDefs, type PropDef } from "@language/parse/props.ts";
 import {
 	exportedSymbols,
 	type ScriptSymbol,
-} from "../../../editors/shared/script/symbols.ts";
+} from "../../../src/editor/script/symbols.ts";
 
 const SYMBOL_SUFFIXES = ["", ".ts", ".tsx", "/index.ts", "/index.tsx"];
 
