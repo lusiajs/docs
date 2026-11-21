@@ -165,6 +165,7 @@ export interface CatalogEntry {
 
 // Keyed by the api entry id. Entries without a demo show no live card.
 export const catalog: Record<string, CatalogEntry> = {
+  "start-project": { icon: "rocket_launch" },
   expr: {
     icon: "text_fields",
     demos: [

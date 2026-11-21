@@ -24,7 +24,7 @@ export const guidePlan: GuideGroup[] = [
     label: "Start",
     icon: "school",
     color: "var(--pink)",
-    entries: ["script", "expr"],
+    entries: ["start-project", "script", "expr"],
   },
   {
     group: "reactivity",

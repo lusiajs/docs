@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { api, type ApiGroup } from "lusia/api";
 import { catalog } from "./catalog.ts";
+import { guidePages } from "./guide-pages.ts";
 import { isGuideEntry, placedRows, placeGroups } from "./guide-placement.ts";
 
 const GROUP_ORDER: ApiGroup[] = [
@@ -47,7 +48,7 @@ describe("guide order", () => {
 
 	test("every api entry is placed exactly once", () => {
 		expect([...placedIds()].sort()).toEqual(
-			api.map((entry) => entry.id).sort(),
+			[...api, ...guidePages].map((entry) => entry.id).sort(),
 		);
 	});
 
@@ -61,7 +62,7 @@ describe("guide order", () => {
 		const guideIds = placedRows(placeGroups(isGuideEntry)).map(
 			(row) => row.entry.id,
 		);
-		const expected = api
+		const expected = [...api, ...guidePages]
 			.filter((entry) => entry.kind !== "type")
 			.map((entry) => entry.id);
 		expect([...guideIds].sort()).toEqual(expected.sort());

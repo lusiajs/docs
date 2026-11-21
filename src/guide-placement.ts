@@ -1,4 +1,5 @@
 import { api, type ApiEntry, type ApiGroup } from "lusia/api";
+import { guidePages } from "./guide-pages.ts";
 import { guidePlan, type GuideGroup } from "./guide-plan.ts";
 
 // Entries that sit together under one heading. A group without sub-groups has one block with no label.
@@ -22,7 +23,9 @@ export interface PlacedRow {
 	block: PlacedBlock;
 }
 
-const entriesById = new Map(api.map((entry) => [entry.id, entry]));
+const entriesById = new Map(
+	[...api, ...guidePages].map((entry) => [entry.id, entry]),
+);
 
 // Type entries are reference only. The Guide leaves them out.
 export function isGuideEntry(entry: ApiEntry): boolean {

@@ -5,11 +5,13 @@ import { catalog } from "../catalog.ts";
 import { headingFlash } from "../flash.ts";
 import { buildKeywordIndex, tokenize } from "../keywords.ts";
 import { guideGroups, orderedEntries } from "../render.ts";
+import { startProjectId } from "../guide-pages.ts";
 import CodeBlock from "./CodeBlock.lusia";
 import CodePanel from "./CodePanel.lusia";
 import DemoRow from "./DemoRow.lusia";
 import DocTable from "./DocTable.lusia";
 import RichText from "./RichText.lusia";
+import StartProject from "./StartProject.lusia";
 
 // Built once from the rendered entries. Text is split into keyword chips once, here.
 const demos = Object.values(catalog).flatMap((entry) => entry.demos ?? []);
@@ -37,6 +39,7 @@ function sectionOf(entry: ApiEntry) {
 		demos: catalog[entry.id]?.demos ?? [],
 		table: catalog[entry.id]?.table ?? null,
 		files: catalog[entry.id]?.files ?? [],
+		intro: entry.id === startProjectId,
 		subtitle: tokenize(entry.summary, keywordIndex, entry.id),
 		bullets: entry.bullets.map((text) =>
 			tokenize(text, keywordIndex, entry.id),
@@ -96,6 +99,9 @@ function languageOf(entry: ApiEntry): string {
 						<li><RichText parts={parts} /></li>
 					</EACH>
 				</ul>
+				<IF {section.intro}>
+					<StartProject />
+				</IF>
 				<IF {section.table}>
 					<DocTable
 						head={section.table.head}
