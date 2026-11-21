@@ -6,7 +6,7 @@ import DocTable from "./DocTable.lusia";
 import Note from "./Note.lusia";
 
 const createCommands = "bun create lusia my-app\ncd my-app\nbun install\nbun run dev";
-const addCommands = "bun add lusia@beta\nbunx lusia dev .\nbunx lusia build .";
+const addCommands = "bun add lusia\nbunx lusia dev .\nbunx lusia build .";
 
 const starterHead = ["File", "What it does"];
 const starterRows = [
