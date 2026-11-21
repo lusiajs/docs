@@ -182,19 +182,41 @@ a.ref-tile {
 	margin-bottom: 1.5rem;
 	padding: 0.5rem 0;
 	background: var(--bg);
-	color: var(--link);
-	font-size: 0.95rem;
-	font-weight: 700;
-	text-decoration: underline;
-	text-decoration-thickness: 1px;
-	text-underline-offset: 0.25em;
 }
 
 .ref-back .material-symbols-rounded {
 	display: inline-block;
 	margin-right: 0.3rem;
 	vertical-align: middle;
+}
+
+// The links that lead through the Reference: back, breadcrumb, previous, next and Guide.
+.ref-link {
+	color: var(--link);
+	font-size: 0.95rem;
+	font-weight: 700;
 	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.ref-crumbs {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.4rem;
+	margin-bottom: 1rem;
+	color: var(--muted);
+	font-size: 0.9rem;
+
+	code {
+		padding: 0;
+		background: none;
+		color: var(--fg);
+		font-family: $font-mono;
+	}
 }
 
 .ref-card {
@@ -250,17 +272,17 @@ a.ref-tile {
 }
 
 // Sections inside a card are separated by a rule, not a box.
-.ref-card .notes,
-.ref-members-wrap,
-.ref-example,
+.ref-block,
 .ref-nav {
 	margin-top: 1.5rem;
 	padding-top: 1.25rem;
 	border-top: 1px solid var(--line);
 }
 
-.ref-card .notes {
-	line-height: 1.6;
+.ref-block-title {
+	margin: 0 0 0.6rem;
+	font-size: 1rem;
+	font-weight: 700;
 }
 
 // The code block and its copy button. The button sits on the top right corner of the block.
@@ -289,11 +311,11 @@ a.ref-tile {
 	right: 0.4rem;
 }
 
-.ref-members-wrap {
+.ref-table-wrap {
 	overflow-x: auto;
 }
 
-.ref-members {
+.ref-table {
 	width: 100%;
 	border-collapse: collapse;
 	font-size: 1rem;
@@ -342,59 +364,10 @@ a.ref-tile {
 	}
 }
 
-.ref-example {
-	summary {
-		display: flex;
-		align-items: center;
-		gap: 0.25rem;
-		width: fit-content;
-		color: var(--fg);
-		font-size: 1rem;
-		font-weight: 700;
-		letter-spacing: normal;
-		text-transform: none;
-		cursor: pointer;
-		list-style: none;
-
-		&::-webkit-details-marker {
-			display: none;
-		}
-
-		&:hover {
-			color: var(--link);
-		}
-	}
-
-	.chevron {
-		font-size: 1.05rem;
-	}
-
-	&[open] .chevron {
-		transform: rotate(90deg);
-	}
-}
-
-@media (prefers-reduced-motion: no-preference) {
-	.ref-example .chevron {
-		transition: transform 0.2s ease;
-	}
-}
-
 .ref-nav {
 	display: flex;
 	justify-content: space-between;
 	gap: 1rem;
-
-	a {
-		color: var(--link);
-		font-size: 0.95rem;
-		font-weight: 600;
-		text-decoration: none;
-
-		&:hover {
-			text-decoration: underline;
-		}
-	}
 }
 
 .ref-nav-next {
@@ -405,17 +378,6 @@ a.ref-tile {
 	display: flex;
 	justify-content: flex-end;
 	margin-top: 0.75rem;
-}
-
-.ref-guide {
-	color: var(--link);
-	font-size: 0.9rem;
-	font-weight: 700;
-	text-decoration: none;
-
-	&:hover {
-		text-decoration: underline;
-	}
 }
 
 .ref-empty {

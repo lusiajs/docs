@@ -6,7 +6,6 @@ import RefIndex from "../components/RefIndex.lusia";
 import RefTile from "../components/RefTile.lusia";
 import { pageLink, referencePath } from "../page-link.ts";
 import { navLabel } from "../nav-label.ts";
-import { buildKeywordIndex, tokenize } from "../keywords.ts";
 import { gridMotion } from "../motion/reference.ts";
 import { pageMotion } from "../motion/page.ts";
 import { sidebarMotion } from "../motion/sidebar.ts";
@@ -16,16 +15,8 @@ import {
 	withNeighbors,
 } from "../reference-model.ts";
 
-const keywordIndex = buildKeywordIndex(api, []);
 const sections = kindSections(api);
-const cards = withNeighbors(sections.flatMap((section) => section.entries)).map(
-	(row) => ({
-		...row,
-		parts: row.entry.bullets.map((text) =>
-			tokenize(text, keywordIndex, row.entry.id),
-		),
-	}),
-);
+const cards = withNeighbors(sections.flatMap((section) => section.entries));
 const indexGroups = sections.map((section) => ({
 	group: section.kind,
 	label: section.label,
@@ -116,7 +107,7 @@ const kinds = kindsOf(api);
 		</div>
 
 		<div data-ref-details>
-			<a class="ref-back" href={referencePath} data-ref-back hidden>
+			<a class="ref-link ref-back" href={referencePath} data-ref-back hidden>
 				<span class="material-symbols-rounded" aria-hidden="true"
 					>arrow_back</span
 				>
@@ -125,7 +116,6 @@ const kinds = kindsOf(api);
 			<EACH {cards} as={card}>
 				<RefCard
 					entry={card.entry}
-					parts={card.parts}
 					previous={card.previous}
 					next={card.next}
 				/>
