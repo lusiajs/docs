@@ -1,5 +1,5 @@
 <script>
-import { props, variable } from "lusiajs";
+import { PRESET, WHEN, props, variable } from "lusiajs";
 import type { EditorFile } from "../editor/files.ts";
 
 const { files, active, onSelect, onAdd } = props({
@@ -8,6 +8,17 @@ const { files, active, onSelect, onAdd } = props({
 	onSelect: (name: string) => {},
 	onAdd: null as (() => void) | null,
 });
+
+// A new tab slides in. A closed tab fades, and the tabs after it slide over the gap.
+const tabMotion = [
+	{ style: PRESET.SLIDE_DOWN, when: WHEN.ATTACH, duration: 250 },
+	{
+		style: PRESET.FADE_OUT,
+		when: WHEN.DETACH,
+		duration: 200,
+		more: { animateSpace: true },
+	},
+];
 
 const strip = variable<HTMLElement | null>(null);
 const showTabs = variable.compute(
@@ -70,6 +81,7 @@ function onTabKey(event: KeyboardEvent) {
 					type="button"
 					role="tab"
 					aria-selected={String(active.value === file.name)}
+					animate={tabMotion}
 					onclick={() => select(file.name)}
 				>
 					<span

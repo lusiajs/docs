@@ -3,7 +3,7 @@ import type { PlayFile } from "./types.ts";
 export const ENTRY_FILE = "App.lusia";
 
 /** The file types the playground compiles. The new-file form lists them. */
-export const FILE_TYPES = [".lusia", ".ts"] as const;
+export const FILE_TYPES: readonly string[] = [".lusia", ".ts"];
 
 const BASE_PATTERN = /^[A-Za-z][A-Za-z0-9_-]*$/;
 
