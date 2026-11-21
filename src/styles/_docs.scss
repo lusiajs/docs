@@ -68,6 +68,15 @@
 	font-weight: 500;
 }
 
+.doc-learn {
+	margin: 0.5rem 0 1rem;
+	padding: 0.5rem 0.9rem;
+	border-left: 4px solid var(--lavender);
+	border-radius: 0 8px 8px 0;
+	background: var(--lavender-soft);
+	color: var(--fg);
+}
+
 .declaration {
 	margin: 1rem 0 1.25rem;
 	padding: 1rem 1.25rem;
