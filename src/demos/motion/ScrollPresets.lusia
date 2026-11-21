@@ -6,22 +6,22 @@ import { watchPinned } from "./scroll-readout.ts";
 const lane = variable(null);
 
 const upMotion = {
-	style: PRESET.SLIDE_IN_UP,
+	style: PRESET.SLIDE_UP,
 	when: WHEN.SCROLL,
 	more: { follow: lane },
 };
 const downMotion = {
-	style: PRESET.SLIDE_IN_DOWN,
+	style: PRESET.SLIDE_DOWN,
 	when: WHEN.SCROLL,
 	more: { follow: lane },
 };
 const leftMotion = {
-	style: PRESET.SLIDE_IN_LEFT,
+	style: PRESET.SLIDE_LEFT,
 	when: WHEN.SCROLL,
 	more: { follow: lane },
 };
 const rightMotion = {
-	style: PRESET.SLIDE_IN_RIGHT,
+	style: PRESET.SLIDE_RIGHT,
 	when: WHEN.SCROLL,
 	more: { follow: lane },
 };
@@ -44,21 +44,21 @@ setup((root) => {
 		<div class="scene">
 			<div class="pair">
 				<div class="cell">
-					<span class="name">SLIDE_IN_UP</span>
+					<span class="name">SLIDE_UP</span>
 					<div class="card" animate={upMotion}>Up</div>
 				</div>
 				<div class="cell">
-					<span class="name">SLIDE_IN_DOWN</span>
+					<span class="name">SLIDE_DOWN</span>
 					<div class="card" animate={downMotion}>Down</div>
 				</div>
 			</div>
 			<div class="pair">
 				<div class="cell">
-					<span class="name">SLIDE_IN_LEFT</span>
+					<span class="name">SLIDE_LEFT</span>
 					<div class="card" animate={leftMotion}>Left</div>
 				</div>
 				<div class="cell">
-					<span class="name">SLIDE_IN_RIGHT</span>
+					<span class="name">SLIDE_RIGHT</span>
 					<div class="card" animate={rightMotion}>Right</div>
 				</div>
 			</div>
