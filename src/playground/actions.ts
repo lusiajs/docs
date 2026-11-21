@@ -1,3 +1,4 @@
+import { copyText } from "../copy.ts";
 import type { LiveError } from "../live/types.ts";
 import { ENTRY_FILE, nameProblem } from "./names.ts";
 import { starterFiles } from "./starter.ts";
@@ -79,6 +80,11 @@ export async function formatActive(): Promise<void> {
 	} catch {
 		notice.value = FORMAT_FAILED;
 	}
+}
+
+/** Copies the active file's code. Resolves to false when the browser refuses. */
+export function copyActive(): Promise<boolean> {
+	return copyText(activeFile()?.code ?? "");
 }
 
 function activeFile(): PlayFile | undefined {

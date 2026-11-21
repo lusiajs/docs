@@ -6,7 +6,7 @@ import PlayErrors from "../components/PlayErrors.lusia";
 import type { LiveError } from "../live/types.ts";
 import { pageMotion } from "../motion/page.ts";
 import { changeCode, jumpTo, selectFile } from "../playground/actions.ts";
-import { active, errors, files, jump, notice, view } from "../playground/state.ts";
+import { active, errors, files, jump, notice, view, wrap } from "../playground/state.ts";
 
 // The error list opens over the workspace, so it never reserves height.
 const problemsOpen = variable(false);
@@ -78,6 +78,7 @@ function jumpToError(error: LiveError) {
 				onChange={changeCode}
 				onSelect={selectFile}
 				jump={jump}
+				wrap={wrap}
 				toolbar={false}
 			/>
 		</section>
