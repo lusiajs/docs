@@ -49,6 +49,7 @@ import {
 import { lusiaCompletionSource } from "./completion-source.ts";
 import type { EditorFile } from "./files.ts";
 import { lusiaHover } from "./hover-source.ts";
+import { indentGuides } from "./indent-guides.ts";
 import { lusiaHighlighting } from "./lang/highlight.ts";
 import { lusiaLanguage, typescriptLanguage } from "./lang/language.ts";
 import { lusiaMarks } from "./lang/marks.ts";
@@ -96,6 +97,7 @@ export function editorExtensions(options: EditorStateOptions): Extension[] {
 		lusiaHover(fileName, getFiles),
 		languageFor(fileName),
 		editorTheme,
+		indentGuides(),
 		options.wrap.of(wrapExtensions(options.wrapValue)),
 		// Popups sit on the page, so the demo card and the editor scroller cannot clip them.
 		tooltips({ parent: document.body, position: "fixed" }),
