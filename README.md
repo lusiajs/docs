@@ -1,3 +1,5 @@
+<p align="center"><img src="public/logo.svg" width="96" alt="Lusia logo"></p>
+
 # Lusia docs
 
 The source of the Lusia docs site. It shows the guide, the API reference, the error list and an online playground.
