@@ -60,6 +60,7 @@ function sectionOf(entry: ApiEntry) {
 // Groups, then their blocks, then the sections: the same order as the sidebar.
 const groups = guideGroups.map((group) => ({
 	label: group.label,
+	intro: group.intro,
 	color: group.color,
 	blocks: group.blocks.map((block) => ({
 		id: block.id,
@@ -77,6 +78,7 @@ function languageOf(entry: ApiEntry): string {
 	<h2 class="guide-group-title" style={"--group: " + group.color}>
 		{group.label}
 	</h2>
+	<p class="guide-group-intro">{group.intro}</p>
 	<EACH {group.blocks} as={block}>
 		<IF {block.label}>
 			<h3 class="guide-subgroup-title">{block.label}</h3>

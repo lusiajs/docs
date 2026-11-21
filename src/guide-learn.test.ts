@@ -11,4 +11,11 @@ describe("guide learn lines", () => {
       expect(learnOf(id)).not.toBeNull();
     },
   );
+
+  test.each(groups.map((group) => [group.label, group.intro] as const))(
+    "%s has a group overview",
+    (_label, intro) => {
+      expect(intro.length).toBeGreaterThan(0);
+    },
+  );
 });

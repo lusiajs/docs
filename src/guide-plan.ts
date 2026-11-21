@@ -11,6 +11,7 @@ export interface GuideSubgroup {
 export interface GuideGroup {
   group: ApiGroup;
   label: string;
+  intro: string;
   icon: string;
   color: string;
   entries?: string[];
@@ -22,6 +23,7 @@ export const guidePlan: GuideGroup[] = [
   {
     group: "basics",
     label: "Start",
+    intro: "What Lusia is, how to make a project, then your first script and markup.",
     icon: "school",
     color: "var(--pink)",
     entries: ["lusia-intro", "start-project", "script", "expr"],
@@ -29,6 +31,7 @@ export const guidePlan: GuideGroup[] = [
   {
     group: "reactivity",
     label: "Variables",
+    intro: "A variable holds a value. When it changes, the markup that reads it updates.",
     icon: "bolt",
     color: "var(--lavender)",
     entries: [
@@ -44,6 +47,7 @@ export const guidePlan: GuideGroup[] = [
   {
     group: "events",
     label: "Events and input",
+    intro: "Run code on clicks and key presses. Keep inputs in step with variables.",
     icon: "ads_click",
     color: "var(--rose)",
     entries: ["event", "bind-value", "bind-prop", "bind-element"],
@@ -51,6 +55,7 @@ export const guidePlan: GuideGroup[] = [
   {
     group: "flow",
     label: "Flow",
+    intro: "Show, hide and repeat markup with IF, EACH and FOR.",
     icon: "alt_route",
     color: "var(--lemon)",
     entries: ["if", "elseif", "else", "each", "for"],
@@ -58,6 +63,7 @@ export const guidePlan: GuideGroup[] = [
   {
     group: "components",
     label: "Components",
+    intro: "Split a page into files. Pass props in, place children with CONTENT, and attach components by code.",
     icon: "widgets",
     color: "var(--mint)",
     entries: [
@@ -81,6 +87,7 @@ export const guidePlan: GuideGroup[] = [
   {
     group: "styling",
     label: "Styling",
+    intro: "Each component has its own CSS. Scoped, tree and global rules control where it applies.",
     icon: "palette",
     color: "var(--sky)",
     entries: ["style", "style-scoped", "style-global", "scoped", "global", "inline-global"],
@@ -88,6 +95,7 @@ export const guidePlan: GuideGroup[] = [
   {
     group: "motion",
     label: "Motion",
+    intro: "Animate any element with the animate attribute. Start with a first animation, then tune timing and triggers.",
     icon: "animation",
     color: "var(--peach)",
     subgroups: [
