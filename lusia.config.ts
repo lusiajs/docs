@@ -1,4 +1,4 @@
-import { EASE, MIDWAY, TURN } from "lusia";
+import { EASE, MIDWAY, PRESET, TURN } from "lusia";
 import { defineConfig } from "lusia/config";
 
 export default defineConfig({
@@ -9,7 +9,7 @@ export default defineConfig({
 		duration: 400,
 		ease: [EASE.STYLE.QUART, EASE.INOUT],
 		midway: { play: MIDWAY.TURN, turn: TURN.SMOOTH },
-		in: "FADE_IN",
-		out: "FADE_OUT",
+		in: PRESET.FADE_IN,
+		out: PRESET.FADE_OUT,
 	},
 });
