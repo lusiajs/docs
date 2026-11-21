@@ -47,8 +47,8 @@ const anchor = location.origin + pageLink(referencePath, shown.id);
 	data-ref-card
 >
 	<header class="ref-head">
-		<h3 class="ref-name"><code>{shown.name}</code></h3>
 		<span class="chip" data-kind={shown.kind}>{shown.kind}</span>
+		<h3 class="ref-name"><code>{shown.name}</code></h3>
 		<button
 			class="copy-button ref-anchor"
 			type="button"

@@ -29,8 +29,8 @@ const search = searchText(shown);
 	data-search={search}
 >
 	<span class="ref-tile-head">
-		<code class="ref-tile-name">{shown.name}</code>
 		<span class="chip" data-kind={shown.kind}>{shown.kind}</span>
+		<code class="ref-tile-name">{shown.name}</code>
 	</span>
 	<span class="ref-tile-summary">{shown.summary}</span>
 </a>
