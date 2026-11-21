@@ -1,0 +1,68 @@
+<script>
+  import { attach, variable, type Instance } from "lusiajs";
+  import LifecycleBox from "./LifecycleBox.lusia";
+  import { attachRuns, detachRuns } from "./lifecycle-count.ts";
+
+  const slot = variable<Element | null>(null);
+  const onPage = variable.compute(() => attachRuns.value - detachRuns.value);
+  let box: Instance | null = null;
+
+  // attach() places the box, and its onAttach hook runs.
+  function mount() {
+    if (box || !slot.value) return;
+    box = attach(LifecycleBox, slot.value);
+  }
+
+  // detach() plays the OUT animation, then removes the box. Its onDetach hook runs.
+  function unmount() {
+    if (!box) return;
+    box.detach();
+    box = null;
+  }
+</script>
+
+<div class="lifecycle-demo">
+  <div class="actions">
+    <button onclick={mount} type="button">Mount</button>
+    <button onclick={unmount} type="button">Unmount</button>
+  </div>
+  <div class="counts">
+    <p>Boxes on the page: {onPage}</p>
+    <p>onAttach ran: {attachRuns} times</p>
+    <p>onDetach ran: {detachRuns} times</p>
+  </div>
+  <div class="slot" bind-element={slot}></div>
+</div>
+
+<style>
+  @use "../../styles/demo" as demo;
+
+  .lifecycle-demo {
+    display: grid;
+    gap: 0.75rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+    }
+
+    .actions {
+      @include demo.row;
+    }
+
+    button {
+      @include demo.button;
+    }
+
+    .counts {
+      display: grid;
+      gap: 0.25rem;
+    }
+
+    .slot {
+      min-height: 3.5rem;
+      display: flex;
+      align-items: center;
+    }
+  }
+</style>

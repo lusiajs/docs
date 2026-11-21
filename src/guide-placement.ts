@@ -12,6 +12,7 @@ export interface PlacedBlock {
 export interface PlacedGroup {
 	group: ApiGroup;
 	label: string;
+	intro: string;
 	icon: string;
 	color: string;
 	blocks: PlacedBlock[];
@@ -75,6 +76,7 @@ function placeGroup(
 	return {
 		group: group.group,
 		label: group.label,
+		intro: group.intro,
 		icon: group.icon,
 		color: group.color,
 		blocks: blocks.filter((block) => block.entries.length > 0),

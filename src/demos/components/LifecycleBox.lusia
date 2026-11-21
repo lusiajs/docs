@@ -1,0 +1,47 @@
+<script>
+  import { onAttach, onDetach, WHEN, EASE } from "lusiajs";
+  import { attachRuns, detachRuns } from "./lifecycle-count.ts";
+
+  // IN plays when the box attaches. OUT plays when detach() is called.
+  const popIn = {
+    0: { opacity: 0, scale: "0.5" },
+    1: [EASE.STYLE.BACK, EASE.OUT, { opacity: 1, scale: "1" }],
+  };
+
+  const shrinkOut = {
+    0: { opacity: 1, scale: "1" },
+    1: [EASE.STYLE.QUART, EASE.IN, { opacity: 0, scale: "0.4" }],
+  };
+
+  onAttach(() => {
+    attachRuns.value++;
+  });
+
+  onDetach(() => {
+    detachRuns.value++;
+  });
+</script>
+
+<div
+  class="lifecycle-box"
+  animate={[
+    { style: popIn, duration: 400 },
+    { style: shrinkOut, when: WHEN.DETACH, duration: 400 },
+  ]}
+>
+  <p>Mounted box</p>
+</div>
+
+<style scoped>
+  .lifecycle-box {
+    padding: 0.75rem 1.25rem;
+    border-radius: 14px;
+    background: var(--mint);
+    color: #1d4f3a;
+    font-weight: 700;
+
+    p {
+      margin: 0;
+    }
+  }
+</style>

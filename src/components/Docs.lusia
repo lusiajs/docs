@@ -6,6 +6,7 @@ import { headingFlash } from "../flash.ts";
 import { buildKeywordIndex, tokenize } from "../keywords.ts";
 import { guideGroups, orderedEntries } from "../render.ts";
 import { animateSpacePageId, startProjectId } from "../guide-pages.ts";
+import { learnOf } from "../guide-learn.ts";
 import AnimateSpace from "./AnimateSpace.lusia";
 import CodeBlock from "./CodeBlock.lusia";
 import CodePanel from "./CodePanel.lusia";
@@ -43,6 +44,7 @@ function sectionOf(entry: ApiEntry) {
 		intro: entry.id === startProjectId,
 		detail: entry.id === animateSpacePageId,
 		subtitle: tokenize(entry.summary, keywordIndex, entry.id),
+		learn: learnOf(entry.id),
 		bullets: entry.bullets.map((text) =>
 			tokenize(text, keywordIndex, entry.id),
 		),
@@ -58,6 +60,7 @@ function sectionOf(entry: ApiEntry) {
 // Groups, then their blocks, then the sections: the same order as the sidebar.
 const groups = guideGroups.map((group) => ({
 	label: group.label,
+	intro: group.intro,
 	color: group.color,
 	blocks: group.blocks.map((block) => ({
 		id: block.id,
@@ -75,6 +78,7 @@ function languageOf(entry: ApiEntry): string {
 	<h2 class="guide-group-title" style={"--group: " + group.color}>
 		{group.label}
 	</h2>
+	<p class="guide-group-intro">{group.intro}</p>
 	<EACH {group.blocks} as={block}>
 		<IF {block.label}>
 			<h3 class="guide-subgroup-title">{block.label}</h3>
@@ -91,6 +95,9 @@ function languageOf(entry: ApiEntry): string {
 						><RichText parts={section.subtitle}
 					/></span>
 				</h2>
+				<IF {section.learn}>
+					<p class="doc-learn">You will learn: {section.learn}</p>
+				</IF>
 				<CodeBlock
 					text={section.entry.signature}
 					language={languageOf(section.entry)}
