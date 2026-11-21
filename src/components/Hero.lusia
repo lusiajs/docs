@@ -2,10 +2,11 @@
 import { onAttach, variable, props, WHEN, EASE } from "lusiajs";
 import { homePath, pageLink } from "../page-link.ts";
 import { scrollHint } from "../motion.ts";
-import { scrollBetween } from "../motion/home-scroll.ts";
+import { heroBetween } from "../motion/hero-slow.ts";
 import { typingFrames } from "../motion/typing.ts";
 import { pull, release } from "../motion/pointer.ts";
 import Mascot from "./Mascot.lusia";
+import HeroLogo from "./HeroLogo.lusia";
 
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -60,7 +61,7 @@ function letterScatter(index: number) {
 		scale: `${offset.scale}`,
 	};
 	const from = { translate: "0em 0em", rotate: "0deg", scale: "1" };
-	return scrollBetween(follow, from, to, [0, 0.4]);
+	return heroBetween(follow, from, to);
 }
 
 const letters = "Lusia".split("").map((char, index) => ({
@@ -81,35 +82,30 @@ const ctaIn = {
 const eyebrowMotion = {
 	style: fadeIn,
 	when: WHEN.ATTACH,
-	more: { animateSpace: true },
 	duration: 600,
 	delay: 500,
 };
 const taglineMotion = {
 	style: fadeIn,
 	when: WHEN.ATTACH,
-	more: { animateSpace: true },
 	duration: 600,
 	delay: 600,
 };
 const installMotion = {
 	style: ctaIn,
 	when: WHEN.ATTACH,
-	more: { animateSpace: true },
 	duration: 600,
 	delay: 700,
 };
 const ctaMotion = {
 	style: ctaIn,
 	when: WHEN.ATTACH,
-	more: { animateSpace: true },
 	duration: 600,
 	delay: 800,
 };
 const noteMotion = {
 	style: fadeIn,
 	when: WHEN.ATTACH,
-	more: { animateSpace: true },
 	duration: 600,
 	delay: 900,
 };
@@ -117,37 +113,31 @@ const noteMotion = {
 // The text drifts up and fades over the first part of the page, as the hero scrolls away.
 const heroDrift = reduced
 	? []
-	: scrollBetween(
+	: heroBetween(
 			follow,
 			{ opacity: 1, translate: "0 0" },
 			{ opacity: 0.3, translate: "0 -4vh" },
-			[0, 0.4],
 		);
 
 // The title moves faster than the rest of the hero, so the two separate as you scroll.
 const titleDrift = reduced
 	? []
-	: scrollBetween(
+	: heroBetween(
 			follow,
 			{ translate: "0 0" },
 			{ translate: "0 -8vh" },
-			[0, 0.4],
 		);
 
 // The two badges fly up and apart, one to each side, so they clear the title as it rises.
 const badgeStart = { translate: "0px 0px", rotate: "0deg" };
-const eyebrowDrift = scrollBetween(
-	follow,
-	badgeStart,
-	{ translate: "-12vw -8vh", rotate: "-16deg" },
-	[0, 0.4],
-);
-const kaomojiDrift = scrollBetween(
-	follow,
-	badgeStart,
-	{ translate: "12vw -8vh", rotate: "14deg" },
-	[0, 0.4],
-);
+const eyebrowDrift = heroBetween(follow, badgeStart, {
+	translate: "-12vw -8vh",
+	rotate: "-16deg",
+});
+const kaomojiDrift = heroBetween(follow, badgeStart, {
+	translate: "12vw -8vh",
+	rotate: "14deg",
+});
 const eyebrowAnimate = reduced ? eyebrowMotion : [eyebrowMotion, eyebrowDrift];
 const kaomojiAnimate = reduced ? [] : kaomojiDrift;
 
@@ -192,6 +182,7 @@ onAttach(() => {
 			</span>
 		</p>
 		<h1 class="hero-title" aria-label="Lusia" animate={titleDrift}>
+			<HeroLogo />
 			<EACH {letters} as="{letter}">
 				<span
 					class="letter-slot"
@@ -209,8 +200,8 @@ onAttach(() => {
 			><span class="caret" aria-hidden="true"></span>
 		</p>
 		<div class="install" animate={installMotion}>
-			<span class="prompt" aria-hidden="true">!</span>
-			<code>Coming soon — no release yet</code>
+			<span class="prompt" aria-hidden="true">$</span>
+			<code>bun add lusia</code>
 		</div>
 		<div class="cta" animate={ctaMotion}>
 			<a
@@ -256,7 +247,7 @@ onAttach(() => {
 			</a>
 		</div>
 		<p class="wip-note" animate={noteMotion}>
-			Lusia is under active development and has no release yet. APIs and
+			Lusia is in beta. APIs and
 			markup may change without notice.
 		</p>
 		<p class="wip-note" animate={noteMotion}>

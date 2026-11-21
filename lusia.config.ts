@@ -11,5 +11,7 @@ export default defineConfig({
 		midway: { play: MIDWAY.TURN, turn: TURN.SMOOTH },
 		in: PRESET.FADE_IN,
 		out: PRESET.FADE_OUT,
+		attach: { animateSpace: false },
+		detach: { animateSpace: false },
 	},
 });
