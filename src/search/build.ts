@@ -1,5 +1,6 @@
 import { api, type ApiEntry } from "lusia/api";
 import { catalog, entryIcon } from "../catalog.ts";
+import { guidePages } from "../guide-pages.ts";
 import { blockTitle, placedRows, type PlacedRow } from "../guide-placement.ts";
 import {
 	guidePath,
@@ -56,7 +57,7 @@ function rowSection(row: PlacedRow): string {
 }
 
 function guideDemos(): SearchEntry[] {
-	return api.flatMap((entry) =>
+	return [...api, ...guidePages].flatMap((entry) =>
 		(catalog[entry.id]?.demos ?? []).map((demo) => ({
 			page: "Guide" as const,
 			section: entry.name,
