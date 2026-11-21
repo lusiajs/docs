@@ -2,7 +2,7 @@ import type { ApiEntry } from "lusiajs/api";
 
 // Guide pages that are not api entries. They sit in the Guide only, never in the Reference.
 export const startProjectId = "start-project";
-export const animateSpaceId = "animate-space";
+export const animateSpacePageId = "animate-space-page";
 
 export const guidePages: ApiEntry[] = [
 	{
@@ -19,7 +19,7 @@ export const guidePages: ApiEntry[] = [
 		example: "bun create lusiajs my-app",
 	},
 	{
-		id: animateSpaceId,
+		id: animateSpacePageId,
 		name: "Animate space",
 		kind: "markup",
 		group: "motion",

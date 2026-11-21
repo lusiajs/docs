@@ -903,6 +903,9 @@ export const catalog: Record<string, CatalogEntry> = {
   },
   "animate-space": {
     icon: "space_bar",
+  },
+  "animate-space-page": {
+    icon: "space_bar",
     demos: [
       {
         id: "animate-space-attach",
