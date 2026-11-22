@@ -3,9 +3,10 @@
 
   const message = variable("Click the card");
   const inView = variable("No");
+  const cardEl = variable<HTMLElement | null>(null);
 
-  onAttach((root) => {
-    const card = root.querySelector("article")!;
+  onAttach(() => {
+    const card = cardEl.value!;
     listen(card, "click", () => {
       message.value = "Card clicked";
     });
@@ -15,7 +16,7 @@
   });
 </script>
 
-<article class="listen-demo">
+<article class="listen-demo" bind-element={cardEl}>
   <p>{message}</p>
   <p>In view: {inView}</p>
 </article>

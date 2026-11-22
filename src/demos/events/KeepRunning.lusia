@@ -3,12 +3,12 @@
 
   const views = variable(0);
   const watching = variable(true);
+  const sectionEl = variable<HTMLElement | null>(null);
   let stopWatching = () => {};
 
-  onAttach((root) => {
-    const section = root.querySelector("section")!;
+  onAttach(() => {
     keepRunning(() => {
-      stopWatching = listen(section, EVENT.VIEW, ({ in: visible }) => {
+      stopWatching = listen(sectionEl.value!, EVENT.VIEW, ({ in: visible }) => {
         if (visible) views.value++;
       });
     });
@@ -21,7 +21,7 @@
 </script>
 
 <div class="keep-demo">
-  <section>Counted {views} times</section>
+  <section bind-element={sectionEl}>Counted {views} times</section>
   <button onclick={stop} type="button" disabled={!watching.value}>
     Stop watching
   </button>
