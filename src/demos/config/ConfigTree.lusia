@@ -1,0 +1,32 @@
+<script>
+  import { SCOPE, setConfig } from "lusiajs";
+  import TaskList from "./TaskList.lusia";
+
+  // SCOPE.TREE reaches this component and the TaskList inside it.
+  setConfig(
+    {
+      animate: {
+        attach: { animateSpace: true },
+        detach: { animateSpace: true },
+      },
+    },
+    SCOPE.TREE,
+  );
+</script>
+
+<div class="config-tree">
+  <p>This component sets the value. The list below is a child, so it slides too.</p>
+  <TaskList />
+</div>
+
+<style>
+  .config-tree {
+    display: grid;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+    }
+  }
+</style>

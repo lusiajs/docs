@@ -107,7 +107,7 @@ export const guidePlan: GuideGroup[] = [
       {
         id: "timing",
         label: "Timing and easing",
-        entries: ["ease", "preset", "set-animate-default", "keyframes-type", "animate-item"],
+        entries: ["ease", "preset", "keyframes-type", "animate-item"],
       },
       {
         id: "configuration",
@@ -118,6 +118,11 @@ export const guidePlan: GuideGroup[] = [
         id: "triggers",
         label: "Triggers",
         entries: ["when", "hover-area", "controller", "animate-space-page", "animate-space"],
+      },
+      {
+        id: "runtime",
+        label: "Runtime settings",
+        entries: ["set-config", "scope", "set-config-global"],
       },
       {
         id: "scroll",

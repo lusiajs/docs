@@ -20,6 +20,11 @@ const wayRows = [
 		"lusia.config",
 		"Every ATTACH or DETACH element",
 	],
+	[
+		"animate.attach, animate.detach",
+		"setConfig in the component or the app",
+		"The elements in its reach",
+	],
 ];
 
 const winHead = ["Order", "Setting", "Used when"];
@@ -27,10 +32,16 @@ const winRows = [
 	["1", "more: { animateSpace } on the element", "The element sets it"],
 	[
 		"2",
-		"animate.attach or animate.detach in lusia.config",
-		"The element does not set it",
+		"setConfig in the component (SCOPE.TREE or SCOPE.SCOPED)",
+		"The element does not set it, and the component's reach covers it",
 	],
-	["3", "Library default", "Neither is set. The value is false"],
+	["3", "setConfig with SCOPE.GLOBAL", "The element and the component do not set it"],
+	[
+		"4",
+		"animate.attach or animate.detach in lusia.config",
+		"None of the above is set",
+	],
+	["5", "Library default", "Nothing is set. The value is false"],
 ];
 
 const elementCode = `<li animate={{

@@ -19,6 +19,7 @@ const MOTION_SUBGROUP_ORDER = [
 	"motion-timing",
 	"motion-configuration",
 	"motion-triggers",
+	"motion-runtime",
 	"motion-scroll",
 	"motion-layout",
 	"motion-advanced",

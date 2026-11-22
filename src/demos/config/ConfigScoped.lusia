@@ -1,0 +1,104 @@
+<script>
+  import { SCOPE, WHEN, setConfig, variable } from "lusiajs";
+  import TaskList from "./TaskList.lusia";
+
+  interface Task {
+    id: number;
+    title: string;
+  }
+
+  // SCOPE.SCOPED reaches only this component's own markup, not the TaskList below.
+  setConfig(
+    {
+      animate: {
+        attach: { animateSpace: true },
+        detach: { animateSpace: true },
+      },
+    },
+    SCOPE.SCOPED,
+  );
+
+  const tasks = variable<Task[]>([
+    { id: 1, title: "Read the docs" },
+    { id: 2, title: "Fix the build" },
+  ]);
+  let nextId = 3;
+
+  const fadeIn = {
+    0: { opacity: 0 },
+    1: { opacity: 1 },
+  };
+
+  const fadeOut = {
+    0: { opacity: 1 },
+    1: { opacity: 0 },
+  };
+
+  function addTask() {
+    tasks.value = [...tasks.value, { id: nextId, title: `Task ${nextId}` }];
+    nextId++;
+  }
+
+  function removeTask(task: Task) {
+    tasks.value = tasks.value.filter((item) => item.id !== task.id);
+  }
+</script>
+
+<div class="config-scoped">
+  <p>Own list. It sets the value, so it slides.</p>
+  <button type="button" onclick={addTask}>Add task</button>
+  <ul class="list">
+    <EACH {tasks} as={task} key={task.id}>
+      <li
+        class="row"
+        animate={[
+          { style: fadeIn, when: WHEN.ATTACH, duration: 400 },
+          { style: fadeOut, when: WHEN.DETACH, duration: 400 },
+        ]}
+      >
+        <span>{task.title}</span>
+        <button type="button" onclick={() => removeTask(task)}>Remove</button>
+      </li>
+    </EACH>
+  </ul>
+  <p>Child list. No value reaches it, so it jumps.</p>
+  <TaskList />
+</div>
+
+<style>
+  @use "../../styles/demo" as demo;
+
+  .config-scoped {
+    display: grid;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+    }
+
+    button {
+      @include demo.button;
+      justify-self: start;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 10px;
+      background: var(--lavender-soft);
+    }
+  }
+</style>
