@@ -5,8 +5,8 @@ import { EASE, WHEN } from "lusiajs";
 // so the layout does not jump.
 const pageOutKeys = {
 	default: [EASE.STYLE.QUART, EASE.IN],
-	0: { opacity: 1, translate: "0px 0px", scale: 1 },
-	1: { opacity: 0, translate: "0px -16px", scale: 0.98 },
+	0: { opacity: 1, translate: "0px 0px" },
+	1: { opacity: 0, translate: "0px -16px" },
 };
 
 const pageInKeys = {
