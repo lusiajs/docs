@@ -26,8 +26,8 @@
   import TerminalMock from "./features/TerminalMock.lusia";
 
   const PHONE_QUERY = "(max-width: 899px)";
-  // The middle of the screen. The marker that crosses it is the active feature.
-  const ACTIVE_BAND = "-50% 0px -50% 0px";
+  // A marker becomes active once its center is this close to the middle of the screen.
+  const ACTIVE_BAND_RATIO = 0.1;
 
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const phone = variable(matchMedia(PHONE_QUERY).matches);
@@ -62,12 +62,7 @@
     variable.compute(() => shown.value === index || leaving.value === index),
   );
 
-  function changeMotion(
-    style: object,
-    duration: number,
-    index: number,
-    delay = 0,
-  ) {
+  function changeMotion(style: object, duration: number, index: number, delay = 0) {
     if (reduced) return [];
     return { style, duration, delay, when: isActive[index] };
   }
@@ -160,19 +155,36 @@
     });
   }
 
-  function watchMarkers(): IntersectionObserver {
+  function markerMiddleDistance(marker: HTMLElement, middle: number): number {
+    const rect = marker.getBoundingClientRect();
+    return Math.abs(rect.top + rect.height / 2 - middle);
+  }
+
+  function nearestMarker(markers: HTMLElement[], middle: number): number {
+    const distances = markers.map((marker) => markerMiddleDistance(marker, middle));
+    return distances.indexOf(Math.min(...distances));
+  }
+
+  // The nearest marker takes over only when its center is inside the band.
+  function updateActive() {
+    if (phone.peek()) return;
     const markers = markerElements();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          setActive(markers.indexOf(entry.target as HTMLElement));
-        }
-      },
-      { rootMargin: ACTIVE_BAND },
-    );
-    for (const marker of markers) observer.observe(marker);
-    return observer;
+    if (markers.length === 0) return;
+    const middle = window.innerHeight / 2;
+    const band = window.innerHeight * ACTIVE_BAND_RATIO;
+    const nearest = nearestMarker(markers, middle);
+    if (markerMiddleDistance(markers[nearest], middle) <= band) setActive(nearest);
+  }
+
+  let updateQueued = false;
+
+  function scheduleUpdate() {
+    if (updateQueued) return;
+    updateQueued = true;
+    requestAnimationFrame(() => {
+      updateQueued = false;
+      updateActive();
+    });
   }
 
   onAttach(() => {
@@ -181,10 +193,13 @@
       phone.value = event.matches;
     };
     phoneQuery.addEventListener("change", onPhoneChange);
-    const observer = watchMarkers();
+    updateActive();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
     return () => {
       phoneQuery.removeEventListener("change", onPhoneChange);
-      observer.disconnect();
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
     };
   });
 </script>
@@ -229,20 +244,13 @@
           <div class="feature-col">
             <div class="copy-col">
               <EACH {items} as={item} index={i} key={item.key}>
-                <div
-                  class={slotClass(i.value)}
-                  animate={copyMotion(i.value)}
-                >
+                <div class={slotClass(i.value)} animate={copyMotion(i.value)}>
                   <p class="copy-index">{item.number}</p>
                   <h3 class="copy-title" aria-label={item.title}>
-                    <EACH {item.chars} as={letter}>
-                      <span
+                    <EACH {item.chars} as={letter}><span
                         class="char"
                         aria-hidden="true"
-                        animate={letter.motion}
-                        >{letter.char}</span
-                      >
-                    </EACH>
+                        animate={letter.motion}>{letter.char}</span></EACH>
                   </h3>
                   <p class="benefit">{item.benefit}</p>
                 </div>
@@ -259,10 +267,7 @@
                   </span>
                   <span class="file-names">
                     <EACH {items} as={item} index={i} key={item.key}>
-                      <span
-                        class={fileClass(i.value)}
-                        animate={fileMotion(i.value)}
-                      >
+                      <span class={fileClass(i.value)} animate={fileMotion(i.value)}>
                         {item.file}
                       </span>
                     </EACH>
@@ -276,10 +281,7 @@
               <div class="panes">
                 <div class="code-pane">
                   <EACH {items} as={item} index={i} key={item.key}>
-                    <div
-                      class={slotClass(i.value)}
-                      animate={codeMotion(i.value)}
-                    >
+                    <div class={slotClass(i.value)} animate={codeMotion(i.value)}>
                       <FeatureSnippet code={item.code} />
                     </div>
                   </EACH>
@@ -566,6 +568,7 @@
     min-width: 0;
   }
 
+
   .slot {
     grid-area: 1 / 1;
     display: flex;
@@ -793,6 +796,7 @@
     }
 
     .window,
+
     .nav-item,
     .nav-dot,
     .slot {
