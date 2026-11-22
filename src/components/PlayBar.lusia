@@ -47,6 +47,7 @@
 
   const COPY_FAILED = "Copy failed. Select the code and copy it instead.";
   const COPIED_MS = 1500;
+  let copiedTimer = 0;
 
   function pick(name: string) {
     closeMenu();
@@ -99,7 +100,8 @@
       return;
     }
     copied.value = true;
-    setTimeout(() => (copied.value = false), COPIED_MS);
+    clearTimeout(copiedTimer);
+    copiedTimer = window.setTimeout(() => (copied.value = false), COPIED_MS);
   }
 
   function removeActive() {
@@ -118,26 +120,8 @@
     if (open) open.open = false;
   }
 
-  function onDocumentClick(event: MouseEvent) {
-    const open = menu.peek();
-    if (!open || !open.open) return;
-    if (open.contains(event.target as Node)) return;
-    open.open = false;
-  }
-
-  function onDocumentKey(event: KeyboardEvent) {
-    if (event.key === "Escape") closeMenu();
-  }
-
-  // The menu closes on an outside click or Escape, like every other popup.
-  onAttach(() => {
-    document.addEventListener("click", onDocumentClick);
-    document.addEventListener("keydown", onDocumentKey);
-    return () => {
-      document.removeEventListener("click", onDocumentClick);
-      document.removeEventListener("keydown", onDocumentKey);
-    };
-  });
+  // The timer must not fire after the bar is gone.
+  onAttach(() => () => clearTimeout(copiedTimer));
 </script>
 
 <div class="play-bar">
@@ -205,7 +189,11 @@
     <span class="play-sep" aria-hidden="true"></span>
     <PresetMenu />
     <span class="play-sep" aria-hidden="true"></span>
-    <details class="play-more" bind-element={menu}>
+    <details
+      class="play-more"
+      bind-element={menu}
+      on:click-outside={closeMenu}
+    >
       <summary
         class="play-icon"
         aria-label="More playground actions"

@@ -1,5 +1,5 @@
 <script>
-  import { PRESET, WHEN, onAttach, variable } from "lusiajs";
+  import { PRESET, WHEN, variable } from "lusiajs";
   import { hasEditedFiles, loadPreset } from "../playground/actions.ts";
   import { PRESETS, type Preset } from "../playground/presets/index.ts";
 
@@ -7,7 +7,6 @@
   const STAGGER_MS = 60;
 
   const open = variable(false);
-  const menu = variable<HTMLElement | null>(null);
   const openText = variable.compute(() => String(open.value));
 
   // Each item slides in a little after the one before it.
@@ -41,29 +40,9 @@
     if (hasEditedFiles() && !confirm(lose)) return;
     loadPreset(preset);
   }
-
-  function onDocumentClick(event: MouseEvent) {
-    const root = menu.peek();
-    if (!open.peek() || root?.contains(event.target as Node)) return;
-    closeMenu();
-  }
-
-  function onDocumentKey(event: KeyboardEvent) {
-    if (event.key === "Escape") closeMenu();
-  }
-
-  // The menu closes on an outside click or Escape, like the More menu.
-  onAttach(() => {
-    document.addEventListener("click", onDocumentClick);
-    document.addEventListener("keydown", onDocumentKey);
-    return () => {
-      document.removeEventListener("click", onDocumentClick);
-      document.removeEventListener("keydown", onDocumentKey);
-    };
-  });
 </script>
 
-<div class="play-presets" bind-element={menu}>
+<div class="play-presets" on:click-outside={closeMenu}>
   <button
     class="play-text"
     type="button"
