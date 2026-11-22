@@ -2,7 +2,7 @@
 // The page's scoped style pulls this in, so every rule here stays on the playground.
 .playground {
 	display: grid;
-	grid-template-rows: auto minmax(0, 1fr) auto;
+	grid-template-rows: minmax(0, 1fr) auto;
 	height: calc(100vh - var(--strip-h, 0px) - var(--topbar-h, 4rem));
 	height: calc(100dvh - var(--strip-h, 0px) - var(--topbar-h, 4rem));
 	margin: 0;
@@ -51,10 +51,12 @@
 	}
 }
 
+// Desktop: the bar and editor share the left column, and the preview fills the right one.
 .play-work {
 	position: relative;
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	grid-template-rows: auto minmax(0, 1fr);
 	min-height: 0;
 }
 
@@ -67,10 +69,14 @@
 }
 
 .play-editor {
+	grid-column: 1;
+	grid-row: 2;
 	background: var(--code);
 }
 
 .play-preview {
+	grid-column: 2;
+	grid-row: 1 / span 2;
 	border-left: 1px solid var(--line);
 	background: #ffffff;
 }
@@ -238,7 +244,7 @@
 
 @media (max-width: 719px) {
 	.playground {
-		grid-template-rows: auto auto minmax(0, 1fr) auto;
+		grid-template-rows: auto minmax(0, 1fr) auto;
 	}
 
 	.play-views {
@@ -255,7 +261,7 @@
 
 	.play-editor,
 	.play-preview {
-		grid-area: 1 / 1;
+		grid-area: 2 / 1;
 	}
 
 	.play-preview {

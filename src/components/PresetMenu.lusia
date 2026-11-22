@@ -1,0 +1,157 @@
+<script>
+  import { PRESET, WHEN, onAttach, variable } from "lusiajs";
+  import { hasEditedFiles, loadPreset } from "../playground/actions.ts";
+  import { PRESETS, type Preset } from "../playground/presets/index.ts";
+
+  const SLIDE_MS = 250;
+  const STAGGER_MS = 60;
+
+  const open = variable(false);
+  const menu = variable<HTMLElement | null>(null);
+  const openText = variable.compute(() => String(open.value));
+
+  // Each item slides in a little after the one before it.
+  const choices = PRESETS.map((preset, index) => ({
+    preset,
+    motion: {
+      style: PRESET.SLIDE_UP,
+      when: WHEN.ATTACH,
+      duration: SLIDE_MS,
+      delay: index * STAGGER_MS,
+    },
+  }));
+
+  // The menu pops in from its corner and pops out when it closes.
+  const menuMotion = [
+    { style: PRESET.POP_IN, when: WHEN.ATTACH, duration: 200 },
+    { style: PRESET.POP_OUT, when: WHEN.DETACH, duration: 150 },
+  ];
+
+  function toggleMenu() {
+    open.value = !open.value;
+  }
+
+  function closeMenu() {
+    open.value = false;
+  }
+
+  function pick(preset: Preset) {
+    closeMenu();
+    const lose = `Replace your files with the ${preset.title} preset?`;
+    if (hasEditedFiles() && !confirm(lose)) return;
+    loadPreset(preset);
+  }
+
+  function onDocumentClick(event: MouseEvent) {
+    const root = menu.peek();
+    if (!open.peek() || root?.contains(event.target as Node)) return;
+    closeMenu();
+  }
+
+  function onDocumentKey(event: KeyboardEvent) {
+    if (event.key === "Escape") closeMenu();
+  }
+
+  // The menu closes on an outside click or Escape, like the More menu.
+  onAttach(() => {
+    document.addEventListener("click", onDocumentClick);
+    document.addEventListener("keydown", onDocumentKey);
+    return () => {
+      document.removeEventListener("click", onDocumentClick);
+      document.removeEventListener("keydown", onDocumentKey);
+    };
+  });
+</script>
+
+<div class="play-presets" bind-element={menu}>
+  <button
+    class="play-text"
+    type="button"
+    aria-haspopup="true"
+    aria-expanded={openText}
+    onclick={toggleMenu}
+  >
+    Presets
+    <span class="material-symbols-rounded" aria-hidden="true">expand_more</span>
+  </button>
+  <IF {open}>
+    <div class="play-menu play-preset-menu" animate={menuMotion}>
+      <EACH {choices} as={choice} key={choice.preset.id}>
+        <button
+          class="play-preset"
+          type="button"
+          animate={choice.motion}
+          onclick={() => pick(choice.preset)}
+        >
+          <span class="play-preset-title">{choice.preset.title}</span>
+          <span class="play-preset-note">{choice.preset.description}</span>
+        </button>
+      </EACH>
+    </div>
+  </IF>
+</div>
+
+<style>
+  .play-presets {
+    position: relative;
+    flex: none;
+  }
+
+  // A text button in the bar. It uses the same tint as the icon buttons.
+  .play-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    height: 2.25rem;
+    padding: 0 0.55rem;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+
+    .material-symbols-rounded {
+      font-size: 1.1rem;
+    }
+
+    &:hover {
+      background: var(--accent-soft);
+      color: var(--fg);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    &[aria-expanded="true"] {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+  }
+
+  .play-preset-menu {
+    min-width: 17rem;
+  }
+
+  .play-preset {
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.5rem 0.6rem;
+  }
+
+  .play-preset-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .play-preset-note {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+</style>

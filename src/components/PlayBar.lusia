@@ -21,6 +21,7 @@
   } from "../playground/state.ts";
   import EditorTabs from "./EditorTabs.lusia";
   import FileNameForm from "./FileNameForm.lusia";
+  import PresetMenu from "./PresetMenu.lusia";
 
   // "add" and "rename" open one name form at a time. "" means no form is open.
   const formMode = variable<"" | "add" | "rename">("");
@@ -202,6 +203,8 @@
       >
     </button>
     <span class="play-sep" aria-hidden="true"></span>
+    <PresetMenu />
+    <span class="play-sep" aria-hidden="true"></span>
     <details class="play-more" bind-element={menu}>
       <summary
         class="play-icon"
@@ -252,7 +255,9 @@
 </div>
 
 <style>
+  // The bar sits in the editor column, above the editor, on every width.
   .play-bar {
+    grid-area: 1 / 1;
     position: relative;
     z-index: 30;
     display: flex;

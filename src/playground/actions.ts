@@ -1,6 +1,7 @@
 import { copyText } from "../copy.ts";
 import type { LiveError } from "../live/types.ts";
 import { ENTRY_FILE, nameProblem } from "./names.ts";
+import { PRESETS, type Preset } from "./presets/index.ts";
 import { starterFiles } from "./starter.ts";
 import { active, files, jump, notice, view } from "./state.ts";
 import type { PlayFile } from "./types.ts";
@@ -50,10 +51,35 @@ export function deleteActive(): void {
 }
 
 export function resetFiles(): void {
-	files.value = starterFiles();
+	showFiles(starterFiles());
+}
+
+/** Replaces every file with a preset's files and opens its entry file. */
+export function loadPreset(preset: Preset): void {
+	showFiles(preset.files.map((file) => ({ ...file })));
+}
+
+/** True when the files are not exactly one preset, so loading a preset would lose work. */
+export function hasEditedFiles(): boolean {
+	const current = files.peek();
+	return !PRESETS.some((preset) => sameFiles(preset.files, current));
+}
+
+function showFiles(next: PlayFile[]): void {
+	files.value = next;
 	active.value = ENTRY_FILE;
 	view.value = "code";
 	notice.value = "";
+}
+
+function sameFiles(left: readonly PlayFile[], right: readonly PlayFile[]): boolean {
+	return (
+		left.length === right.length &&
+		left.every(
+			(file, index) =>
+				file.name === right[index]?.name && file.code === right[index]?.code,
+		)
+	);
 }
 
 export function jumpTo(error: LiveError): void {

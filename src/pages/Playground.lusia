@@ -76,9 +76,8 @@
     </button>
   </div>
 
-  <PlayBar />
-
   <div class="play-work">
+    <PlayBar />
     <section class="play-editor" aria-label="Code">
       <CodeEditor
         files={files}
