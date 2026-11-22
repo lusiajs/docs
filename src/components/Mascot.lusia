@@ -1,7 +1,7 @@
 <script>
-  import { WHEN, EASE } from "lusiajs";
+  import { SCREEN, WHEN, EASE } from "lusiajs";
 
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = SCREEN.REDUCED_MOTION.value;
 
   // The eyes close for a moment, once every few seconds.
   const blink = {

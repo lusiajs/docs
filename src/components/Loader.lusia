@@ -1,9 +1,9 @@
 <script>
-  import { WHEN } from "lusiajs";
+  import { SCREEN, WHEN } from "lusiajs";
   import LoadingMark from "./LoadingMark.lusia";
 
   // Reduced motion keeps the loader still. Only the fade-out still plays.
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = SCREEN.REDUCED_MOTION.value;
 
   const fadeOut = {
     0: { opacity: 1 },

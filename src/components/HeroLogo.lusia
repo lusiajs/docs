@@ -1,8 +1,16 @@
 <script>
-  import { onAttach, variable, WHEN, EASE } from "lusiajs";
+  import {
+    EASE,
+    EVENT,
+    SCREEN,
+    WHEN,
+    listen,
+    onAttach,
+    variable,
+  } from "lusiajs";
   import { wobbleStyle } from "../motion/wobble.ts";
 
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = SCREEN.REDUCED_MOTION.value;
 
   const logoEl = variable<HTMLElement | null>(null);
 
@@ -24,12 +32,10 @@
 
   // Font swaps and resizes change the title width, so watching the title covers both.
   onAttach(() => {
-    const titleSizes = new ResizeObserver(placeLogo);
     placeLogo();
     document.fonts.ready.then(placeLogo);
-    const title = logoEl.value?.parentElement;
-    if (title) titleSizes.observe(title);
-    return () => titleSizes.disconnect();
+    const title = logoEl.peek()?.parentElement;
+    if (title) listen(title, EVENT.SIZE, placeLogo);
   });
 
   // Grows in with the first letter. Reduced motion shows it at once.

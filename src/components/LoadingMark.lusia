@@ -1,8 +1,8 @@
 <script>
-  import { EASE } from "lusiajs";
+  import { EASE, SCREEN } from "lusiajs";
 
   // Reduced motion keeps the dots still.
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = SCREEN.REDUCED_MOTION.value;
 
   const dotBounce = {
     default: [EASE.STYLE.SINE, EASE.INOUT],

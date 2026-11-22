@@ -1,5 +1,5 @@
 <script>
-  import { onAttach, variable, WHEN } from "lusiajs";
+  import { SCREEN, listen, onAttach, variable, WHEN } from "lusiajs";
   import { copyText } from "../copy.ts";
   import { wobbleStyle } from "../motion/wobble.ts";
   import {
@@ -13,7 +13,7 @@
 
   type Choice = "create" | "add";
 
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = SCREEN.REDUCED_MOTION.value;
 
   const commands: Record<Choice, string> = {
     create: "bun create lusiajs my-app",
@@ -86,11 +86,8 @@
   onAttach(() => {
     placeHighlight();
     document.fonts.ready.then(placeHighlight);
-    window.addEventListener("resize", placeHighlight);
-    return () => {
-      window.removeEventListener("resize", placeHighlight);
-      clearTimeout(noticeTimer);
-    };
+    listen(window, "resize", placeHighlight);
+    return () => clearTimeout(noticeTimer);
   });
 
   const pillMotion = reduced

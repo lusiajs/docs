@@ -1,7 +1,7 @@
 <script>
-  import { onAttach, variable } from "lusiajs";
+  import { SCREEN, onAttach, variable } from "lusiajs";
 
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = SCREEN.REDUCED_MOTION.value;
 
   const items = [
     { id: 1, label: "Rise" },
@@ -15,6 +15,7 @@
   ];
 
   const box = variable<HTMLElement | null>(null);
+  const rows = items.map(() => variable<HTMLElement | null>(null));
 
   // How far each item has come up into the box, from 0 (below) to 1 (fully in view).
   const progress = variable<number[]>(items.map(() => (reduced ? 1 : 0)));
@@ -23,21 +24,21 @@
     return Math.min(1, Math.max(0, value));
   }
 
+  function rowProgress(row: HTMLElement, el: HTMLElement): number {
+    const view = el.clientHeight;
+    return clamp01((el.scrollTop + view - row.offsetTop) / (view * 0.7));
+  }
+
   function measure() {
     const el = box.peek();
     if (!el || reduced) return;
-    const view = el.clientHeight;
-    const rows = [...el.querySelectorAll<HTMLElement>(".item")];
-    progress.value = rows.map((row) =>
-      clamp01((el.scrollTop + view - row.offsetTop) / (view * 0.7)),
-    );
+    progress.value = rows.map((row) => rowProgress(row.peek()!, el));
   }
 
   onAttach(() => {
-    const el = box.peek();
     measure();
-    el?.addEventListener("scroll", measure, { passive: true });
-    return () => el?.removeEventListener("scroll", measure);
+    const el = box.peek();
+    if (el) listen(el, "scroll", measure);
   });
 
   function itemStyle(index: number): string {
@@ -50,7 +51,11 @@
   <div class="box" bind-element={box}>
     <ul class="list">
       <EACH {items} as={item} index={i} key={item.id}>
-        <li class="item" style={itemStyle(i.value)}>
+        <li
+          class="item"
+          style={itemStyle(i.value)}
+          bind-element={rows[i.value]}
+        >
           <span>{item.label} {i.value + 1}</span>
         </li>
       </EACH>

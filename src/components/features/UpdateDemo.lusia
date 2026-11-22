@@ -1,5 +1,5 @@
 <script>
-  import { variable } from "lusiajs";
+  import { SCREEN, variable } from "lusiajs";
 
   const name = variable("Ada");
   const letters = variable.compute(() => name.value.length);
@@ -14,7 +14,7 @@
 
   // Only the two readouts that read the variables flash. The labels never do.
   function flash(el: HTMLElement | null) {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (SCREEN.REDUCED_MOTION.value) return;
     el?.animate(pulse, {
       duration: 450,
       easing: "cubic-bezier(0.2, 0.7, 0.2, 1)",

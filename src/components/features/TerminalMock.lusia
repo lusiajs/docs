@@ -1,5 +1,5 @@
 <script>
-  import { onAttach, variable } from "lusiajs";
+  import { EVENT, SCREEN, listen, onAttach, variable } from "lusiajs";
 
   const COMMANDS = [
     "bun create lusiajs my-app",
@@ -9,7 +9,7 @@
   ];
   const STEP_MS = 55;
   const PAUSE_MS = 350;
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = SCREEN.REDUCED_MOTION.value;
 
   const first = variable(reduced ? COMMANDS[0] : "");
   const second = variable(reduced ? COMMANDS[1] : "");
@@ -40,16 +40,16 @@
   onAttach(() => {
     const el = root.peek();
     if (!el || reduced) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-        observer.disconnect();
+    const stopView = listen(
+      el,
+      EVENT.VIEW,
+      ({ in: visible }) => {
+        if (!visible) return;
+        stopView();
         typeAll();
       },
-      { threshold: 0.5 },
+      { amount: 0.5 },
     );
-    observer.observe(el);
-    return () => observer.disconnect();
   });
 </script>
 
