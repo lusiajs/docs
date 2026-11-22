@@ -1,10 +1,19 @@
 <script>
   import animateSpaceConfigSource from "../config-files/animate-space.config.ts?raw";
-  import animateSpaceConfigJsonSource from "../config-files/animate-space.config.json?raw";
+  import animateSpaceJsonSource from "../config-files/animate-space.config.json?raw";
   import CodeBlock from "./CodeBlock.lusia";
   import CodePanel from "./CodePanel.lusia";
   import DocTable from "./DocTable.lusia";
   import Note from "./Note.lusia";
+  import SpaceCompare from "./animate-space/SpaceCompare.lusia";
+  import spaceCompareSource from "./animate-space/SpaceCompare.lusia?raw";
+
+  const optionHead = ["Option", "Where", "Values", "Default"];
+  const optionRows = [
+    ["more: { animateSpace }", "On one element", "true or false", "false"],
+    ["animate.attach.animateSpace", "lusia.config", "true or false", "false"],
+    ["animate.detach.animateSpace", "lusia.config", "true or false", "false"],
+  ];
 
   const defaultHead = ["Trigger", "Default"];
   const defaultRows = [
@@ -51,11 +60,28 @@
     text="The default is false. Nothing slides until you turn animateSpace on."
   />
 
-  <h3>What it does</h3>
+  <h3>Jump or slide</h3>
   <p>
-    When an element is added or removed, the elements around it normally jump to
-    their new places. With animateSpace, they slide there instead.
+    Add or remove an item. The rows below it jump to their new places when
+    animateSpace is off, and slide there when it is on.
   </p>
+  <SpaceCompare />
+  <CodePanel sources={[{ path: "SpaceCompare.lusia", text: spaceCompareSource }]} />
+
+  <ul>
+    <li>
+      <strong>What it is:</strong> when an element is added or removed, its
+      neighbors slide to their new place instead of jumping.
+    </li>
+    <li>
+      <strong>How to turn it on:</strong> pick Animate space in the create
+      prompt, or set <code>animateSpace</code> in <code>lusia.config.ts</code>.
+    </li>
+    <li>
+      <strong>Options:</strong> see the table below.
+    </li>
+  </ul>
+  <DocTable head={optionHead} rows={optionRows} />
 
   <h3>Which triggers use it</h3>
   <ul>
@@ -79,9 +105,9 @@
   <p><strong>For the whole app:</strong> add this to lusia.config.ts.</p>
   <CodePanel
     sources={[
-			{ path: "lusia.config.ts", text: animateSpaceConfigSource },
-			{ path: "lusia.config.json", text: animateSpaceConfigJsonSource },
-		]}
+      { path: "lusia.config.ts", text: animateSpaceConfigSource },
+      { path: "lusia.config.json", text: animateSpaceJsonSource },
+    ]}
   />
 
   <h3>Which setting wins</h3>
@@ -168,10 +194,6 @@
     </li>
   </ul>
 
-  <h3>Demos</h3>
-  <p>
-    Each demo below has a toggle. Switch it to see the neighbors jump or slide.
-  </p>
 </div>
 
 <style>

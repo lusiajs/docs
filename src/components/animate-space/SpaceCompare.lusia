@@ -1,0 +1,127 @@
+<script>
+  import { WHEN, variable } from "lusiajs";
+
+  interface Item {
+    id: number;
+    title: string;
+  }
+
+  const startItems: Item[] = [
+    { id: 1, title: "Read the docs" },
+    { id: 2, title: "Fix the build" },
+    { id: 3, title: "Ship the release" },
+  ];
+  const newItem: Item = { id: 4, title: "Plan the sprint" };
+  // The new item goes in the middle, so the rows below it have to move.
+  const withNewItem: Item[] = [startItems[0], newItem, startItems[1], startItems[2]];
+  const items = variable<Item[]>(startItems);
+  let running = false;
+
+  const fadeIn = {
+    0: { opacity: 0 },
+    1: { opacity: 1 },
+  };
+  const fadeOut = {
+    0: { opacity: 1 },
+    1: { opacity: 0 },
+  };
+
+  // The two panels differ only in animateSpace.
+  const offMotion = [
+    { style: fadeIn, when: WHEN.ATTACH, duration: 400, more: { animateSpace: false } },
+    { style: fadeOut, when: WHEN.DETACH, duration: 400, more: { animateSpace: false } },
+  ];
+  const onMotion = [
+    { style: fadeIn, when: WHEN.ATTACH, duration: 400, more: { animateSpace: true } },
+    { style: fadeOut, when: WHEN.DETACH, duration: 400, more: { animateSpace: true } },
+  ];
+
+  function wait(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async function replay() {
+    if (running) return;
+    running = true;
+    items.value = startItems;
+    await wait(800);
+    items.value = withNewItem;
+    await wait(1200);
+    items.value = startItems;
+    running = false;
+  }
+</script>
+
+<div class="space-compare">
+  <div class="actions">
+    <button type="button" onclick={replay}>Replay</button>
+  </div>
+  <div class="panels">
+    <div class="panel">
+      <p class="label">Animate space: off</p>
+      <ul class="list">
+        <EACH {items} as={item} key={item.id}>
+          <li class="row" animate={offMotion}>
+            <span>{item.title}</span>
+          </li>
+        </EACH>
+      </ul>
+    </div>
+    <div class="panel">
+      <p class="label">Animate space: on</p>
+      <ul class="list">
+        <EACH {items} as={item} key={item.id}>
+          <li class="row" animate={onMotion}>
+            <span>{item.title}</span>
+          </li>
+        </EACH>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  @use "../../styles/demo" as demo;
+
+  .space-compare {
+    display: grid;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    .actions {
+      @include demo.row;
+    }
+
+    button {
+      @include demo.button;
+    }
+
+    .panels {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      gap: 1rem;
+    }
+
+    .label {
+      margin: 0 0 0.4rem;
+      font-weight: 700;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      padding: 0.4rem 0.6rem;
+      border-radius: 10px;
+      background: var(--lavender-soft);
+    }
+  }
+</style>
