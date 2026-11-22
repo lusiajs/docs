@@ -32,6 +32,7 @@
   const selected = variable("");
   const host = variable<HTMLElement | null>(null);
   const copied = variable(false);
+  let copiedTimer = 0;
   const toolbarWrap = variable(false);
   const lineWrap = variable.compute(() => wrap.value || toolbarWrap.value);
   // A false attribute is removed, so aria-pressed takes the text "false".
@@ -91,6 +92,7 @@
       });
     return () => {
       closed = true;
+      clearTimeout(copiedTimer);
       session?.destroy();
       session = undefined;
     };
@@ -126,7 +128,8 @@
     try {
       await navigator.clipboard.writeText(session.text());
       copied.value = true;
-      setTimeout(() => (copied.value = false), 1500);
+      clearTimeout(copiedTimer);
+      copiedTimer = window.setTimeout(() => (copied.value = false), 1500);
     } catch {
       status.value = "Copy failed. Select the code and copy it instead.";
     }
