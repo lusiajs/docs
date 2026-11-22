@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE, SCROLL_AT, onAttach } from "lusiajs";
+  import { WHEN, EASE, EDGE, onAttach } from "lusiajs";
   import { AT, watchProgress } from "./scroll-readout.ts";
 
   // Starts at the middle and fades out as the card leaves the top of the screen.
@@ -11,7 +11,10 @@
   const fadeOutMotion = {
     style: fadeOut,
     when: WHEN.SCROLL,
-    more: { start: SCROLL_AT.CENTER, end: SCROLL_AT.LEAVE },
+    more: {
+      start: [EDGE.CENTER, EDGE.CENTER],
+      end: [EDGE.BOTTOM, EDGE.TOP],
+    },
   };
 
   onAttach((root) => {

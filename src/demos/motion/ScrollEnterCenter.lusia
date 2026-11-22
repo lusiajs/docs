@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE, SCROLL_AT, onAttach } from "lusiajs";
+  import { WHEN, EASE, EDGE, onAttach } from "lusiajs";
   import { AT, watchProgress } from "./scroll-readout.ts";
 
   // Finishes in the middle: progress 1 when the card's centre reaches the screen middle.
@@ -11,7 +11,10 @@
   const riseMotion = {
     style: rise,
     when: WHEN.SCROLL,
-    more: { start: SCROLL_AT.ENTER, end: SCROLL_AT.CENTER },
+    more: {
+      start: [EDGE.TOP, EDGE.BOTTOM],
+      end: [EDGE.CENTER, EDGE.CENTER],
+    },
   };
 
   onAttach((root) => {

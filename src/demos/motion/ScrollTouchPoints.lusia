@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE, EDGE, SCROLL_AT, onAttach } from "lusiajs";
+  import { WHEN, EASE, EDGE, onAttach } from "lusiajs";
   import { watchProgress } from "./scroll-readout.ts";
 
   const fadeIn = {
@@ -7,13 +7,13 @@
     1: [EASE.STYLE.LINEAR, EASE.OUT, { opacity: 1 }],
   };
 
-  // An object takes an EDGE member or a number from 0 to 1 for each point.
-  const edgeStart = { element: EDGE.TOP, window: EDGE.CENTER };
-  const edgeEnd = { element: EDGE.BOTTOM, window: EDGE.TOP };
-  const numberStart = { element: 0.25, window: 0.75 };
-  const numberEnd = { element: 0.75, window: 0.25 };
-  const enterStart = { element: 0, window: 1 };
-  const leaveEnd = { element: 1, window: 0 };
+  // A pair takes an EDGE member or a number from 0 to 1 for each point.
+  const edgeStart = [EDGE.TOP, EDGE.CENTER];
+  const edgeEnd = [EDGE.BOTTOM, EDGE.TOP];
+  const numberStart = [0.25, 0.75];
+  const numberEnd = [0.75, 0.25];
+  const defaultStart = [EDGE.TOP, EDGE.BOTTOM];
+  const defaultEnd = [EDGE.BOTTOM, EDGE.TOP];
 
   const edgeMotion = {
     style: fadeIn,
@@ -28,7 +28,7 @@
   const enterMotion = {
     style: fadeIn,
     when: WHEN.SCROLL,
-    more: { start: SCROLL_AT.ENTER, end: SCROLL_AT.LEAVE },
+    more: { start: defaultStart, end: defaultEnd },
   };
 
   onAttach((root) => {
@@ -37,7 +37,7 @@
     const stops = [
       watchProgress(cards[0], edgeStart, edgeEnd, outputs[0]),
       watchProgress(cards[1], numberStart, numberEnd, outputs[1]),
-      watchProgress(cards[2], enterStart, leaveEnd, outputs[2]),
+      watchProgress(cards[2], defaultStart, defaultEnd, outputs[2]),
     ];
     return () => stops.forEach((stop) => stop());
   });
@@ -50,7 +50,7 @@
       top.
     </li>
     <li>Middle: numbers. The same idea, with 0.25 and 0.75.</li>
-    <li>Bottom: SCROLL_AT.ENTER to LEAVE, the default.</li>
+    <li>Bottom: no start or end set, so the default range.</li>
   </ul>
   <div class="space">
     <div class="row">
@@ -62,7 +62,7 @@
       <output>0.00</output>
     </div>
     <div class="row">
-      <div class="card" animate={enterMotion}>SCROLL_AT</div>
+      <div class="card" animate={enterMotion}>Default</div>
       <output>0.00</output>
     </div>
   </div>

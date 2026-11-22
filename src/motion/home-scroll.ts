@@ -1,5 +1,4 @@
 import {
-	SCROLL_AT,
 	WHEN,
 	type AnimateItem,
 	type ComputedVariable,
@@ -9,10 +8,8 @@ import {
 // Scroll motion for the Home page. All Home scroll motion lives here.
 export type Follow = ComputedVariable<HTMLElement | null>;
 
-// A SCROLL_AT mode, or `{ element, window }` with numbers from 0 to 1.
-export type ScrollPoint =
-	| (typeof SCROLL_AT)[keyof typeof SCROLL_AT]
-	| { element: number; window: number };
+// [element edge, screen edge], each an EDGE value or a number from 0 to 1.
+export type ScrollPoint = [number, number];
 
 // Plays `from` to `to` on the followed element's box, from `start` to `end` on the screen.
 export function scrollAcross(

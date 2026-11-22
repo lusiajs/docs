@@ -1,5 +1,5 @@
 import { EASE, EDGE, WHEN, type AnimateItem, type Style } from "lusiajs";
-import { scrollAcross, type Follow } from "./home-scroll.ts";
+import { scrollAcross, type Follow, type ScrollPoint } from "./home-scroll.ts";
 
 // The hero sinks with the page, so it moves at 1 - PUSH speed while the page scrolls through the zone.
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -9,8 +9,8 @@ const PUSH = 0.6;
 const PUSH_VH = Math.round(ZONE_VH * PUSH);
 
 // The zone runs from the anchor's place 80vh down the page (ZONE_VH) to the top of the screen.
-const zoneStart = { element: EDGE.TOP, window: ZONE_VH / 100 };
-const zoneEnd = { element: EDGE.TOP, window: 0 };
+const zoneStart: ScrollPoint = [EDGE.TOP, ZONE_VH / 100];
+const zoneEnd: ScrollPoint = [EDGE.TOP, 0];
 
 // Plays `from` to `to` over the slow-down zone only.
 export function heroBetween(follow: Follow, from: Style, to: Style): AnimateItem {

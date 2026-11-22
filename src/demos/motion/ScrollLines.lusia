@@ -2,7 +2,7 @@
   import { onAttach } from "lusiajs";
   import { onScrollFrame, meets } from "./scroll-readout.ts";
 
-  // A window line lights up when an element line is on it, and the other way round.
+  // A screen line lights up when an element line is on it, and the other way round.
   function lineAt(el) {
     return Number(el.dataset.at);
   }
@@ -11,7 +11,7 @@
     return others.some((other) => meets(rect, lineAt(line), lineAt(other)));
   }
 
-  // The window lines are fixed to the screen, so they show only while the demo is on it.
+  // The screen lines are fixed to the screen, so they show only while the demo is on it.
   function isOnScreen(root) {
     const rect = root.getBoundingClientRect();
     return rect.bottom > 0 && rect.top < window.innerHeight;
@@ -38,7 +38,7 @@
 <div class="scroll-demo">
   <ul class="watch">
     <li>
-      The blue lines are the window: top, centre and bottom of the screen.
+      The blue lines are the screen: top, centre and bottom.
     </li>
     <li>The card has its own lines: top, centre and bottom.</li>
     <li>
@@ -48,13 +48,13 @@
   </ul>
 
   <div class="window-line" data-at="0" style="top: 0%">
-    <span>window top</span>
+    <span>screen top</span>
   </div>
   <div class="window-line" data-at="0.5" style="top: 50%">
-    <span>window centre</span>
+    <span>screen centre</span>
   </div>
   <div class="window-line" data-at="1" style="top: 100%">
-    <span>window bottom</span>
+    <span>screen bottom</span>
   </div>
 
   <div class="space">

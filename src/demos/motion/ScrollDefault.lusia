@@ -2,7 +2,8 @@
   import { WHEN, EASE, onAttach } from "lusiajs";
   import { AT, watchProgress } from "./scroll-readout.ts";
 
-  // With no start or end, the range is SCROLL_AT.ENTER to SCROLL_AT.LEAVE.
+  // With no start or end, the range runs from the card's top at the screen's bottom
+  // to the card's bottom at the screen's top.
   // Opacity and blur do not move the box, so the progress stays exact.
   const rise = {
     0: { opacity: 0, filter: "blur(12px)" },

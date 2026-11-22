@@ -15,8 +15,8 @@
   const scrolled = {
     when: WHEN.SCROLL,
     more: {
-      start: { element: EDGE.TOP, window: 0.9 },
-      end: { element: EDGE.TOP, window: 0.4 },
+      start: [EDGE.TOP, 0.9],
+      end: [EDGE.TOP, 0.4],
     },
   };
   const barMotion = { ...scrolled, style: fill };

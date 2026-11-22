@@ -1,16 +1,15 @@
+import { EDGE } from "lusiajs";
+
 // Demo-only helpers for the SCROLL pages. They measure the same way WHEN.SCROLL does, so the readouts match the motion.
 
-export interface Touch {
-  element: number;
-  window: number;
-}
+// [element edge, screen edge], the same pair shape as WHEN.SCROLL start and end.
+export type ScrollPoint = [number, number];
 
-// The same points as SCROLL_AT.ENTER, CENTER and LEAVE.
 export const AT = {
-  ENTER: { element: 0, window: 1 },
-  CENTER: { element: 0.5, window: 0.5 },
-  LEAVE: { element: 1, window: 0 },
-} satisfies Record<string, Touch>;
+  ENTER: [EDGE.TOP, EDGE.BOTTOM],
+  CENTER: [EDGE.CENTER, EDGE.CENTER],
+  LEAVE: [EDGE.BOTTOM, EDGE.TOP],
+} satisfies Record<string, ScrollPoint>;
 
 const MEET_PX = 4;
 
@@ -34,12 +33,18 @@ export function onScrollFrame(frame: () => void): () => void {
   };
 }
 
+/** The top of the element when its point meets its screen point. */
+function screenY(point: ScrollPoint, viewport: number, height: number): number {
+  const [elementEdge, screenEdge] = point;
+  return screenEdge * viewport - elementEdge * height;
+}
+
 /** The progress from `start` to `end`, clamped to 0 to 1. */
-export function progressOf(el: Element, start: Touch, end: Touch): number {
+export function progressOf(el: Element, start: ScrollPoint, end: ScrollPoint): number {
   const rect = el.getBoundingClientRect();
   const viewport = window.innerHeight;
-  const startTop = start.window * viewport - start.element * rect.height;
-  const endTop = end.window * viewport - end.element * rect.height;
+  const startTop = screenY(start, viewport, rect.height);
+  const endTop = screenY(end, viewport, rect.height);
   const span = startTop - endTop;
   if (span === 0) return 0;
   return Math.min(1, Math.max(0, (startTop - rect.top) / span));
@@ -65,8 +70,8 @@ export function watchPinned(el: Element, out: Element): () => void {
 /** Writes the progress with two decimals into `out` while the page scrolls. */
 export function watchProgress(
   el: Element,
-  start: Touch,
-  end: Touch,
+  start: ScrollPoint,
+  end: ScrollPoint,
   out: Element,
 ): () => void {
   return onScrollFrame(() => {
