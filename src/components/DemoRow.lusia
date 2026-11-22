@@ -1,5 +1,13 @@
 <script>
-  import { attach, onAttach, props, variable, type Instance } from "lusiajs";
+  import {
+    EVENT,
+    attach,
+    listen,
+    onAttach,
+    props,
+    variable,
+    type Instance,
+  } from "lusiajs";
   import type { Demo } from "../catalog.ts";
   import type { EditorFile } from "../editor/files.ts";
   import { createDemoSession } from "../live/demo-session.ts";
@@ -49,20 +57,18 @@
     preview = new Preview(stage.peek()!, (error) => session.report(error), {
       sizeToContent: true,
     });
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
+    const stopNearby = listen(
+      codeSlot.peek()!,
+      EVENT.VIEW,
+      ({ in: visible }) => {
+        if (!visible) return;
         remountOriginals();
         openEditor();
-        observer.disconnect();
+        stopNearby();
       },
-      { rootMargin: "240px 0px" },
+      { margin: "-240px", amount: 0 },
     );
-    observer.observe(codeSlot.peek()!);
-    return () => {
-      observer.disconnect();
-      preview?.destroy();
-    };
+    return () => preview?.destroy();
   });
 
   function openEditor(): void {
