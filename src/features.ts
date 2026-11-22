@@ -2,7 +2,6 @@ import flowSource from "./components/features/FlowDemo.lusia?raw";
 import motionSource from "./components/features/MotionDemo.lusia?raw";
 import scopedSource from "./components/features/ScopedDemo.lusia?raw";
 import scrollSource from "./components/features/ScrollDemo.lusia?raw";
-import sizeSource from "./components/features/SizeDemo.lusia?raw";
 import terminalSource from "./components/features/TerminalMock.lusia?raw";
 import treeSource from "./components/features/TreeNode.lusia?raw";
 import updateSource from "./components/features/UpdateDemo.lusia?raw";
@@ -64,17 +63,8 @@ export const features = [
 		tone: "var(--peach)",
 	},
 	{
-		key: "size",
-		number: "07",
-		tag: "Size",
-		title: "Tiny and fast",
-		benefit: "About 9 KB gzipped. No runtime dependencies.",
-		icon: "compress",
-		tone: "var(--rose)",
-	},
-	{
 		key: "start",
-		number: "08",
+		number: "07",
 		tag: "Tooling",
 		title: "Zero to running",
 		benefit: "One command creates a project. bun run dev starts it.",
@@ -92,6 +82,5 @@ export const featureSources = {
 	flow: { file: "FlowDemo.lusia", code: flowSource },
 	tree: { file: "TreeNode.lusia", code: treeSource },
 	scoped: { file: "ScopedDemo.lusia", code: scopedSource },
-	size: { file: "SizeDemo.lusia", code: sizeSource },
 	start: { file: "TerminalMock.lusia", code: terminalSource },
 };

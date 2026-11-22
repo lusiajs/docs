@@ -22,7 +22,6 @@
   import FlowDemo from "./features/FlowDemo.lusia";
   import TreeDemo from "./features/TreeDemo.lusia";
   import ScopedDemo from "./features/ScopedDemo.lusia";
-  import SizeDemo from "./features/SizeDemo.lusia";
   import TerminalMock from "./features/TerminalMock.lusia";
 
   const PHONE_QUERY = "(max-width: 899px)";
@@ -209,7 +208,7 @@
     <IF {phone.value}>
       <header class="features-head" animate={titleSlide}>
         <h2 class="section-title">Features</h2>
-        <p class="section-sub">Eight things Lusia does for you.</p>
+        <p class="section-sub">Seven things Lusia does for you.</p>
       </header>
     </IF>
 
@@ -223,7 +222,7 @@
           <nav class="nav" aria-label="Features" style={windowStyle()}>
             <header class="nav-head">
               <h2 class="section-title">Features</h2>
-              <p class="section-sub">Eight things Lusia does for you.</p>
+              <p class="section-sub">Seven things Lusia does for you.</p>
             </header>
             <div class="nav-list">
               <EACH {features} as={feature} index={i} key={feature.key}>
@@ -308,10 +307,7 @@
                       <IF {isMounted[5].value}><ScopedDemo /></IF>
                     </div>
                     <div class={slotClass(6)} animate={demoMotion(6)}>
-                      <IF {isMounted[6].value}><SizeDemo /></IF>
-                    </div>
-                    <div class={slotClass(7)} animate={demoMotion(7)}>
-                      <IF {isMounted[7].value}><TerminalMock /></IF>
+                      <IF {isMounted[6].value}><TerminalMock /></IF>
                     </div>
                   </div>
                   <span class="try">Try it</span>
@@ -371,13 +367,6 @@
           <p class="copy-index">{features[6].number}</p>
           <h3 class="copy-title">{features[6].title}</h3>
           <p class="benefit">{features[6].benefit}</p>
-          <div class="phone-demo"><SizeDemo /></div>
-          <FeatureSnippet code={featureSources.size.code} />
-        </article>
-        <article class="phone-item" style={toneStyle(features[7].tone)}>
-          <p class="copy-index">{features[7].number}</p>
-          <h3 class="copy-title">{features[7].title}</h3>
-          <p class="benefit">{features[7].benefit}</p>
           <div class="phone-demo"><TerminalMock /></div>
           <FeatureSnippet code={featureSources.start.code} />
         </article>
@@ -460,10 +449,10 @@
     }
   }
 
-  // Eight steps of scroll. The markers set the active feature, and the stage sticks.
+  // Seven steps of scroll. The markers set the active feature, and the stage sticks.
   .track {
     position: relative;
-    height: calc(8 * #{$step-height});
+    height: calc(7 * #{$step-height});
   }
 
   .marker {
