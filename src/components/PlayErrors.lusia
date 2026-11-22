@@ -23,7 +23,6 @@
 <section class="play-errors" aria-label="Errors">
   <IF {isEmpty}>
     <p class="play-ok">No errors.</p>
-  </IF>
   <ELSE>
     <ul class="play-error-list" role="list">
       <EACH {errors} as={error}>
@@ -48,7 +47,7 @@
         </li>
       </EACH>
     </ul>
-  </ELSE>
+  </IF>
 </section>
 
 <style>

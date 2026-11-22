@@ -35,15 +35,13 @@
   </div>
   <IF {mode.value === "member"}>
     <p class="branch" animate={branchMotion}>Welcome back, Ada.</p>
-  </IF>
   <ELSEIF {mode.value === "guest"}>
     <p class="branch" animate={branchMotion}>
       Hi guest. Some pages are locked.
     </p>
-  </ELSEIF>
   <ELSE>
     <p class="branch" animate={branchMotion}>Please sign in.</p>
-  </ELSE>
+  </IF>
 </div>
 
 <style>

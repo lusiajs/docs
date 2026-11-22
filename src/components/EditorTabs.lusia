@@ -103,8 +103,7 @@
       </button>
     </IF>
   </div>
-</IF>
 <ELSE>
   <span class="material-symbols-rounded" aria-hidden="true">description</span>
   <span class="file-name">{active}</span>
-</ELSE>
+</IF>

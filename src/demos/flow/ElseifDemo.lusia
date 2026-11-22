@@ -16,13 +16,11 @@
   </div>
   <IF {score.value >= 90}>
     <p>Grade A</p>
-  </IF>
   <ELSEIF {score.value >= 70}>
     <p>Grade C</p>
-  </ELSEIF>
   <ELSE>
     <p>Try again</p>
-  </ELSE>
+  </IF>
 </div>
 
 <style scoped>

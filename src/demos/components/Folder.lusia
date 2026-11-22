@@ -29,10 +29,9 @@
         </EACH>
       </ul>
     </IF>
-  </IF>
   <ELSE>
     <span class="file">{item.value.name}</span>
-  </ELSE>
+  </IF>
 </li>
 
 <style>

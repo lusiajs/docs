@@ -165,10 +165,9 @@
     <span class="prompt" aria-hidden="true" animate={promptHoverMotion}>
       <IF {copiedShown.value}>
         <span class="prompt-glyph" animate={promptCopyMotion}>$</span>
-      </IF>
       <ELSE>
         <span class="prompt-glyph">$</span>
-      </ELSE>
+      </IF>
     </span>
     <code class="install-text">
       <EACH {commandRows} as={row} key={row.key}>
@@ -194,12 +193,11 @@
             animate={checkMotion}
             >check</span
           >
-        </IF>
         <ELSE>
           <span class="material-symbols-rounded" aria-hidden="true"
             >content_copy</span
           >
-        </ELSE>
+        </IF>
       </button>
     </div>
   </div>

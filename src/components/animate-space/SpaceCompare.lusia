@@ -13,7 +13,12 @@
   ];
   const newItem: Item = { id: 4, title: "Plan the sprint" };
   // The new item goes in the middle, so the rows below it have to move.
-  const withNewItem: Item[] = [startItems[0], newItem, startItems[1], startItems[2]];
+  const withNewItem: Item[] = [
+    startItems[0],
+    newItem,
+    startItems[1],
+    startItems[2],
+  ];
   const items = variable<Item[]>(startItems);
   let running = false;
 
@@ -28,12 +33,32 @@
 
   // The two panels differ only in animateSpace.
   const offMotion = [
-    { style: fadeIn, when: WHEN.ATTACH, duration: 400, more: { animateSpace: false } },
-    { style: fadeOut, when: WHEN.DETACH, duration: 400, more: { animateSpace: false } },
+    {
+      style: fadeIn,
+      when: WHEN.ATTACH,
+      duration: 400,
+      more: { animateSpace: false },
+    },
+    {
+      style: fadeOut,
+      when: WHEN.DETACH,
+      duration: 400,
+      more: { animateSpace: false },
+    },
   ];
   const onMotion = [
-    { style: fadeIn, when: WHEN.ATTACH, duration: 400, more: { animateSpace: true } },
-    { style: fadeOut, when: WHEN.DETACH, duration: 400, more: { animateSpace: true } },
+    {
+      style: fadeIn,
+      when: WHEN.ATTACH,
+      duration: 400,
+      more: { animateSpace: true },
+    },
+    {
+      style: fadeOut,
+      when: WHEN.DETACH,
+      duration: 400,
+      more: { animateSpace: true },
+    },
   ];
 
   function wait(ms: number): Promise<void> {

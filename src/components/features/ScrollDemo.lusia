@@ -100,8 +100,7 @@
     font-size: 1.2rem;
     font-weight: 800;
     opacity: var(--p);
-    transform:
-      translateY(calc((1 - var(--p)) * 60px))
+    transform: translateY(calc((1 - var(--p)) * 60px))
       rotate(calc((1 - var(--p)) * -14deg));
     will-change: transform, opacity;
   }

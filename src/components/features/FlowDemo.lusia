@@ -43,7 +43,6 @@
     >
       Log out
     </button>
-  </IF>
   <ELSE>
     <button
       class="login"
@@ -53,7 +52,7 @@
     >
       Log in
     </button>
-  </ELSE>
+  </IF>
   <ul>
     <EACH {todos} as={todo} index={i} key={todo.id}>
       <li

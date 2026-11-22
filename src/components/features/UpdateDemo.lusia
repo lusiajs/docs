@@ -15,7 +15,10 @@
   // Only the two readouts that read the variables flash. The labels never do.
   function flash(el: HTMLElement | null) {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    el?.animate(pulse, { duration: 450, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" });
+    el?.animate(pulse, {
+      duration: 450,
+      easing: "cubic-bezier(0.2, 0.7, 0.2, 1)",
+    });
   }
 
   name.onUpdate(

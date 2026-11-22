@@ -54,7 +54,9 @@
     </div>
   </div>
 
-  <button class="toggle" type="button" onclick={toggleNames}>{toggleLabel}</button>
+  <button class="toggle" type="button" onclick={toggleNames}>
+    {toggleLabel}
+  </button>
 
   <IF {showNames}>
     <ul class="names">

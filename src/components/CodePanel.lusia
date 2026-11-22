@@ -53,13 +53,12 @@
           </button>
         </EACH>
       </div>
-    </IF>
     <ELSE>
       <span class="material-symbols-rounded" aria-hidden="true"
         >description</span
       >
       <span class="file-name">{fileName(sources.value[0].path)}</span>
-    </ELSE>
+    </IF>
     <button class="copy-button" type="button" aria-label="Copy the code">
       <span class="material-symbols-rounded" aria-hidden="true"
         >content_copy</span

@@ -26,9 +26,7 @@
       onclick={followChip}
       >{part.text}</a
     >
-  </IF>
   <ELSEIF {part.chip}>
     <code class="chip" data-kind={part.kind}>{part.text}</code>
-  </ELSEIF>
-  <ELSE>{part.text}</ELSE>
+  <ELSE>{part.text}</IF>
 </EACH>

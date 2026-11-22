@@ -25,11 +25,7 @@
 <div class="motion">
   <div class="presets">
     <EACH {presets} as={preset} key={preset.label}>
-      <button
-        class="chip"
-        type="button"
-        onclick={() => play(preset)}
-      >
+      <button class="chip" type="button" onclick={() => play(preset)}>
         {preset.label}
       </button>
     </EACH>

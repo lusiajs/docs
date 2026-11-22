@@ -7,6 +7,5 @@
 </script>
 
 <EACH {parts} as={p}>
-  <IF {p.hit}><mark>{p.text}</mark></IF>
-  <ELSE>{p.text}</ELSE>
+  <IF {p.hit}><mark>{p.text}</mark><ELSE>{p.text}</IF>
 </EACH>

@@ -172,11 +172,10 @@
         onChange={session.edit}
         onReset={session.reset}
       />
-    </IF>
     <ELSE>
       <div class="lazy-code" bind-element={codeSlot} onclick={openEditor}>
         <CodePanel sources={demo.value.sources} />
       </div>
-    </ELSE>
+    </IF>
   </div>
 </div>

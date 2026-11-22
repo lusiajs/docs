@@ -66,7 +66,9 @@
     animateSpace is off, and slide there when it is on.
   </p>
   <SpaceCompare />
-  <CodePanel sources={[{ path: "SpaceCompare.lusia", text: spaceCompareSource }]} />
+  <CodePanel
+    sources={[{ path: "SpaceCompare.lusia", text: spaceCompareSource }]}
+  />
 
   <ul>
     <li>
@@ -77,9 +79,7 @@
       <strong>How to turn it on:</strong> pick Animate space in the create
       prompt, or set <code>animateSpace</code> in <code>lusia.config.ts</code>.
     </li>
-    <li>
-      <strong>Options:</strong> see the table below.
-    </li>
+    <li><strong>Options:</strong> see the table below.</li>
   </ul>
   <DocTable head={optionHead} rows={optionRows} />
 
@@ -193,7 +193,6 @@
       of moderate size.
     </li>
   </ul>
-
 </div>
 
 <style>

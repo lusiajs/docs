@@ -62,10 +62,9 @@
     <h2>Flow</h2>
     <IF {remaining.value === 0}>
       <p>All done.</p>
-    </IF>
     <ELSE>
       <p>{remaining} left</p>
-    </ELSE>
+    </IF>
     <ul>
       <EACH {todos} as={todo} key={todo.id}>
         <li>

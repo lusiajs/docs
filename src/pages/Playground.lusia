@@ -125,7 +125,6 @@
         <span class="material-symbols-rounded" aria-hidden="true">error</span>
         <span class="play-problem-text">{problemLabel}: {firstProblem}</span>
       </button>
-    </IF>
     <ELSE>
       <span class="play-ok">
         <span class="material-symbols-rounded" aria-hidden="true"
@@ -133,7 +132,7 @@
         >
         No errors
       </span>
-    </ELSE>
+    </IF>
   </div>
 </main>
 

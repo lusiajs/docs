@@ -14,10 +14,9 @@
   </button>
   <IF {loggedIn}>
     <p>Welcome back.</p>
-  </IF>
   <ELSE>
     <p>Please log in.</p>
-  </ELSE>
+  </IF>
 </div>
 
 <style scoped>

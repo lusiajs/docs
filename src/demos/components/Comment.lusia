@@ -28,12 +28,11 @@
         <Comment comment={reply} depth={depth.value + 1} />
       </EACH>
     </ul>
-  </IF>
   <ELSE>
     <IF {replies.value.length > 0}>
       <p class="hidden">Replies past depth {maxDepth} are not shown.</p>
     </IF>
-  </ELSE>
+  </IF>
 </li>
 
 <style>

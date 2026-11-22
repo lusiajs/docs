@@ -61,7 +61,12 @@
     variable.compute(() => shown.value === index || leaving.value === index),
   );
 
-  function changeMotion(style: object, duration: number, index: number, delay = 0) {
+  function changeMotion(
+    style: object,
+    duration: number,
+    index: number,
+    delay = 0,
+  ) {
     if (reduced) return [];
     return { style, duration, delay, when: isActive[index] };
   }
@@ -160,7 +165,9 @@
   }
 
   function nearestMarker(markers: HTMLElement[], middle: number): number {
-    const distances = markers.map((marker) => markerMiddleDistance(marker, middle));
+    const distances = markers.map((marker) =>
+      markerMiddleDistance(marker, middle),
+    );
     return distances.indexOf(Math.min(...distances));
   }
 
@@ -172,7 +179,8 @@
     const middle = window.innerHeight / 2;
     const band = window.innerHeight * ACTIVE_BAND_RATIO;
     const nearest = nearestMarker(markers, middle);
-    if (markerMiddleDistance(markers[nearest], middle) <= band) setActive(nearest);
+    if (markerMiddleDistance(markers[nearest], middle) <= band)
+      setActive(nearest);
   }
 
   let updateQueued = false;
@@ -243,13 +251,20 @@
           <div class="feature-col">
             <div class="copy-col">
               <EACH {items} as={item} index={i} key={item.key}>
-                <div class={slotClass(i.value)} animate={copyMotion(i.value)}>
+                <div
+                  class={slotClass(i.value)}
+                  animate={copyMotion(i.value)}
+                >
                   <p class="copy-index">{item.number}</p>
                   <h3 class="copy-title" aria-label={item.title}>
-                    <EACH {item.chars} as={letter}><span
+                    <EACH {item.chars} as={letter}>
+                      <span
                         class="char"
                         aria-hidden="true"
-                        animate={letter.motion}>{letter.char}</span></EACH>
+                        animate={letter.motion}
+                        >{letter.char}</span
+                      >
+                    </EACH>
                   </h3>
                   <p class="benefit">{item.benefit}</p>
                 </div>
@@ -266,7 +281,10 @@
                   </span>
                   <span class="file-names">
                     <EACH {items} as={item} index={i} key={item.key}>
-                      <span class={fileClass(i.value)} animate={fileMotion(i.value)}>
+                      <span
+                        class={fileClass(i.value)}
+                        animate={fileMotion(i.value)}
+                      >
                         {item.file}
                       </span>
                     </EACH>
@@ -280,7 +298,10 @@
               <div class="panes">
                 <div class="code-pane">
                   <EACH {items} as={item} index={i} key={item.key}>
-                    <div class={slotClass(i.value)} animate={codeMotion(i.value)}>
+                    <div
+                      class={slotClass(i.value)}
+                      animate={codeMotion(i.value)}
+                    >
                       <FeatureSnippet code={item.code} />
                     </div>
                   </EACH>
@@ -557,7 +578,6 @@
     min-width: 0;
   }
 
-
   .slot {
     grid-area: 1 / 1;
     display: flex;
@@ -785,7 +805,6 @@
     }
 
     .window,
-
     .nav-item,
     .nav-dot,
     .slot {
