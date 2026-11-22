@@ -1,26 +1,9 @@
 <script>
-  import { props, type Style } from "lusiajs";
-  import { scrollBetween } from "../motion/home-scroll.ts";
+  import { props } from "lusiajs";
   import LogoTunnel from "./LogoTunnel.lusia";
 
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  // One shared backdrop behind the whole page. Each layer moves at its own speed.
-  const { follow, storm } = props({
-    follow: null as HTMLElement | null,
-    storm: false,
-  });
-
-  function layer(from: Style, to: Style) {
-    return reduced ? [] : scrollBetween(follow, from, to);
-  }
-
-  const rays = layer(
-    { translate: "0 0", rotate: "0deg" },
-    { translate: "0 -15vh", rotate: "30deg" },
-  );
-  const dots = layer({ translate: "0 0" }, { translate: "0 -25vh" });
-  const sparkles = layer({ translate: "0 0" }, { translate: "0 -45vh" });
+  // One shared backdrop, pinned behind the whole page. It does not move on scroll.
+  const { storm } = props({ storm: false });
 
   function petal(
     left: number,
@@ -66,10 +49,10 @@
 </script>
 
 <div class="home-bg" aria-hidden="true">
-  <span class="bg-rays" animate={rays}></span>
-  <span class="bg-dots" animate={dots}></span>
-  <LogoTunnel follow={follow} />
-  <div class="bg-sparkles" animate={sparkles}>
+  <span class="bg-rays"></span>
+  <span class="bg-dots"></span>
+  <LogoTunnel />
+  <div class="bg-sparkles">
     <span class="bg-sparkle s1"></span>
     <span class="bg-sparkle s2"></span>
     <span class="bg-sparkle s3"></span>

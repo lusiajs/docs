@@ -20,7 +20,7 @@ $star: polygon(
 
 // One backdrop behind the whole page. Its layers move with scroll and never block clicks.
 .home-bg {
-	position: absolute;
+	position: fixed;
 	inset: 0;
 	z-index: -1;
 	overflow: hidden;
@@ -82,8 +82,28 @@ $star: polygon(
 	mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
 }
 
+// Each layer moves by the page's scroll share (--page-progress), so it ends at its far offset on the last scroll.
+.bg-rays {
+	translate: 0 calc(var(--page-progress, 0) * -15vh);
+	rotate: calc(var(--page-progress, 0) * 30deg);
+}
+
+.bg-dots {
+	translate: 0 calc(var(--page-progress, 0) * -25vh);
+}
+
 .bg-sparkles {
 	inset: 0;
+	translate: 0 calc(var(--page-progress, 0) * -45vh);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.bg-rays,
+	.bg-dots,
+	.bg-sparkles {
+		translate: none;
+		rotate: none;
+	}
 }
 
 .bg-sparkle {
@@ -223,6 +243,7 @@ $star: polygon(
 		var(--lavender),
 		var(--mint)
 	);
+	transform: scaleX(var(--page-progress, 0));
 	transform-origin: left;
 }
 

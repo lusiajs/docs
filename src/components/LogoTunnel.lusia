@@ -1,19 +1,11 @@
 <script>
-  import { props } from "lusiajs";
-  import { scrollBetween } from "../motion/home-scroll.ts";
-
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const { follow } = props({ follow: null as HTMLElement | null });
-
   const copyCount = 12;
   const biggestVmin = 160;
   const shrink = 0.8;
   const firstOpacity = 0.22;
   const lastOpacity = 0.03;
-  const scrollShiftVh = 100;
 
-  // The outline images use a 108 by 112 box. Sizes below scale the same 128 grid as before.
+  // The outline images use a 108 by 112 box. Sizes scale the same 128 grid as before.
   const imageWidthShare = 108 / 128;
   const imageHeightShare = 112 / 128;
 
@@ -37,18 +29,8 @@
       `height: ${height}vmin`,
       `margin: ${-height / 2}vmin 0 0 ${-width / 2}vmin`,
       `opacity: ${copyOpacity(index)}`,
+      `--shift: ${(0.04 + index * 0.03) * 100}`,
     ].join("; ");
-  }
-
-  // The biggest copy moves slowest, the smallest fastest, and each grows a little.
-  function copyParallax(index: number) {
-    if (reduced) return [];
-    const shiftFactor = 0.04 + index * 0.03;
-    const to = {
-      translate: `0 -${shiftFactor * scrollShiftVh}vh`,
-      scale: "1.06",
-    };
-    return scrollBetween(follow, { translate: "0 0", scale: "1" }, to);
   }
 
   // Each stroke bucket shares one outline file, so thin lines stay visible.
@@ -62,7 +44,6 @@
   const copies = Array.from({ length: copyCount }, (_, index) => ({
     id: index,
     css: copyCss(index),
-    motion: copyParallax(index),
     lightSrc: outlineSource("light", index),
     darkSrc: outlineSource("dark", index),
   }));
@@ -70,7 +51,7 @@
 
 <div class="logo-tunnel" aria-hidden="true">
   <EACH {copies} as="{copy}">
-    <span class="tunnel-copy" style={copy.css} animate={copy.motion}>
+    <span class="tunnel-copy" style={copy.css}>
       <img
         class="tunnel-image tunnel-image-light"
         src={copy.lightSrc}
@@ -96,12 +77,15 @@
     height: 100svh;
   }
 
+  // The biggest copy moves least and the smallest most, and each grows a little.
   .tunnel-copy {
     position: absolute;
     top: 50%;
     left: 50%;
     pointer-events: none;
     will-change: translate, scale;
+    translate: 0 calc(var(--page-progress, 0) * var(--shift) * -1vh);
+    scale: calc(1 + var(--page-progress, 0) * 0.06);
   }
 
   .tunnel-image {
@@ -112,6 +96,13 @@
 
   .tunnel-image-dark {
     display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tunnel-copy {
+      translate: none;
+      scale: none;
+    }
   }
 
   :root[data-theme="dark"] .tunnel-image-light {

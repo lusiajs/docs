@@ -6,12 +6,12 @@
   import ScrollProgress from "../components/ScrollProgress.lusia";
   import Sparks from "../components/Sparks.lusia";
   import { pageMotion } from "../motion/page.ts";
+  import { watchPageProgress } from "../motion/page-progress.ts";
   import { heroSlow } from "../motion/hero-slow.ts";
   import { trackCursor } from "../motion/cursor.ts";
   import { spawnSparks, type Spark } from "../motion/sparks.ts";
   import { watchKonami } from "../motion/konami.ts";
 
-  const homeEl = variable<HTMLElement | null>(null);
   const sparks = variable<Spark[]>([]);
   const storm = variable(false);
   const slowAnchor = variable<HTMLElement | null>(null);
@@ -27,6 +27,7 @@
 
   onAttach(() => {
     const stopCursor = trackCursor(sparks);
+    const stopProgress = watchPageProgress();
     const stopKonami = watchKonami(() => {
       startStorm();
       spawnSparks(sparks, {
@@ -42,14 +43,15 @@
     });
     return () => {
       stopCursor();
+      stopProgress();
       stopKonami();
     };
   });
 </script>
 
-<div class="page-root home" animate={pageMotion} bind-element={homeEl}>
-  <HomeBackground follow={homeEl} storm={storm} />
-  <ScrollProgress follow={homeEl} />
+<div class="page-root home" animate={pageMotion}>
+  <HomeBackground storm={storm} />
+  <ScrollProgress />
   <div class="cursor-layer" aria-hidden="true">
     <Sparks sparks={sparks} />
   </div>
