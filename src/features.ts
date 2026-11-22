@@ -59,7 +59,7 @@ export const features = [
 		number: "06",
 		tag: "Styles",
 		title: "Styles stay home",
-		benefit: "A component's styles stay in that component. Use scoped, tree or global when you need more.",
+		benefit: "Styles in a scoped block only touch their own component. Two components can use the same class name without clashing.",
 		icon: "palette",
 		tone: "var(--peach)",
 	},

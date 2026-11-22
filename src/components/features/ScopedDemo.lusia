@@ -1,27 +1,182 @@
 <script>
-  import { PRESET, WHEN } from "lusiajs";
+  import { variable } from "lusiajs";
+  import CardA from "./scoped/CardA.lusia";
+  import CardB from "./scoped/CardB.lusia";
+
+  const showNames = variable(false);
+  const toggleLabel = variable.compute(() =>
+    showNames.value ? "Hide class names" : "Show class names",
+  );
+  const hostA = variable<HTMLElement | null>(null);
+  const hostB = variable<HTMLElement | null>(null);
+  const hostPlain = variable<HTMLElement | null>(null);
+  const names = variable<{ label: string; classes: string }[]>([]);
+
+  function classesOf(host: HTMLElement | null): string {
+    const card = host?.querySelector(".card");
+    return card ? Array.from(card.classList).join(" ") : "";
+  }
+
+  // Read at click time, so the names are the ones the browser built.
+  function readNames() {
+    names.value = [
+      { label: "CardA", classes: classesOf(hostA.peek()) },
+      { label: "CardB", classes: classesOf(hostB.peek()) },
+      { label: "Plain", classes: classesOf(hostPlain.peek()) },
+    ];
+  }
+
+  function toggleNames() {
+    showNames.value = !showNames.value;
+    if (showNames.value) readNames();
+  }
 </script>
 
-<div class="card" animate={{ style: PRESET.PULSE, when: WHEN.HOVER }}>
-  <p>Styled here only.</p>
+<div class="scoped-demo">
+  <div class="row">
+    <div class="boundary">
+      <svg class="outline" aria-hidden="true">
+        <rect x="1" y="1" rx="20"></rect>
+      </svg>
+      <div bind-element={hostA}><CardA /></div>
+    </div>
+    <div class="boundary">
+      <svg class="outline" aria-hidden="true">
+        <rect x="1" y="1" rx="20"></rect>
+      </svg>
+      <div bind-element={hostB}><CardB /></div>
+    </div>
+  </div>
+
+  <div class="plain" bind-element={hostPlain}>
+    <div class="card">
+      <p>Plain card</p>
+    </div>
+  </div>
+
+  <button class="toggle" type="button" onclick={toggleNames}>{toggleLabel}</button>
+
+  <IF {showNames}>
+    <ul class="names">
+      <EACH {names} as={row} key={row.label}>
+        <li>
+          <span class="name-label">{row.label}</span>
+          <code>{row.classes}</code>
+        </li>
+      </EACH>
+    </ul>
+  </IF>
 </div>
 
 <style scoped>
+  @use "../../styles/theme" as *;
+
+  .scoped-demo {
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+    color: var(--fg);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  // The dashed outline marks where a component's styles stop.
+  .boundary {
+    position: relative;
+    min-width: 0;
+    padding: 0.6rem;
+  }
+
+  .outline {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+
+    rect {
+      width: calc(100% - 2px);
+      height: calc(100% - 2px);
+      fill: none;
+      stroke: var(--fg);
+      stroke-width: 2;
+      stroke-dasharray: 8 6;
+      animation: boundary-march 1s linear infinite;
+    }
+  }
+
+  @keyframes boundary-march {
+    to {
+      stroke-dashoffset: -14;
+    }
+  }
+
+  .plain {
+    min-width: 0;
+  }
+
+  // The default look. It sits outside the components, so their card rules skip it.
   .card {
     display: grid;
     place-items: center;
-    width: min(100%, 22rem);
-    min-height: 9rem;
-    padding: 1.5rem;
+    min-height: 7rem;
+    padding: 1rem;
     border-radius: 24px;
     background: #ffe4f1;
     color: #3a2e4a;
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     font-weight: 800;
-    text-align: center;
 
     p {
       margin: 0;
+    }
+  }
+
+  .toggle {
+    justify-self: start;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--code);
+    color: var(--fg);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .names {
+    display: grid;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+
+    li {
+      display: grid;
+      gap: 0.15rem;
+    }
+
+    code {
+      overflow-wrap: anywhere;
+      font-family: $font-mono;
+    }
+  }
+
+  .name-label {
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .outline rect {
+      animation: none;
     }
   }
 </style>

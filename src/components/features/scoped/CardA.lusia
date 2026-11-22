@@ -1,0 +1,23 @@
+<div class="card">
+  <p>Card A</p>
+</div>
+
+<style scoped>
+  .card {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-height: 7rem;
+    padding: 1rem;
+    box-sizing: border-box;
+    border-radius: 20px;
+    background: #d9f0ff;
+    color: #1d3a52;
+    font-size: 1.1rem;
+    font-weight: 800;
+
+    p {
+      margin: 0;
+    }
+  }
+</style>
