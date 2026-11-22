@@ -6,6 +6,7 @@ export const startProjectId = "start-project";
 export const lifecyclePageId = "lifecycle";
 export const animateSpacePageId = "animate-space-page";
 export const scrollAtPageId = "scroll-at";
+export const setConfigGlobalPageId = "set-config-global";
 
 export const guidePages: ApiEntry[] = [
 	{
@@ -238,5 +239,30 @@ export const guidePages: ApiEntry[] = [
 		summary: "Slide the neighbors when an element attaches or detaches, instead of letting them jump.",
 		bullets: ["Only ATTACH and DETACH use it. The default is false for both."],
 		example: "animate={{ style: PRESET.FADE_IN, when: WHEN.ATTACH, more: { animateSpace: true } }}",
+	},
+	{
+		id: setConfigGlobalPageId,
+		name: "Set for the whole app",
+		kind: "function",
+		group: "motion",
+		signature: "setConfig({ animate: { duration: 400 } }, SCOPE.GLOBAL)",
+		summary: "Set an animation value for the whole app, from onAttach(), onDetach() or a function.",
+		bullets: [
+			"Call it in onAttach(), onDetach() or a function. Not at the top of a script.",
+			"The value lasts until the page ends. To undo it, set the value back yourself.",
+			"A setting on a component or an element still wins over it.",
+			"setAnimateDefault() was removed. Use setConfig(..., SCOPE.GLOBAL) instead.",
+		],
+		example: `<script>
+  import { SCOPE, onAttach, onDetach, setConfig } from "lusiajs";
+
+  onAttach(() => {
+    setConfig({ animate: { duration: 400 } }, SCOPE.GLOBAL);
+  });
+
+  onDetach(() => {
+    setConfig({ animate: { duration: 300 } }, SCOPE.GLOBAL);
+  });
+</script>`,
 	},
 ];

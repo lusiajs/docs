@@ -1,0 +1,85 @@
+<script>
+  import { WHEN, variable } from "lusiajs";
+
+  interface Task {
+    id: number;
+    title: string;
+  }
+
+  const tasks = variable<Task[]>([
+    { id: 1, title: "Read the docs" },
+    { id: 2, title: "Fix the build" },
+  ]);
+  let nextId = 3;
+
+  // No more.animateSpace here. The parent's setConfig decides whether the rows slide.
+  const fadeIn = {
+    0: { opacity: 0 },
+    1: { opacity: 1 },
+  };
+
+  const fadeOut = {
+    0: { opacity: 1 },
+    1: { opacity: 0 },
+  };
+
+  function addTask() {
+    tasks.value = [...tasks.value, { id: nextId, title: `Task ${nextId}` }];
+    nextId++;
+  }
+
+  function removeTask(task: Task) {
+    tasks.value = tasks.value.filter((item) => item.id !== task.id);
+  }
+</script>
+
+<div class="task-list">
+  <button type="button" onclick={addTask}>Add task</button>
+  <ul class="list">
+    <EACH {tasks} as={task} key={task.id}>
+      <li
+        class="row"
+        animate={[
+          { style: fadeIn, when: WHEN.ATTACH, duration: 400 },
+          { style: fadeOut, when: WHEN.DETACH, duration: 400 },
+        ]}
+      >
+        <span>{task.title}</span>
+        <button type="button" onclick={() => removeTask(task)}>Remove</button>
+      </li>
+    </EACH>
+  </ul>
+</div>
+
+<style>
+  @use "../../styles/demo" as demo;
+
+  .task-list {
+    display: grid;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    button {
+      @include demo.button;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 10px;
+      background: var(--lavender-soft);
+    }
+  }
+</style>

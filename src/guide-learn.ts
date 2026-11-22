@@ -53,7 +53,6 @@ const learnLines: Record<string, string> = {
   "style-screen-if": "How to add a style that applies only in one screen size.",
   "style-screen-mixin": "How to wrap plain rules in a screen size with @include screen().",
   "config-screens": "How to name your own screen sizes in lusia.config.",
-  scope: "How far a setConfig call reaches: this component, its children, or the app.",
   animate: "How to animate an element when it appears, leaves or is changed.",
   "animate-item": "How to write one animation, with its own trigger and timing.",
   when: "How to choose the moment an animation plays.",
@@ -61,15 +60,17 @@ const learnLines: Record<string, string> = {
   ease: "How to change the speed curve of an animation.",
   interpolate: "How to blend two values with the animation engine.",
   layout: "How to glide an element when its place or size changes.",
-  "set-config": "How to change animation settings for a component or the whole app.",
   controller: "How to play an animation by hand, from code.",
   midway: "How to choose what happens when a new play starts during a run.",
   turn: "How a play changes direction when it is turned around.",
   "hover-area": "How to choose which box a hover is checked against.",
   "scroll-at": "How to start and end a scroll animation at element and screen edges.",
-  edge: "How to pick a point on an element or the window for a scroll.",
+  edge: "How to pick a point on an element or the screen for a scroll.",
   config: "How to set animation defaults for the whole project.",
   "animate-space-page": "How to slide neighbors when an element attaches or detaches.",
+  "set-config": "How to change animation settings for one component and its children.",
+  scope: "How far a setConfig call reaches: its own markup, its tree, or the whole app.",
+  "set-config-global": "How to change an animation setting for the whole app, and undo it.",
 };
 
 // The learn line of a Guide section, or null when the section has none.

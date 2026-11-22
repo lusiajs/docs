@@ -1,0 +1,42 @@
+<script>
+  import { SCOPE, setConfig, variable } from "lusiajs";
+  import TaskList from "./TaskList.lusia";
+
+  const slide = variable(false);
+
+  // SCOPE.GLOBAL changes the whole app until it is set back. Turn it off to undo.
+  function toggleSlide() {
+    slide.value = !slide.value;
+    setConfig(
+      {
+        animate: {
+          attach: { animateSpace: slide.value },
+          detach: { animateSpace: slide.value },
+        },
+      },
+      SCOPE.GLOBAL,
+    );
+  }
+</script>
+
+<div class="config-global">
+  <button type="button" onclick={toggleSlide}>
+    Animate space for the app: {slide.value ? "on" : "off"}
+  </button>
+  <TaskList />
+</div>
+
+<style>
+  @use "../../styles/demo" as demo;
+
+  .config-global {
+    display: grid;
+    gap: 0.6rem;
+    justify-items: start;
+    color: var(--fg);
+
+    button {
+      @include demo.button;
+    }
+  }
+</style>

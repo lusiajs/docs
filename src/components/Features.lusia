@@ -2,9 +2,11 @@
   import {
     EDGE,
     EVENT,
+    SCOPE,
     SCREEN,
     listen,
     onAttach,
+    setConfig,
     variable,
   } from "lusiajs";
   import { features, featureSources } from "../features.ts";
@@ -35,6 +37,12 @@
   const PHONE_QUERY = "(max-width: 899px)";
   // The middle of a marker's scroll range: its center is at the middle of the screen.
   const MIDDLE = 0.5;
+
+  // Every demo below is a child component, so this reaches all of them.
+  setConfig(
+    { animate: { attach: { animateSpace: true }, detach: { animateSpace: true } } },
+    SCOPE.TREE,
+  );
 
   const reduced = SCREEN.REDUCED_MOTION.value;
   const phone = variable(matchMedia(PHONE_QUERY).matches);

@@ -63,8 +63,6 @@ import InlineGlobal from "./demos/styling/InlineGlobal.lusia";
 import inlineGlobalSource from "./demos/styling/InlineGlobal.lusia?raw";
 import ScreenSizes from "./demos/styling/ScreenSizes.lusia";
 import screenSizesSource from "./demos/styling/ScreenSizes.lusia?raw";
-import SetConfigDemo from "./demos/motion/SetConfigDemo.lusia";
-import setConfigDemoSource from "./demos/motion/SetConfigDemo.lusia?raw";
 import HoverArea from "./demos/motion/HoverArea.lusia";
 import hoverAreaSource from "./demos/motion/HoverArea.lusia?raw";
 import Turn from "./demos/motion/Turn.lusia";
@@ -117,6 +115,14 @@ import lazyDemoSource from "./demos/components/LazyDemo.lusia?raw";
 import Props from "./demos/components/Props.lusia";
 import propsSource from "./demos/components/Props.lusia?raw";
 import badgeSource from "./demos/components/badge.lusia?raw";
+import ConfigGlobal from "./demos/config/ConfigGlobal.lusia";
+import configGlobalSource from "./demos/config/ConfigGlobal.lusia?raw";
+import ConfigScoped from "./demos/config/ConfigScoped.lusia";
+import configScopedSource from "./demos/config/ConfigScoped.lusia?raw";
+import ConfigTree from "./demos/config/ConfigTree.lusia";
+import configTreeSource from "./demos/config/ConfigTree.lusia?raw";
+import TaskList from "./demos/config/TaskList.lusia";
+import taskListSource from "./demos/config/TaskList.lusia?raw";
 import EachDemo from "./demos/flow/EachDemo.lusia";
 import eachSource from "./demos/flow/EachDemo.lusia?raw";
 import ForDemo from "./demos/flow/ForDemo.lusia";
@@ -1560,18 +1566,6 @@ export const catalog: Record<string, CatalogEntry> = {
     icon: "settings",
     files: [{ path: "lusia.config.ts", text: screensConfigSource }],
   },
-  scope: {
-    icon: "center_focus_strong",
-    demos: [
-      {
-        id: "scope-global",
-        title: "SCOPE.GLOBAL",
-        caption: "setConfig() with SCOPE.GLOBAL sets the duration for the whole app.",
-        components: [SetConfigDemo],
-        sources: [{ path: "src/demos/motion/SetConfigDemo.lusia", text: setConfigDemoSource }],
-      },
-    ],
-  },
   elseif: {
     icon: "call_split",
     demos: [
@@ -1743,11 +1737,68 @@ export const catalog: Record<string, CatalogEntry> = {
     icon: "tune",
     demos: [
       {
-        id: "set-config-duration",
-        title: "Change the duration",
-        caption: "setConfig() with SCOPE.GLOBAL changes the duration for the whole page. Reset sets 400 ms again.",
-        components: [SetConfigDemo],
-        sources: [{ path: "src/demos/motion/SetConfigDemo.lusia", text: setConfigDemoSource }],
+        id: "config-tree",
+        title: "Tree: children too",
+        caption: "Set with SCOPE.TREE in this component. The list inside a child component slides too.",
+        components: [ConfigTree],
+        sources: [
+          {
+            path: "src/demos/config/ConfigTree.lusia",
+            text: configTreeSource,
+          },
+          {
+            path: "src/demos/config/TaskList.lusia",
+            text: taskListSource,
+          },
+        ],
+      },
+      {
+        id: "config-scoped",
+        title: "Scoped: own markup only",
+        caption: "Set with SCOPE.SCOPED. The list in this component slides. The child list jumps.",
+        components: [ConfigScoped],
+        sources: [
+          {
+            path: "src/demos/config/ConfigScoped.lusia",
+            text: configScopedSource,
+          },
+          {
+            path: "src/demos/config/TaskList.lusia",
+            text: taskListSource,
+          },
+        ],
+      },
+    ],
+  },
+  scope: {
+    icon: "layers",
+    table: {
+      head: ["Value", "Reaches", "Call it in"],
+      rows: [
+        ["SCOPE.SCOPED", "This component's own markup, with its IF and EACH blocks", "Top of the script"],
+        ["SCOPE.TREE", "This component and every component inside it. The default", "Top of the script"],
+        ["SCOPE.GLOBAL", "The whole app, until the page ends", "onAttach, onDetach or a function"],
+      ],
+    },
+  },
+  "set-config-global": {
+    icon: "public",
+    demos: [
+      {
+        id: "config-global",
+        title: "Whole app",
+        caption: "Turn it on to slide neighbors in every list that sets nothing itself. Turn it off to undo.",
+        components: [ConfigGlobal],
+        sources: [
+          {
+            path: "src/demos/config/ConfigGlobal.lusia",
+            text: configGlobalSource,
+          },
+          {
+            path: "src/demos/config/TaskList.lusia",
+            text: taskListSource,
+          },
+        ],
       },
     ],
   },
