@@ -1,6 +1,12 @@
 // One line per Guide section: what the reader will be able to do after it.
 const learnLines: Record<string, string> = {
   "lusia-intro": "What a .lusia file holds, and how a variable updates the page.",
+  "reactivity-overview": "How a variable updates the text that reads it.",
+  "events-overview": "How a click runs a function that writes a variable.",
+  "flow-overview": "How IF shows one branch and removes the other.",
+  "components-overview": "How a component tag places a component in the page.",
+  "styling-overview": "How style rules match the nodes of one component.",
+  "motion-overview": "How an element animates when it attaches and detaches.",
   "start-project": "How to make a new app and add Lusia to an existing one.",
   script: "Where the TypeScript of a component goes.",
   expr: "How to put a value into text and into an attribute.",

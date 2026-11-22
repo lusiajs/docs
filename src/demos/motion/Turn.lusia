@@ -1,0 +1,58 @@
+<script>
+  import { TURN, WHEN } from "lusiajs";
+
+  const slide = {
+    0: { translate: "0px 0px" },
+    1: { translate: "160px 0px" },
+  };
+</script>
+
+<div class="motion-stage">
+  <div class="track">
+    <div
+      class="box"
+      animate={{
+        style: slide,
+        when: WHEN.HOVER,
+        duration: 900,
+        midway: { turn: TURN.SUDDEN },
+      }}
+    >
+      Sudden
+    </div>
+  </div>
+  <div class="track">
+    <div
+      class="box"
+      animate={{
+        style: slide,
+        when: WHEN.HOVER,
+        duration: 900,
+        midway: { turn: TURN.SMOOTH, turnDuration: 250 },
+      }}
+    >
+      Smooth
+    </div>
+  </div>
+</div>
+
+<style scoped>
+  .motion-stage {
+    display: grid;
+    gap: 0.8rem;
+    color: var(--fg);
+  }
+
+  .track {
+    width: 14rem;
+    padding: 0.2rem 0;
+  }
+
+  .box {
+    display: inline-block;
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
+    background: var(--sky);
+    font-weight: 700;
+  }
+</style>

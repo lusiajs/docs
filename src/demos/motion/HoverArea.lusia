@@ -1,0 +1,50 @@
+<script>
+  import { HOVER_AREA, WHEN } from "lusiajs";
+
+  const grow = {
+    0: { scale: "1" },
+    1: { scale: "1.4" },
+  };
+</script>
+
+<div class="motion-stage">
+  <div
+    class="box"
+    animate={{
+      style: grow,
+      when: WHEN.HOVER,
+      duration: 250,
+      more: { area: HOVER_AREA.FINAL },
+    }}
+  >
+    Final box
+  </div>
+  <div
+    class="box"
+    animate={{
+      style: grow,
+      when: WHEN.HOVER,
+      duration: 250,
+      more: { area: HOVER_AREA.ELEMENT },
+    }}
+  >
+    Element box
+  </div>
+</div>
+
+<style scoped>
+  .motion-stage {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    color: var(--fg);
+  }
+
+  .box {
+    display: inline-block;
+    padding: 0.8rem 1.1rem;
+    border-radius: 14px;
+    background: var(--lemon);
+    font-weight: 700;
+  }
+</style>

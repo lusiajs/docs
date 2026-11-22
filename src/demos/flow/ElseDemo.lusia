@@ -1,0 +1,41 @@
+<script>
+  import { variable } from "lusiajs";
+
+  const loggedIn = variable(false);
+
+  function toggleLogin() {
+    loggedIn.value = !loggedIn.value;
+  }
+</script>
+
+<div class="login-demo">
+  <button onclick={toggleLogin} type="button">
+    {loggedIn.value ? "Log out" : "Log in"}
+  </button>
+  <IF {loggedIn}>
+    <p>Welcome back.</p>
+  </IF>
+  <ELSE>
+    <p>Please log in.</p>
+  </ELSE>
+</div>
+
+<style scoped>
+  @use "../../styles/demo" as demo;
+
+  .login-demo {
+    display: grid;
+    justify-items: start;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+      font-weight: 700;
+    }
+
+    button {
+      @include demo.button;
+    }
+  }
+</style>

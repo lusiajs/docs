@@ -35,6 +35,7 @@ export const guidePlan: GuideGroup[] = [
     icon: "bolt",
     color: "var(--lavender)",
     entries: [
+      "reactivity-overview",
       "variable",
       "variable-compute",
       "variable-auto-run",
@@ -50,7 +51,7 @@ export const guidePlan: GuideGroup[] = [
     intro: "Run code on clicks and key presses. Keep inputs in step with variables.",
     icon: "ads_click",
     color: "var(--rose)",
-    entries: ["event", "bind-value", "bind-prop", "bind-element"],
+    entries: ["events-overview", "event", "bind-value", "bind-prop", "bind-element"],
   },
   {
     group: "flow",
@@ -58,7 +59,7 @@ export const guidePlan: GuideGroup[] = [
     intro: "Show, hide and repeat markup with IF, EACH and FOR.",
     icon: "alt_route",
     color: "var(--lemon)",
-    entries: ["if", "elseif", "else", "each", "for"],
+    entries: ["flow-overview", "if", "elseif", "else", "each", "for"],
   },
   {
     group: "components",
@@ -67,6 +68,7 @@ export const guidePlan: GuideGroup[] = [
     icon: "widgets",
     color: "var(--mint)",
     entries: [
+      "components-overview",
       "component-tag",
       "props",
       "content",
@@ -90,7 +92,7 @@ export const guidePlan: GuideGroup[] = [
     intro: "Each component has its own CSS. Scoped, tree and global rules control where it applies.",
     icon: "palette",
     color: "var(--sky)",
-    entries: ["style", "style-scoped", "style-global", "scoped", "global", "inline-global"],
+    entries: ["styling-overview", "style", "style-scoped", "style-global", "scoped", "global", "inline-global"],
   },
   {
     group: "motion",
@@ -102,7 +104,7 @@ export const guidePlan: GuideGroup[] = [
       {
         id: "first-animation",
         label: "First animation",
-        entries: ["animate", "animate-type", "animate-more"],
+        entries: ["motion-overview", "animate", "animate-type", "animate-more"],
       },
       {
         id: "timing",

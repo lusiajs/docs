@@ -1,0 +1,39 @@
+<script>
+  import { variable } from "lusiajs";
+
+  const greeting = "Hello";
+  const count = variable(0);
+
+  function shout(text: string): string {
+    return text.toUpperCase() + "!";
+  }
+
+  function addOne() {
+    count.value++;
+  }
+</script>
+
+<div class="script-demo">
+  <p>{shout(greeting)}</p>
+  <button onclick={addOne} type="button">Clicked {count} times</button>
+</div>
+
+<style scoped>
+  @use "../../styles/demo" as demo;
+
+  .script-demo {
+    display: grid;
+    justify-items: start;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+      font-weight: 700;
+    }
+
+    button {
+      @include demo.button;
+    }
+  }
+</style>

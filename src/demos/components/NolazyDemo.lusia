@@ -1,0 +1,21 @@
+<script>
+  import NolazyBadge from "./NolazyBadge.lusia";
+</script>
+
+<div class="nolazy-demo">
+  <p>This badge is part of the page that imports it:</p>
+  <NolazyBadge />
+</div>
+
+<style scoped>
+  .nolazy-demo {
+    display: grid;
+    justify-items: start;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+    }
+  }
+</style>

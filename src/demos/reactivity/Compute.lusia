@@ -1,0 +1,35 @@
+<script>
+  import { variable } from "lusiajs";
+
+  const price = variable(4);
+  const quantity = variable(2);
+  const total = variable.compute(() => price.value * quantity.value);
+
+  function addOne() {
+    quantity.value++;
+  }
+</script>
+
+<div class="compute-demo">
+  <p>{quantity} items at {price} each = {total}</p>
+  <button onclick={addOne} type="button">Add one item</button>
+</div>
+
+<style scoped>
+  @use "../../styles/demo" as demo;
+
+  .compute-demo {
+    display: grid;
+    justify-items: start;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+    }
+
+    button {
+      @include demo.button;
+    }
+  }
+</style>

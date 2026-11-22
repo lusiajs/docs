@@ -1,0 +1,23 @@
+<script>
+  import ScopedChild from "./ScopedChild.lusia";
+</script>
+
+<div class="card">
+  <h2>Parent card</h2>
+  <ScopedChild />
+</div>
+
+<style>
+  h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.05rem;
+  }
+
+  @scoped {
+    .card {
+      padding: 1rem;
+      border: 2px solid var(--mint);
+      border-radius: 12px;
+    }
+  }
+</style>

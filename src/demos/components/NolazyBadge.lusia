@@ -1,0 +1,14 @@
+<NOLAZY />
+
+<span class="badge">Always loaded</span>
+
+<style scoped>
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    background: var(--peach);
+    color: #6b3a1c;
+    font-weight: 700;
+  }
+</style>

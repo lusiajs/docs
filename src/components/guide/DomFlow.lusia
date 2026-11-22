@@ -1,0 +1,244 @@
+<script>
+  import { onAttach, props, variable } from "lusiajs";
+  import DomNode from "./DomNode.lusia";
+
+  interface FlowNode {
+    id: string;
+    tag: string;
+    text?: string;
+    children?: FlowNode[];
+  }
+
+  interface FlowStep {
+    title: string;
+    // 1-based code lines to highlight.
+    lines: number[];
+    nodes: FlowNode[];
+  }
+
+  const { code, steps } = props({ code: "", steps: [] as FlowStep[] });
+  const root = variable<Element | null>(null);
+  const index = variable(0);
+  const playing = variable(false);
+  const current = variable.compute(() => steps.value[index.value]);
+  const title = variable.compute(() => current.value?.title ?? "");
+  const rows = variable.compute(() => {
+    const lit = current.value?.lines ?? [];
+    return code.value.split("\n").map((text, i) => ({
+      number: i + 1,
+      text,
+      className: lit.includes(i + 1) ? "line lit" : "line",
+    }));
+  });
+  const rootIds = variable.compute(() =>
+    (current.value?.nodes ?? []).map((node) => node.id),
+  );
+  const nodeMap = variable.compute(
+    () =>
+      new Map(flatten(current.value?.nodes ?? []).map((node) => [node.id, node])),
+  );
+
+  function flatten(nodes: FlowNode[]): FlowNode[] {
+    return nodes.flatMap((node) => [node, ...flatten(node.children ?? [])]);
+  }
+
+  function findNode(key: string): FlowNode | undefined {
+    return nodeMap.value.get(key);
+  }
+
+  let timer = 0;
+
+  function showStep(next: number): void {
+    const count = steps.peek().length;
+    index.value = (next + count) % count;
+  }
+
+  function startTimer(): void {
+    stopTimer();
+    timer = window.setInterval(() => showStep(index.peek() + 1), 2600);
+  }
+
+  function stopTimer(): void {
+    window.clearInterval(timer);
+  }
+
+  function setPlaying(value: boolean): void {
+    playing.value = value;
+    if (value) startTimer();
+    else stopTimer();
+  }
+
+  function togglePlay(): void {
+    setPlaying(!playing.peek());
+  }
+
+  // A click moves to another step. A running timer starts again from there.
+  function moveStep(delta: number): void {
+    showStep(index.peek() + delta);
+    if (playing.peek()) startTimer();
+  }
+
+  onAttach(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setPlaying(entry.isIntersecting),
+      { threshold: 0.4 },
+    );
+    observer.observe(root.peek()!);
+    return () => {
+      observer.disconnect();
+      stopTimer();
+    };
+  });
+</script>
+
+<div class="dom-flow" bind-element={root}>
+  <p class="caption">
+    <span class="count">{index.value + 1} / {steps.value.length}</span>
+    {title}
+  </p>
+  <div class="panes">
+    <div class="code">
+      <EACH {rows} as={row} key={row.number}>
+        <span class={row.className}
+          ><span class="no">{row.number}</span>{row.text}</span
+        >
+      </EACH>
+    </div>
+    <div class="dom">
+      <p class="label">document</p>
+      <ul class="tree">
+        <EACH {rootIds} as={id}>
+          <DomNode id={id} find={findNode} />
+        </EACH>
+      </ul>
+    </div>
+  </div>
+  <div class="controls">
+    <button
+      type="button"
+      onclick={() => moveStep(-1)}
+      aria-label="Previous step"
+    >
+      <span class="material-symbols-rounded" aria-hidden="true"
+        >skip_previous</span
+      >
+    </button>
+    <button type="button" onclick={togglePlay} aria-label="Play or pause">
+      <span class="material-symbols-rounded" aria-hidden="true">
+        {playing.value ? "pause" : "play_arrow"}
+      </span>
+    </button>
+    <button type="button" onclick={() => moveStep(1)} aria-label="Next step">
+      <span class="material-symbols-rounded" aria-hidden="true">skip_next</span>
+    </button>
+  </div>
+</div>
+
+<style scoped>
+  @use "../../styles/theme" as theme;
+
+  .dom-flow {
+    display: grid;
+    gap: 0.8rem;
+    color: var(--fg);
+    container-type: inline-size;
+  }
+
+  .caption {
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .count {
+    margin-right: 0.6rem;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .panes {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.8rem;
+  }
+
+  .code,
+  .dom {
+    min-width: 0;
+    padding: 0.7rem 0.6rem;
+    border-radius: 14px;
+    background: var(--code);
+    border: 1px solid var(--line);
+  }
+
+  .code {
+    overflow-x: auto;
+    font-family: theme.$font-mono;
+    font-size: 0.85rem;
+  }
+
+  .line {
+    display: block;
+    padding: 0 0.4rem;
+    border-radius: 6px;
+    white-space: pre;
+    transition: background-color 0.3s ease;
+  }
+
+  .line.lit {
+    background: color-mix(in srgb, var(--lemon) 45%, transparent);
+  }
+
+  .no {
+    display: inline-block;
+    width: 2.2ch;
+    margin-right: 0.8rem;
+    color: var(--muted);
+    text-align: right;
+    user-select: none;
+  }
+
+  .label {
+    margin: 0 0 0.4rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .tree {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .controls {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  button {
+    display: inline-grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--fg);
+    cursor: pointer;
+  }
+
+  button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  button:focus-visible {
+    outline: 3px solid var(--ai);
+    outline-offset: 2px;
+  }
+
+  @container (max-width: 620px) {
+    .panes {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

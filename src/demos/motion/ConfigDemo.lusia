@@ -1,0 +1,44 @@
+<script>
+  import { PRESET, WHEN, variable } from "lusiajs";
+
+  const open = variable(false);
+
+  function toggle() {
+    open.value = !open.value;
+  }
+</script>
+
+<div class="motion-stage">
+  <button onclick={toggle} type="button">Toggle</button>
+  <div class="box" animate={{ style: PRESET.FADE_IN, when: open }}>
+    Uses the project duration
+  </div>
+  <div
+    class="box"
+    animate={{ style: PRESET.FADE_IN, when: open, duration: 2000 }}
+  >
+    Sets its own duration
+  </div>
+</div>
+
+<style scoped>
+  @use "../../styles/demo" as demo;
+
+  .motion-stage {
+    display: grid;
+    justify-items: start;
+    gap: 0.8rem;
+    color: var(--fg);
+
+    button {
+      @include demo.button;
+    }
+
+    .box {
+      padding: 0.6rem 1rem;
+      border-radius: 12px;
+      background: var(--peach);
+      font-weight: 700;
+    }
+  }
+</style>

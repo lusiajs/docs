@@ -1,0 +1,54 @@
+<script>
+  import { interpolate, variable } from "lusiajs";
+
+  const width = interpolate("40px", "200px");
+  const tint = interpolate("#7bd389", "#ff6f91");
+  const progress = variable(0);
+
+  function setProgress(value: number) {
+    progress.value = value;
+  }
+
+  function barStyle(t: number): string {
+    return "width: " + String(width(t)) + "; background: " + String(tint(t));
+  }
+</script>
+
+<div class="interpolate-demo">
+  <div class="actions">
+    <button onclick={() => setProgress(0)} type="button">0</button>
+    <button onclick={() => setProgress(0.5)} type="button">0.5</button>
+    <button onclick={() => setProgress(1)} type="button">1</button>
+  </div>
+  <div class="bar" style={barStyle(progress.value)}></div>
+  <p>t = {progress}</p>
+</div>
+
+<style scoped>
+  @use "../../styles/demo" as demo;
+
+  .interpolate-demo {
+    display: grid;
+    justify-items: start;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+      font-family: monospace;
+    }
+
+    .actions {
+      @include demo.row;
+    }
+
+    button {
+      @include demo.button;
+    }
+
+    .bar {
+      height: 1.2rem;
+      border-radius: 999px;
+    }
+  }
+</style>

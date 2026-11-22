@@ -1,0 +1,12 @@
+<p class="mood">Happy</p>
+
+<style scoped>
+  .mood {
+    margin: 0;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    background: var(--mint);
+    color: #1f5f4a;
+    font-weight: 700;
+  }
+</style>

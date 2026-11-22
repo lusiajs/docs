@@ -1,0 +1,57 @@
+<script>
+  import { attach, variable, type Instance } from "lusiajs";
+  import MoodHappy from "./MoodHappy.lusia";
+
+  const slot = variable<Element | null>(null);
+  const status = variable("Attached.");
+  let panel: Instance | null = null;
+
+  function mount() {
+    if (panel || !slot.value) return;
+    panel = attach(MoodHappy, slot.value);
+    status.value = "Attached.";
+  }
+
+  // detach() waits for the DETACH animation. The nodes are gone when it resolves.
+  async function remove() {
+    if (!panel) return;
+    const leaving = panel;
+    panel = null;
+    status.value = "Leaving...";
+    await leaving.detach();
+    status.value = "Removed.";
+  }
+</script>
+
+<div class="detach-demo">
+  <div class="actions">
+    <button onclick={mount} type="button">Attach</button>
+    <button onclick={remove} type="button">Detach and wait</button>
+  </div>
+  <p>{status}</p>
+  <div class="slot" bind-element={slot}></div>
+</div>
+
+<style scoped>
+  @use "../../styles/demo" as demo;
+
+  .detach-demo {
+    display: grid;
+    justify-items: start;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .actions {
+      @include demo.row;
+    }
+
+    button {
+      @include demo.button;
+    }
+  }
+</style>

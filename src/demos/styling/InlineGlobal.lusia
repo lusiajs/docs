@@ -1,0 +1,16 @@
+<div class="card">
+  <a>A link inside the card</a>
+</div>
+
+<style>
+  .card :global(a) {
+    color: var(--link);
+    font-weight: 700;
+  }
+
+  .card {
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    background: var(--lavender-soft);
+  }
+</style>

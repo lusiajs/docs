@@ -1,0 +1,50 @@
+<script>
+  import { variable } from "lusiajs";
+
+  const score = variable(72);
+
+  function setScore(value: number) {
+    score.value = value;
+  }
+</script>
+
+<div class="grade-demo">
+  <div class="actions">
+    <button onclick={() => setScore(95)} type="button">Score 95</button>
+    <button onclick={() => setScore(72)} type="button">Score 72</button>
+    <button onclick={() => setScore(40)} type="button">Score 40</button>
+  </div>
+  <IF {score.value >= 90}>
+    <p>Grade A</p>
+  </IF>
+  <ELSEIF {score.value >= 70}>
+    <p>Grade C</p>
+  </ELSEIF>
+  <ELSE>
+    <p>Try again</p>
+  </ELSE>
+</div>
+
+<style scoped>
+  @use "../../styles/demo" as demo;
+
+  .grade-demo {
+    display: grid;
+    justify-items: start;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .actions {
+      @include demo.row;
+    }
+
+    button {
+      @include demo.button;
+    }
+  }
+</style>

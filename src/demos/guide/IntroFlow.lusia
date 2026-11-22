@@ -1,0 +1,6 @@
+<script>
+  import DomFlow from "../../components/guide/DomFlow.lusia";
+  import { code, steps } from "./intro-flow.ts";
+</script>
+
+<DomFlow code={code} steps={steps} />

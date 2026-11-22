@@ -1,0 +1,167 @@
+<script>
+  import { PRESET, WHEN, onAttach, variable } from "lusiajs";
+  import { templateFiles } from "./project-files.ts";
+
+  interface Entry {
+    path: string;
+    name: string;
+    depth: number;
+    text: string;
+  }
+
+  function textOf(path: string): string {
+    return templateFiles.find((file) => file.path === path)?.text ?? "";
+  }
+
+  function fileEntry(path: string, name: string, depth: number): Entry {
+    return { path, name, depth, text: textOf(path) };
+  }
+
+  function folderEntry(path: string, name: string, depth: number): Entry {
+    return { path, name, depth, text: "" };
+  }
+
+  // The files `bun create lusiajs` writes, in the order the CLI lists them.
+  const entries: Entry[] = [
+    folderEntry("my-app", "my-app/", 0),
+    fileEntry("_gitignore", ".gitignore", 1),
+    fileEntry("index.html", "index.html", 1),
+    fileEntry("lusia.config.ts", "lusia.config.ts", 1),
+    fileEntry("package.json", "package.json", 1),
+    folderEntry("src", "src/", 1),
+    fileEntry("src/App.lusia", "App.lusia", 2),
+    fileEntry("src/main.ts", "main.ts", 2),
+    fileEntry("tsconfig.json", "tsconfig.json", 1),
+  ];
+
+  const shown = variable(0);
+  const selected = variable<Entry>(entries[6]);
+  const visible = variable.compute(() => entries.slice(0, shown.value));
+  let timer = 0;
+
+  // One more file appears every step, until the whole tree is shown.
+  function revealNext(): void {
+    shown.value++;
+    if (shown.value >= entries.length) window.clearInterval(timer);
+  }
+
+  function replay(): void {
+    window.clearInterval(timer);
+    shown.value = 0;
+    timer = window.setInterval(revealNext, 450);
+  }
+
+  function indent(entry: Entry): string {
+    return "padding-left: " + entry.depth * 1.1 + "rem";
+  }
+
+  function select(entry: Entry): void {
+    if (entry.text) selected.value = entry;
+  }
+
+  const rowMotion = {
+    style: PRESET.SLIDE_UP,
+    when: WHEN.ATTACH,
+    duration: 350,
+    more: { animateSpace: true },
+  };
+
+  onAttach(() => {
+    replay();
+    return () => window.clearInterval(timer);
+  });
+</script>
+
+<div class="project-tree">
+  <div class="tree-pane">
+    <ul class="tree">
+      <EACH {visible} as={entry} key={entry.path}>
+        <li class="row" style={indent(entry)} animate={rowMotion}>
+          <button
+            type="button"
+            class={selected.value.path === entry.path ? "active" : ""}
+            onclick={() => select(entry)}
+          >
+            {entry.name}
+          </button>
+        </li>
+      </EACH>
+    </ul>
+    <button type="button" class="replay" onclick={replay}>
+      Create again
+    </button>
+  </div>
+  <div class="file-pane">
+    <p class="file-name">{selected.value.path}</p>
+    <pre>{selected.value.text}</pre>
+  </div>
+</div>
+
+<style scoped>
+  @use "../../styles/demo" as demo;
+  @use "../../styles/theme" as theme;
+
+  .project-tree {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 1rem;
+    color: var(--fg);
+    container-type: inline-size;
+  }
+
+  .tree {
+    margin: 0 0 0.8rem;
+    padding: 0;
+    list-style: none;
+    font-family: theme.$font-mono;
+  }
+
+  .row {
+    margin: 0.2rem 0;
+  }
+
+  .tree button {
+    padding: 0.15rem 0.6rem;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--fg);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .tree button.active,
+  .tree button:hover {
+    background: var(--lavender-soft);
+  }
+
+  .replay {
+    @include demo.button;
+  }
+
+  .file-pane {
+    min-width: 0;
+  }
+
+  .file-name {
+    margin: 0 0 0.4rem;
+    color: var(--muted);
+    font-family: theme.$font-mono;
+    font-size: 0.85rem;
+  }
+
+  pre {
+    margin: 0;
+    overflow-x: auto;
+    padding: 0.7rem;
+    border-radius: 14px;
+    background: var(--code);
+    font-size: 0.85rem;
+  }
+
+  @container (max-width: 560px) {
+    .project-tree {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

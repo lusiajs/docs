@@ -1,0 +1,106 @@
+<NOLAZY />
+
+<script>
+  import { PRESET, WHEN, props, variable } from "lusiajs";
+  import DomNode from "./DomNode.lusia";
+
+  interface DomData {
+    id: string;
+    tag: string;
+    text?: string;
+    children?: DomData[];
+  }
+
+  const { id, find } = props({
+    id: "",
+    find: (key: string): DomData | undefined => undefined,
+  });
+  const data = variable.compute(() => find.value(id.value));
+  const tag = variable.compute(() => data.value?.tag ?? "");
+  const childIds = variable.compute(() =>
+    (data.value?.children ?? []).map((child) => child.id),
+  );
+  // A new text is a new key, so the old text leaves and the new one pulses in.
+  const texts = variable.compute(() => {
+    const text = data.value?.text;
+    return text ? [text] : [];
+  });
+
+  const enter = {
+    0: { opacity: 0, translate: "0px -10px" },
+    1: { opacity: 1, translate: "0px 0px" },
+  };
+  const leave = {
+    0: { opacity: 1, translate: "0px 0px" },
+    1: { opacity: 0, translate: "0px 10px" },
+  };
+  const space = { animateSpace: true };
+  const nodeMotion = [
+    { style: enter, when: WHEN.ATTACH, duration: 420, more: space },
+    { style: leave, when: WHEN.DETACH, duration: 280, more: space },
+  ];
+  const textMotion = { style: PRESET.PULSE, when: WHEN.ATTACH, duration: 500 };
+</script>
+
+<li class="dom-node" animate={nodeMotion}>
+  <p class="row">
+    <span class="bracket">&lt;</span>
+    <span class="tag">{tag}</span>
+    <span class="bracket">&gt;</span>
+    <EACH {texts} as={text}>
+    <span class="text" animate={textMotion}>{text}</span>
+    </EACH>
+  </p>
+  <ul class="children">
+    <EACH {childIds} as={childId}>
+      <DomNode id={childId} find={find} />
+    </EACH>
+  </ul>
+</li>
+
+<style scoped>
+  @use "../../styles/theme" as theme;
+
+  .dom-node {
+    list-style: none;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0.35rem 0;
+    font-family: theme.$font-mono;
+    font-size: 0.9rem;
+  }
+
+  .bracket {
+    color: var(--muted);
+  }
+
+  .tag {
+    color: var(--tok-tag);
+    font-weight: 700;
+  }
+
+  .text {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--lemon) 45%, transparent);
+    color: var(--fg);
+  }
+
+  .children {
+    margin: 0 0 0 0.9rem;
+    padding: 0 0 0 0.8rem;
+    border-left: 2px dashed var(--line);
+    list-style: none;
+  }
+
+  .children:empty {
+    display: none;
+  }
+</style>

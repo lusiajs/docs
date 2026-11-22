@@ -51,6 +51,103 @@ export const guidePages: ApiEntry[] = [
 		example: "bun create lusiajs my-app",
 	},
 	{
+		id: "reactivity-overview",
+		name: "Variables in the DOM",
+		kind: "markup",
+		group: "reactivity",
+		signature: "variable(value)",
+		example: `<script>
+  import { variable } from "lusiajs";
+
+  const count = variable(0);
+</script>
+
+<p>{count} clicks</p>`,
+		summary: "A variable is a value the page watches. Only the text that reads it changes.",
+		bullets: [
+			"Read a variable in markup with {name}. The text updates after each write.",
+			"Write it with .value. A click that writes the variable updates the page.",
+		],
+	},
+	{
+		id: "events-overview",
+		name: "Events in the DOM",
+		kind: "markup",
+		group: "events",
+		signature: "onclick={handler}",
+		example: `<button onclick={swap}>Swap</button>`,
+		summary: "An event runs a function. The function can write variables, and the page follows.",
+		bullets: [
+			"Each click runs the handler once.",
+			"The handler writes a variable, so the text that reads it updates.",
+		],
+	},
+	{
+		id: "flow-overview",
+		name: "Flow in the DOM",
+		kind: "markup",
+		group: "flow",
+		signature: "<IF {condition}> ... </IF>",
+		example: `<IF {loggedIn}>
+  <p>Welcome back.</p>
+</IF>
+<ELSE>
+  <p>Please log in.</p>
+</ELSE>`,
+		summary: "IF shows one branch of markup. When the condition changes, the other branch leaves.",
+		bullets: [
+			"Only the branch that matches is in the DOM.",
+			"Branches that leave play their DETACH animation first.",
+		],
+	},
+	{
+		id: "components-overview",
+		name: "Components in the DOM",
+		kind: "markup",
+		group: "components",
+		signature: '<Card title="Ada" />',
+		example: `<script>
+  import Card from "./Card.lusia";
+</script>
+
+<Card title="Ada" />`,
+		summary: "A component tag places the markup of another .lusia file on the page.",
+		bullets: [
+			"Each tag places its own copy of the component.",
+			"Props pass values in. The child shows them in its own markup.",
+		],
+	},
+	{
+		id: "styling-overview",
+		name: "Styles in the DOM",
+		kind: "markup",
+		group: "styling",
+		signature: "<style scoped> ... </style>",
+		example: `<style scoped>
+  h1 {
+    color: tomato;
+  }
+</style>`,
+		summary: "A style block sets the look of the markup in the same file. The DOM keeps the same nodes.",
+		bullets: [
+			"Scoped rules match only the markup of their own component.",
+			"Tree rules also reach the child components inside it.",
+		],
+	},
+	{
+		id: "motion-overview",
+		name: "Motion in the DOM",
+		kind: "markup",
+		group: "motion",
+		signature: "animate={{ style, when }}",
+		example: "<p animate={{ style: PRESET.FADE_IN, when: WHEN.ATTACH }}>Hello</p>",
+		summary: "The animate attribute plays when a node attaches or detaches. The node stays in the DOM until its leave ends.",
+		bullets: [
+			"WHEN.ATTACH plays when the element is placed on the page.",
+			"WHEN.DETACH plays before the element is removed.",
+		],
+	},
+	{
 		id: lifecyclePageId,
 		name: "Lifecycle",
 		kind: "markup",

@@ -1,4 +1,68 @@
 import type { Component } from "lusiajs";
+import IntroFlow from "./demos/guide/IntroFlow.lusia";
+import introFlowSource from "./demos/guide/IntroFlow.lusia?raw";
+import introFlowDataSource from "./demos/guide/intro-flow.ts?raw";
+import ProjectTree from "./demos/guide/ProjectTree.lusia";
+import projectTreeSource from "./demos/guide/ProjectTree.lusia?raw";
+import ReactivityFlow from "./demos/guide/ReactivityFlow.lusia";
+import reactivityFlowSource from "./demos/guide/ReactivityFlow.lusia?raw";
+import reactivityFlowDataSource from "./demos/guide/reactivity-flow.ts?raw";
+import EventsFlow from "./demos/guide/EventsFlow.lusia";
+import eventsFlowSource from "./demos/guide/EventsFlow.lusia?raw";
+import eventsFlowDataSource from "./demos/guide/events-flow.ts?raw";
+import ConditionFlow from "./demos/guide/ConditionFlow.lusia";
+import conditionFlowSource from "./demos/guide/ConditionFlow.lusia?raw";
+import conditionFlowDataSource from "./demos/guide/condition-flow.ts?raw";
+import ComponentsFlow from "./demos/guide/ComponentsFlow.lusia";
+import componentsFlowSource from "./demos/guide/ComponentsFlow.lusia?raw";
+import componentsFlowDataSource from "./demos/guide/components-flow.ts?raw";
+import guideCardSource from "./demos/guide/Card.lusia?raw";
+import StylingFlow from "./demos/guide/StylingFlow.lusia";
+import stylingFlowSource from "./demos/guide/StylingFlow.lusia?raw";
+import stylingFlowDataSource from "./demos/guide/styling-flow.ts?raw";
+import MotionFlow from "./demos/guide/MotionFlow.lusia";
+import motionFlowSource from "./demos/guide/MotionFlow.lusia?raw";
+import motionFlowDataSource from "./demos/guide/motion-flow.ts?raw";
+import domFlowSource from "./components/guide/DomFlow.lusia?raw";
+import domNodeSource from "./components/guide/DomNode.lusia?raw";
+import { templateFiles } from "./demos/guide/project-files.ts";
+import projectFilesSource from "./demos/guide/project-files.ts?raw";
+import ScriptBlock from "./demos/basics/ScriptBlock.lusia";
+import scriptBlockSource from "./demos/basics/ScriptBlock.lusia?raw";
+import Compute from "./demos/reactivity/Compute.lusia";
+import computeSource from "./demos/reactivity/Compute.lusia?raw";
+import BindProp from "./demos/events/BindProp.lusia";
+import bindPropSource from "./demos/events/BindProp.lusia?raw";
+import ElseifDemo from "./demos/flow/ElseifDemo.lusia";
+import elseifDemoSource from "./demos/flow/ElseifDemo.lusia?raw";
+import ElseDemo from "./demos/flow/ElseDemo.lusia";
+import elseDemoSource from "./demos/flow/ElseDemo.lusia?raw";
+import DetachDemo from "./demos/components/DetachDemo.lusia";
+import detachDemoSource from "./demos/components/DetachDemo.lusia?raw";
+import NolazyDemo from "./demos/components/NolazyDemo.lusia";
+import nolazyDemoSource from "./demos/components/NolazyDemo.lusia?raw";
+import NolazyBadge from "./demos/components/NolazyBadge.lusia";
+import nolazyBadgeSource from "./demos/components/NolazyBadge.lusia?raw";
+import MoodHappy from "./demos/components/MoodHappy.lusia";
+import moodHappySource from "./demos/components/MoodHappy.lusia?raw";
+import ScopedRules from "./demos/styling/ScopedRules.lusia";
+import scopedRulesSource from "./demos/styling/ScopedRules.lusia?raw";
+import ScopedChild from "./demos/styling/ScopedChild.lusia";
+import scopedChildSource from "./demos/styling/ScopedChild.lusia?raw";
+import GlobalBlock from "./demos/styling/GlobalBlock.lusia";
+import globalBlockSource from "./demos/styling/GlobalBlock.lusia?raw";
+import InlineGlobal from "./demos/styling/InlineGlobal.lusia";
+import inlineGlobalSource from "./demos/styling/InlineGlobal.lusia?raw";
+import SetAnimateDefault from "./demos/motion/SetAnimateDefault.lusia";
+import setAnimateDefaultSource from "./demos/motion/SetAnimateDefault.lusia?raw";
+import HoverArea from "./demos/motion/HoverArea.lusia";
+import hoverAreaSource from "./demos/motion/HoverArea.lusia?raw";
+import Turn from "./demos/motion/Turn.lusia";
+import turnSource from "./demos/motion/Turn.lusia?raw";
+import Interpolate from "./demos/motion/Interpolate.lusia";
+import interpolateSource from "./demos/motion/Interpolate.lusia?raw";
+import ConfigDemo from "./demos/motion/ConfigDemo.lusia";
+import configDemoSource from "./demos/motion/ConfigDemo.lusia?raw";
 import Attributes from "./demos/basics/Attributes.lusia";
 import attributesSource from "./demos/basics/Attributes.lusia?raw";
 import BindElement from "./demos/basics/BindElement.lusia";
@@ -169,10 +233,126 @@ export interface CatalogEntry {
   files?: SourceFile[];
 }
 
+// The DomFlow visuals mount these two files, so each visual lists them.
+const domFlowSources: SourceFile[] = [
+  { path: "src/components/guide/DomFlow.lusia", text: domFlowSource },
+  { path: "src/components/guide/DomNode.lusia", text: domNodeSource },
+];
+
 // Keyed by the api entry id. Entries without a demo show no live card.
 export const catalog: Record<string, CatalogEntry> = {
+  "reactivity-overview": {
+    icon: "bolt",
+    demos: [
+      {
+        id: "reactivity-overview-flow",
+        title: "Step by step",
+        caption: "A variable is read in the markup. Each click writes it, and only the text changes.",
+        components: [ReactivityFlow],
+        sources: [
+          { path: "src/demos/guide/ReactivityFlow.lusia", text: reactivityFlowSource },
+          { path: "src/demos/guide/reactivity-flow.ts", text: reactivityFlowDataSource },
+          ...domFlowSources,
+        ],
+      },
+    ],
+  },
+  "events-overview": {
+    icon: "ads_click",
+    demos: [
+      {
+        id: "events-overview-flow",
+        title: "Step by step",
+        caption: "A click runs swap(). The new name reaches the text that reads it.",
+        components: [EventsFlow],
+        sources: [
+          { path: "src/demos/guide/EventsFlow.lusia", text: eventsFlowSource },
+          { path: "src/demos/guide/events-flow.ts", text: eventsFlowDataSource },
+          ...domFlowSources,
+        ],
+      },
+    ],
+  },
+  "flow-overview": {
+    icon: "alt_route",
+    demos: [
+      {
+        id: "flow-overview-flow",
+        title: "Step by step",
+        caption: "IF shows one branch. A click makes the condition true, and the other branch leaves.",
+        components: [ConditionFlow],
+        sources: [
+          { path: "src/demos/guide/ConditionFlow.lusia", text: conditionFlowSource },
+          { path: "src/demos/guide/condition-flow.ts", text: conditionFlowDataSource },
+          ...domFlowSources,
+        ],
+      },
+    ],
+  },
+  "components-overview": {
+    icon: "widgets",
+    demos: [
+      {
+        id: "components-overview-flow",
+        title: "Step by step",
+        caption: "Each component tag places one Card in the DOM.",
+        components: [ComponentsFlow],
+        sources: [
+          { path: "src/demos/guide/ComponentsFlow.lusia", text: componentsFlowSource },
+          { path: "src/demos/guide/components-flow.ts", text: componentsFlowDataSource },
+          { path: "src/demos/guide/Card.lusia", text: guideCardSource },
+          ...domFlowSources,
+        ],
+      },
+    ],
+  },
+  "styling-overview": {
+    icon: "palette",
+    demos: [
+      {
+        id: "styling-overview-flow",
+        title: "Step by step",
+        caption: "The same nodes stay in place. Each style rule changes only the nodes it matches.",
+        components: [StylingFlow],
+        sources: [
+          { path: "src/demos/guide/StylingFlow.lusia", text: stylingFlowSource },
+          { path: "src/demos/guide/styling-flow.ts", text: stylingFlowDataSource },
+          ...domFlowSources,
+        ],
+      },
+    ],
+  },
+  "motion-overview": {
+    icon: "animation",
+    demos: [
+      {
+        id: "motion-overview-flow",
+        title: "Step by step",
+        caption: "The p fades in when it attaches, and fades out before it is removed.",
+        components: [MotionFlow],
+        sources: [
+          { path: "src/demos/guide/MotionFlow.lusia", text: motionFlowSource },
+          { path: "src/demos/guide/motion-flow.ts", text: motionFlowDataSource },
+          ...domFlowSources,
+        ],
+      },
+    ],
+  },
   "lusia-intro": {
     icon: "info",
+    demos: [
+      {
+        id: "intro-flow",
+        title: "From file to DOM",
+        caption: "Lusia compiles the file. Its markup becomes DOM nodes, and a click changes only the text.",
+        components: [IntroFlow],
+        sources: [
+          { path: "src/demos/guide/IntroFlow.lusia", text: introFlowSource },
+          { path: "src/demos/guide/intro-flow.ts", text: introFlowDataSource },
+          ...domFlowSources,
+        ],
+      },
+    ],
     table: {
       head: ["Section", "What it holds"],
       rows: [
@@ -182,7 +362,22 @@ export const catalog: Record<string, CatalogEntry> = {
       ],
     },
   },
-  "start-project": { icon: "rocket_launch" },
+  "start-project": {
+    icon: "rocket_launch",
+    demos: [
+      {
+        id: "start-project-tree",
+        title: "Files after bun create",
+        caption: "The files the CLI writes for a new app. Press Create again to watch them appear, and click a file to read it.",
+        components: [ProjectTree],
+        sources: [
+          { path: "src/demos/guide/ProjectTree.lusia", text: projectTreeSource },
+          { path: "src/demos/guide/project-files.ts", text: projectFilesSource },
+          ...templateFiles.map((file) => ({ path: "my-app/" + file.path, text: file.text })),
+        ],
+      },
+    ],
+  },
   expr: {
     icon: "text_fields",
     demos: [
@@ -258,7 +453,18 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
-  "variable-compute": { icon: "calculate" },
+  "variable-compute": {
+    icon: "calculate",
+    demos: [
+      {
+        id: "variable-compute-total",
+        title: "Computed total",
+        caption: "total is worked out from price and quantity. It updates when either one changes.",
+        components: [Compute],
+        sources: [{ path: "src/demos/reactivity/Compute.lusia", text: computeSource }],
+      },
+    ],
+  },
   "variable-auto-run": {
     icon: "sync",
     table: {
@@ -432,7 +638,21 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
-  detach: { icon: "link_off" },
+  detach: {
+    icon: "link_off",
+    demos: [
+      {
+        id: "detach-wait",
+        title: "Detach and wait",
+        caption: "detach() resolves after the DETACH animation. The status changes only when the box is gone.",
+        components: [DetachDemo],
+        sources: [
+          { path: "src/demos/components/DetachDemo.lusia", text: detachDemoSource },
+          { path: "src/demos/components/MoodHappy.lusia", text: moodHappySource },
+        ],
+      },
+    ],
+  },
   "on-detach": {
     icon: "link_off",
     demos: [
@@ -459,7 +679,18 @@ export const catalog: Record<string, CatalogEntry> = {
   component: { icon: "extension" },
   instance: { icon: "memory" },
   "props-type": { icon: "category" },
-  script: { icon: "terminal" },
+  script: {
+    icon: "terminal",
+    demos: [
+      {
+        id: "script-block",
+        title: "Script block",
+        caption: "The script holds the imports, the variables and the functions. The markup can call the functions.",
+        components: [ScriptBlock],
+        sources: [{ path: "src/demos/basics/ScriptBlock.lusia", text: scriptBlockSource }],
+      },
+    ],
+  },
   "component-tag": {
     icon: "widgets",
     demos: [
@@ -558,6 +789,18 @@ export const catalog: Record<string, CatalogEntry> = {
   },
   nolazy: {
     icon: "push_pin",
+    demos: [
+      {
+        id: "nolazy-badge",
+        title: "Badge",
+        caption: "NOLAZY keeps the badge in the page that imports it. It is never loaded later on its own.",
+        components: [NolazyDemo],
+        sources: [
+          { path: "src/demos/components/NolazyDemo.lusia", text: nolazyDemoSource },
+          { path: "src/demos/components/NolazyBadge.lusia", text: nolazyBadgeSource },
+        ],
+      },
+    ],
   },
   "on-attach": {
     icon: "touch_app",
@@ -863,6 +1106,15 @@ export const catalog: Record<string, CatalogEntry> = {
   },
   config: {
     icon: "tune",
+    demos: [
+      {
+        id: "config-duration",
+        title: "Project defaults",
+        caption: "The first box has no duration, so it uses the value in lusia.config. The second sets its own.",
+        components: [ConfigDemo],
+        sources: [{ path: "src/demos/motion/ConfigDemo.lusia", text: configDemoSource }],
+      },
+    ],
     table: {
       head: ["Key", "Value", "Default", "What it does"],
       rows: [
@@ -1267,12 +1519,81 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
-  scoped: { icon: "segment" },
-  global: { icon: "language" },
-  "inline-global": { icon: "filter_center_focus" },
-  elseif: { icon: "call_split" },
-  else: { icon: "fork_right" },
-  "bind-prop": { icon: "swap_horiz" },
+  scoped: {
+    icon: "segment",
+    demos: [
+      {
+        id: "scoped-block",
+        title: "Scoped block",
+        caption: "The @scoped rule stops at the child. The child card has no border, but its h2 still turns red.",
+        components: [ScopedRules],
+        sources: [
+          { path: "src/demos/styling/ScopedRules.lusia", text: scopedRulesSource },
+          { path: "src/demos/styling/ScopedChild.lusia", text: scopedChildSource },
+        ],
+      },
+    ],
+  },
+  global: {
+    icon: "language",
+    demos: [
+      {
+        id: "global-block",
+        title: "Global block",
+        caption: "A rule in @global reaches the element by its class, even from a scoped style.",
+        components: [GlobalBlock],
+        sources: [{ path: "src/demos/styling/GlobalBlock.lusia", text: globalBlockSource }],
+      },
+    ],
+  },
+  "inline-global": {
+    icon: "filter_center_focus",
+    demos: [
+      {
+        id: "inline-global-link",
+        title: "Global part of a selector",
+        caption: "The link inside the card gets the color. The card itself stays scoped.",
+        components: [InlineGlobal],
+        sources: [{ path: "src/demos/styling/InlineGlobal.lusia", text: inlineGlobalSource }],
+      },
+    ],
+  },
+  elseif: {
+    icon: "call_split",
+    demos: [
+      {
+        id: "elseif-grades",
+        title: "Grade branches",
+        caption: "The first true branch wins. Each button sets the score, and the matching grade shows.",
+        components: [ElseifDemo],
+        sources: [{ path: "src/demos/flow/ElseifDemo.lusia", text: elseifDemoSource }],
+      },
+    ],
+  },
+  else: {
+    icon: "fork_right",
+    demos: [
+      {
+        id: "else-login",
+        title: "Fallback branch",
+        caption: "ELSE shows when the IF condition is false. Toggle the button to switch between the two.",
+        components: [ElseDemo],
+        sources: [{ path: "src/demos/flow/ElseDemo.lusia", text: elseDemoSource }],
+      },
+    ],
+  },
+  "bind-prop": {
+    icon: "swap_horiz",
+    demos: [
+      {
+        id: "bind-prop-checked",
+        title: "Checkbox",
+        caption: "bind-checked links the checked property and the variable. A check updates the variable.",
+        components: [BindProp],
+        sources: [{ path: "src/demos/events/BindProp.lusia", text: bindPropSource }],
+      },
+    ],
+  },
   ease: {
     icon: "show_chart",
     table: {
@@ -1345,7 +1666,18 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
-  "set-animate-default": { icon: "tune" },
+  "set-animate-default": {
+    icon: "tune",
+    demos: [
+      {
+        id: "set-animate-default-speed",
+        title: "Change the default",
+        caption: "Slow every animation changes the default for the whole page. Reset puts back the site default.",
+        components: [SetAnimateDefault],
+        sources: [{ path: "src/demos/motion/SetAnimateDefault.lusia", text: setAnimateDefaultSource }],
+      },
+    ],
+  },
   controller: {
     icon: "play_circle",
     demos: [
@@ -1380,12 +1712,45 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
-  turn: { icon: "u_turn_left" },
+  turn: {
+    icon: "u_turn_left",
+    demos: [
+      {
+        id: "turn-midway",
+        title: "Sudden and smooth turns",
+        caption: "Hover in and out while the box moves. SUDDEN jumps to the new direction, SMOOTH bends into it.",
+        components: [Turn],
+        sources: [{ path: "src/demos/motion/Turn.lusia", text: turnSource }],
+      },
+    ],
+  },
   "animate-more": { icon: "more_horiz" },
   "animate-type": { icon: "movie" },
-  "hover-area": { icon: "mouse" },
+  "hover-area": {
+    icon: "mouse",
+    demos: [
+      {
+        id: "hover-area-boxes",
+        title: "Two hover areas",
+        caption: "The final box is checked at rest, so it can flicker when it grows. The element box follows the growth.",
+        components: [HoverArea],
+        sources: [{ path: "src/demos/motion/HoverArea.lusia", text: hoverAreaSource }],
+      },
+    ],
+  },
   "keyframes-type": { icon: "timeline" },
-  interpolate: { icon: "linear_scale" },
+  interpolate: {
+    icon: "linear_scale",
+    demos: [
+      {
+        id: "interpolate-bar",
+        title: "Blend two values",
+        caption: "interpolate() returns a function. Call it with t from 0 to 1 to get the blended width and color.",
+        components: [Interpolate],
+        sources: [{ path: "src/demos/motion/Interpolate.lusia", text: interpolateSource }],
+      },
+    ],
+  },
 };
 
 // Every api entry needs an icon. A missing one throws, so the catalog test catches it at once.

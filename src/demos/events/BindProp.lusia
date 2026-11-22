@@ -1,0 +1,33 @@
+<script>
+  import { variable } from "lusiajs";
+
+  const agreed = variable(false);
+</script>
+
+<div class="bind-demo">
+  <label>
+    <input type="checkbox" bind-checked={agreed} />
+    I agree to the terms
+  </label>
+  <p>{agreed.value ? "Thanks." : "Please agree."}</p>
+</div>
+
+<style scoped>
+  .bind-demo {
+    display: grid;
+    justify-items: start;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+    }
+  }
+</style>
