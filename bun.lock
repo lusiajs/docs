@@ -17,7 +17,7 @@
         "@codemirror/view": "6.43.15",
         "@lezer/common": "1.5.6",
         "@lezer/highlight": "1.2.5",
-        "lusiajs": "0.1.0-beta.2",
+        "lusiajs": "0.1.0-beta.3",
         "prettier": "3.10.1",
         "prismjs": "^1.30.0",
         "sass": "^1.80.0",
@@ -140,7 +140,7 @@
 
     "lines-and-columns": ["lines-and-columns@1.2.4", "", {}, "sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg=="],
 
-    "lusiajs": ["lusiajs@0.1.0-beta.2", "", { "dependencies": { "prettier": "3.10.1", "sass": "^1.80.0", "sucrase": "3.35.1" }, "peerDependencies": { "typescript": "^5.6.0" }, "optionalPeers": ["typescript"], "bin": { "lusia": "src/cli/index.ts" } }, "sha512-VbNTU2EDyTut6aADHb5JeJSUTWq9aFdTBNpj86dRkIuHOj0OIQOheHhJw7ItTl21C7ytK283tZKcR5pX/BGmLw=="],
+    "lusiajs": ["lusiajs@0.1.0-beta.3", "", { "dependencies": { "prettier": "3.10.1", "sass": "^1.80.0", "sucrase": "3.35.1" }, "peerDependencies": { "typescript": "^5.6.0" }, "optionalPeers": ["typescript"], "bin": { "lusia": "src/cli/index.ts" } }, "sha512-jESsZqQoj69nCs/K7ADxYwFhBEILF/qMOngdORF2i2urhYxJPsIj237DFUX022AapQCpyBLmxhk+BU5zppSDsQ=="],
 
     "mz": ["mz@2.7.0", "", { "dependencies": { "any-promise": "^1.0.0", "object-assign": "^4.0.1", "thenify-all": "^1.0.0" } }, "sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q=="],
 
