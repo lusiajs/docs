@@ -111,6 +111,10 @@ export const guidePlan: GuideGroup[] = [
       "global",
       "inline-global",
       "screen-sizes",
+      "screen",
+      "style-screen-if",
+      "style-screen-mixin",
+      "config-screens",
     ],
   },
   {
@@ -128,7 +132,7 @@ export const guidePlan: GuideGroup[] = [
       {
         id: "timing",
         label: "Timing and easing",
-        entries: ["ease", "preset", "set-config","keyframes-type", "animate-item"],
+        entries: ["ease", "preset", "set-config", "scope", "keyframes-type", "animate-item"],
       },
       {
         id: "configuration",

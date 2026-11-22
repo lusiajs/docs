@@ -5,6 +5,7 @@ export const introPageId = "lusia-intro";
 export const startProjectId = "start-project";
 export const lifecyclePageId = "lifecycle";
 export const animateSpacePageId = "animate-space-page";
+export const scrollAtPageId = "scroll-at";
 
 export const guidePages: ApiEntry[] = [
 	{
@@ -90,14 +91,14 @@ export const guidePages: ApiEntry[] = [
 		signature: "<IF {condition}> ... </IF>",
 		example: `<IF {loggedIn}>
   <p>Welcome back.</p>
-</IF>
 <ELSE>
   <p>Please log in.</p>
-</ELSE>`,
+</IF>`,
 		summary: "IF shows one branch of markup. When the condition changes, the other branch leaves.",
 		bullets: [
 			"Only the branch that matches is in the DOM.",
 			"Branches that leave play their DETACH animation first.",
+			"One closing </IF> ends the whole chain. Older files close each branch. Run lusia format to convert them.",
 		],
 	},
 	{
@@ -114,6 +115,7 @@ export const guidePages: ApiEntry[] = [
 		summary: "A component tag places the markup of another .lusia file on the page.",
 		bullets: [
 			"Each tag places its own copy of the component.",
+			"A name must not be an HTML tag. row works, but button does not. The error suggests a name such as ButtonBox.",
 			"Props pass values in. The child shows them in its own markup.",
 		],
 	},
@@ -212,6 +214,20 @@ export const guidePages: ApiEntry[] = [
 
   onDetach(() => console.log("the component is gone"));
 </script>`,
+	},
+	{
+		id: scrollAtPageId,
+		name: "Start and end",
+		kind: "markup",
+		group: "motion",
+		signature: "more: { start: [EDGE.TOP, EDGE.BOTTOM], end: [EDGE.BOTTOM, EDGE.TOP] }",
+		summary: "Set where a scroll animation starts and ends, as points on the element and on the screen.",
+		bullets: [
+			"start and end are pairs: [element edge, screen edge]. The first point is on the element, the second on the screen.",
+			"Each point is EDGE.TOP (0), EDGE.CENTER (0.5), EDGE.BOTTOM (1), or a number from 0 to 1.",
+			"Default: start [EDGE.TOP, EDGE.BOTTOM], end [EDGE.BOTTOM, EDGE.TOP].",
+		],
+		example: `<p animate={{ style: PRESET.FADE_IN, when: WHEN.SCROLL, more: { start: [EDGE.TOP, EDGE.CENTER], end: [EDGE.BOTTOM, EDGE.TOP] } }}>Hello</p>`,
 	},
 	{
 		id: animateSpacePageId,

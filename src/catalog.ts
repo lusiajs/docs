@@ -167,30 +167,21 @@ import Presets from "./demos/motion/Presets.lusia";
 import presetsSource from "./demos/motion/Presets.lusia?raw";
 import Reveal from "./demos/motion/Reveal.lusia";
 import revealSource from "./demos/motion/Reveal.lusia?raw";
-import ScrollCenterLeave from "./demos/motion/ScrollCenterLeave.lusia";
-import scrollCenterLeaveSource from "./demos/motion/ScrollCenterLeave.lusia?raw";
-import ScrollDefault from "./demos/motion/ScrollDefault.lusia";
-import scrollDefaultSource from "./demos/motion/ScrollDefault.lusia?raw";
 import ScrollEffects from "./demos/motion/ScrollEffects.lusia";
 import scrollEffectsSource from "./demos/motion/ScrollEffects.lusia?raw";
-import ScrollEnterCenter from "./demos/motion/ScrollEnterCenter.lusia";
-import scrollEnterCenterSource from "./demos/motion/ScrollEnterCenter.lusia?raw";
 import ScrollLines from "./demos/motion/ScrollLines.lusia";
 import scrollLinesSource from "./demos/motion/ScrollLines.lusia?raw";
 import ScrollPartFollow from "./demos/motion/ScrollPartFollow.lusia";
 import scrollPartFollowSource from "./demos/motion/ScrollPartFollow.lusia?raw";
 import ScrollPresets from "./demos/motion/ScrollPresets.lusia";
 import scrollPresetsSource from "./demos/motion/ScrollPresets.lusia?raw";
-import ScrollTouchPoints from "./demos/motion/ScrollTouchPoints.lusia";
-import scrollTouchPointsSource from "./demos/motion/ScrollTouchPoints.lusia?raw";
-import ScrollTwo from "./demos/motion/ScrollTwo.lusia";
-import scrollTwoSource from "./demos/motion/ScrollTwo.lusia?raw";
+import ScrollEdges from "./components/guide/ScrollEdges.lusia";
+import scrollEdgesSource from "./components/guide/ScrollEdges.lusia?raw";
 import shrinkSource from "./demos/motion/Shrink.lusia?raw";
 import SpinAway from "./demos/motion/SpinAway.lusia";
 import spinAwaySource from "./demos/motion/SpinAway.lusia?raw";
 import VariableTrigger from "./demos/motion/VariableTrigger.lusia";
 import variableTriggerSource from "./demos/motion/VariableTrigger.lusia?raw";
-import scrollReadoutSource from "./demos/motion/scroll-readout.ts?raw";
 import AutoRun from "./demos/reactivity/AutoRun.lusia";
 import autoRunSource from "./demos/reactivity/AutoRun.lusia?raw";
 import Batch from "./demos/reactivity/Batch.lusia";
@@ -1181,14 +1172,14 @@ export const catalog: Record<string, CatalogEntry> = {
         ],
         [
           "animate.scroll.start",
-          "ENTER, CENTER, LEAVE, or { element, window }",
-          "ENTER",
+          "[element edge, screen edge], EDGE or 0 to 1",
+          "[EDGE.TOP, EDGE.BOTTOM]",
           "Where the progress starts",
         ],
         [
           "animate.scroll.end",
-          "ENTER, CENTER, LEAVE, or { element, window }",
-          "LEAVE",
+          "[element edge, screen edge], EDGE or 0 to 1",
+          "[EDGE.BOTTOM, EDGE.TOP]",
           "Where the progress ends",
         ],
         ["animate.scroll.part", "[from, to], 0 to 1", "[0, 1]", "The part of the progress to play"],
@@ -1284,44 +1275,11 @@ export const catalog: Record<string, CatalogEntry> = {
     icon: "vertical_align_center",
     demos: [
       {
-        id: "scroll-default",
-        title: "Whole time on screen",
-        caption: "With no start or end, the card fades in for the whole time it is on screen.",
-        components: [ScrollDefault],
-        sources: [
-          {
-            path: "src/demos/motion/ScrollDefault.lusia",
-            text: scrollDefaultSource,
-          },
-          {
-            path: "src/demos/motion/scroll-readout.ts",
-            text: scrollReadoutSource,
-          },
-        ],
-      },
-      {
-        id: "scroll-enter-center",
-        title: "Ends at the middle",
-        caption: "The card finishes when it reaches the middle of the screen.",
-        components: [ScrollEnterCenter],
-        sources: [
-          {
-            path: "src/demos/motion/ScrollEnterCenter.lusia",
-            text: scrollEnterCenterSource,
-          },
-        ],
-      },
-      {
-        id: "scroll-center-leave",
-        title: "Fades out at the top",
-        caption: "The card fades out as it leaves the top of the screen.",
-        components: [ScrollCenterLeave],
-        sources: [
-          {
-            path: "src/demos/motion/ScrollCenterLeave.lusia",
-            text: scrollCenterLeaveSource,
-          },
-        ],
+        id: "scroll-edges-diagram",
+        title: "Element edge and screen edge",
+        caption: "Each point of start and end pairs an element edge with a screen edge. Here the element top meets the screen center.",
+        components: [ScrollEdges],
+        sources: [{ path: "src/components/guide/ScrollEdges.lusia", text: scrollEdgesSource }],
       },
       {
         id: "scroll-presets",
@@ -1347,35 +1305,11 @@ export const catalog: Record<string, CatalogEntry> = {
           },
         ],
       },
-      {
-        id: "scroll-two-items",
-        title: "Two items on one card",
-        caption: "One item fades in, another blurs out. They set different properties.",
-        components: [ScrollTwo],
-        sources: [
-          {
-            path: "src/demos/motion/ScrollTwo.lusia",
-            text: scrollTwoSource,
-          },
-        ],
-      },
     ],
   },
   edge: {
     icon: "grid_on",
     demos: [
-      {
-        id: "scroll-touch-points",
-        title: "Edges or numbers",
-        caption: "{ element, window } takes EDGE members or numbers from 0 to 1.",
-        components: [ScrollTouchPoints],
-        sources: [
-          {
-            path: "src/demos/motion/ScrollTouchPoints.lusia",
-            text: scrollTouchPointsSource,
-          },
-        ],
-      },
       {
         id: "animate-follow-scroll",
         title: "Follow the scroll",
@@ -1585,7 +1519,58 @@ export const catalog: Record<string, CatalogEntry> = {
         sources: [{ path: "src/demos/styling/ScreenSizes.lusia", text: screenSizesSource }],
       },
     ],
+  },
+  screen: {
+    icon: "straighten",
+    demos: [
+      {
+        id: "screen-markup-tile",
+        title: "SCREEN in markup",
+        caption: "The first tile uses SCREEN in an IF. Resize the window to switch its text.",
+        components: [ScreenSizes],
+        sources: [{ path: "src/demos/styling/ScreenSizes.lusia", text: screenSizesSource }],
+      },
+    ],
+  },
+  "style-screen-if": {
+    icon: "call_split",
+    demos: [
+      {
+        id: "style-screen-if-tile",
+        title: "style in IF",
+        caption: "The second tile has a style in each IF branch. Its padding changes at the PHONE size.",
+        components: [ScreenSizes],
+        sources: [{ path: "src/demos/styling/ScreenSizes.lusia", text: screenSizesSource }],
+      },
+    ],
+  },
+  "style-screen-mixin": {
+    icon: "code",
+    demos: [
+      {
+        id: "screen-mixin-tile",
+        title: "screen() mixin",
+        caption: "The third tile uses @include screen(PHONE) in its style.",
+        components: [ScreenSizes],
+        sources: [{ path: "src/demos/styling/ScreenSizes.lusia", text: screenSizesSource }],
+      },
+    ],
+  },
+  "config-screens": {
+    icon: "settings",
     files: [{ path: "lusia.config.ts", text: screensConfigSource }],
+  },
+  scope: {
+    icon: "center_focus_strong",
+    demos: [
+      {
+        id: "scope-global",
+        title: "SCOPE.GLOBAL",
+        caption: "setConfig() with SCOPE.GLOBAL sets the duration for the whole app.",
+        components: [SetConfigDemo],
+        sources: [{ path: "src/demos/motion/SetConfigDemo.lusia", text: setConfigDemoSource }],
+      },
+    ],
   },
   elseif: {
     icon: "call_split",
