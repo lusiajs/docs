@@ -6,6 +6,7 @@ import { LusiaError } from "lusiajs/errors/error.ts";
 import { formatWhere } from "lusiajs/errors/where.ts";
 import { compileWithoutStyles } from "./compile-check.ts";
 import { typescriptLanguage } from "./lang/language.ts";
+import { WRONG_LUSIA_IMPORT_MESSAGE, wrongLusiaImports } from "./import-check.ts";
 
 export interface EditorDiagnostic {
 	/** 1-based. */
@@ -39,14 +40,13 @@ export function diagnosticsFor(
 	return [
 		...compileDiagnostics(source, file),
 		...syntaxDiagnostics(source, file),
+		...importDiagnostics(source, file),
 		...lintDiagnostics(source, file, childProps),
 	];
 }
 
 function syntaxDiagnostics(source: string, file: string): EditorDiagnostic[] {
-	const script = file.endsWith(".ts")
-		? { code: source, offset: 0 }
-		: scriptCode(source);
+	const script = scriptFor(source, file);
 	if (!script) return [];
 	const tree = typescriptLanguage.language.parser.parse(script.code);
 	const found: EditorDiagnostic[] = [];
@@ -58,6 +58,22 @@ function syntaxDiagnostics(source: string, file: string): EditorDiagnostic[] {
 		},
 	});
 	return found;
+}
+
+function importDiagnostics(source: string, file: string): EditorDiagnostic[] {
+	const script = scriptFor(source, file);
+	if (!script) return [];
+	return wrongLusiaImports(script.code).map((specifier) =>
+		importDiagnostic(source, script.offset + specifier.from, specifier.to - specifier.from, file),
+	);
+}
+
+function scriptFor(
+	source: string,
+	file: string,
+): { code: string; offset: number } | undefined {
+	if (file.endsWith(".ts")) return { code: source, offset: 0 };
+	return scriptCode(source);
 }
 
 function scriptCode(
@@ -76,9 +92,7 @@ function syntaxDiagnostic(
 	offset: number,
 	file: string,
 ): EditorDiagnostic {
-	const before = source.slice(0, offset);
-	const line = before.split("\n").length;
-	const column = offset - before.lastIndexOf("\n");
+	const { line, column } = positionAt(source, offset);
 	return {
 		line,
 		column,
@@ -87,6 +101,36 @@ function syntaxDiagnostic(
 		message: "Syntax error in the script",
 		code: "syntax",
 		where: formatWhere(file, line, column),
+	};
+}
+
+function importDiagnostic(
+	source: string,
+	offset: number,
+	length: number,
+	file: string,
+): EditorDiagnostic {
+	const { line, column } = positionAt(source, offset);
+	return {
+		line,
+		column,
+		length,
+		severity: "error",
+		source: "lusia",
+		message: WRONG_LUSIA_IMPORT_MESSAGE,
+		code: "wrong-import",
+		where: formatWhere(file, line, column),
+	};
+}
+
+function positionAt(
+	source: string,
+	offset: number,
+): { line: number; column: number } {
+	const before = source.slice(0, offset);
+	return {
+		line: before.split("\n").length,
+		column: offset - before.lastIndexOf("\n"),
 	};
 }
 
