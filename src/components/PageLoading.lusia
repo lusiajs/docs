@@ -1,27 +1,27 @@
 <script>
-import { WHEN } from "lusiajs";
-import LoadingMark from "./LoadingMark.lusia";
+  import { WHEN } from "lusiajs";
+  import LoadingMark from "./LoadingMark.lusia";
 
-const fadeOut = {
-	0: { opacity: 1 },
-	1: { opacity: 0 },
-};
+  const fadeOut = {
+    0: { opacity: 1 },
+    1: { opacity: 0 },
+  };
 </script>
 
 <div
-	class="page-loading"
-	role="status"
-	aria-label="Loading the page"
-	animate={{ style: fadeOut, when: WHEN.DETACH, duration: 200 }}
+  class="page-loading"
+  role="status"
+  aria-label="Loading the page"
+  animate={{ style: fadeOut, when: WHEN.DETACH, duration: 200 }}
 >
-	<LoadingMark />
+  <LoadingMark />
 </div>
 
 <style>
-.page-loading {
-	display: grid;
-	place-items: center;
-	min-height: 60vh;
-	padding: 3rem 1rem;
-}
+  .page-loading {
+    display: grid;
+    place-items: center;
+    min-height: 60vh;
+    padding: 3rem 1rem;
+  }
 </style>

@@ -1,74 +1,74 @@
 <script>
-import { EASE } from "lusiajs";
+  import { EASE } from "lusiajs";
 
-// Reduced motion keeps the dots still.
-const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Reduced motion keeps the dots still.
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const dotBounce = {
-	default: [EASE.STYLE.SINE, EASE.INOUT],
-	0: { translate: "0px 0px" },
-	1: { translate: "0px -8px" },
-};
+  const dotBounce = {
+    default: [EASE.STYLE.SINE, EASE.INOUT],
+    0: { translate: "0px 0px" },
+    1: { translate: "0px -8px" },
+  };
 
-const loopSettings = {
-	loop: true,
-	backAndForth: true,
-};
+  const loopSettings = {
+    loop: true,
+    backAndForth: true,
+  };
 
-function dotMotion(delay: number) {
-	return reduced
-		? []
-		: { ...loopSettings, style: dotBounce, duration: 500, delay };
-}
+  function dotMotion(delay: number) {
+    return reduced
+      ? []
+      : { ...loopSettings, style: dotBounce, duration: 500, delay };
+  }
 </script>
 
 <div class="loading-mark">
-	<img class="logo" src="/logo.svg" width="64" height="64" alt="" />
-	<p class="name">Lusia</p>
-	<div class="dots" aria-hidden="true">
-		<span class="dot pink" animate={dotMotion(0)}></span>
-		<span class="dot lavender" animate={dotMotion(120)}></span>
-		<span class="dot mint" animate={dotMotion(240)}></span>
-	</div>
+  <img class="logo" src="/logo.svg" width="64" height="64" alt="" />
+  <p class="name">Lusia</p>
+  <div class="dots" aria-hidden="true">
+    <span class="dot pink" animate={dotMotion(0)}></span>
+    <span class="dot lavender" animate={dotMotion(120)}></span>
+    <span class="dot mint" animate={dotMotion(240)}></span>
+  </div>
 </div>
 
 <style>
-.loading-mark {
-	display: grid;
-	justify-items: center;
-	gap: 0.9rem;
-}
+  .loading-mark {
+    display: grid;
+    justify-items: center;
+    gap: 0.9rem;
+  }
 
-.logo {
-	width: 64px;
-	height: 64px;
-}
+  .logo {
+    width: 64px;
+    height: 64px;
+  }
 
-.name {
-	margin: 0;
-	font-family: "M PLUS Rounded 1c", system-ui, sans-serif;
-	font-size: 1.4rem;
-	font-weight: 800;
-}
+  .name {
+    margin: 0;
+    font-family: "M PLUS Rounded 1c", system-ui, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+  }
 
-.dots {
-	display: flex;
-	gap: 0.45rem;
-}
+  .dots {
+    display: flex;
+    gap: 0.45rem;
+  }
 
-.dot {
-	width: 0.55rem;
-	height: 0.55rem;
-	border-radius: 50%;
+  .dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
 
-	&.pink {
-		background: var(--pink);
-	}
-	&.lavender {
-		background: var(--lavender);
-	}
-	&.mint {
-		background: var(--mint);
-	}
-}
+    &.pink {
+      background: var(--pink);
+    }
+    &.lavender {
+      background: var(--lavender);
+    }
+    &.mint {
+      background: var(--mint);
+    }
+  }
 </style>

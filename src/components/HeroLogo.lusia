@@ -1,79 +1,79 @@
 <script>
-import { onAttach, variable, WHEN, EASE } from "lusiajs";
-import { wobbleStyle } from "../motion/wobble.ts";
+  import { onAttach, variable, WHEN, EASE } from "lusiajs";
+  import { wobbleStyle } from "../motion/wobble.ts";
 
-const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const logoEl = variable<HTMLElement | null>(null);
+  const logoEl = variable<HTMLElement | null>(null);
 
-// The title is centered, so the first letter's position is read from the DOM.
-function placeLogo() {
-	const logo = logoEl.value;
-	const title = logo?.parentElement;
-	const letter = title?.querySelector<HTMLElement>(".letter-slot");
-	if (!logo || !title || !letter) return;
-	title.style.setProperty("--title-pad", `${titlePadding(logo)}px`);
-	logo.style.setProperty("--letter-left", `${letter.offsetLeft}px`);
-}
+  // The title is centered, so the first letter's position is read from the DOM.
+  function placeLogo() {
+    const logo = logoEl.value;
+    const title = logo?.parentElement;
+    const letter = title?.querySelector<HTMLElement>(".letter-slot");
+    if (!logo || !title || !letter) return;
+    title.style.setProperty("--title-pad", `${titlePadding(logo)}px`);
+    logo.style.setProperty("--letter-left", `${letter.offsetLeft}px`);
+  }
 
-// The left margin is the logo width plus the gap. Padding by it moves the text by half.
-function titlePadding(logo: HTMLElement) {
-	if (getComputedStyle(logo).display === "none") return 0;
-	return -parseFloat(getComputedStyle(logo).marginLeft);
-}
+  // The left margin is the logo width plus the gap. Padding by it moves the text by half.
+  function titlePadding(logo: HTMLElement) {
+    if (getComputedStyle(logo).display === "none") return 0;
+    return -parseFloat(getComputedStyle(logo).marginLeft);
+  }
 
-// Font swaps and resizes change the title width, so watching the title covers both.
-onAttach(() => {
-	const titleSizes = new ResizeObserver(placeLogo);
-	placeLogo();
-	document.fonts.ready.then(placeLogo);
-	const title = logoEl.value?.parentElement;
-	if (title) titleSizes.observe(title);
-	return () => titleSizes.disconnect();
-});
+  // Font swaps and resizes change the title width, so watching the title covers both.
+  onAttach(() => {
+    const titleSizes = new ResizeObserver(placeLogo);
+    placeLogo();
+    document.fonts.ready.then(placeLogo);
+    const title = logoEl.value?.parentElement;
+    if (title) titleSizes.observe(title);
+    return () => titleSizes.disconnect();
+  });
 
-// Grows in with the first letter. Reduced motion shows it at once.
-const logoIn = {
-	0: { opacity: 0, scale: "0.6" },
-	1: [EASE.STYLE.QUART, EASE.OUT, { opacity: 1, scale: "1" }],
-};
-const logoMotion = reduced
-	? []
-	: [
-			{
-				style: logoIn,
-				when: WHEN.ATTACH,
-				more: { animateSpace: false },
-				duration: 600,
-				delay: 80,
-			},
-			{ style: wobbleStyle, when: WHEN.HOVER, duration: 500 },
-		];
+  // Grows in with the first letter. Reduced motion shows it at once.
+  const logoIn = {
+    0: { opacity: 0, scale: "0.6" },
+    1: [EASE.STYLE.QUART, EASE.OUT, { opacity: 1, scale: "1" }],
+  };
+  const logoMotion = reduced
+    ? []
+    : [
+        {
+          style: logoIn,
+          when: WHEN.ATTACH,
+          more: { animateSpace: false },
+          duration: 600,
+          delay: 80,
+        },
+        { style: wobbleStyle, when: WHEN.HOVER, duration: 500 },
+      ];
 </script>
 
 <img
-	class="hero-logo"
-	src="/logo.svg"
-	alt=""
-	aria-hidden="true"
-	bind-element={logoEl}
-	animate={logoMotion}
+  class="hero-logo"
+  src="/logo.svg"
+  alt=""
+  aria-hidden="true"
+  bind-element={logoEl}
+  animate={logoMotion}
 />
 
 <style>
-.hero-logo {
-	position: absolute;
-	top: 50%;
-	left: var(--letter-left, 0px);
-	width: 1.25em;
-	height: 1.25em;
-	margin: -0.625em 0 0 -1.55em;
-	pointer-events: auto;
-}
+  .hero-logo {
+    position: absolute;
+    top: 50%;
+    left: var(--letter-left, 0px);
+    width: 1.25em;
+    height: 1.25em;
+    margin: -0.625em 0 0 -1.55em;
+    pointer-events: auto;
+  }
 
-@media (max-width: 559px) {
-	.hero-logo {
-		display: none;
-	}
-}
+  @media (max-width: 559px) {
+    .hero-logo {
+      display: none;
+    }
+  }
 </style>

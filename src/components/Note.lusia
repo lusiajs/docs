@@ -1,24 +1,24 @@
 <script>
-import { props } from "lusiajs";
+  import { props } from "lusiajs";
 
-const { text } = props({ text: "" });
+  const { text } = props({ text: "" });
 </script>
 
 <p class="note-box">
-	<span class="material-symbols-rounded" aria-hidden="true">info</span>
-	{text.value}
+  <span class="material-symbols-rounded" aria-hidden="true">info</span>
+  {text.value}
 </p>
 
 <style>
-.note-box {
-	display: flex;
-	align-items: flex-start;
-	gap: 0.6rem;
-	margin: 0 0 1.25rem;
-	padding: 0.75rem 1rem;
-	border-radius: 8px;
-	background: var(--lemon);
-	color: #3a2e4a;
-	font-size: 0.95rem;
-}
+  .note-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin: 0 0 1.25rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: var(--lemon);
+    color: #3a2e4a;
+    font-size: 0.95rem;
+  }
 </style>

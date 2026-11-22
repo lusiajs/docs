@@ -1,365 +1,367 @@
 <script>
-import { onAttach, variable, WHEN } from "lusiajs";
-import { copyText } from "../copy.ts";
-import { wobbleStyle } from "../motion/wobble.ts";
-import {
-	pillLift,
-	commandIn,
-	commandOut,
-	copiedLabelIn,
-	copiedLabelOut,
-	checkPopIn,
-} from "../motion/install-command.ts";
+  import { onAttach, variable, WHEN } from "lusiajs";
+  import { copyText } from "../copy.ts";
+  import { wobbleStyle } from "../motion/wobble.ts";
+  import {
+    pillLift,
+    commandIn,
+    commandOut,
+    copiedLabelIn,
+    copiedLabelOut,
+    checkPopIn,
+  } from "../motion/install-command.ts";
 
-type Choice = "create" | "add";
+  type Choice = "create" | "add";
 
-const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const commands: Record<Choice, string> = {
-	create: "bun create lusiajs my-app",
-	add: "bun add lusiajs",
-};
-const noticeShownFor = 1500;
+  const commands: Record<Choice, string> = {
+    create: "bun create lusiajs my-app",
+    add: "bun add lusiajs",
+  };
+  const noticeShownFor = 1500;
 
-const choice = variable<Choice>("create");
-// A boolean attribute would only mark presence, so aria-pressed gets the words.
-const createPressed = variable.compute(() =>
-	choice.value === "create" ? "true" : "false",
-);
-const addPressed = variable.compute(() =>
-	choice.value === "add" ? "true" : "false",
-);
-const command = variable.compute(() => commands[choice.value]);
-// One row keyed by the choice: a change detaches the old row and attaches the new one.
-const commandRows = variable.compute(() => [
-	{ key: choice.value, text: command.value },
-]);
+  const choice = variable<Choice>("create");
+  // A boolean attribute would only mark presence, so aria-pressed gets the words.
+  const createPressed = variable.compute(() =>
+    choice.value === "create" ? "true" : "false",
+  );
+  const addPressed = variable.compute(() =>
+    choice.value === "add" ? "true" : "false",
+  );
+  const command = variable.compute(() => commands[choice.value]);
+  // One row keyed by the choice: a change detaches the old row and attaches the new one.
+  const commandRows = variable.compute(() => [
+    { key: choice.value, text: command.value },
+  ]);
 
-const createButton = variable<HTMLElement | null>(null);
-const addButton = variable<HTMLElement | null>(null);
-// The highlight is one element. Its left and width follow the chosen button.
-const highlightStyle = variable("");
+  const createButton = variable<HTMLElement | null>(null);
+  const addButton = variable<HTMLElement | null>(null);
+  // The highlight is one element. Its left and width follow the chosen button.
+  const highlightStyle = variable("");
 
-function chosenButton(): HTMLElement | null {
-	return choice.value === "create" ? createButton.value : addButton.value;
-}
+  function chosenButton(): HTMLElement | null {
+    return choice.value === "create" ? createButton.value : addButton.value;
+  }
 
-function placeHighlight() {
-	const button = chosenButton();
-	if (!button) return;
-	highlightStyle.value = `left: ${button.offsetLeft}px; width: ${button.offsetWidth}px`;
-}
+  function placeHighlight() {
+    const button = chosenButton();
+    if (!button) return;
+    highlightStyle.value = `left: ${button.offsetLeft}px; width: ${button.offsetWidth}px`;
+  }
 
-let noticeTimer: ReturnType<typeof setTimeout> | undefined;
+  let noticeTimer: ReturnType<typeof setTimeout> | undefined;
 
-function choose(next: Choice) {
-	if (choice.value === next) return;
-	choice.value = next;
-	// The chosen button turns bold, so measure after the new style is laid out.
-	requestAnimationFrame(placeHighlight);
-}
+  function choose(next: Choice) {
+    if (choice.value === next) return;
+    choice.value = next;
+    // The chosen button turns bold, so measure after the new style is laid out.
+    requestAnimationFrame(placeHighlight);
+  }
 
-// The label text. "" hides it. "Press Ctrl+C" shows when the browser refuses the copy.
-const notice = variable("");
-const copiedShown = variable.compute(() => notice.value === "Copied");
-const noticeShown = variable.compute(() => notice.value !== "");
+  // The label text. "" hides it. "Press Ctrl+C" shows when the browser refuses the copy.
+  const notice = variable("");
+  const copiedShown = variable.compute(() => notice.value === "Copied");
+  const noticeShown = variable.compute(() => notice.value !== "");
 
-const nextFrame = () =>
-	new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  const nextFrame = () =>
+    new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 
-// Clears the notice for one frame first, so a second copy plays the animations again.
-async function showNotice(text: string) {
-	clearTimeout(noticeTimer);
-	notice.value = "";
-	await nextFrame();
-	notice.value = text;
-	noticeTimer = setTimeout(() => (notice.value = ""), noticeShownFor);
-}
+  // Clears the notice for one frame first, so a second copy plays the animations again.
+  async function showNotice(text: string) {
+    clearTimeout(noticeTimer);
+    notice.value = "";
+    await nextFrame();
+    notice.value = text;
+    noticeTimer = setTimeout(() => (notice.value = ""), noticeShownFor);
+  }
 
-// Copies the full command, even while it is still typing out.
-async function copyCommand() {
-	const copiedOk = await copyText(command.value);
-	await showNotice(copiedOk ? "Copied" : "Press Ctrl+C");
-}
+  // Copies the full command, even while it is still typing out.
+  async function copyCommand() {
+    const copiedOk = await copyText(command.value);
+    await showNotice(copiedOk ? "Copied" : "Press Ctrl+C");
+  }
 
-// Fonts can change the button widths after attach, so measure again when they load.
-onAttach(() => {
-	placeHighlight();
-	document.fonts.ready.then(placeHighlight);
-	window.addEventListener("resize", placeHighlight);
-	return () => {
-		window.removeEventListener("resize", placeHighlight);
-		clearTimeout(noticeTimer);
-	};
-});
+  // Fonts can change the button widths after attach, so measure again when they load.
+  onAttach(() => {
+    placeHighlight();
+    document.fonts.ready.then(placeHighlight);
+    window.addEventListener("resize", placeHighlight);
+    return () => {
+      window.removeEventListener("resize", placeHighlight);
+      clearTimeout(noticeTimer);
+    };
+  });
 
-const pillMotion = reduced ? [] : { style: pillLift, when: WHEN.HOVER, duration: 250 };
-const promptHoverMotion = reduced
-	? []
-	: { style: wobbleStyle, when: WHEN.HOVER, duration: 500 };
-// The glyph is mounted only while "Copied" shows, so this wobbles once per copy.
-const promptCopyMotion = reduced
-	? []
-	: { style: wobbleStyle, when: WHEN.ATTACH, duration: 500 };
-const labelMotion = reduced
-	? []
-	: [
-			{
-				style: copiedLabelIn,
-				when: WHEN.ATTACH,
-				more: { animateSpace: false },
-				duration: 200,
-			},
-			{
-				style: copiedLabelOut,
-				when: WHEN.DETACH,
-				more: { animateSpace: false },
-				duration: 150,
-			},
-		];
-const checkMotion = reduced
-	? []
-	: { style: checkPopIn, when: WHEN.ATTACH, duration: 400 };
-const commandMotion = reduced
-	? []
-	: [
-			{ style: commandIn, when: WHEN.ATTACH, duration: 200 },
-			{ style: commandOut, when: WHEN.DETACH, duration: 150 },
-		];
-// No keyframes: the highlight glides when its left or width changes.
-const highlightMotion = reduced
-	? []
-	: { when: WHEN.MOVE_OR_RESIZE, duration: 300 };
+  const pillMotion = reduced
+    ? []
+    : { style: pillLift, when: WHEN.HOVER, duration: 250 };
+  const promptHoverMotion = reduced
+    ? []
+    : { style: wobbleStyle, when: WHEN.HOVER, duration: 500 };
+  // The glyph is mounted only while "Copied" shows, so this wobbles once per copy.
+  const promptCopyMotion = reduced
+    ? []
+    : { style: wobbleStyle, when: WHEN.ATTACH, duration: 500 };
+  const labelMotion = reduced
+    ? []
+    : [
+        {
+          style: copiedLabelIn,
+          when: WHEN.ATTACH,
+          more: { animateSpace: false },
+          duration: 200,
+        },
+        {
+          style: copiedLabelOut,
+          when: WHEN.DETACH,
+          more: { animateSpace: false },
+          duration: 150,
+        },
+      ];
+  const checkMotion = reduced
+    ? []
+    : { style: checkPopIn, when: WHEN.ATTACH, duration: 400 };
+  const commandMotion = reduced
+    ? []
+    : [
+        { style: commandIn, when: WHEN.ATTACH, duration: 200 },
+        { style: commandOut, when: WHEN.DETACH, duration: 150 },
+      ];
+  // No keyframes: the highlight glides when its left or width changes.
+  const highlightMotion = reduced
+    ? []
+    : { when: WHEN.MOVE_OR_RESIZE, duration: 300 };
 </script>
 
 <div class="install-command">
-	<div class="install-pill" animate={pillMotion}>
-		<div class="install-switch" role="group" aria-label="Pick a command">
-			<span
-				class="install-highlight"
-				aria-hidden="true"
-				style={highlightStyle}
-				animate={highlightMotion}
-			></span>
-			<button
-				type="button"
-				class="install-choice"
-				aria-pressed={createPressed}
-				bind-element={createButton}
-				onclick={() => choose("create")}
-			>
-				create
-			</button>
-			<button
-				type="button"
-				class="install-choice"
-				aria-pressed={addPressed}
-				bind-element={addButton}
-				onclick={() => choose("add")}
-			>
-				add
-			</button>
-		</div>
-		<span class="prompt" aria-hidden="true" animate={promptHoverMotion}>
-			<IF {copiedShown.value}>
-				<span class="prompt-glyph" animate={promptCopyMotion}>$</span>
-			</IF>
-			<ELSE>
-				<span class="prompt-glyph">$</span>
-			</ELSE>
-		</span>
-		<code class="install-text">
-			<EACH {commandRows} as={row} key={row.key}>
-				<span class="command-line" animate={commandMotion}>{row.text}</span>
-			</EACH>
-		</code>
-		<div class="install-copy-wrap">
-			<span class="copy-status" aria-live="polite">
-				<IF {noticeShown.value}>
-					<span class="copied-label" animate={labelMotion}>{notice}</span>
-				</IF>
-			</span>
-			<button
-				type="button"
-				class="install-copy"
-				aria-label="Copy the command"
-				onclick={copyCommand}
-			>
-				<IF {copiedShown.value}>
-					<span
-						class="material-symbols-rounded"
-						aria-hidden="true"
-						animate={checkMotion}
-						>check</span
-					>
-				</IF>
-				<ELSE>
-					<span class="material-symbols-rounded" aria-hidden="true"
-						>content_copy</span
-					>
-				</ELSE>
-			</button>
-		</div>
-	</div>
+  <div class="install-pill" animate={pillMotion}>
+    <div class="install-switch" role="group" aria-label="Pick a command">
+      <span
+        class="install-highlight"
+        aria-hidden="true"
+        style={highlightStyle}
+        animate={highlightMotion}
+      ></span>
+      <button
+        type="button"
+        class="install-choice"
+        aria-pressed={createPressed}
+        bind-element={createButton}
+        onclick={() => choose("create")}
+      >
+        create
+      </button>
+      <button
+        type="button"
+        class="install-choice"
+        aria-pressed={addPressed}
+        bind-element={addButton}
+        onclick={() => choose("add")}
+      >
+        add
+      </button>
+    </div>
+    <span class="prompt" aria-hidden="true" animate={promptHoverMotion}>
+      <IF {copiedShown.value}>
+        <span class="prompt-glyph" animate={promptCopyMotion}>$</span>
+      </IF>
+      <ELSE>
+        <span class="prompt-glyph">$</span>
+      </ELSE>
+    </span>
+    <code class="install-text">
+      <EACH {commandRows} as={row} key={row.key}>
+        <span class="command-line" animate={commandMotion}>{row.text}</span>
+      </EACH>
+    </code>
+    <div class="install-copy-wrap">
+      <span class="copy-status" aria-live="polite">
+        <IF {noticeShown.value}>
+          <span class="copied-label" animate={labelMotion}>{notice}</span>
+        </IF>
+      </span>
+      <button
+        type="button"
+        class="install-copy"
+        aria-label="Copy the command"
+        onclick={copyCommand}
+      >
+        <IF {copiedShown.value}>
+          <span
+            class="material-symbols-rounded"
+            aria-hidden="true"
+            animate={checkMotion}
+            >check</span
+          >
+        </IF>
+        <ELSE>
+          <span class="material-symbols-rounded" aria-hidden="true"
+            >content_copy</span
+          >
+        </ELSE>
+      </button>
+    </div>
+  </div>
 </div>
 
 <style scoped>
-@use "../styles/theme" as *;
+  @use "../styles/theme" as *;
 
-.install-command {
-	display: grid;
-	justify-items: center;
-	gap: 0.3rem;
-}
+  .install-command {
+    display: grid;
+    justify-items: center;
+    gap: 0.3rem;
+  }
 
-.install-pill {
-	display: flex;
-	align-items: center;
-	gap: 0.75rem;
-	max-width: 100%;
-	padding: 0.4rem 0.6rem 0.4rem 0.4rem;
-	border: 2px solid var(--lavender);
-	border-radius: 20px;
-	background: var(--card);
-	box-shadow: var(--shadow);
-	font-family: $font-mono;
-	font-size: 0.95rem;
-	text-align: left;
-	transition: box-shadow 250ms ease;
+  .install-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 100%;
+    padding: 0.4rem 0.6rem 0.4rem 0.4rem;
+    border: 2px solid var(--lavender);
+    border-radius: 20px;
+    background: var(--card);
+    box-shadow: var(--shadow);
+    font-family: $font-mono;
+    font-size: 0.95rem;
+    text-align: left;
+    transition: box-shadow 250ms ease;
 
-	&:hover {
-		box-shadow: 0 10px 24px rgba(58, 46, 74, 0.16);
-	}
-}
+    &:hover {
+      box-shadow: 0 10px 24px rgba(58, 46, 74, 0.16);
+    }
+  }
 
-.install-switch {
-	position: relative;
-	display: inline-flex;
-	gap: 2px;
-	padding: 2px;
-	border-radius: 999px;
-	background: var(--lavender-soft);
-}
+  .install-switch {
+    position: relative;
+    display: inline-flex;
+    gap: 2px;
+    padding: 2px;
+    border-radius: 999px;
+    background: var(--lavender-soft);
+  }
 
-// Sits under the buttons. Its left and width are set in the script.
-.install-highlight {
-	position: absolute;
-	top: 2px;
-	bottom: 2px;
-	border-radius: 999px;
-	background: var(--lavender);
-	pointer-events: none;
-}
+  // Sits under the buttons. Its left and width are set in the script.
+  .install-highlight {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    border-radius: 999px;
+    background: var(--lavender);
+    pointer-events: none;
+  }
 
-.install-choice {
-	position: relative;
-	padding: 0.2rem 0.65rem;
-	border: 0;
-	border-radius: 999px;
-	background: transparent;
-	color: var(--muted);
-	font: inherit;
-	font-size: 0.8rem;
-	font-weight: 700;
-	cursor: pointer;
-	transition: color 300ms ease;
+  .install-choice {
+    position: relative;
+    padding: 0.2rem 0.65rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 300ms ease;
 
-	&[aria-pressed="true"] {
-		color: #3a2e4a;
-	}
+    &[aria-pressed="true"] {
+      color: #3a2e4a;
+    }
 
-	@media (prefers-reduced-motion: reduce) {
-		transition: none;
-	}
-}
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
 
-.prompt,
-.prompt-glyph {
-	display: inline-block;
-}
+  .prompt,
+  .prompt-glyph {
+    display: inline-block;
+  }
 
-.prompt {
-	color: var(--ai);
-	font-weight: 700;
-	user-select: none;
-}
+  .prompt {
+    color: var(--ai);
+    font-weight: 700;
+    user-select: none;
+  }
 
-// The global code style adds padding. content-box keeps min-width to the text alone.
-// Rows share one grid cell, so a leaving row and its new one overlap while animating.
-.install-text {
-	display: inline-grid;
-	box-sizing: content-box;
-	min-width: calc(25ch + 4px);
-	color: var(--fg);
-}
+  // The global code style adds padding. content-box keeps min-width to the text alone.
+  // Rows share one grid cell, so a leaving row and its new one overlap while animating.
+  .install-text {
+    display: inline-grid;
+    box-sizing: content-box;
+    min-width: calc(25ch + 4px);
+    color: var(--fg);
+  }
 
-.command-line {
-	grid-area: 1 / 1;
-	white-space: pre;
-}
+  .command-line {
+    grid-area: 1 / 1;
+    white-space: pre;
+  }
 
-.install-copy-wrap {
-	position: relative;
-	display: grid;
-}
+  .install-copy-wrap {
+    position: relative;
+    display: grid;
+  }
 
-.install-copy {
-	display: grid;
-	place-items: center;
-	width: 2.1rem;
-	height: 2.1rem;
-	padding: 0;
-	border: 2px solid transparent;
-	border-radius: 999px;
-	background: transparent;
-	color: var(--fg);
-	cursor: pointer;
+  .install-copy {
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--fg);
+    cursor: pointer;
 
-	&:hover {
-		border-color: var(--lavender);
-	}
+    &:hover {
+      border-color: var(--lavender);
+    }
 
-	.material-symbols-rounded {
-		font-size: 1.1rem;
-	}
-}
+    .material-symbols-rounded {
+      font-size: 1.1rem;
+    }
+  }
 
-.install-choice:focus-visible,
-.install-copy:focus-visible {
-	outline: 2px solid var(--accent);
-	outline-offset: 2px;
-}
+  .install-choice:focus-visible,
+  .install-copy:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
 
-.copied-label {
-	position: absolute;
-	bottom: calc(100% + 0.4rem);
-	left: 50%;
-	padding: 0.15rem 0.55rem;
-	border-radius: 999px;
-	background: var(--lemon);
-	box-shadow: var(--shadow);
-	color: #3a2e4a;
-	font-family: inherit;
-	font-size: 0.75rem;
-	font-weight: 700;
-	white-space: nowrap;
-	pointer-events: none;
-	transform: translateX(-50%);
-}
+  .copied-label {
+    position: absolute;
+    bottom: calc(100% + 0.4rem);
+    left: 50%;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    background: var(--lemon);
+    box-shadow: var(--shadow);
+    color: #3a2e4a;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
 
-@media (max-width: 559px) {
-	.install-pill {
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 0.5rem;
-		font-size: 0.8rem;
-	}
+  @media (max-width: 559px) {
+    .install-pill {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
 
-	.install-switch {
-		order: 1;
-		flex: 0 0 100%;
-		justify-content: center;
-		background: transparent;
-	}
-}
+    .install-switch {
+      order: 1;
+      flex: 0 0 100%;
+      justify-content: center;
+      background: transparent;
+    }
+  }
 </style>

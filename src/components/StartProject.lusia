@@ -1,51 +1,52 @@
 <script>
-import configSource from "../config-files/start-project.config.ts?raw";
-import CodeBlock from "./CodeBlock.lusia";
-import CodeCopy from "./CodeCopy.lusia";
-import DocTable from "./DocTable.lusia";
-import Note from "./Note.lusia";
+  import configSource from "../config-files/start-project.config.ts?raw";
+  import CodeBlock from "./CodeBlock.lusia";
+  import CodeCopy from "./CodeCopy.lusia";
+  import DocTable from "./DocTable.lusia";
+  import Note from "./Note.lusia";
 
-const createCommands = "bun create lusiajs my-app\ncd my-app\nbun install\nbun run dev";
-const addCommands = "bun add lusiajs\nbunx lusiajs dev .\nbunx lusiajs build .";
+  const createCommands =
+    "bun create lusiajs my-app\ncd my-app\nbun install\nbun run dev";
+  const addCommands = "bun add lusiajs\nbunx lusiajs dev .\nbunx lusiajs build .";
 
-const starterHead = ["File", "What it does"];
-const starterRows = [
-	["package.json", "Lists the lusiajs package and the dev and build scripts."],
-	["lusia.config.ts", "Sets the build options with defineConfig."],
-	["index.html", "The page the browser opens. It loads src/main.ts."],
-	["tsconfig.json", "TypeScript settings for the project."],
-	["src/main.ts", "Attaches App to the page."],
-	["src/App.lusia", "A counter. The count is a variable()."],
-];
+  const starterHead = ["File", "What it does"];
+  const starterRows = [
+    ["package.json", "Lists the lusiajs package and the dev and build scripts."],
+    ["lusia.config.ts", "Sets the build options with defineConfig."],
+    ["index.html", "The page the browser opens. It loads src/main.ts."],
+    ["tsconfig.json", "TypeScript settings for the project."],
+    ["src/main.ts", "Attaches App to the page."],
+    ["src/App.lusia", "A counter. The count is a variable()."],
+  ];
 </script>
 
 <div class="start-project">
-	<h3>Create an app</h3>
-	<CodeCopy text={createCommands} copy={createCommands} language="none" />
-	<p>Then open http://localhost:3000.</p>
+  <h3>Create an app</h3>
+  <CodeCopy text={createCommands} copy={createCommands} language="none" />
+  <p>Then open http://localhost:3000.</p>
 
-	<h3>The starter files</h3>
-	<DocTable head={starterHead} rows={starterRows} />
+  <h3>The starter files</h3>
+  <DocTable head={starterHead} rows={starterRows} />
 
-	<h3>Add Lusia to an existing project</h3>
-	<CodeCopy text={addCommands} copy={addCommands} language="none" />
-	<p>Put this file at the project root. It sets the build options.</p>
-	<CodeBlock text={configSource} language="typescript" />
+  <h3>Add Lusia to an existing project</h3>
+  <CodeCopy text={addCommands} copy={addCommands} language="none" />
+  <p>Put this file at the project root. It sets the build options.</p>
+  <CodeBlock text={configSource} language="typescript" />
 
-	<Note text="Lusia is in beta. APIs may change before the first release." />
+  <Note text="Lusia is in beta. APIs may change before the first release." />
 </div>
 
 <style>
-.start-project {
-	color: var(--fg);
+  .start-project {
+    color: var(--fg);
 
-	h3 {
-		margin: 1.5rem 0 0.5rem;
-		font-size: 1.1rem;
-	}
+    h3 {
+      margin: 1.5rem 0 0.5rem;
+      font-size: 1.1rem;
+    }
 
-	p {
-		margin: 0 0 1rem;
-	}
-}
+    p {
+      margin: 0 0 1rem;
+    }
+  }
 </style>

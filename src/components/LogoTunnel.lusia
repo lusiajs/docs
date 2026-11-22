@@ -1,124 +1,124 @@
 <script>
-import { props } from "lusiajs";
-import { scrollBetween } from "../motion/home-scroll.ts";
+  import { props } from "lusiajs";
+  import { scrollBetween } from "../motion/home-scroll.ts";
 
-const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const { follow } = props({ follow: null as HTMLElement | null });
+  const { follow } = props({ follow: null as HTMLElement | null });
 
-const copyCount = 12;
-const biggestVmin = 160;
-const shrink = 0.8;
-const firstOpacity = 0.22;
-const lastOpacity = 0.03;
-const scrollShiftVh = 100;
+  const copyCount = 12;
+  const biggestVmin = 160;
+  const shrink = 0.8;
+  const firstOpacity = 0.22;
+  const lastOpacity = 0.03;
+  const scrollShiftVh = 100;
 
-// The outline images use a 108 by 112 box. Sizes below scale the same 128 grid as before.
-const imageWidthShare = 108 / 128;
-const imageHeightShare = 112 / 128;
+  // The outline images use a 108 by 112 box. Sizes below scale the same 128 grid as before.
+  const imageWidthShare = 108 / 128;
+  const imageHeightShare = 112 / 128;
 
-// Copy 0 is the biggest. Each next copy is smaller by `shrink`.
-function copySize(index: number) {
-	return biggestVmin * shrink ** index;
-}
+  // Copy 0 is the biggest. Each next copy is smaller by `shrink`.
+  function copySize(index: number) {
+    return biggestVmin * shrink ** index;
+  }
 
-// The opacity falls in equal steps from the first copy to the last.
-function copyOpacity(index: number) {
-	const share = index / (copyCount - 1);
-	return firstOpacity + (lastOpacity - firstOpacity) * share;
-}
+  // The opacity falls in equal steps from the first copy to the last.
+  function copyOpacity(index: number) {
+    const share = index / (copyCount - 1);
+    return firstOpacity + (lastOpacity - firstOpacity) * share;
+  }
 
-function copyCss(index: number) {
-	const size = copySize(index);
-	const width = size * imageWidthShare;
-	const height = size * imageHeightShare;
-	return [
-		`width: ${width}vmin`,
-		`height: ${height}vmin`,
-		`margin: ${-height / 2}vmin 0 0 ${-width / 2}vmin`,
-		`opacity: ${copyOpacity(index)}`,
-	].join("; ");
-}
+  function copyCss(index: number) {
+    const size = copySize(index);
+    const width = size * imageWidthShare;
+    const height = size * imageHeightShare;
+    return [
+      `width: ${width}vmin`,
+      `height: ${height}vmin`,
+      `margin: ${-height / 2}vmin 0 0 ${-width / 2}vmin`,
+      `opacity: ${copyOpacity(index)}`,
+    ].join("; ");
+  }
 
-// The biggest copy moves slowest, the smallest fastest, and each grows a little.
-function copyParallax(index: number) {
-	if (reduced) return [];
-	const shiftFactor = 0.04 + index * 0.03;
-	const to = {
-		translate: `0 -${shiftFactor * scrollShiftVh}vh`,
-		scale: "1.06",
-	};
-	return scrollBetween(follow, { translate: "0 0", scale: "1" }, to);
-}
+  // The biggest copy moves slowest, the smallest fastest, and each grows a little.
+  function copyParallax(index: number) {
+    if (reduced) return [];
+    const shiftFactor = 0.04 + index * 0.03;
+    const to = {
+      translate: `0 -${shiftFactor * scrollShiftVh}vh`,
+      scale: "1.06",
+    };
+    return scrollBetween(follow, { translate: "0 0", scale: "1" }, to);
+  }
 
-// Each stroke bucket shares one outline file, so thin lines stay visible.
-const copiesPerStroke = 3;
+  // Each stroke bucket shares one outline file, so thin lines stay visible.
+  const copiesPerStroke = 3;
 
-function outlineSource(theme: string, index: number) {
-	const bucket = Math.floor(index / copiesPerStroke) + 1;
-	return `/logo-outline-${theme}-${bucket}.svg`;
-}
+  function outlineSource(theme: string, index: number) {
+    const bucket = Math.floor(index / copiesPerStroke) + 1;
+    return `/logo-outline-${theme}-${bucket}.svg`;
+  }
 
-const copies = Array.from({ length: copyCount }, (_, index) => ({
-	id: index,
-	css: copyCss(index),
-	motion: copyParallax(index),
-	lightSrc: outlineSource("light", index),
-	darkSrc: outlineSource("dark", index),
-}));
+  const copies = Array.from({ length: copyCount }, (_, index) => ({
+    id: index,
+    css: copyCss(index),
+    motion: copyParallax(index),
+    lightSrc: outlineSource("light", index),
+    darkSrc: outlineSource("dark", index),
+  }));
 </script>
 
 <div class="logo-tunnel" aria-hidden="true">
-	<EACH {copies} as="{copy}">
-		<span class="tunnel-copy" style={copy.css} animate={copy.motion}>
-			<img
-				class="tunnel-image tunnel-image-light"
-				src={copy.lightSrc}
-				alt=""
-				decoding="async"
-			/>
-			<img
-				class="tunnel-image tunnel-image-dark"
-				src={copy.darkSrc}
-				alt=""
-				decoding="async"
-			/>
-		</span>
-	</EACH>
+  <EACH {copies} as="{copy}">
+    <span class="tunnel-copy" style={copy.css} animate={copy.motion}>
+      <img
+        class="tunnel-image tunnel-image-light"
+        src={copy.lightSrc}
+        alt=""
+        decoding="async"
+      />
+      <img
+        class="tunnel-image tunnel-image-dark"
+        src={copy.darkSrc}
+        alt=""
+        decoding="async"
+      />
+    </span>
+  </EACH>
 </div>
 
 <style>
-.logo-tunnel {
-	position: absolute;
-	top: 0;
-	right: 0;
-	left: 0;
-	height: 100svh;
-}
+  .logo-tunnel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 100svh;
+  }
 
-.tunnel-copy {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	pointer-events: none;
-	will-change: translate, scale;
-}
+  .tunnel-copy {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    pointer-events: none;
+    will-change: translate, scale;
+  }
 
-.tunnel-image {
-	display: block;
-	width: 100%;
-	height: 100%;
-}
+  .tunnel-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
 
-.tunnel-image-dark {
-	display: none;
-}
+  .tunnel-image-dark {
+    display: none;
+  }
 
-:root[data-theme="dark"] .tunnel-image-light {
-	display: none;
-}
+  :root[data-theme="dark"] .tunnel-image-light {
+    display: none;
+  }
 
-:root[data-theme="dark"] .tunnel-image-dark {
-	display: block;
-}
+  :root[data-theme="dark"] .tunnel-image-dark {
+    display: block;
+  }
 </style>

@@ -1,12 +1,12 @@
 <script>
-import { props } from "lusiajs";
-import type { Part } from "../search/fuzzy.ts";
+  import { props } from "lusiajs";
+  import type { Part } from "../search/fuzzy.ts";
 
-const noParts: Part[] = [];
-const { parts } = props({ parts: noParts });
+  const noParts: Part[] = [];
+  const { parts } = props({ parts: noParts });
 </script>
 
 <EACH {parts} as={p}>
-	<IF {p.hit}><mark>{p.text}</mark></IF>
-	<ELSE>{p.text}</ELSE>
+  <IF {p.hit}><mark>{p.text}</mark></IF>
+  <ELSE>{p.text}</ELSE>
 </EACH>

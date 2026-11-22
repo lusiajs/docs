@@ -1,20 +1,20 @@
 <script>
-import { variable } from "lusiajs";
-import { theme, toggleTheme } from "../theme.ts";
+  import { variable } from "lusiajs";
+  import { theme, toggleTheme } from "../theme.ts";
 
-const icon = variable.compute(() =>
-	theme.value === "light" ? "dark_mode" : "light_mode",
-);
-const label = variable.compute(() =>
-	theme.value === "light" ? "Switch to dark theme" : "Switch to light theme",
-);
+  const icon = variable.compute(() =>
+    theme.value === "light" ? "dark_mode" : "light_mode",
+  );
+  const label = variable.compute(() =>
+    theme.value === "light" ? "Switch to dark theme" : "Switch to light theme",
+  );
 </script>
 
 <button
-	class="icon-button toggle"
-	type="button"
-	aria-label={label}
-	onclick={toggleTheme}
+  class="icon-button toggle"
+  type="button"
+  aria-label={label}
+  onclick={toggleTheme}
 >
-	<span class="material-symbols-rounded">{icon}</span>
+  <span class="material-symbols-rounded">{icon}</span>
 </button>
