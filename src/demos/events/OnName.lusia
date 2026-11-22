@@ -1,0 +1,35 @@
+<script>
+  import { variable, type ViewEvent } from "lusiajs";
+
+  const clicks = variable(0);
+  const seen = variable("Not seen");
+
+  function countClick() {
+    clicks.value++;
+  }
+
+  function showView(event: ViewEvent) {
+    seen.value = event.in ? "Seen" : "Not seen";
+  }
+</script>
+
+<div class="on-name-demo">
+  <button on:click={countClick} type="button">Clicked {clicks} times</button>
+  <section on:view={showView}>
+    <p>{seen}</p>
+  </section>
+</div>
+
+<style scoped>
+  .on-name-demo {
+    display: grid;
+    justify-items: start;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+      font-weight: 700;
+    }
+  }
+</style>

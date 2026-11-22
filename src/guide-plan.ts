@@ -51,7 +51,17 @@ export const guidePlan: GuideGroup[] = [
     intro: "Run code on clicks and key presses. Keep inputs in step with variables.",
     icon: "ads_click",
     color: "var(--rose)",
-    entries: ["events-overview", "event", "bind-value", "bind-prop", "bind-element"],
+    entries: [
+      "events-overview",
+      "event",
+      "on-name",
+      "bind-value",
+      "bind-prop",
+      "bind-element",
+      "listen",
+      "event-value",
+      "keep-running",
+    ],
   },
   {
     group: "flow",

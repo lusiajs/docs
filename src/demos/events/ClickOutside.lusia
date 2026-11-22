@@ -1,0 +1,48 @@
+<script>
+  import { variable } from "lusiajs";
+
+  const open = variable(false);
+
+  function toggle() {
+    open.value = !open.value;
+  }
+
+  function close() {
+    open.value = false;
+  }
+</script>
+
+<div class="menu-demo" on:click-outside={close}>
+  <button onclick={toggle} type="button">Menu</button>
+  <IF {open}>
+    <ul>
+      <li>Profile</li>
+      <li>Settings</li>
+      <li>Log out</li>
+    </ul>
+  </IF>
+</div>
+
+<style scoped>
+  .menu-demo {
+    position: relative;
+    color: var(--fg);
+
+    ul {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 1;
+      margin: 0.3rem 0 0;
+      padding: 0.4rem 0;
+      min-width: 10rem;
+      list-style: none;
+      border-radius: 10px;
+      background: var(--lavender-soft);
+    }
+
+    li {
+      padding: 0.4rem 1rem;
+    }
+  }
+</style>

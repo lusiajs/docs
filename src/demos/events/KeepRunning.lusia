@@ -1,0 +1,41 @@
+<script>
+  import { EVENT, keepRunning, listen, onAttach, variable } from "lusiajs";
+
+  const views = variable(0);
+  const watching = variable(true);
+  let stopWatching = () => {};
+
+  onAttach((root) => {
+    const section = root.querySelector("section")!;
+    keepRunning(() => {
+      stopWatching = listen(section, EVENT.VIEW, ({ in: visible }) => {
+        if (visible) views.value++;
+      });
+    });
+  });
+
+  function stop() {
+    stopWatching();
+    watching.value = false;
+  }
+</script>
+
+<div class="keep-demo">
+  <section>Counted {views} times</section>
+  <button onclick={stop} type="button" disabled={!watching.value}>
+    Stop watching
+  </button>
+</div>
+
+<style scoped>
+  .keep-demo {
+    display: grid;
+    justify-items: start;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    section {
+      font-weight: 700;
+    }
+  }
+</style>

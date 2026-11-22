@@ -33,6 +33,14 @@ import Compute from "./demos/reactivity/Compute.lusia";
 import computeSource from "./demos/reactivity/Compute.lusia?raw";
 import BindProp from "./demos/events/BindProp.lusia";
 import bindPropSource from "./demos/events/BindProp.lusia?raw";
+import OnName from "./demos/events/OnName.lusia";
+import onNameSource from "./demos/events/OnName.lusia?raw";
+import Listen from "./demos/events/Listen.lusia";
+import listenSource from "./demos/events/Listen.lusia?raw";
+import ClickOutside from "./demos/events/ClickOutside.lusia";
+import clickOutsideSource from "./demos/events/ClickOutside.lusia?raw";
+import KeepRunning from "./demos/events/KeepRunning.lusia";
+import keepRunningSource from "./demos/events/KeepRunning.lusia?raw";
 import ElseifDemo from "./demos/flow/ElseifDemo.lusia";
 import elseifDemoSource from "./demos/flow/ElseifDemo.lusia?raw";
 import ElseDemo from "./demos/flow/ElseDemo.lusia";
@@ -1579,6 +1587,65 @@ export const catalog: Record<string, CatalogEntry> = {
         caption: "ELSE shows when the IF condition is false. Toggle the button to switch between the two.",
         components: [ElseDemo],
         sources: [{ path: "src/demos/flow/ElseDemo.lusia", text: elseDemoSource }],
+      },
+    ],
+  },
+  "on-name": {
+    icon: "touch_app",
+    table: {
+      head: ["Form", "Runs on", "What it does"],
+      rows: [
+        ["onclick={fn}", "DOM event only", "Runs on the DOM click event."],
+        ["on:click={fn}", "DOM event", "The same click as onclick."],
+        ["on:view={fn}", "EVENT.VIEW", "Runs when the element enters or leaves the screen."],
+        ["on:scroll={fn}", "EVENT.SCROLL", "Runs with progress from 0 to 1. onscroll is the DOM scroll event."],
+        ["on:size={fn}", "EVENT.SIZE", "Runs when the element changes size."],
+        ["on:click-outside={fn}", "EVENT.CLICK_OUTSIDE", "Runs on a press outside the element, or Escape."],
+      ],
+    },
+    demos: [
+      {
+        id: "on-name-view",
+        title: "Click and view",
+        caption: "on:click counts clicks. on:view sets the text when the box enters or leaves the screen. Scroll the page to see it change.",
+        components: [OnName],
+        sources: [{ path: "src/demos/events/OnName.lusia", text: onNameSource }],
+      },
+    ],
+  },
+  listen: {
+    icon: "hearing",
+    demos: [
+      {
+        id: "listen-card",
+        title: "Listen in a component",
+        caption: "listen() watches a DOM click and the EVENT.VIEW event on the card. Both stop when the component detaches.",
+        components: [Listen],
+        sources: [{ path: "src/demos/events/Listen.lusia", text: listenSource }],
+      },
+    ],
+  },
+  "event-value": {
+    icon: "event",
+    demos: [
+      {
+        id: "click-outside-menu",
+        title: "Menu closes on an outside click",
+        caption: "Press Menu to open it. A press outside the menu, or Escape, closes it.",
+        components: [ClickOutside],
+        sources: [{ path: "src/demos/events/ClickOutside.lusia", text: clickOutsideSource }],
+      },
+    ],
+  },
+  "keep-running": {
+    icon: "sync",
+    demos: [
+      {
+        id: "keep-running-count",
+        title: "Listener that keeps running",
+        caption: "keepRunning() keeps the listener alive after the component detaches. Stop watching ends it.",
+        components: [KeepRunning],
+        sources: [{ path: "src/demos/events/KeepRunning.lusia", text: keepRunningSource }],
       },
     ],
   },

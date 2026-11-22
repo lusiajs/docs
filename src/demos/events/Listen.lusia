@@ -1,0 +1,37 @@
+<script>
+  import { EVENT, listen, onAttach, variable } from "lusiajs";
+
+  const message = variable("Click the card");
+  const inView = variable("No");
+
+  onAttach((root) => {
+    const card = root.querySelector("article")!;
+    listen(card, "click", () => {
+      message.value = "Card clicked";
+    });
+    listen(card, EVENT.VIEW, ({ in: visible }) => {
+      inView.value = visible ? "Yes" : "No";
+    });
+  });
+</script>
+
+<article class="listen-demo">
+  <p>{message}</p>
+  <p>In view: {inView}</p>
+</article>
+
+<style scoped>
+  .listen-demo {
+    display: grid;
+    justify-items: start;
+    gap: 0.4rem;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    background: var(--lavender-soft);
+    color: var(--fg);
+
+    p {
+      margin: 0;
+    }
+  }
+</style>
