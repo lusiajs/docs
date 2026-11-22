@@ -49,8 +49,8 @@ describe("scroll-readout progressOf", () => {
 
   test("ENTER to LEAVE is 0 at the bottom edge and 1 past the top", () => {
     Object.defineProperty(window, "innerHeight", { value: 1000, configurable: true });
-    const enter = { element: 0, window: 1 };
-    const leave = { element: 1, window: 0 };
+    const enter: [number, number] = [0, 1];
+    const leave: [number, number] = [1, 0];
     expect(progressOf(box(1000, 100), enter, leave)).toBe(0);
     expect(progressOf(box(450, 100), enter, leave)).toBeCloseTo(0.5);
     expect(progressOf(box(-100, 100), enter, leave)).toBe(1);
