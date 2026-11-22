@@ -1,0 +1,66 @@
+<script>
+  import { SCREEN } from "lusiajs";
+</script>
+
+<div class="sizes-demo">
+  <div class="tile markup-tile">
+    <p>SCREEN in markup</p>
+    <IF {SCREEN.PHONE}>
+      <span>Phone</span>
+    <ELSE>
+      <span>Wider</span>
+    </IF>
+  </div>
+
+  <div class="tile if-tile">
+    <p>style in IF</p>
+    <IF {SCREEN.PHONE}>
+      <style>
+        .if-tile {
+          padding: 8px;
+        }
+      </style>
+    <ELSE>
+      <style>
+        .if-tile {
+          padding: 24px;
+        }
+      </style>
+    </IF>
+  </div>
+
+  <div class="tile mixin-tile">
+    <p>screen() mixin</p>
+  </div>
+</div>
+
+<style scoped>
+  .sizes-demo {
+    display: grid;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+      font-weight: 700;
+    }
+
+    span {
+      color: var(--muted);
+    }
+  }
+
+  .tile {
+    display: grid;
+    gap: 0.3rem;
+    padding: 24px;
+    border-radius: 12px;
+    background: var(--lavender-soft);
+  }
+
+  @include screen(PHONE) {
+    .mixin-tile {
+      padding: 8px;
+    }
+  }
+</style>

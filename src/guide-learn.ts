@@ -48,6 +48,7 @@ const learnLines: Record<string, string> = {
   scoped: "How tree-mode rules switch back to scoped mode.",
   global: "How to make style rules apply to the whole page.",
   "inline-global": "How to make one part of a selector global.",
+  "screen-sizes": "How to change the look at each window size, and set your own sizes.",
   animate: "How to animate an element when it appears, leaves or is changed.",
   "animate-item": "How to write one animation, with its own trigger and timing.",
   when: "How to choose the moment an animation plays.",

@@ -61,6 +61,8 @@ import GlobalBlock from "./demos/styling/GlobalBlock.lusia";
 import globalBlockSource from "./demos/styling/GlobalBlock.lusia?raw";
 import InlineGlobal from "./demos/styling/InlineGlobal.lusia";
 import inlineGlobalSource from "./demos/styling/InlineGlobal.lusia?raw";
+import ScreenSizes from "./demos/styling/ScreenSizes.lusia";
+import screenSizesSource from "./demos/styling/ScreenSizes.lusia?raw";
 import SetAnimateDefault from "./demos/motion/SetAnimateDefault.lusia";
 import setAnimateDefaultSource from "./demos/motion/SetAnimateDefault.lusia?raw";
 import HoverArea from "./demos/motion/HoverArea.lusia";
@@ -246,6 +248,12 @@ const domFlowSources: SourceFile[] = [
   { path: "src/components/guide/DomFlow.lusia", text: domFlowSource },
   { path: "src/components/guide/DomNode.lusia", text: domNodeSource },
 ];
+
+const screensConfigSource = `import { defineConfig } from "lusiajs/config";
+
+export default defineConfig({
+  screens: { PHONE: 0, TABLET: 700, DESKTOP: 1200 },
+});`;
 
 // Keyed by the api entry id. Entries without a demo show no live card.
 export const catalog: Record<string, CatalogEntry> = {
@@ -1565,6 +1573,19 @@ export const catalog: Record<string, CatalogEntry> = {
         sources: [{ path: "src/demos/styling/InlineGlobal.lusia", text: inlineGlobalSource }],
       },
     ],
+  },
+  "screen-sizes": {
+    icon: "devices",
+    demos: [
+      {
+        id: "screen-sizes-tiles",
+        title: "Three ways",
+        caption: "Resize the window. Each tile changes at the PHONE size, using SCREEN in markup, a style in an IF, or the screen() mixin.",
+        components: [ScreenSizes],
+        sources: [{ path: "src/demos/styling/ScreenSizes.lusia", text: screenSizesSource }],
+      },
+    ],
+    files: [{ path: "lusia.config.ts", text: screensConfigSource }],
   },
   elseif: {
     icon: "call_split",

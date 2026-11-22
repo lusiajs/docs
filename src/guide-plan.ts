@@ -102,7 +102,16 @@ export const guidePlan: GuideGroup[] = [
     intro: "Each component has its own CSS. Scoped, tree and global rules control where it applies.",
     icon: "palette",
     color: "var(--sky)",
-    entries: ["styling-overview", "style", "style-scoped", "style-global", "scoped", "global", "inline-global"],
+    entries: [
+      "styling-overview",
+      "style",
+      "style-scoped",
+      "style-global",
+      "scoped",
+      "global",
+      "inline-global",
+      "screen-sizes",
+    ],
   },
   {
     group: "motion",

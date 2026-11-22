@@ -135,6 +135,49 @@ export const guidePages: ApiEntry[] = [
 		],
 	},
 	{
+		id: "screen-sizes",
+		name: "Screen sizes",
+		kind: "markup",
+		group: "styling",
+		signature: "SCREEN.PHONE  |  @include screen(PHONE)",
+		summary: "Change the look for each window size. Use SCREEN in markup, or the screen() mixin in a style.",
+		bullets: [
+			"Three sizes come by default: PHONE, TABLET and DESKTOP. Each one starts at a width in px.",
+			"SCREEN.PHONE is on while the window is in the PHONE size. Use it in <IF>.",
+			"A <style> inside an <IF> applies only in that branch.",
+			"@include screen(PHONE) wraps rules in the style of that size. Use it for plain rules.",
+			"Set your own sizes with screens in lusia.config. Names are UPPER_SNAKE_CASE.",
+			"lusia dev and lusia build write .lusia/screens.d.ts, so SCREEN knows your names. Add .lusia to tsconfig include.",
+		],
+		example: `<IF {SCREEN.PHONE}>
+  <p>Phone</p>
+<ELSE>
+  <p>Wider</p>
+</IF>
+
+<IF {SCREEN.PHONE}>
+  <style>
+    .card {
+      padding: 8px;
+    }
+  </style>
+<ELSE>
+  <style>
+    .card {
+      padding: 24px;
+    }
+  </style>
+</IF>
+
+<style>
+  @include screen(PHONE) {
+    .card {
+      padding: 8px;
+    }
+  }
+</style>`,
+	},
+	{
 		id: "motion-overview",
 		name: "Motion in the DOM",
 		kind: "markup",
