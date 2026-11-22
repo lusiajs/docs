@@ -36,11 +36,9 @@ const APP = `<script>
           <button type="button" onclick={() => finish(task)}>Done</button>
         </li>
       </EACH>
-    </ul>
-  </IF>
   <ELSE>
     <p class="empty">Nothing to do. Add a task above.</p>
-  </ELSE>
+  </IF>
 </main>
 
 <style>
