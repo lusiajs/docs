@@ -22,16 +22,32 @@
 
 <div class="start-project">
   <h3>Create an app</h3>
-  <CodeCopy text={createCommands} copy={createCommands} language="none" />
+  <CodeCopy
+    text={createCommands}
+    copy={createCommands}
+    language="none"
+    className="ref-code"
+  />
   <p>Then open http://localhost:3000.</p>
 
   <h3>The starter files</h3>
   <DocTable head={starterHead} rows={starterRows} />
 
   <h3>Add Lusia to an existing project</h3>
-  <CodeCopy text={addCommands} copy={addCommands} language="none" />
+  <CodeCopy
+    text={addCommands}
+    copy={addCommands}
+    language="none"
+    className="ref-code"
+  />
   <p>Put this file at the project root. It sets the build options.</p>
-  <CodeBlock text={configSource} language="typescript" />
+  <div class="code-copy">
+    <CodeBlock
+      text={configSource}
+      language="typescript"
+      className="ref-code"
+    />
+  </div>
 
   <Note text="Lusia is in beta. APIs may change before the first release." />
 </div>
@@ -45,8 +61,9 @@
       font-size: 1.1rem;
     }
 
-    p {
-      margin: 0 0 1rem;
+    p,
+    .code-copy {
+      margin: 1rem 0;
     }
   }
 </style>
