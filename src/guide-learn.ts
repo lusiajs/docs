@@ -56,7 +56,7 @@ const learnLines: Record<string, string> = {
   ease: "How to change the speed curve of an animation.",
   interpolate: "How to blend two values with the animation engine.",
   layout: "How to glide an element when its place or size changes.",
-  "set-animate-default": "How to change the engine default for every animation.",
+  "set-config": "How to change animation settings for a component or the whole app.",
   controller: "How to play an animation by hand, from code.",
   midway: "How to choose what happens when a new play starts during a run.",
   turn: "How a play changes direction when it is turned around.",

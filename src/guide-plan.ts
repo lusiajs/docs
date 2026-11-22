@@ -128,7 +128,7 @@ export const guidePlan: GuideGroup[] = [
       {
         id: "timing",
         label: "Timing and easing",
-        entries: ["ease", "preset", "set-animate-default", "keyframes-type", "animate-item"],
+        entries: ["ease", "preset", "set-config","keyframes-type", "animate-item"],
       },
       {
         id: "configuration",

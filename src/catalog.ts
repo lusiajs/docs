@@ -63,8 +63,8 @@ import InlineGlobal from "./demos/styling/InlineGlobal.lusia";
 import inlineGlobalSource from "./demos/styling/InlineGlobal.lusia?raw";
 import ScreenSizes from "./demos/styling/ScreenSizes.lusia";
 import screenSizesSource from "./demos/styling/ScreenSizes.lusia?raw";
-import SetAnimateDefault from "./demos/motion/SetAnimateDefault.lusia";
-import setAnimateDefaultSource from "./demos/motion/SetAnimateDefault.lusia?raw";
+import SetConfigDemo from "./demos/motion/SetConfigDemo.lusia";
+import setConfigDemoSource from "./demos/motion/SetConfigDemo.lusia?raw";
 import HoverArea from "./demos/motion/HoverArea.lusia";
 import hoverAreaSource from "./demos/motion/HoverArea.lusia?raw";
 import Turn from "./demos/motion/Turn.lusia";
@@ -1754,15 +1754,15 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
-  "set-animate-default": {
+  "set-config": {
     icon: "tune",
     demos: [
       {
-        id: "set-animate-default-speed",
-        title: "Change the default",
-        caption: "Slow every animation changes the default for the whole page. Reset puts back the site default.",
-        components: [SetAnimateDefault],
-        sources: [{ path: "src/demos/motion/SetAnimateDefault.lusia", text: setAnimateDefaultSource }],
+        id: "set-config-duration",
+        title: "Change the duration",
+        caption: "setConfig() with SCOPE.GLOBAL changes the duration for the whole page. Reset sets 400 ms again.",
+        components: [SetConfigDemo],
+        sources: [{ path: "src/demos/motion/SetConfigDemo.lusia", text: setConfigDemoSource }],
       },
     ],
   },
