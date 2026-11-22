@@ -1,13 +1,5 @@
 <script>
-  import {
-    EASE,
-    EVENT,
-    SCREEN,
-    WHEN,
-    listen,
-    onAttach,
-    variable,
-  } from "lusiajs";
+  import { EASE, EVENT, SCREEN, WHEN, listen, onAttach, variable } from "lusiajs";
   import { wobbleStyle } from "../motion/wobble.ts";
 
   const reduced = SCREEN.REDUCED_MOTION.value;

@@ -44,7 +44,11 @@
       "setConfig in the component (SCOPE.TREE or SCOPE.SCOPED)",
       "The element does not set it, and the component's reach covers it",
     ],
-    ["3", "setConfig with SCOPE.GLOBAL", "The element and the component do not set it"],
+    [
+      "3",
+      "setConfig with SCOPE.GLOBAL",
+      "The element and the component do not set it",
+    ],
     [
       "4",
       "animate.attach or animate.detach in lusia.config",

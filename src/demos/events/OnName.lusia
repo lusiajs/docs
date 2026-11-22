@@ -14,7 +14,9 @@
 </script>
 
 <div class="on-name-demo">
-  <button on:click={countClick} type="button">Clicked {clicks} times</button>
+  <button on:click={countClick} type="button">
+    Clicked {clicks} times
+  </button>
   <section on:view={showView}>
     <p>{seen}</p>
   </section>

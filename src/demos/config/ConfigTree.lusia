@@ -15,7 +15,9 @@
 </script>
 
 <div class="config-tree">
-  <p>This component sets the value. The list below is a child, so it slides too.</p>
+  <p>
+    This component sets the value. The list below is a child, so it slides too.
+  </p>
   <TaskList />
 </div>
 

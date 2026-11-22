@@ -37,9 +37,7 @@
 
 <div class="scroll-demo">
   <ul class="watch">
-    <li>
-      The blue lines are the screen: top, centre and bottom.
-    </li>
+    <li>The blue lines are the screen: top, centre and bottom.</li>
     <li>The card has its own lines: top, centre and bottom.</li>
     <li>
       A line turns red when it meets the other one. That is a start or end

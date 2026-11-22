@@ -40,7 +40,9 @@
 
   // Every demo below is a child component, so this reaches all of them.
   setConfig(
-    { animate: { attach: { animateSpace: true }, detach: { animateSpace: true } } },
+    {
+      animate: { attach: { animateSpace: true }, detach: { animateSpace: true } },
+    },
     SCOPE.TREE,
   );
 
@@ -184,12 +186,10 @@
   }
 
   function watchMarker(marker: HTMLElement, index: number) {
-    listen(
-      marker,
-      EVENT.SCROLL,
-      ({ progress }) => markPassed(index, progress),
-      { start: [EDGE.CENTER, EDGE.BOTTOM], end: [EDGE.CENTER, EDGE.TOP] },
-    );
+    listen(marker, EVENT.SCROLL, ({ progress }) => markPassed(index, progress), {
+      start: [EDGE.CENTER, EDGE.BOTTOM],
+      end: [EDGE.CENTER, EDGE.TOP],
+    });
   }
 
   onAttach(() => {
