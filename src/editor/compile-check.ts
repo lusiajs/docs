@@ -25,6 +25,8 @@ export function compileWithoutStyles(source: string, file: string): void {
 		template,
 		css: "",
 		id: "editor",
+		// No styles here, so there are no scope classes to add.
+		scopes: { scoped: "", tree: "" },
 		file,
 		dev: false,
 		source,
