@@ -27,7 +27,10 @@ const attrExpression = {
 
 function attributes(): Record<string, unknown> {
 	return {
-		"event-attr": /(?<=\s)on[a-z]+(?=\s*=\s*\{)/,
+		"event-attr": {
+			pattern: /(?<=\s)on(?::[a-z][\w-]*|[a-z]+)(?=\s*=\s*\{)/,
+			inside: { "event-prefix": /^on:/ },
+		},
 		"bind-attr": /(?<=\s)bind-[a-z][a-z-]*(?=\s*=\s*\{)/,
 		"animate-attr": /(?<=\s)animate(?=\s*(?:=|\/?>|\s|$))/,
 		"flow-attr": /(?<=\s)(?:as|index|key|from|to|step)(?=\s*=)/,

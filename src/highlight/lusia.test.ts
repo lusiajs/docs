@@ -41,12 +41,38 @@ function hasPiece(list: Piece[], type: string, text: string): boolean {
 describe("lusia Prism grammar", () => {
 	test("flow tags are their own token, separate from HTML tags", () => {
 		const list = tokenize(
-			`<IF {ready.value}>\n  <p>Hi</p>\n</IF>\n<ELSEIF {guest.value}>x</ELSEIF>\n<ELSE>y</ELSE>`,
+			`<IF {ready.value}>\n  <p>Hi</p>\n<ELSEIF {guest.value}>\n  <p>x</p>\n<ELSE>\n  <p>y</p>\n</IF>`,
 		);
 		expect(hasPiece(list, "flow-name", "IF")).toBe(true);
 		expect(hasPiece(list, "flow-name", "ELSEIF")).toBe(true);
 		expect(hasPiece(list, "flow-name", "ELSE")).toBe(true);
 		expect(hasPiece(list, "tag", "p")).toBe(true);
+	});
+
+	test("ELSEIF and ELSE branches need no closing tag", () => {
+		const list = tokenize(
+			`<IF {score.value >= 90}>\n  <p>A</p>\n<ELSEIF {score.value >= 70}>\n  <p>C</p>\n<ELSE>\n  <p>Try again</p>\n</IF>`,
+		);
+		expect(hasPiece(list, "flow-name", "ELSEIF")).toBe(true);
+		expect(hasPiece(list, "flow-name", "ELSE")).toBe(true);
+		expect(hasPiece(list, "flow-name", "IF")).toBe(true);
+		expect(hasPiece(list, "component-name", "ELSE")).toBe(false);
+	});
+
+	test("on:name attributes get an event prefix and name", () => {
+		const list = tokenize(`<button on:click={save}>Save</button>`);
+		expect(hasPiece(list, "event-prefix", "on:")).toBe(true);
+		expect(hasPiece(list, "event-attr", "on:click")).toBe(true);
+	});
+
+	test("EVENT, SCREEN and EDGE names are constants", () => {
+		const list = tokenize(
+			`<script>\nlisten(EVENT.VIEW, SCREEN.X);\nconst more = { start: [EDGE.TOP, EDGE.BOTTOM] };\n</script>`,
+		);
+		expect(hasPiece(list, "constant", "EVENT.VIEW")).toBe(true);
+		expect(hasPiece(list, "constant", "SCREEN.X")).toBe(true);
+		expect(hasPiece(list, "constant", "EDGE.TOP")).toBe(true);
+		expect(hasPiece(list, "constant", "EDGE.BOTTOM")).toBe(true);
 	});
 
 	test("EACH and FOR tags with their flow attributes", () => {
