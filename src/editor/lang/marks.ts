@@ -14,7 +14,7 @@ import { typescriptLanguage } from "./language.ts";
 // Group 1 is always the name, so the start is found from the match.
 const FLOW_NAME = /<\/?(IF|ELSEIF|ELSE|EACH|FOR|CONTENT|HTML)(?=[\s/>])/g;
 const COMPONENT_NAME = /<\/?([A-Z][\w.]*)/g;
-const LUSIA_ATTRIBUTE = /(?<=\s)(on[a-z]+|animate|bind-[\w-]+)(?=\s*=)/g;
+const LUSIA_ATTRIBUTE = /(?<=\s)(on:?[a-z][a-z-]*|animate|bind-[\w-]+)(?=\s*=)/g;
 const FLOW_NAMES: ReadonlySet<string> = new Set([
 	"IF",
 	"ELSEIF",
