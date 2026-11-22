@@ -64,7 +64,7 @@
     return { style: rowIn, when: WHEN.ATTACH, duration: 200, delay: stagger };
   }
 
-  // The shortcut hint shows the key of this platform: Cmd on Apple devices, Ctrl elsewhere.
+  // The shortcut hint shows this platform's key: Cmd on Apple devices, Ctrl elsewhere.
   const APPLE_PLATFORM = /Mac|iPhone|iPad/;
   const shortcutModifier = APPLE_PLATFORM.test(navigator.platform) ? "⌘" : "Ctrl";
 

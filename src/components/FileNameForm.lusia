@@ -26,7 +26,7 @@
     input?.select();
   });
 
-  // The parent returns a problem with the name, or nothing to accept it and close the form.
+  // The parent returns a problem with the name, or nothing to accept it and close it.
   function submit(event: SubmitEvent) {
     event.preventDefault();
     problem.value = onSubmit.peek()(value.peek().trim()) ?? "";

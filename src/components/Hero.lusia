@@ -111,7 +111,7 @@
     delay: 900,
   };
 
-  // The text drifts up and fades over the first part of the page, as the hero scrolls away.
+  // The text drifts up and fades over the first part of the page as the hero scrolls.
   const heroDrift = reduced
     ? []
     : heroBetween(
@@ -125,7 +125,7 @@
     ? []
     : heroBetween(follow, { translate: "0 0" }, { translate: "0 -8vh" });
 
-  // The two badges fly up and apart, one to each side, so they clear the title as it rises.
+  // The two badges fly up and apart, one to each side, to clear the title as it rises.
   const badgeStart = { translate: "0px 0px", rotate: "0deg" };
   const eyebrowDrift = heroBetween(follow, badgeStart, {
     translate: "-12vw -8vh",
