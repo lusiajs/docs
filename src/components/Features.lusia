@@ -1,5 +1,5 @@
 <script>
-  import { EDGE, SCROLL_AT, onAttach, variable } from "lusiajs";
+  import { EDGE, SCOPE, SCROLL_AT, onAttach, setConfig, variable } from "lusiajs";
   import { features, featureSources } from "../features.ts";
   import { scrollOwn } from "../motion/home-scroll.ts";
   import {
@@ -28,6 +28,12 @@
   const PHONE_QUERY = "(max-width: 899px)";
   // The middle of the screen. The marker that crosses it is the active feature.
   const ACTIVE_BAND = "-50% 0px -50% 0px";
+
+  // Every demo below is a child component, so this reaches all of them.
+  setConfig(
+    { animate: { attach: { animateSpace: true }, detach: { animateSpace: true } } },
+    SCOPE.TREE,
+  );
 
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const phone = variable(matchMedia(PHONE_QUERY).matches);
