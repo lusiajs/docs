@@ -31,3 +31,22 @@ Use Conventional Commits. One commit per logical change.
 
 # 10. Framework updates are automatic
 Every 6 hours `.github/workflows/update-framework.yml` runs `bun update lusiajs`. If the version changed, it runs typecheck, test and build, then pushes to `main` and deploys. If a check fails, nothing is pushed and a person must fix the docs.
+
+# 11. Indent script and style
+Indent the code inside `<script>` and `<style>` by 2 spaces, in `.lusia` files and in every code example shown on the site. The framework allows flush-left code, but this is the house style.
+
+```lusia
+<script>
+  import { variable } from "lusiajs";
+
+  const count = variable(0);
+</script>
+
+<p>{count}</p>
+
+<style scoped>
+  p {
+    color: tomato;
+  }
+</style>
+```
