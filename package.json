@@ -8,8 +8,8 @@
     "url": "git+https://github.com/lusiajs/docs.git"
   },
   "scripts": {
-    "dev": "bun scripts/playground-runtime.ts && lusia dev .",
-    "build": "bun scripts/playground-runtime.ts && lusia build .",
+    "dev": "bun scripts/playground-runtime.ts && bun scripts/ai-docs.ts && lusia dev .",
+    "build": "bun scripts/playground-runtime.ts && bun scripts/ai-docs.ts && lusia build .",
     "test": "bun test --parallel=6",
     "typecheck": "tsc --noEmit",
     "check": "bun run typecheck && bun run test && bun run build"
