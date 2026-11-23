@@ -32,11 +32,18 @@ type LoadResult = { component: Component } | { error: unknown };
 const LOADING_DELAY_MS = 150;
 
 let pages: PageSpec[] = [];
+let missing: PageSpec;
 let navigation = 0;
 
-export function startRouter(outletNode: HTMLElement, specs: PageSpec[]): Promise<void> {
+// The not-found page shows for any path that matches no page. It is not in the link list.
+export function startRouter(
+	outletNode: HTMLElement,
+	specs: PageSpec[],
+	notFound: PageSpec,
+): Promise<void> {
 	setOutlet(outletNode);
 	pages = specs;
+	missing = notFound;
 	history.scrollRestoration = "manual";
 	document.addEventListener("click", onClick);
 	window.addEventListener("popstate", () => void show(location.pathname, location.hash, false));
@@ -45,9 +52,7 @@ export function startRouter(outletNode: HTMLElement, specs: PageSpec[]): Promise
 }
 
 function specFor(path: string): PageSpec {
-	const spec = pages.find((page) => page.path === normalizePath(path)) ?? pages[0];
-	if (!spec) throw new Error("the router needs at least one page");
-	return spec;
+	return pages.find((page) => page.path === normalizePath(path)) ?? missing;
 }
 
 // Same-origin links to a known page go through the router. A link to the page on screen only scrolls.
@@ -69,7 +74,7 @@ export function navigateTo(path: string, hash: string): void {
 async function show(path: string, hash: string, push: boolean): Promise<void> {
 	const spec = specFor(path);
 	const id = ++navigation;
-	const url = spec.path + hash;
+	const url = addressFor(spec, path) + hash;
 	if (push && url !== location.pathname + location.hash) history.pushState(null, "", url);
 	showAddress(spec);
 	const shown = currentScreen();
@@ -87,6 +92,11 @@ async function show(path: string, hash: string, push: boolean): Promise<void> {
 	if (!early) await inOutlet(() => showLoading(id));
 	const result = await load;
 	await inOutlet(() => showResult(id, spec, result, hash));
+}
+
+// A missing page keeps the address that was asked for. A known page uses its own path.
+function addressFor(spec: PageSpec, path: string): string {
+	return spec === missing ? path : spec.path;
 }
 
 // The title, the active link and the CSS route change as soon as the reader asks for the page.

@@ -69,6 +69,14 @@ const specs: PageSpec[] = [
 	broken.spec,
 ];
 
+const notFound: PageSpec = {
+	path: "/404",
+	route: "not-found",
+	title: "Page not found",
+	load: () => Promise.resolve(fakePage),
+	mount: () => {},
+};
+
 // The page URL setter of happy-dom, which the DOM typings do not declare.
 function happyDOM(): { setURL(url: string): Promise<void> } {
 	return (
@@ -121,7 +129,7 @@ beforeAll(async () => {
 	await happyDOM().setURL("http://localhost/");
 	history.replaceState(null, "", "/guide");
 	document.body.innerHTML = `<header class="topbar"></header><nav class="main-menu"><a href="/slow">Slow</a><a href="/fast">Fast</a></nav><div id="outlet"></div><h2 id="alpha">Alpha</h2>`;
-	await startRouter(document.querySelector("#outlet")!, specs);
+	await startRouter(document.querySelector("#outlet")!, specs, notFound);
 });
 
 describe("router", () => {
@@ -198,5 +206,15 @@ describe("router", () => {
 		await wait(20);
 		expect(outlet().querySelector(".page-error")).toBeNull();
 		expect(document.title).toBe("Broken");
+	});
+
+	test("an unknown path shows the not-found page and keeps its address", async () => {
+		history.replaceState(null, "", "/missing/deep");
+		window.dispatchEvent(new Event("popstate"));
+		await wait(20);
+		expect(location.pathname).toBe("/missing/deep");
+		expect(document.title).toBe("Page not found");
+		expect(document.documentElement.dataset.route).toBe("not-found");
+		expect(document.querySelector('.main-menu a[aria-current="page"]')).toBeNull();
 	});
 });

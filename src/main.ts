@@ -1,7 +1,7 @@
 import { attach, type Instance } from "lusiajs";
 import Loader from "./components/Loader.lusia";
 import Site from "./components/Site.lusia";
-import { pageSpecs } from "./pages.ts";
+import { notFoundSpec, pageSpecs } from "./pages.ts";
 import { startRouter } from "./router.ts";
 import { initSearchShortcuts } from "./search/shortcuts.ts";
 
@@ -20,7 +20,7 @@ void start(loader);
 async function start(loaderInstance: Instance): Promise<void> {
 	await hideLoader(loaderInstance);
 	try {
-		await startRouter(document.getElementById("outlet")!, pageSpecs);
+		await startRouter(document.getElementById("outlet")!, pageSpecs, notFoundSpec);
 	} finally {
 		document.documentElement.classList.remove("is-loading");
 	}

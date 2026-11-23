@@ -39,6 +39,15 @@ function mountErrors(root: HTMLElement, signal: AbortSignal): void {
 	initCopy(root, signal);
 }
 
+// Shown for any path that matches no page. Its path is never a link, so the menu marks none active.
+export const notFoundSpec: PageSpec = {
+	path: "/404",
+	route: "not-found",
+	title: "Page not found · Lusia",
+	load: () => import("./pages/NotFound.lusia").then((module) => module.default),
+	mount: () => {},
+};
+
 export const pageSpecs: PageSpec[] = [
 	{
 		path: "/",
