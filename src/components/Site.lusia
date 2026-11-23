@@ -1,3 +1,9 @@
+<script>
+  import Shell from "./Shell.lusia";
+</script>
+
+<Shell />
+
 <style global>
   @use "../styles/site";
 </style>
