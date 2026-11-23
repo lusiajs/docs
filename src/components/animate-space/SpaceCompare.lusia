@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, variable } from "lusiajs";
+  import { WHEN, onDetach, variable } from "lusiajs";
 
   interface Item {
     id: number;
@@ -21,6 +21,7 @@
   ];
   const items = variable<Item[]>(startItems);
   let running = false;
+  let detached = false;
 
   const fadeIn = {
     0: { opacity: 0 },
@@ -70,11 +71,17 @@
     running = true;
     items.value = startItems;
     await wait(800);
+    if (detached) return;
     items.value = withNewItem;
     await wait(1200);
+    if (detached) return;
     items.value = startItems;
     running = false;
   }
+
+  onDetach(() => {
+    detached = true;
+  });
 </script>
 
 <div class="space-compare">

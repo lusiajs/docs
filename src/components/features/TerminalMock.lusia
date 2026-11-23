@@ -1,5 +1,5 @@
 <script>
-  import { EVENT, SCREEN, listen, onAttach, variable } from "lusiajs";
+  import { EVENT, SCREEN, listen, onAttach, onDetach, variable } from "lusiajs";
 
   const COMMANDS = [
     "bun create lusiajs my-app",
@@ -18,13 +18,16 @@
   const lines = [first, second, third, fourth];
   const root = variable<HTMLElement | null>(null);
 
+  let detached = false;
+
   function wait(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  // Types one line a character at a time, then returns once it is done.
+  // Types one line a character at a time. Stops early once the component detaches.
   async function typeLine(line: string, target: typeof first) {
     for (let count = 1; count <= line.length; count++) {
+      if (detached) return;
       target.value = line.slice(0, count);
       await wait(STEP_MS);
     }
@@ -32,10 +35,15 @@
 
   async function typeAll() {
     for (const [index, target] of lines.entries()) {
+      if (detached) return;
       await typeLine(COMMANDS[index], target);
       await wait(PAUSE_MS);
     }
   }
+
+  onDetach(() => {
+    detached = true;
+  });
 
   onAttach(() => {
     const el = root.peek();
