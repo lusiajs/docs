@@ -1,9 +1,25 @@
 <script>
   import { props } from "lusiajs";
   import { collapsedState, toggleGroup } from "../nav-group.ts";
-  import type { SidebarGroup } from "../render.ts";
+  import type { SidebarBlock, SidebarGroup } from "../render.ts";
 
-  const { groups } = props({ groups: [] as SidebarGroup[] });
+  // shown says which entry ids are visible. By default every entry is.
+  const { groups, shown } = props({
+    groups: [] as SidebarGroup[],
+    shown: (_id: string) => true,
+  });
+
+  function entryShown(id: string): boolean {
+    return shown.value(id);
+  }
+
+  function blockShown(block: SidebarBlock): boolean {
+    return block.entries.some((entry) => entryShown(entry.id));
+  }
+
+  function groupShown(group: SidebarGroup): boolean {
+    return group.blocks.some(blockShown);
+  }
 
   function blockKey(group: SidebarGroup, blockId: string): string {
     return group.id + "/" + blockId;
@@ -24,6 +40,7 @@
     data-group={group.id}
     data-collapse={group.id}
     style={"--group: " + group.color}
+    hidden={!groupShown(group)}
   >
     <button
       class="nav-title"
@@ -50,6 +67,7 @@
             class={collapsibleClass("nav-subgroup", blockKey(group, block.id))}
             data-block={block.id}
             data-collapse={blockKey(group, block.id)}
+            hidden={!blockShown(block)}
           >
             <IF {block.label}>
               <button
@@ -71,7 +89,7 @@
               <div>
                 <nav class="nav-links" aria-label={block.label ?? group.label}>
                   <EACH {block.entries} as={entry}>
-                    <div class="nav-entry">
+                    <div class="nav-entry" hidden={!entryShown(entry.id)}>
                       <a href={entry.href}>
                         <span class="material-symbols-rounded" aria-hidden="true"
                           >{entry.icon}</span
