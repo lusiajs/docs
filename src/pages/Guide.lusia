@@ -1,7 +1,9 @@
 <script>
   import Docs from "../components/Docs.lusia";
+  import Sidebar from "../components/Sidebar.lusia";
   import { pageMotion } from "../motion/page.ts";
   import { sidebarMotion } from "../motion/sidebar.ts";
+  import { guideSidebar } from "../render.ts";
 </script>
 
 <div class="page-root docs">
@@ -12,7 +14,7 @@
     animate={sidebarMotion}
   >
     <span class="nav-indicator" aria-hidden="true"></span>
-    <div id="nav-groups"></div>
+    <Sidebar groups={guideSidebar} />
   </aside>
   <div class="scrim" id="scrim" hidden></div>
   <main class="content" id="sections" animate={pageMotion}>

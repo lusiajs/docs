@@ -1,0 +1,72 @@
+<script>
+  import { props } from "lusiajs";
+  import type { SidebarGroup } from "../render.ts";
+
+  const { groups } = props({ groups: [] as SidebarGroup[] });
+</script>
+
+<EACH {groups} as={group}>
+  <div class="nav-group" data-group={group.id} style={"--group: " + group.color}>
+    <button class="nav-title" type="button" aria-expanded="true">
+      <span class="group-name">
+        <IF {group.icon}>
+          <span class="material-symbols-rounded" aria-hidden="true"
+            >{group.icon}</span
+          >
+        </IF>
+        {group.label}
+      </span>
+      <span class="material-symbols-rounded chevron" aria-hidden="true"
+        >expand_more</span
+      >
+    </button>
+    <div class="nav-items">
+      <div>
+        <EACH {group.blocks} as={block}>
+          <div class="nav-subgroup" data-block={block.id}>
+            <IF {block.label}>
+              <button
+                class="nav-title nav-subtitle"
+                type="button"
+                aria-expanded="true"
+              >
+                <span class="group-name">{block.label}</span>
+                <span
+                  class="material-symbols-rounded chevron"
+                  aria-hidden="true"
+                >
+                  expand_more
+                </span>
+              </button>
+            </IF>
+            <div class="nav-items">
+              <div>
+                <nav class="nav-links" aria-label={block.label ?? group.label}>
+                  <EACH {block.entries} as={entry}>
+                    <div class="nav-entry">
+                      <a href={entry.href}>
+                        <span class="material-symbols-rounded" aria-hidden="true"
+                          >{entry.icon}</span
+                        >
+                        <code class="nav-label">{entry.name}</code>
+                      </a>
+                      <IF {entry.demos.length > 1}>
+                        <div class="nav-sub">
+                          <div class="nav-sub-inner">
+                            <EACH {entry.demos} as={demo}>
+                              <a href={demo.href}>{demo.title}</a>
+                            </EACH>
+                          </div>
+                        </div>
+                      </IF>
+                    </div>
+                  </EACH>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </EACH>
+      </div>
+    </div>
+  </div>
+</EACH>

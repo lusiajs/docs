@@ -2,8 +2,8 @@
   import { api } from "lusiajs/api";
   import { entryIcon } from "../catalog.ts";
   import RefCard from "../components/RefCard.lusia";
-  import RefIndex from "../components/RefIndex.lusia";
   import RefTile from "../components/RefTile.lusia";
+  import Sidebar from "../components/Sidebar.lusia";
   import { pageLink, referencePath } from "../page-link.ts";
   import { navLabel } from "../nav-label.ts";
   import { gridMotion } from "../motion/reference.ts";
@@ -14,17 +14,19 @@
   const sections = kindSections(api);
   const cards = withNeighbors(sections.flatMap((section) => section.entries));
   const indexGroups = sections.map((section) => ({
-    group: section.kind,
+    id: section.kind,
     label: section.label,
     icon: section.icon,
     color: section.color,
     blocks: [
       {
         id: section.kind,
-        links: section.entries.map((entry) => ({
+        entries: section.entries.map((entry) => ({
           id: entry.id,
           name: navLabel(entry.name),
           icon: entryIcon(entry.id),
+          href: pageLink(referencePath, entry.id),
+          demos: [],
         })),
       },
     ],
@@ -40,7 +42,7 @@
     animate={sidebarMotion}
   >
     <span class="nav-indicator" aria-hidden="true"></span>
-    <RefIndex groups={indexGroups} />
+    <Sidebar groups={indexGroups} />
   </aside>
   <div class="scrim" id="scrim" hidden></div>
   <main class="content" animate={pageMotion}>
