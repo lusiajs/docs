@@ -1,4 +1,5 @@
 <script>
+  import { onAttach, variable } from "lusiajs";
   import { api } from "lusiajs/api";
   import { entryIcon } from "../catalog.ts";
   import RefCard from "../components/RefCard.lusia";
@@ -11,6 +12,11 @@
   import { sidebarMotion } from "../motion/sidebar.ts";
   import { createReferenceFilter } from "../reference-filter.ts";
   import { kindSections, kindsOf, withNeighbors } from "../reference-model.ts";
+  import {
+    entryIdFromHash,
+    scrollOnOpen,
+    watchHash,
+  } from "../reference-view.ts";
 
   const sections = kindSections(api);
   const cards = withNeighbors(sections.flatMap((section) => section.entries));
@@ -33,11 +39,20 @@
     ],
   }));
   const kinds = kindsOf(api);
-  const filter = createReferenceFilter(sections.flatMap((section) => section.entries));
+  const filter = createReferenceFilter(
+    sections.flatMap((section) => section.entries),
+  );
 
   function sectionShown(section: (typeof sections)[number]): boolean {
     return filter.hasShown(section.entries.map((entry) => entry.id));
   }
+
+  // The hash names the entry to open. Without one, the grid shows.
+  const hash = variable(location.hash);
+  const cardIds = cards.map((card) => card.entry.id);
+  const openId = variable.compute(() => entryIdFromHash(hash.value, cardIds));
+  scrollOnOpen(openId);
+  onAttach(() => watchHash(hash));
 </script>
 
 <div class="page-root docs reference">
@@ -52,97 +67,103 @@
   </aside>
   <div class="scrim" id="scrim" hidden></div>
   <main class="content" animate={pageMotion}>
-    <div data-ref-grid animate={gridMotion}>
-      <h1 class="ref-page-title">Reference</h1>
-      <p class="ref-lead">
-        Every function, type, markup, style and value, with signatures and
-        examples.
-      </p>
-      <div class="ref-tools">
-        <label class="ref-search">
-          <span class="material-symbols-rounded" aria-hidden="true"
-            >search</span
-          >
-          <input
-            id="ref-filter"
-            type="search"
-            placeholder="Filter the reference"
-            aria-label="Filter the reference"
-            autocomplete="off"
-            bind-value={filter.text}
-          />
-        </label>
-        <div class="ref-kinds" role="group" aria-label="Filter by kind">
-          <EACH {kinds} as={kind}>
-            <button
-              class="chip kind-chip"
-              type="button"
-              data-kind={kind}
-              data-ref-kind={kind}
-              aria-pressed={String(filter.isKindPicked(kind))}
-              onclick={() => filter.toggleKind(kind)}
+    <IF {!openId.value}>
+      <div data-ref-grid animate={gridMotion}>
+        <h1 class="ref-page-title">Reference</h1>
+        <p class="ref-lead">
+          Every function, type, markup, style and value, with signatures and
+          examples.
+        </p>
+        <div class="ref-tools">
+          <label class="ref-search">
+            <span class="material-symbols-rounded" aria-hidden="true"
+              >search</span
             >
-              {kind}
+            <input
+              id="ref-filter"
+              type="search"
+              placeholder="Filter the reference"
+              aria-label="Filter the reference"
+              autocomplete="off"
+              bind-value={filter.text}
+            />
+          </label>
+          <div class="ref-kinds" role="group" aria-label="Filter by kind">
+            <EACH {kinds} as={kind}>
+              <button
+                class="chip kind-chip"
+                type="button"
+                data-kind={kind}
+                data-ref-kind={kind}
+                aria-pressed={String(filter.isKindPicked(kind))}
+                onclick={() => filter.toggleKind(kind)}
+              >
+                {kind}
+              </button>
+            </EACH>
+          </div>
+          <p class="ref-count" data-ref-count>{filter.count}</p>
+        </div>
+
+        <IF {filter.empty.value}>
+          <div class="ref-empty" data-ref-empty>
+            <p>Nothing matches your filter.</p>
+            <button
+              class="ref-clear"
+              type="button"
+              data-ref-clear
+              onclick={filter.clear}
+            >
+              Clear filters
             </button>
-          </EACH>
-        </div>
-        <p class="ref-count" data-ref-count>{filter.count}</p>
-      </div>
-
-      <IF {filter.empty.value}>
-        <div class="ref-empty" data-ref-empty>
-          <p>Nothing matches your filter.</p>
-          <button
-            class="ref-clear"
-            type="button"
-            data-ref-clear
-            onclick={filter.clear}
-          >
-            Clear filters
-          </button>
-        </div>
-      </IF>
-
-      <EACH {sections} as={section}>
-        <IF {sectionShown(section)}>
-          <section
-            class="ref-group"
-            data-ref-group={section.kind}
-            style={"--group: " + section.color}
-          >
-            <h2 class="ref-group-title">
-              {section.label}
-              <span class="ref-group-count">{section.entries.length}</span>
-            </h2>
-            <div class="ref-tile-grid">
-              <EACH {section.entries} as={entry}>
-                <IF {filter.isShown(entry.id)}>
-                  <RefTile
-                    entry={entry}
-                    href={pageLink(referencePath, entry.id)}
-                  />
-                </IF>
-              </EACH>
-            </div>
-          </section>
+          </div>
         </IF>
-      </EACH>
-    </div>
 
-    <div data-ref-details>
-      <a class="ref-link ref-back" href={referencePath} data-ref-back hidden>
-        <span class="material-symbols-rounded" aria-hidden="true"
-          >arrow_back</span
-        >
-        Back to Reference
-      </a>
-      <EACH {cards} as={card}>
-        <RefCard
-          entry={card.entry}
-          previous={card.previous}
-          next={card.next}
-        />
-      </EACH>
-    </div>
+        <EACH {sections} as={section}>
+          <IF {sectionShown(section)}>
+            <section
+              class="ref-group"
+              data-ref-group={section.kind}
+              style={"--group: " + section.color}
+            >
+              <h2 class="ref-group-title">
+                {section.label}
+                <span class="ref-group-count">{section.entries.length}</span>
+              </h2>
+              <div class="ref-tile-grid">
+                <EACH {section.entries} as={entry}>
+                  <IF {filter.isShown(entry.id)}>
+                    <RefTile
+                      entry={entry}
+                      href={pageLink(referencePath, entry.id)}
+                    />
+                  </IF>
+                </EACH>
+              </div>
+            </section>
+          </IF>
+        </EACH>
+      </div>
+    </IF>
+
+    <IF {openId.value}>
+      <div data-ref-details>
+        <a class="ref-link ref-back" href={referencePath} data-ref-back>
+          <span class="material-symbols-rounded" aria-hidden="true"
+            >arrow_back</span
+          >
+          Back to Reference
+        </a>
+        <EACH {cards} as={card}>
+          <IF {card.entry.id === openId.value}>
+            <RefCard
+              entry={card.entry}
+              previous={card.previous}
+              next={card.next}
+            />
+          </IF>
+        </EACH>
+      </div>
+    </IF>
   </main>
 </div>

@@ -2,7 +2,6 @@ import { initCopy } from "./copy.ts";
 import { initDrawer } from "./drawer.ts";
 import { errorsPath, playgroundPath } from "./page-link.ts";
 import { initReferenceClick } from "./reference-click.ts";
-import { initReferenceView } from "./reference-view.ts";
 import type { PageSpec } from "./router.ts";
 import { initScrollSpy } from "./scroll-spy.ts";
 import { initSidebarFollow } from "./sidebar-follow.ts";
@@ -23,7 +22,6 @@ function mountHome(root: HTMLElement, signal: AbortSignal): void {
 function mountReference(root: HTMLElement, signal: AbortSignal): void {
 	initSidebarFollow(signal);
 	initDrawer(signal);
-	initReferenceView(root, signal);
 	initReferenceClick(root, signal);
 	initCopy(root, signal);
 }
