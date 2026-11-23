@@ -33,8 +33,6 @@
   import ScopedDemo from "./features/ScopedDemo.lusia";
   import TerminalMock from "./features/TerminalMock.lusia";
 
-  // 899px is not a SCREEN size, so the phone layout keeps its own media query.
-  const PHONE_QUERY = "(max-width: 899px)";
   // The middle of a marker's scroll range: its center is at the middle of the screen.
   const MIDDLE = 0.5;
 
@@ -47,7 +45,7 @@
   );
 
   const reduced = SCREEN.REDUCED_MOTION.value;
-  const phone = variable(matchMedia(PHONE_QUERY).matches);
+  const phone = variable.compute(() => !SCREEN.DESKTOP.value);
 
   const markerEls = features.map(() => variable<HTMLElement | null>(null));
   // passed[index] is true while that feature's marker is past the middle of the screen.
@@ -63,9 +61,9 @@
 
   const trackEl = variable<HTMLElement | null>(null);
   // While a nav click scrolls, the markers it passes must not switch the feature.
-  const NAVIGATE_MAX_MS = 1200;
+  // The flag clears when the clicked feature's marker reaches the middle.
   let navigating = false;
-  let navigateTimer = 0;
+  let navigateTarget = -1;
 
   // The header slides in from the left as the section arrives.
   const titleSlide = reduced
@@ -171,17 +169,10 @@
     shown.value = active.peek();
   }
 
-  // The middle of a feature's active range: the stage is stuck and its marker is well past the middle.
+  // The middle of a feature's active range: the stage is stuck and the marker is past it.
   function stepTop(track: HTMLElement, index: number): number {
     const trackTop = track.getBoundingClientRect().top + window.scrollY;
     return trackTop + index * (window.innerHeight / 2);
-  }
-
-  function finishNavigating() {
-    if (!navigating) return;
-    navigating = false;
-    clearTimeout(navigateTimer);
-    updateActive();
   }
 
   function goTo(index: number) {
@@ -189,8 +180,7 @@
     if (!track) return;
     setActive(index);
     navigating = true;
-    clearTimeout(navigateTimer);
-    navigateTimer = window.setTimeout(finishNavigating, NAVIGATE_MAX_MS);
+    navigateTarget = index;
     window.scrollTo({
       top: stepTop(track, index),
       behavior: reduced ? "auto" : "smooth",
@@ -206,6 +196,7 @@
 
   function markPassed(index: number, progress: number) {
     passed[index] = progress >= MIDDLE;
+    if (navigating && index === navigateTarget && passed[index]) navigating = false;
     updateActive();
   }
 
@@ -217,22 +208,11 @@
   }
 
   onAttach(() => {
-    const phoneQuery = matchMedia(PHONE_QUERY);
-    const onPhoneChange = (event: MediaQueryListEvent) => {
-      phone.value = event.matches;
-    };
-    phoneQuery.addEventListener("change", onPhoneChange);
-    window.addEventListener("scrollend", finishNavigating);
     markerEls.forEach((markerEl, index) => {
       const marker = markerEl.peek();
       if (marker) watchMarker(marker, index);
     });
-    return () => {
-      phoneQuery.removeEventListener("change", onPhoneChange);
-      window.removeEventListener("scrollend", finishNavigating);
-      clearTimeout(enterTimer);
-      clearTimeout(navigateTimer);
-    };
+    return () => clearTimeout(enterTimer);
   });
 </script>
 

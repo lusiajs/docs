@@ -1,4 +1,4 @@
-import type { Variable } from "lusiajs";
+import { SCREEN, type Variable } from "lusiajs";
 import { spawnSparks, type Spark } from "./sparks.ts";
 
 const TRAIL_GAP_MS = 45;
@@ -12,8 +12,7 @@ const trailTones = [
 
 // A sparkle trail that follows mouse pointers.
 export function trackCursor(sparks: Variable<Spark[]>): () => void {
-	if (matchMedia("(prefers-reduced-motion: reduce)").matches)
-		return () => {};
+	if (SCREEN.REDUCED_MOTION.value) return () => {};
 
 	const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
 	let lastTrail = 0;
