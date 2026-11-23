@@ -1,7 +1,6 @@
 import { beforeAll, describe, expect, test } from "bun:test";
 import type { Component } from "lusiajs";
 import { startRouter, type PageSpec } from "./router.ts";
-import { initTopbar } from "./topbar.ts";
 
 // A stand-in page: attaches one element and removes it when detached.
 const fakePage = ((target: Element) => {
@@ -122,7 +121,6 @@ beforeAll(async () => {
 	await happyDOM().setURL("http://localhost/");
 	history.replaceState(null, "", "/guide");
 	document.body.innerHTML = `<header class="topbar"></header><nav class="main-menu"><a href="/slow">Slow</a><a href="/fast">Fast</a></nav><div id="outlet"></div><h2 id="alpha">Alpha</h2>`;
-	initTopbar();
 	await startRouter(document.querySelector("#outlet")!, specs);
 });
 
