@@ -22,10 +22,8 @@
     return -parseFloat(getComputedStyle(logo).marginLeft);
   }
 
-  // Font swaps and resizes change the title width, so watching the title covers both.
+  // The size listener runs at start, and again on each font swap or resize of the title.
   onAttach(() => {
-    placeLogo();
-    document.fonts.ready.then(placeLogo);
     const title = logoEl.peek()?.parentElement;
     if (title) listen(title, EVENT.SIZE, placeLogo);
   });
