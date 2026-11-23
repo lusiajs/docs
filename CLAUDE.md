@@ -50,3 +50,6 @@ Indent the code inside `<script>` and `<style>` by 2 spaces, in `.lusia` files a
   }
 </style>
 ```
+
+# 12. Branches
+Work from `main`. Only `main` and `dev` stay long-lived. Delete a branch once it is merged.
