@@ -1,4 +1,12 @@
-import { EASE, type AnimateItem, type Keyframes, type Variable } from "lusiajs";
+import {
+	controller,
+	EASE,
+	WHEN,
+	type AnimateItem,
+	type Controller,
+	type Keyframes,
+	type Variable,
+} from "lusiajs";
 
 export type SparkKind = "petal" | "star";
 
@@ -9,6 +17,7 @@ export type Spark = {
 	x: number;
 	y: number;
 	motion: AnimateItem;
+	control: Controller;
 };
 
 export type SparkOptions = {
@@ -46,22 +55,28 @@ function makeSpark(options: SparkOptions): Spark {
 	const dx = Math.cos(angle) * distance;
 	const dy = Math.sin(angle) * distance + options.lift;
 	const turn = randomBetween(-360, 360);
+	const control = controller();
 	return {
 		id: nextId++,
 		kind: options.kind,
 		tone: pick(options.tones),
 		x: options.x,
 		y: options.y,
-		motion: { style: flight(dx, dy, turn), duration: options.duration },
+		motion: {
+			style: flight(dx, dy, turn),
+			duration: options.duration,
+			when: WHEN.MANUAL,
+			control,
+		},
+		control,
 	};
 }
 
-function removeSparks(sparks: Variable<Spark[]>, created: Spark[]): void {
-	const gone = new Set(created);
-	sparks.value = sparks.value.filter((spark) => !gone.has(spark));
+function removeSpark(sparks: Variable<Spark[]>, spark: Spark): void {
+	sparks.value = sparks.value.filter((other) => other !== spark);
 }
 
-// Each spark plays its flight once, then is removed from the list.
+// Each spark plays its flight once. When the flight ends, the spark leaves the list.
 export function spawnSparks(
 	sparks: Variable<Spark[]>,
 	options: SparkOptions,
@@ -70,5 +85,7 @@ export function spawnSparks(
 		makeSpark(options),
 	);
 	sparks.value = [...sparks.value, ...created];
-	setTimeout(() => removeSparks(sparks, created), options.duration + 50);
+	for (const spark of created) {
+		spark.control.play().then(() => removeSpark(sparks, spark));
+	}
 }
