@@ -32,8 +32,25 @@ export async function copyText(text: string): Promise<boolean> {
 
 async function copy(button: HTMLButtonElement): Promise<void> {
 	const glyph = button.querySelector(".material-symbols-rounded")!;
-	glyph.textContent = (await copyText(textToCopy(button))) ? "check" : "error";
+	glyph.textContent = (await copyButtonText(button)) ? "check" : "error";
 	setTimeout(() => (glyph.textContent = copyIcon), resetDelay);
+}
+
+// A button with data-copy-url copies the text of that file. It fails when the file cannot be loaded.
+async function copyButtonText(button: HTMLButtonElement): Promise<boolean> {
+	const url = button.dataset.copyUrl;
+	if (url === undefined) return copyText(textToCopy(button));
+	const text = await fetchText(url);
+	return text !== undefined && (await copyText(text));
+}
+
+async function fetchText(url: string): Promise<string | undefined> {
+	try {
+		const response = await fetch(url);
+		return response.ok ? await response.text() : undefined;
+	} catch {
+		return undefined;
+	}
 }
 
 function textToCopy(button: HTMLButtonElement): string {

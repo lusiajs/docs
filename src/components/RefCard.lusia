@@ -1,6 +1,7 @@
 <script>
   import { props } from "lusiajs";
   import type { ApiEntry } from "lusiajs/api";
+  import { entryMarkdownUrl } from "../ai-docs.ts";
   import { cardMotion } from "../motion/reference.ts";
   import { guidePath, pageLink, referencePath } from "../page-link.ts";
   import {
@@ -11,6 +12,7 @@
     wrapSignature,
   } from "../reference-model.ts";
   import CodeCopy from "./CodeCopy.lusia";
+  import CopyForLlm from "./CopyForLlm.lusia";
 
   const emptyEntry: ApiEntry = {
     id: "",
@@ -151,6 +153,7 @@
   </nav>
 
   <footer class="ref-foot">
+    <CopyForLlm url={entryMarkdownUrl(shown.id)} />
     <a class="ref-link" href={pageLink(guidePath, shown.id)}>
       Guide <span aria-hidden="true">→</span>
     </a>

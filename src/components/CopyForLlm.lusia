@@ -1,0 +1,14 @@
+<script>
+  import { props } from "lusiajs";
+
+  const { url } = props({ url: "" });
+</script>
+
+<button
+  class="copy-button copy-llm-button"
+  type="button"
+  data-copy-url={url.value}
+>
+  <span class="material-symbols-rounded" aria-hidden="true">content_copy</span>
+  <span class="copy-llm-label">Copy for LLM</span>
+</button>

@@ -2,6 +2,7 @@
   import { WHEN, PRESET } from "lusiajs";
   import type { ApiEntry } from "lusiajs/api";
   import { catalog } from "../catalog.ts";
+  import { entryMarkdownUrl } from "../ai-docs.ts";
   import { headingFlash } from "../flash.ts";
   import { buildKeywordIndex, tokenize } from "../keywords.ts";
   import { guideGroups, orderedEntries } from "../render.ts";
@@ -10,6 +11,7 @@
   import AnimateSpace from "./AnimateSpace.lusia";
   import CodeBlock from "./CodeBlock.lusia";
   import CodePanel from "./CodePanel.lusia";
+  import CopyForLlm from "./CopyForLlm.lusia";
   import DemoRow from "./DemoRow.lusia";
   import DocTable from "./DocTable.lusia";
   import RichText from "./RichText.lusia";
@@ -95,6 +97,7 @@
             ><RichText parts={section.subtitle}
           /></span>
         </h2>
+        <CopyForLlm url={entryMarkdownUrl(section.entry.id)} />
         <IF {section.learn}>
           <p class="doc-learn">You will learn: {section.learn}</p>
         </IF>
