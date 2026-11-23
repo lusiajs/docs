@@ -6,6 +6,7 @@
   import { countRows, groupsFor, rowCounts, type Row } from "../search/rank.ts";
   import { loadRecent, saveRecent, withRecent } from "../search/recent.ts";
   import { closeSearch, openSearch, searchOpen } from "../search/state.ts";
+  import { navigateTo } from "../router.ts";
 
   // Opening glides the box to the top centre. The backdrop fades in behind it.
   const index = buildSearchIndex();
@@ -13,11 +14,11 @@
   const active = variable(0);
   const recent = variable(loadRecent());
   const field = variable<HTMLInputElement | null>(null);
-  const list = variable<HTMLElement | null>(null);
 
   const groups = variable.compute(() =>
     groupsFor(index, typed.value, recent.value),
   );
+  const rows = variable.compute(() => groups.value.flatMap((group) => group.rows));
   const starts = variable.compute(() => groupStarts(rowCounts(groups.value)));
   const count = variable.compute(() => countRows(groups.value));
   const noResults = variable.compute(
@@ -102,7 +103,7 @@
         break;
       case "Enter":
         event.preventDefault();
-        activeRow()?.click();
+        openActive();
         break;
       case "Escape":
         closeSearch();
@@ -114,25 +115,44 @@
     return index === active.value ? "search-row is-active" : "search-row";
   }
 
-  function activeRow(): HTMLElement | null | undefined {
-    return list.value?.querySelector<HTMLElement>(
-      `[data-index="${active.value}"]`,
-    );
+  function activeRow(): Row | undefined {
+    return rows.peek().find((row) => row.index === active.peek());
+  }
+
+  function fillTerm(term: string) {
+    typed.value = term;
+    active.value = 0;
+  }
+
+  function rememberTyped() {
+    if (typed.value.trim() === "") return;
+    recent.value = withRecent(recent.value, typed.value.trim());
+    saveRecent(recent.value);
   }
 
   // A term row fills the box. A result row closes the palette and remembers the term.
   function pick(event: MouseEvent, row: Row) {
     if (row.term !== undefined) {
       event.preventDefault();
-      typed.value = row.term;
-      active.value = 0;
+      fillTerm(row.term);
       return;
     }
-    if (typed.value.trim() !== "") {
-      recent.value = withRecent(recent.value, typed.value.trim());
-      saveRecent(recent.value);
-    }
+    rememberTyped();
     closeSearch();
+  }
+
+  // Enter does what a click on the active row does, without a click on the element.
+  function openActive() {
+    const row = activeRow();
+    if (!row) return;
+    if (row.term !== undefined) {
+      fillTerm(row.term);
+      return;
+    }
+    rememberTyped();
+    closeSearch();
+    const url = new URL(row.href, location.href);
+    navigateTo(url.pathname, url.hash);
   }
 </script>
 
@@ -182,7 +202,6 @@
         class="search-panel"
         id="search-results"
         role="listbox"
-        bind-element={list}
         animate={panelMotion}
       >
         <div class="search-results">
