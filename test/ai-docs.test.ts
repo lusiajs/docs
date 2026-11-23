@@ -8,8 +8,8 @@ import { CODES } from "lusiajs/errors/codes.ts";
 import { entryMarkdownUrl } from "../src/ai-docs.ts";
 import { generateDocs } from "../scripts/ai-docs/generate.ts";
 import { findBrokenLinks } from "../scripts/ai-docs/links.ts";
-import { configSchema } from "../scripts/ai-docs/source.ts";
-import { apiPagePath, llmsTxtPath } from "../scripts/ai-docs/paths.ts";
+import { configSchema, packageJson } from "../scripts/ai-docs/source.ts";
+import { apiPagePath, indexPagePath, llmsFullTxtPath, llmsTxtPath } from "../scripts/ai-docs/paths.ts";
 
 const WORDS_THAT_MEAN_A_BUG = ["undefined", "[object Object]"];
 const LLMS_LINK = /\]\(([^)\s]+)\)/g;
@@ -55,6 +55,13 @@ describe("generated docs", () => {
   test("config.md lists the nested animate.attach.animateSpace option", async () => {
     const config = await readDoc(firstDir, "docs/config.md");
     expect(config).toContain("animate.attach.animateSpace");
+  });
+
+  test("llms.txt, llms-full.txt and docs/README.md show the installed version", async () => {
+    const versionLine = `Version: ${packageJson.version}`;
+    for (const path of [llmsTxtPath, llmsFullTxtPath, indexPagePath]) {
+      expect(await readDoc(firstDir, path)).toContain(versionLine);
+    }
   });
 
   test("every link in llms.txt points to a file that exists", async () => {

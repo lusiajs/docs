@@ -6,15 +6,21 @@ import { rebaseLinks } from "./links.ts";
 
 const SEPARATOR = "\n---\n\n";
 
+function versionLine(version: string): string {
+  return `Version: ${version}`;
+}
+
 function apiLine(entry: ApiEntry): string {
   return `- [${entry.name}](${apiPagePath(entry.id)}): ${entry.summary}`;
 }
 
-export function buildLlmsTxt(entries: ApiEntry[], description: string): string {
+export function buildLlmsTxt(entries: ApiEntry[], description: string, version: string): string {
   const lines = [
     "# Lusia",
     "",
     `> ${description}`,
+    "",
+    versionLine(version),
     "",
     "## Start here",
     "",
@@ -47,10 +53,10 @@ function isFullPage(path: string): boolean {
   return path.startsWith("docs/") && path.endsWith(".md");
 }
 
-export function buildLlmsFullTxt(files: DocFiles): string {
+export function buildLlmsFullTxt(files: DocFiles, version: string): string {
   const pages = [...files]
     .filter(([path]) => isFullPage(path))
     .sort(([left], [right]) => fullRank(left) - fullRank(right) || left.localeCompare(right));
   const parts = pages.map(([path, content]) => rebaseLinks(content, path).trimEnd());
-  return `${parts.join(SEPARATOR)}\n`;
+  return `${versionLine(version)}\n\n${parts.join(SEPARATOR)}\n`;
 }

@@ -46,9 +46,11 @@ const READING_NOTES = [
   "For a step-by-step tour, read the Guide at https://lusia.azpepoze.com/guide.",
 ];
 
-export function buildIndexPage(entries: ApiEntry[], intro: string): string {
+export function buildIndexPage(entries: ApiEntry[], intro: string, version: string): string {
   const lines = [
     "# Lusia",
+    "",
+    `Version: ${version}`,
     "",
     "**How to read these docs**",
     "",

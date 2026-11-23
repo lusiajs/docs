@@ -20,14 +20,14 @@ function addFile(files: DocFiles, path: string, content: string): void {
 // Every file the package ships, keyed by its path from the package root.
 export function buildDocFiles(): DocFiles {
   const files: DocFiles = new Map();
-  const description = packageJson.description;
-  addFile(files, indexPagePath, buildIndexPage(api, description + INTRO_SUFFIX));
+  const { description, version } = packageJson;
+  addFile(files, indexPagePath, buildIndexPage(api, description + INTRO_SUFFIX, version));
   for (const entry of api) {
     addFile(files, apiPagePath(entry.id), buildApiPage(entry, api));
   }
   addFile(files, errorsPagePath, buildErrorsPage(CODES));
   addFile(files, configPagePath, buildConfigPage(configSchema));
-  addFile(files, llmsTxtPath, buildLlmsTxt(api, description));
-  addFile(files, llmsFullTxtPath, buildLlmsFullTxt(files));
+  addFile(files, llmsTxtPath, buildLlmsTxt(api, description, version));
+  addFile(files, llmsFullTxtPath, buildLlmsFullTxt(files, version));
   return files;
 }
