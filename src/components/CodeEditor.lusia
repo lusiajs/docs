@@ -1,6 +1,7 @@
 <script>
   import { onAttach, props, variable } from "lusiajs";
   import type { EditorFile, EditorJump } from "../editor/files.ts";
+  import { copyText } from "../copy.ts";
   import type { EditorSession } from "../editor/session.ts";
   import EditorTabs from "./EditorTabs.lusia";
 
@@ -125,14 +126,13 @@
 
   async function copyCode() {
     if (!session) return;
-    try {
-      await navigator.clipboard.writeText(session.text());
-      copied.value = true;
-      clearTimeout(copiedTimer);
-      copiedTimer = window.setTimeout(() => (copied.value = false), 1500);
-    } catch {
+    if (!(await copyText(session.text()))) {
       status.value = "Copy failed. Select the code and copy it instead.";
+      return;
     }
+    copied.value = true;
+    clearTimeout(copiedTimer);
+    copiedTimer = window.setTimeout(() => (copied.value = false), 1500);
   }
 </script>
 
