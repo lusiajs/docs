@@ -1,42 +1,28 @@
-// A group or a sub-group. Both collapse the same way.
-const COLLAPSIBLE = ".nav-group, .nav-subgroup";
+import { variable, type Variable } from "lusiajs";
 
-export function setGroupCollapsed(
-	group: HTMLElement,
-	collapsed: boolean,
-): void {
-	group.classList.toggle("is-collapsed", collapsed);
-	group.querySelector(".nav-title")?.setAttribute(
-		"aria-expanded",
-		String(!collapsed),
-	);
+// The collapse state of every group and sub-group, keyed by its data-collapse value.
+const collapsed = new Map<string, Variable<boolean>>();
+
+export function collapsedState(key: string): Variable<boolean> {
+	let state = collapsed.get(key);
+	if (!state) {
+		state = variable(false);
+		collapsed.set(key, state);
+	}
+	return state;
 }
 
-export function initGroupToggles(signal: AbortSignal): void {
-	for (const title of document.querySelectorAll<HTMLButtonElement>(
-		".nav-title",
-	)) {
-		title.addEventListener(
-			"click",
-			() => {
-				const group = title.closest<HTMLElement>(COLLAPSIBLE)!;
-				setGroupCollapsed(
-					group,
-					!group.classList.contains("is-collapsed"),
-				);
-			},
-			{ signal },
-		);
-	}
+export function toggleGroup(key: string): void {
+	const state = collapsedState(key);
+	state.value = !state.value;
 }
 
 // Opens every collapsed group or sub-group around a link, so the current link is never hidden.
 export function expandAround(link: HTMLElement): void {
-	let collapsed = link.closest<HTMLElement>(".is-collapsed");
-	while (collapsed) {
-		setGroupCollapsed(collapsed, false);
-		collapsed =
-			collapsed.parentElement?.closest<HTMLElement>(".is-collapsed") ??
-			null;
+	let holder = link.closest<HTMLElement>("[data-collapse]");
+	while (holder) {
+		collapsedState(holder.dataset.collapse!).value = false;
+		holder =
+			holder.parentElement?.closest<HTMLElement>("[data-collapse]") ?? null;
 	}
 }

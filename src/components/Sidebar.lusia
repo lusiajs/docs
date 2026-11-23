@@ -1,13 +1,36 @@
 <script>
   import { props } from "lusiajs";
+  import { collapsedState, toggleGroup } from "../nav-group.ts";
   import type { SidebarGroup } from "../render.ts";
 
   const { groups } = props({ groups: [] as SidebarGroup[] });
+
+  function blockKey(group: SidebarGroup, blockId: string): string {
+    return group.id + "/" + blockId;
+  }
+
+  function collapsibleClass(base: string, key: string): string {
+    return collapsedState(key).value ? base + " is-collapsed" : base;
+  }
+
+  function expandedText(key: string): string {
+    return String(!collapsedState(key).value);
+  }
 </script>
 
 <EACH {groups} as={group}>
-  <div class="nav-group" data-group={group.id} style={"--group: " + group.color}>
-    <button class="nav-title" type="button" aria-expanded="true">
+  <div
+    class={collapsibleClass("nav-group", group.id)}
+    data-group={group.id}
+    data-collapse={group.id}
+    style={"--group: " + group.color}
+  >
+    <button
+      class="nav-title"
+      type="button"
+      aria-expanded={expandedText(group.id)}
+      onclick={() => toggleGroup(group.id)}
+    >
       <span class="group-name">
         <IF {group.icon}>
           <span class="material-symbols-rounded" aria-hidden="true"
@@ -23,12 +46,17 @@
     <div class="nav-items">
       <div>
         <EACH {group.blocks} as={block}>
-          <div class="nav-subgroup" data-block={block.id}>
+          <div
+            class={collapsibleClass("nav-subgroup", blockKey(group, block.id))}
+            data-block={block.id}
+            data-collapse={blockKey(group, block.id)}
+          >
             <IF {block.label}>
               <button
                 class="nav-title nav-subtitle"
                 type="button"
-                aria-expanded="true"
+                aria-expanded={expandedText(blockKey(group, block.id))}
+                onclick={() => toggleGroup(blockKey(group, block.id))}
               >
                 <span class="group-name">{block.label}</span>
                 <span
