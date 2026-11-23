@@ -61,6 +61,12 @@
   const ENTER_GAP_MS = 340;
   let enterTimer = 0;
 
+  const trackEl = variable<HTMLElement | null>(null);
+  // While a nav click scrolls, the markers it passes must not switch the feature.
+  const NAVIGATE_MAX_MS = 1200;
+  let navigating = false;
+  let navigateTimer = 0;
+
   // The header slides in from the left as the section arrives.
   const titleSlide = reduced
     ? []
@@ -165,17 +171,35 @@
     shown.value = active.peek();
   }
 
+  // The middle of a feature's active range: the stage is stuck and its marker is well past the middle.
+  function stepTop(track: HTMLElement, index: number): number {
+    const trackTop = track.getBoundingClientRect().top + window.scrollY;
+    return trackTop + index * (window.innerHeight / 2);
+  }
+
+  function finishNavigating() {
+    if (!navigating) return;
+    navigating = false;
+    clearTimeout(navigateTimer);
+    updateActive();
+  }
+
   function goTo(index: number) {
+    const track = trackEl.peek();
+    if (!track) return;
     setActive(index);
-    markerEls[index].peek()?.scrollIntoView({
+    navigating = true;
+    clearTimeout(navigateTimer);
+    navigateTimer = window.setTimeout(finishNavigating, NAVIGATE_MAX_MS);
+    window.scrollTo({
+      top: stepTop(track, index),
       behavior: reduced ? "auto" : "smooth",
-      block: "center",
     });
   }
 
   // The last feature whose marker has passed the middle is the active one.
   function updateActive() {
-    if (phone.peek()) return;
+    if (phone.peek() || navigating) return;
     const last = passed.lastIndexOf(true);
     if (last !== -1) setActive(last);
   }
@@ -198,13 +222,16 @@
       phone.value = event.matches;
     };
     phoneQuery.addEventListener("change", onPhoneChange);
+    window.addEventListener("scrollend", finishNavigating);
     markerEls.forEach((markerEl, index) => {
       const marker = markerEl.peek();
       if (marker) watchMarker(marker, index);
     });
     return () => {
       phoneQuery.removeEventListener("change", onPhoneChange);
+      window.removeEventListener("scrollend", finishNavigating);
       clearTimeout(enterTimer);
+      clearTimeout(navigateTimer);
     };
   });
 </script>
@@ -218,7 +245,7 @@
       </header>
     </IF>
 
-    <div class="track">
+    <div class="track" bind-element={trackEl}>
       <EACH {features} as={feature} index={i} key={feature.key}>
         <div
           class="marker"
@@ -472,10 +499,10 @@
     }
   }
 
-  // Seven steps of scroll. The markers set the active feature, and the stage sticks.
+  // Seven steps of scroll. The extra screen keeps the stage stuck through the last step.
   .track {
     position: relative;
-    height: calc(7 * #{$step-height});
+    height: calc(6 * #{$step-height} + 100vh);
   }
 
   .marker {
