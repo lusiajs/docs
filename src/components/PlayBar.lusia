@@ -1,5 +1,5 @@
 <script>
-  import { PRESET, WHEN, onAttach, variable } from "lusiajs";
+  import { EVENT, PRESET, WHEN, listen, onAttach, variable } from "lusiajs";
   import {
     addFile,
     copyActive,
@@ -28,7 +28,9 @@
   const adding = variable.compute(() => formMode.value === "add");
   const renaming = variable.compute(() => formMode.value === "rename");
   const isEntry = variable.compute(() => active.value === ENTRY_FILE);
-  const menu = variable<HTMLDetailsElement | null>(null);
+  const moreOpen = variable(false);
+  const moreText = variable.compute(() => String(moreOpen.value));
+  const moreRoot = variable<HTMLElement | null>(null);
   const copied = variable(false);
   const copyLabel = variable.compute(() =>
     copied.value ? "Copied" : "Copy file",
@@ -115,13 +117,20 @@
       resetFiles();
   }
 
-  function closeMenu() {
-    const open = menu.peek();
-    if (open) open.open = false;
+  function toggleMore() {
+    moreOpen.value = !moreOpen.value;
   }
 
-  // The timer must not fire after the bar is gone.
-  onAttach(() => () => clearTimeout(copiedTimer));
+  function closeMenu() {
+    moreOpen.value = false;
+  }
+
+  // A press outside the More menu, or Escape, closes it.
+  onAttach(() => {
+    listen(moreRoot.peek()!, EVENT.CLICK_OUTSIDE, closeMenu);
+    // The timer must not fire after the bar is gone.
+    return () => clearTimeout(copiedTimer);
+  });
 </script>
 
 <div class="play-bar">
@@ -189,31 +198,33 @@
     <span class="play-sep" aria-hidden="true"></span>
     <PresetMenu />
     <span class="play-sep" aria-hidden="true"></span>
-    <details
-      class="play-more"
-      bind-element={menu}
-      on:click-outside={closeMenu}
-    >
-      <summary
+    <div class="play-more" bind-element={moreRoot}>
+      <button
         class="play-icon"
+        type="button"
         aria-label="More playground actions"
+        aria-haspopup="true"
+        aria-expanded={moreText}
         title="More"
+        onclick={toggleMore}
       >
         <span class="material-symbols-rounded" aria-hidden="true"
           >more_horiz</span
         >
-      </summary>
-      <div class="play-menu">
-        <button type="button" disabled={isEntry} onclick={openRename}>
-          Rename file
-        </button>
-        <button type="button" disabled={isEntry} onclick={removeActive}>
-          Delete file
-        </button>
-        <div class="play-menu-sep" role="separator"></div>
-        <button type="button" onclick={reset}>Reset to starter</button>
-      </div>
-    </details>
+      </button>
+      <IF {moreOpen}>
+        <div class="play-menu">
+          <button type="button" disabled={isEntry} onclick={openRename}>
+            Rename file
+          </button>
+          <button type="button" disabled={isEntry} onclick={removeActive}>
+            Delete file
+          </button>
+          <div class="play-menu-sep" role="separator"></div>
+          <button type="button" onclick={reset}>Reset to starter</button>
+        </div>
+      </IF>
+    </div>
   </div>
   <IF {adding}>
     <div class="play-form" animate={formMotion}>
@@ -334,14 +345,6 @@
     &[aria-pressed="true"] {
       background: var(--accent-soft);
       color: var(--accent);
-    }
-  }
-
-  summary.play-icon {
-    list-style: none;
-
-    &::-webkit-details-marker {
-      display: none;
     }
   }
 

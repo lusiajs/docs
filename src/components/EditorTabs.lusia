@@ -1,6 +1,7 @@
 <script>
   import { PRESET, WHEN, props, variable } from "lusiajs";
   import type { EditorFile } from "../editor/files.ts";
+  import { nextIndex } from "../tab-keys.ts";
 
   const { files, active, onSelect, onAdd } = props({
     files: [] as EditorFile[],
@@ -43,14 +44,6 @@
 
   function add() {
     onAdd.peek()?.();
-  }
-
-  function nextIndex(key: string, current: number, count: number): number | null {
-    if (key === "ArrowRight") return (current + 1) % count;
-    if (key === "ArrowLeft") return (current - 1 + count) % count;
-    if (key === "Home") return 0;
-    if (key === "End") return count - 1;
-    return null;
   }
 
   // Arrow keys move between tabs and focus them, like a native tab list.

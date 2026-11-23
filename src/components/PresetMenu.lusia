@@ -1,5 +1,5 @@
 <script>
-  import { PRESET, WHEN, variable } from "lusiajs";
+  import { EVENT, PRESET, WHEN, listen, onAttach, variable } from "lusiajs";
   import { hasEditedFiles, loadPreset } from "../playground/actions.ts";
   import { PRESETS, type Preset } from "../playground/presets/index.ts";
 
@@ -8,6 +8,7 @@
 
   const open = variable(false);
   const openText = variable.compute(() => String(open.value));
+  const root = variable<HTMLElement | null>(null);
 
   // Each item slides in a little after the one before it.
   const choices = PRESETS.map((preset, index) => ({
@@ -40,9 +41,14 @@
     if (hasEditedFiles() && !confirm(lose)) return;
     loadPreset(preset);
   }
+
+  // A press outside the menu, or Escape, closes it.
+  onAttach(() => {
+    listen(root.peek()!, EVENT.CLICK_OUTSIDE, closeMenu);
+  });
 </script>
 
-<div class="play-presets" on:click-outside={closeMenu}>
+<div class="play-presets" bind-element={root}>
   <button
     class="play-text"
     type="button"

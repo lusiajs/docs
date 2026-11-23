@@ -1,4 +1,5 @@
 import { attach, type Component, type Instance, type Props } from "lusiajs";
+import { createQueue } from "./live/queue.ts";
 import type { PageSpec } from "./router.ts";
 
 // What the outlet shows: a page, or the loading or error fallback (no spec).
@@ -11,7 +12,7 @@ export interface Screen {
 let element: HTMLElement;
 let screen: Screen | undefined;
 // Outlet changes run one after another, so a page never attaches while the old one is still leaving.
-let queue: Promise<void> = Promise.resolve();
+const later = createQueue();
 
 export function setOutlet(target: HTMLElement): void {
 	element = target;
@@ -25,9 +26,8 @@ export function currentScreen(): Screen | undefined {
 	return screen;
 }
 
-export function inOutlet(task: () => Promise<void>): Promise<void> {
-	queue = queue.then(task).catch((error: unknown) => console.error(error));
-	return queue;
+export function inOutlet(task: () => Promise<void>): Promise<unknown> {
+	return later(task);
 }
 
 // Takes the screen first, so no other step can detach it again while it leaves.

@@ -16,6 +16,7 @@
   import { loadRuntime } from "../live/runtime-source.ts";
   import type { LiveBundle, LiveError, LiveRun } from "../live/types.ts";
   import { guidePath, pageLink } from "../page-link.ts";
+  import { theme } from "../theme.ts";
   // CodeEditor is large. Inside an IF, smart mode splits it into its own chunk.
   import CodeEditor from "./CodeEditor.lusia";
   import CodePanel from "./CodePanel.lusia";
@@ -51,6 +52,15 @@
     show: showLive,
     restore: showOriginal,
   });
+
+  // The frame takes its theme when it runs, so an edited demo runs again on a switch.
+  variable.watch(
+    [theme],
+    () => {
+      if (live.peek()) session.rerun();
+    },
+    { onInit: false },
+  );
 
   // The demo and its editor are made when the row nears the screen.
   onAttach(() => {
@@ -102,7 +112,7 @@
       await preview!.show({
         ...bundle,
         runtime: await loadRuntime(),
-        theme: themeName(),
+        theme: theme.peek(),
       });
     } catch (error) {
       return { ok: false, error: errorDetail(error) };
@@ -125,10 +135,6 @@
   function reload(): void {
     if (session.edited.peek()) session.rerun();
     else remountOriginals();
-  }
-
-  function themeName(): string {
-    return document.documentElement.dataset.theme ?? "light";
   }
 
   function errorDetail(error: unknown): LiveError {
