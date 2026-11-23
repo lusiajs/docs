@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, variable } from "lusiajs";
+  import { EVENT, WHEN, listen, variable } from "lusiajs";
   import Highlight from "./Highlight.lusia";
   import { buildSearchIndex } from "../search/build.ts";
   import { groupJump, groupStarts, moveIndex } from "../search/keys.ts";
@@ -14,6 +14,7 @@
   const active = variable(0);
   const recent = variable(loadRecent());
   const field = variable<HTMLInputElement | null>(null);
+  const box = variable<HTMLElement | null>(null);
 
   const groups = variable.compute(() =>
     groupsFor(index, typed.value, recent.value),
@@ -69,10 +70,26 @@
   const APPLE_PLATFORM = /Mac|iPhone|iPad/;
   const shortcutModifier = APPLE_PLATFORM.test(navigator.platform) ? "⌘" : "Ctrl";
 
+  // A press outside the box, or Escape, closes the palette. Listens only while open.
+  let stopClickOutside = () => {};
+
+  function watchClickOutside() {
+    stopClickOutside();
+    const shell = box.peek();
+    if (shell) {
+      stopClickOutside = listen(shell, EVENT.CLICK_OUTSIDE, closeSearch);
+    }
+  }
+
   // Focus follows the open state: opening focuses the field, closing leaves it.
   variable.autoRun(() => {
-    if (searchOpen.value) field.value?.focus();
-    else field.value?.blur();
+    if (searchOpen.value) {
+      field.value?.focus();
+      watchClickOutside();
+    } else {
+      field.value?.blur();
+      stopClickOutside();
+    }
   });
 
   function onInput() {
@@ -104,9 +121,6 @@
       case "Enter":
         event.preventDefault();
         openActive();
-        break;
-      case "Escape":
-        closeSearch();
         break;
     }
   }
@@ -160,11 +174,11 @@
   <div
     class={searchOpen.value ? "search-backdrop is-open" : "search-backdrop"}
     animate={backdrop}
-    onclick={closeSearch}
   ></div>
   <div
     class={searchOpen.value ? "search is-open" : "search"}
     animate={glide}
+    bind-element={box}
   >
     <div class="search-field">
       <span class="material-symbols-rounded search-glyph" aria-hidden="true"
