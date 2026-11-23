@@ -1,8 +1,19 @@
 <script>
-  import { EASE, EVENT, SCREEN, WHEN, listen, onAttach, variable } from "lusiajs";
+  import {
+    EASE,
+    EVENT,
+    SCREEN,
+    WHEN,
+    listen,
+    onAttach,
+    props,
+    variable,
+  } from "lusiajs";
   import { wobbleStyle } from "../motion/wobble.ts";
 
   const reduced = SCREEN.REDUCED_MOTION.value;
+
+  const { letter } = props({ letter: null as HTMLElement | null });
 
   const logoEl = variable<HTMLElement | null>(null);
 
@@ -10,10 +21,10 @@
   function placeLogo() {
     const logo = logoEl.value;
     const title = logo?.parentElement;
-    const letter = title?.querySelector<HTMLElement>(".letter-slot");
-    if (!logo || !title || !letter) return;
+    const firstLetter = letter.value;
+    if (!logo || !title || !firstLetter) return;
     title.style.setProperty("--title-pad", `${titlePadding(logo)}px`);
-    logo.style.setProperty("--letter-left", `${letter.offsetLeft}px`);
+    logo.style.setProperty("--letter-left", `${firstLetter.offsetLeft}px`);
   }
 
   // The left margin is the logo width plus the gap. Padding by it moves the text by half.

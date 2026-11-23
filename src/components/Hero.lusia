@@ -69,7 +69,9 @@
     char,
     scatter: letterScatter(index),
     motion: letterMotion(index),
+    slot: variable<HTMLElement | null>(null),
   }));
+  const firstSlot = letters[0].slot;
 
   const fadeIn = {
     0: { opacity: 0 },
@@ -179,9 +181,14 @@
       </span>
     </p>
     <h1 class="hero-title" aria-label="Lusia" animate={titleDrift}>
-      <HeroLogo />
+      <HeroLogo letter={firstSlot} />
       <EACH {letters} as="{letter}">
-        <span class="letter-slot" aria-hidden="true" animate={letter.scatter}>
+        <span
+          class="letter-slot"
+          aria-hidden="true"
+          animate={letter.scatter}
+          bind-element={letter.slot}
+        >
           <span class="letter" animate={letter.motion}> {letter.char} </span>
         </span>
       </EACH>
