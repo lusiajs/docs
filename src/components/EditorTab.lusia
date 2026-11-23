@@ -1,0 +1,50 @@
+<script>
+  import { PRESET, WHEN, props, variable } from "lusiajs";
+
+  const { name, active, onSelect } = props({
+    name: "",
+    active: "",
+    onSelect: (value: string) => {},
+  });
+
+  // A new tab slides in. A closed tab fades, and the tabs after it slide over the gap.
+  const tabMotion = [
+    { style: PRESET.SLIDE_DOWN, when: WHEN.ATTACH, duration: 250 },
+    {
+      style: PRESET.FADE_OUT,
+      when: WHEN.DETACH,
+      duration: 200,
+      more: { animateSpace: true },
+    },
+  ];
+
+  const tab = variable<HTMLElement | null>(null);
+  const isSelected = variable.compute(() => active.value === name.value);
+  const selectedText = variable.compute(() => String(isSelected.value));
+
+  // Bindings refresh the tab after this watcher runs, so scroll once they have.
+  variable.autoRun(() => {
+    const el = tab.value;
+    if (!el || !isSelected.value) return;
+    queueMicrotask(() => {
+      el.scrollIntoView({ inline: "nearest", block: "nearest" });
+    });
+  });
+
+  function choose() {
+    onSelect.peek()(name.peek());
+  }
+</script>
+
+<button
+  class="code-tab"
+  type="button"
+  role="tab"
+  aria-selected={selectedText}
+  animate={tabMotion}
+  bind-element={tab}
+  onclick={choose}
+>
+  <span class="material-symbols-rounded" aria-hidden="true">description</span>
+  {name}
+</button>

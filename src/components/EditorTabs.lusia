@@ -1,7 +1,8 @@
 <script>
-  import { PRESET, WHEN, props, variable } from "lusiajs";
+  import { props, variable } from "lusiajs";
   import type { EditorFile } from "../editor/files.ts";
   import { nextIndex } from "../tab-keys.ts";
+  import EditorTab from "./EditorTab.lusia";
 
   const { files, active, onSelect, onAdd } = props({
     files: [] as EditorFile[],
@@ -10,33 +11,9 @@
     onAdd: null as (() => void) | null,
   });
 
-  // A new tab slides in. A closed tab fades, and the tabs after it slide over the gap.
-  const tabMotion = [
-    { style: PRESET.SLIDE_DOWN, when: WHEN.ATTACH, duration: 250 },
-    {
-      style: PRESET.FADE_OUT,
-      when: WHEN.DETACH,
-      duration: 200,
-      more: { animateSpace: true },
-    },
-  ];
-
-  const strip = variable<HTMLElement | null>(null);
   const showTabs = variable.compute(
     () => files.value.length > 1 || onAdd.value !== null,
   );
-
-  // Bindings refresh the tabs after this watcher runs, so scroll once they have.
-  variable.autoRun(() => {
-    const source = strip.value;
-    const name = active.value;
-    if (!source || name === "") return;
-    queueMicrotask(() => {
-      source
-        .querySelector<HTMLElement>('[aria-selected="true"]')
-        ?.scrollIntoView({ inline: "nearest", block: "nearest" });
-    });
-  });
 
   function select(name: string) {
     onSelect.peek()(name);
@@ -66,22 +43,9 @@
       role="tablist"
       aria-label="Files"
       onkeydown={onTabKey}
-      bind-element={strip}
     >
       <EACH {files} as={file} key={file.name}>
-        <button
-          class="code-tab"
-          type="button"
-          role="tab"
-          aria-selected={String(active.value === file.name)}
-          animate={tabMotion}
-          onclick={() => select(file.name)}
-        >
-          <span class="material-symbols-rounded" aria-hidden="true"
-            >description</span
-          >
-          {file.name}
-        </button>
+        <EditorTab name={file.name} active={active} onSelect={select} />
       </EACH>
     </div>
     <IF {onAdd.value !== null}>
