@@ -1,5 +1,5 @@
 <script>
-  import { SCREEN, onAttach, variable } from "lusiajs";
+  import { SCREEN, listen, onAttach, variable } from "lusiajs";
 
   const reduced = SCREEN.REDUCED_MOTION.value;
 
