@@ -7,22 +7,21 @@
   const toggleLabel = variable.compute(() =>
     showNames.value ? "Hide class names" : "Show class names",
   );
-  const hostA = variable<HTMLElement | null>(null);
-  const hostB = variable<HTMLElement | null>(null);
-  const hostPlain = variable<HTMLElement | null>(null);
+  const cardA = variable<HTMLElement | null>(null);
+  const cardB = variable<HTMLElement | null>(null);
+  const plainCard = variable<HTMLElement | null>(null);
   const names = variable<{ label: string; classes: string }[]>([]);
 
-  function classesOf(host: HTMLElement | null): string {
-    const card = host?.querySelector(".card");
+  function classesOf(card: HTMLElement | null): string {
     return card ? Array.from(card.classList).join(" ") : "";
   }
 
   // Read at click time, so the names are the ones the browser built.
   function readNames() {
     names.value = [
-      { label: "CardA", classes: classesOf(hostA.peek()) },
-      { label: "CardB", classes: classesOf(hostB.peek()) },
-      { label: "Plain", classes: classesOf(hostPlain.peek()) },
+      { label: "CardA", classes: classesOf(cardA.peek()) },
+      { label: "CardB", classes: classesOf(cardB.peek()) },
+      { label: "Plain", classes: classesOf(plainCard.peek()) },
     ];
   }
 
@@ -38,18 +37,18 @@
       <svg class="outline" aria-hidden="true">
         <rect x="1" y="1" rx="20"></rect>
       </svg>
-      <div bind-element={hostA}><CardA /></div>
+      <div><CardA cardEl={cardA} /></div>
     </div>
     <div class="boundary">
       <svg class="outline" aria-hidden="true">
         <rect x="1" y="1" rx="20"></rect>
       </svg>
-      <div bind-element={hostB}><CardB /></div>
+      <div><CardB cardEl={cardB} /></div>
     </div>
   </div>
 
-  <div class="plain" bind-element={hostPlain}>
-    <div class="card">
+  <div class="plain">
+    <div class="card" bind-element={plainCard}>
       <p>Plain card</p>
     </div>
   </div>

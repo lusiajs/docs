@@ -1,4 +1,10 @@
-<div class="card">
+<script>
+  import { props } from "lusiajs";
+
+  const { cardEl } = props({ cardEl: null as HTMLElement | null });
+</script>
+
+<div class="card" bind-element={cardEl}>
   <p>Card B</p>
 </div>
 
