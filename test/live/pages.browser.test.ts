@@ -86,10 +86,10 @@ suite("Reference page after the lazy mount", () => {
     async () => {
       const page = await openReference();
       const groups = await page.evaluate(() =>
-        [...document.querySelectorAll<HTMLElement>("[data-index-group]")]
+        [...document.querySelectorAll<HTMLElement>("#sidebar [data-group]")]
           .filter((group) => !group.hidden)
           .map((group) => ({
-            kind: group.dataset.indexGroup,
+            kind: group.dataset.group,
             links: group.querySelectorAll("a").length,
           })),
       );

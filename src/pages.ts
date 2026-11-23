@@ -1,19 +1,13 @@
 import { initCopy } from "./copy.ts";
 import { initDrawer } from "./drawer.ts";
-import { initGroupToggles } from "./nav-group.ts";
 import { errorsPath, playgroundPath } from "./page-link.ts";
 import { initReferenceClick } from "./reference-click.ts";
-import { initReferenceFilter } from "./reference-filter.ts";
-import { initReferenceView } from "./reference-view.ts";
-import { renderNav } from "./render.ts";
 import type { PageSpec } from "./router.ts";
 import { initScrollSpy } from "./scroll-spy.ts";
 import { initSidebarFollow } from "./sidebar-follow.ts";
 
 // The Guide's wiring starts when the page attaches and stops when the signal aborts.
 function mountGuide(root: HTMLElement, signal: AbortSignal): void {
-	renderNav(root.querySelector<HTMLElement>("#nav-groups")!);
-	initGroupToggles(signal);
 	initSidebarFollow(signal);
 	initScrollSpy(signal, { sections: ".doc-section", demos: ".demo-block" });
 	initDrawer(signal);
@@ -28,9 +22,6 @@ function mountHome(root: HTMLElement, signal: AbortSignal): void {
 function mountReference(root: HTMLElement, signal: AbortSignal): void {
 	initSidebarFollow(signal);
 	initDrawer(signal);
-	initGroupToggles(signal);
-	initReferenceFilter(root, signal);
-	initReferenceView(root, signal);
 	initReferenceClick(root, signal);
 	initCopy(root, signal);
 }

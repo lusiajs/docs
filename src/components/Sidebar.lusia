@@ -1,0 +1,118 @@
+<script>
+  import { props } from "lusiajs";
+  import { collapsedState, toggleGroup } from "../nav-group.ts";
+  import type { SidebarBlock, SidebarGroup } from "../render.ts";
+
+  // shown says which entry ids are visible. By default every entry is.
+  const { groups, shown } = props({
+    groups: [] as SidebarGroup[],
+    shown: (_id: string) => true,
+  });
+
+  function entryShown(id: string): boolean {
+    return shown.value(id);
+  }
+
+  function blockShown(block: SidebarBlock): boolean {
+    return block.entries.some((entry) => entryShown(entry.id));
+  }
+
+  function groupShown(group: SidebarGroup): boolean {
+    return group.blocks.some(blockShown);
+  }
+
+  function blockKey(group: SidebarGroup, blockId: string): string {
+    return group.id + "/" + blockId;
+  }
+
+  function collapsibleClass(base: string, key: string): string {
+    return collapsedState(key).value ? base + " is-collapsed" : base;
+  }
+
+  function expandedText(key: string): string {
+    return String(!collapsedState(key).value);
+  }
+</script>
+
+<EACH {groups} as={group}>
+  <div
+    class={collapsibleClass("nav-group", group.id)}
+    data-group={group.id}
+    data-collapse={group.id}
+    style={"--group: " + group.color}
+    hidden={!groupShown(group)}
+  >
+    <button
+      class="nav-title"
+      type="button"
+      aria-expanded={expandedText(group.id)}
+      onclick={() => toggleGroup(group.id)}
+    >
+      <span class="group-name">
+        <IF {group.icon}>
+          <span class="material-symbols-rounded" aria-hidden="true"
+            >{group.icon}</span
+          >
+        </IF>
+        {group.label}
+      </span>
+      <span class="material-symbols-rounded chevron" aria-hidden="true"
+        >expand_more</span
+      >
+    </button>
+    <div class="nav-items">
+      <div>
+        <EACH {group.blocks} as={block}>
+          <div
+            class={collapsibleClass("nav-subgroup", blockKey(group, block.id))}
+            data-block={block.id}
+            data-collapse={blockKey(group, block.id)}
+            hidden={!blockShown(block)}
+          >
+            <IF {block.label}>
+              <button
+                class="nav-title nav-subtitle"
+                type="button"
+                aria-expanded={expandedText(blockKey(group, block.id))}
+                onclick={() => toggleGroup(blockKey(group, block.id))}
+              >
+                <span class="group-name">{block.label}</span>
+                <span
+                  class="material-symbols-rounded chevron"
+                  aria-hidden="true"
+                >
+                  expand_more
+                </span>
+              </button>
+            </IF>
+            <div class="nav-items">
+              <div>
+                <nav class="nav-links" aria-label={block.label ?? group.label}>
+                  <EACH {block.entries} as={entry}>
+                    <div class="nav-entry" hidden={!entryShown(entry.id)}>
+                      <a href={entry.href}>
+                        <span class="material-symbols-rounded" aria-hidden="true"
+                          >{entry.icon}</span
+                        >
+                        <code class="nav-label">{entry.name}</code>
+                      </a>
+                      <IF {entry.demos.length > 1}>
+                        <div class="nav-sub">
+                          <div class="nav-sub-inner">
+                            <EACH {entry.demos} as={demo}>
+                              <a href={demo.href}>{demo.title}</a>
+                            </EACH>
+                          </div>
+                        </div>
+                      </IF>
+                    </div>
+                  </EACH>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </EACH>
+      </div>
+    </div>
+  </div>
+</EACH>
