@@ -1,7 +1,5 @@
+import { EVENT, keepRunning, listen, type Stop } from "lusiajs";
 import { currentLinks, setCurrentLinks } from "./sidebar-follow.ts";
-
-// Px from the top of the viewport where a section or demo becomes current. Below the scroll margin, so a clicked target is current.
-const SPY_LINE_PX = 200;
 
 // The CSS selectors of the page's section and demo targets. Each target's id matches the hash of a sidebar link.
 export interface SpyTargets {
@@ -9,96 +7,64 @@ export interface SpyTargets {
 	demos?: string;
 }
 
-let linksById = new Map<string, HTMLAnchorElement[]>();
-let sections: HTMLElement[] = [];
-let demos: HTMLElement[] = [];
-let selectors: SpyTargets;
-let observer: MutationObserver | undefined;
-let frame = 0;
+interface Spy {
+	sections: HTMLElement[];
+	demos: HTMLElement[];
+	visible: Set<HTMLElement>;
+	linksById: Map<string, HTMLAnchorElement[]>;
+}
 
-// Runs while a page with a #sidebar is attached. The signal removes every listener and pending frame.
+// Runs while a page with a #sidebar is attached. The signal stops every view listener.
 export function initScrollSpy(signal: AbortSignal, targets: SpyTargets): void {
-	const sidebar = document.querySelector<HTMLElement>("#sidebar")!;
-	linksById = groupLinksById(sidebar);
-	selectors = targets;
-	sections = queryAll(targets.sections);
-	demos = targets.demos ? queryAll(targets.demos) : [];
-	window.addEventListener("scroll", () => scheduleUpdate(signal), {
-		passive: true,
-		signal,
-	});
-	window.addEventListener("resize", () => scheduleUpdate(signal), {
-		signal,
-	});
-	// Lazy components mount after the page, so their sections and demos join the targets later.
-	observer = new MutationObserver(() => recollect(signal));
-	observer.observe(document.getElementById("outlet") ?? document.body, {
-		childList: true,
-		subtree: true,
-	});
+	const spy: Spy = {
+		sections: queryAll(targets.sections),
+		demos: targets.demos ? queryAll(targets.demos) : [],
+		visible: new Set(),
+		linksById: groupLinksById(document.querySelector<HTMLElement>("#sidebar")!),
+	};
+	const stops = watchTargets(spy);
 	signal.addEventListener("abort", () => {
-		observer?.disconnect();
-		observer = undefined;
-		cancelAnimationFrame(frame);
-		frame = 0;
+		for (const stop of stops) stop();
 	});
-	update();
+	activate(spy);
 }
 
-// Call after targets are shown or hidden, so the current link follows the change without a scroll.
-export function refreshScrollSpy(): void {
-	update();
+// Each target reports when it enters or leaves the screen. The sections and demos are in the page when it attaches.
+function watchTargets(spy: Spy): Stop[] {
+	const stops: Stop[] = [];
+	keepRunning(() => {
+		for (const target of [...spy.sections, ...spy.demos]) {
+			stops.push(
+				listen(target, EVENT.VIEW, ({ in: isIn }) => {
+					setVisible(spy.visible, target, isIn);
+					activate(spy);
+				}),
+			);
+		}
+	});
+	return stops;
 }
 
-function recollect(signal: AbortSignal): void {
-	const nextSections = queryAll(selectors.sections);
-	const nextDemos = selectors.demos ? queryAll(selectors.demos) : [];
-	if (sameItems(sections, nextSections) && sameItems(demos, nextDemos))
-		return;
-	sections = nextSections;
-	demos = nextDemos;
-	scheduleUpdate(signal);
-}
-
-function sameItems<T>(before: T[], after: T[]): boolean {
-	return (
-		before.length === after.length &&
-		before.every((item, index) => item === after[index])
-	);
+function setVisible(
+	visible: Set<HTMLElement>,
+	target: HTMLElement,
+	isIn: boolean,
+): void {
+	if (isIn) visible.add(target);
+	else visible.delete(target);
 }
 
 function queryAll(selector: string): HTMLElement[] {
 	return [...document.querySelectorAll<HTMLElement>(selector)];
 }
 
-function scheduleUpdate(signal: AbortSignal): void {
-	if (frame || signal.aborted) return;
-	frame = requestAnimationFrame(() => {
-		frame = 0;
-		update();
-	});
-}
-
-function update(): void {
-	const section = currentTarget(sections);
-	const demo = currentTarget(demos);
-	activate(section, demo && section?.contains(demo) ? demo : undefined);
-}
-
-// The last visible target whose top is above the line. Targets are in document order, so the scan stops early.
-function currentTarget(targets: HTMLElement[]): HTMLElement | undefined {
-	if (atPageBottom()) return lastVisible(targets);
-	let current: HTMLElement | undefined;
-	for (const target of targets) {
-		if (target.hidden) continue;
-		if (target.getBoundingClientRect().top > SPY_LINE_PX) break;
-		current = target;
-	}
-	return current;
-}
-
-function lastVisible(targets: HTMLElement[]): HTMLElement | undefined {
-	return targets.findLast((target) => !target.hidden);
+// The first visible target in page order, or the last one when the page is scrolled to its end.
+function current(
+	targets: HTMLElement[],
+	visible: Set<HTMLElement>,
+): HTMLElement | undefined {
+	const shown = targets.filter((target) => visible.has(target));
+	return atPageBottom() ? shown.at(-1) : shown[0];
 }
 
 function atPageBottom(): boolean {
@@ -119,16 +85,29 @@ function groupLinksById(
 	return map;
 }
 
-// Runs on every scroll frame, so it only touches the sidebar when the current place changes.
-function activate(
+// A demo counts only inside the current section, so the sidebar never marks a demo from another one.
+function nestedDemo(
 	section: HTMLElement | undefined,
 	demo: HTMLElement | undefined,
-): void {
-	const links = [...linksFor(section), ...linksFor(demo)];
+): HTMLElement | undefined {
+	return section && demo && section.contains(demo) ? demo : undefined;
+}
+
+function activate(spy: Spy): void {
+	const section = current(spy.sections, spy.visible);
+	const demo = nestedDemo(section, current(spy.demos, spy.visible));
+	const links = [...linksFor(spy, section), ...linksFor(spy, demo)];
 	if (sameItems(links, currentLinks())) return;
 	setCurrentLinks(links);
 }
 
-function linksFor(target: HTMLElement | undefined): HTMLAnchorElement[] {
-	return target ? (linksById.get(target.id) ?? []) : [];
+function linksFor(spy: Spy, target: HTMLElement | undefined): HTMLAnchorElement[] {
+	return target ? (spy.linksById.get(target.id) ?? []) : [];
+}
+
+function sameItems<T>(before: T[], after: T[]): boolean {
+	return (
+		before.length === after.length &&
+		before.every((item, index) => item === after[index])
+	);
 }
