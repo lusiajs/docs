@@ -4,11 +4,22 @@
   const { url } = props({ url: "" });
 </script>
 
-<button
-  class="copy-button copy-llm-button"
-  type="button"
-  data-copy-url={url.value}
->
-  <span class="material-symbols-rounded" aria-hidden="true">content_copy</span>
-  <span class="copy-llm-label">Copy for LLM</span>
-</button>
+<div class="llm-actions">
+  <button
+    class="copy-button copy-llm-button"
+    type="button"
+    data-copy-url={url.value}
+  >
+    <span class="material-symbols-rounded" aria-hidden="true">content_copy</span>
+    <span class="copy-llm-label">Copy for LLM</span>
+  </button>
+  <a
+    class="copy-llm-button"
+    href={url.value}
+    target="_blank"
+    rel="noopener"
+  >
+    <span class="material-symbols-rounded" aria-hidden="true">article</span>
+    <span>View as Markdown</span>
+  </a>
+</div>
