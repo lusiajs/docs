@@ -5,7 +5,7 @@
   const { sparks } = props({ sparks: [] as Spark[] });
 </script>
 
-<EACH {sparks} as="{spark}">
+<EACH {sparks} as={spark} key={spark.id}>
   <span
     class="spark {spark.kind}"
     style="left: {spark.x}px; top: {spark.y}px; --tone: {spark.tone}"

@@ -1,5 +1,5 @@
 <script>
-  import { onAttach, props, variable } from "lusiajs";
+  import { EVENT, listen, onAttach, props, variable } from "lusiajs";
   import DomNode from "./DomNode.lusia";
 
   interface FlowNode {
@@ -79,15 +79,11 @@
   }
 
   onAttach(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => setPlaying(entry.isIntersecting),
-      { threshold: 0.4 },
-    );
-    observer.observe(root.peek()!);
-    return () => {
-      observer.disconnect();
-      stopTimer();
-    };
+    const el = root.peek();
+    if (el) {
+      listen(el, EVENT.VIEW, ({ in: visible }) => setPlaying(visible), { amount: 0.4 });
+    }
+    return stopTimer;
   });
 </script>
 

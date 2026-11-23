@@ -5,6 +5,8 @@ export default defineConfig({
 	outdir: "dist",
 	minify: true,
 	routes: ["/guide", "/reference", "/playground", "/errors"],
+	// PHONE ends at 559px, TABLET at 899px. Same names as the defaults, so the types need no generated file.
+	screens: { PHONE: 0, TABLET: 560, DESKTOP: 900 },
 	animate: {
 		duration: 400,
 		ease: [EASE.STYLE.QUART, EASE.INOUT],
