@@ -5,6 +5,7 @@
   import RefCard from "../components/RefCard.lusia";
   import RefTile from "../components/RefTile.lusia";
   import Sidebar from "../components/Sidebar.lusia";
+  import { drawerOpen, sidebarClass } from "../drawer.ts";
   import { pageLink, referencePath } from "../page-link.ts";
   import { navLabel } from "../nav-label.ts";
   import { gridMotion } from "../motion/reference.ts";
@@ -57,7 +58,7 @@
 
 <div class="page-root docs reference">
   <aside
-    class="sidebar"
+    class={sidebarClass}
     id="sidebar"
     aria-label="Reference"
     animate={sidebarMotion}
@@ -65,7 +66,7 @@
     <span class="nav-indicator" aria-hidden="true"></span>
     <Sidebar groups={indexGroups} shown={filter.isShown} />
   </aside>
-  <div class="scrim" id="scrim" hidden></div>
+  <div class="scrim" id="scrim" hidden={!drawerOpen.value}></div>
   <main class="content" animate={pageMotion}>
     <IF {!openId.value}>
       <div data-ref-grid animate={gridMotion}>

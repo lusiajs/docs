@@ -1,6 +1,7 @@
 <script>
   import Docs from "../components/Docs.lusia";
   import Sidebar from "../components/Sidebar.lusia";
+  import { drawerOpen, sidebarClass } from "../drawer.ts";
   import { pageMotion } from "../motion/page.ts";
   import { sidebarMotion } from "../motion/sidebar.ts";
   import { guideSidebar } from "../render.ts";
@@ -8,7 +9,7 @@
 
 <div class="page-root docs">
   <aside
-    class="sidebar"
+    class={sidebarClass}
     id="sidebar"
     aria-label="Docs"
     animate={sidebarMotion}
@@ -16,7 +17,7 @@
     <span class="nav-indicator" aria-hidden="true"></span>
     <Sidebar groups={guideSidebar} />
   </aside>
-  <div class="scrim" id="scrim" hidden></div>
+  <div class="scrim" id="scrim" hidden={!drawerOpen.value}></div>
   <main class="content" id="sections" animate={pageMotion}>
     <span id="first-demo-group" class="anchor-target"></span>
     <Docs />
