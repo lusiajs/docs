@@ -1414,7 +1414,7 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
-  when: {
+  on: {
     icon: "schedule",
     table: {
       head: ["Value", "What it does"],
@@ -1932,7 +1932,7 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
-  "animate-more": { icon: "more_horiz" },
+  "animate-options": { icon: "more_horiz" },
   "animate-type": { icon: "movie" },
   "hover-area": {
     icon: "mouse",
@@ -1946,7 +1946,6 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
-  "keyframes-type": { icon: "timeline" },
   interpolate: {
     icon: "linear_scale",
     demos: [

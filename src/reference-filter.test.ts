@@ -17,7 +17,7 @@ function entry(id: string, kind: ApiEntry["kind"], summary: string): ApiEntry {
 
 const ENTRIES: ApiEntry[] = [
 	entry("variable", "function", "creates a value"),
-	entry("when", "value", "attach timing"),
+	entry("on", "value", "attach timing"),
 	entry("each", "markup", "loops over a list"),
 ];
 
@@ -26,14 +26,14 @@ describe("createReferenceFilter", () => {
 		const filter = createReferenceFilter(ENTRIES);
 		expect(filter.count.value).toBe("3 entries");
 		expect(filter.empty.value).toBe(false);
-		expect(filter.isShown("when")).toBe(true);
+		expect(filter.isShown("on")).toBe(true);
 	});
 
 	test("filters by text, case and spacing do not matter", () => {
 		const filter = createReferenceFilter(ENTRIES);
 		filter.text.value = "  LOOPS ";
 		expect(filter.isShown("each")).toBe(true);
-		expect(filter.isShown("when")).toBe(false);
+		expect(filter.isShown("on")).toBe(false);
 		expect(filter.count.value).toBe("1 of 3 entries");
 	});
 
@@ -42,7 +42,7 @@ describe("createReferenceFilter", () => {
 		filter.toggleKind("value");
 		expect(filter.isKindPicked("value")).toBe(true);
 		expect(filter.isShown("variable")).toBe(false);
-		expect(filter.isShown("when")).toBe(true);
+		expect(filter.isShown("on")).toBe(true);
 		filter.toggleKind("value");
 		expect(filter.isShown("variable")).toBe(true);
 	});
@@ -59,7 +59,7 @@ describe("createReferenceFilter", () => {
 	test("a group is shown when one of its ids is", () => {
 		const filter = createReferenceFilter(ENTRIES);
 		filter.text.value = "attach";
-		expect(filter.hasShown(["variable", "when"])).toBe(true);
+		expect(filter.hasShown(["variable", "on"])).toBe(true);
 		expect(filter.hasShown(["variable", "each"])).toBe(false);
 	});
 });

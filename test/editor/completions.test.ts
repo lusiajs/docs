@@ -89,7 +89,7 @@ describe("markup completions", () => {
 
   test("inside animate={...}, offers the item keys", () => {
     const items = completeAt(`<script>\n</script>\n<div animate={{ |}}></div>`);
-    expect(labelsOf(items)).toEqual(expect.arrayContaining(["style", "when", "duration"]));
+    expect(labelsOf(items)).toEqual(expect.arrayContaining(["play", "on", "duration"]));
   });
 
   test("a component tag offers the props the imported file declares", () => {

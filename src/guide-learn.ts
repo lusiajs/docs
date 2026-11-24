@@ -55,7 +55,7 @@ const learnLines: Record<string, string> = {
   "config-screens": "How to name your own screen sizes in lusia.config.",
   animate: "How to animate an element when it appears, leaves or is changed.",
   "animate-item": "How to write one animation, with its own trigger and timing.",
-  when: "How to choose the moment an animation plays.",
+  on: "How to choose the moment an animation plays.",
   preset: "How to use a ready-made animation.",
   ease: "How to change the speed curve of an animation.",
   interpolate: "How to blend two values with the animation engine.",

@@ -3,7 +3,7 @@ import { entryIdFromHash } from "./reference-view.ts";
 
 describe("entryIdFromHash", () => {
 	test("returns the id when the hash names one", () => {
-		expect(entryIdFromHash("#variable", ["variable", "when"])).toBe(
+		expect(entryIdFromHash("#variable", ["variable", "on"])).toBe(
 			"variable",
 		);
 	});
