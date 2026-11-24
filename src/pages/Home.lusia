@@ -6,7 +6,6 @@
   import ScrollProgress from "../components/ScrollProgress.lusia";
   import Sparks from "../components/Sparks.lusia";
   import { pageMotion } from "../motion/page.ts";
-  import { watchPageProgress } from "../motion/page-progress.ts";
   import { heroSlow } from "../motion/hero-slow.ts";
   import { trackCursor } from "../motion/cursor.ts";
   import { spawnSparks, type Spark } from "../motion/sparks.ts";
@@ -15,6 +14,8 @@
   const sparks = variable<Spark[]>([]);
   const storm = variable(false);
   const slowAnchor = variable<HTMLElement | null>(null);
+  const heroZone = variable<HTMLElement | null>(null);
+  const pageSpan = variable<HTMLElement | null>(null);
   const heroSlowMotion = heroSlow(slowAnchor);
 
   const STORM_MS = 6000;
@@ -27,7 +28,6 @@
 
   onAttach(() => {
     const stopCursor = trackCursor(sparks);
-    const stopProgress = watchPageProgress();
     const stopKonami = watchKonami(() => {
       startStorm();
       spawnSparks(sparks, {
@@ -43,25 +43,28 @@
     });
     return () => {
       stopCursor();
-      stopProgress();
       stopKonami();
     };
   });
 </script>
 
+<HomeBackground storm={storm} follow={pageSpan} />
+<div class="cursor-layer" aria-hidden="true">
+  <Sparks sparks={sparks} />
+</div>
 <div class="page-root home" animate={pageMotion}>
-  <HomeBackground storm={storm} />
-  <ScrollProgress />
-  <div class="cursor-layer" aria-hidden="true">
-    <Sparks sparks={sparks} />
-  </div>
+  <span class="page-span" aria-hidden="true" bind-element={pageSpan}></span>
+  <ScrollProgress follow={pageSpan} />
   <div
     class="hero-slow-anchor"
     aria-hidden="true"
     bind-element={slowAnchor}
   ></div>
-  <div class="hero-slow" animate={heroSlowMotion}>
-    <Hero follow={slowAnchor} />
+  <div class="hero-zone">
+    <span class="hero-zone-span" aria-hidden="true" bind-element={heroZone}></span>
+    <div class="hero-slow" animate={heroSlowMotion}>
+      <Hero zone={heroZone} />
+    </div>
   </div>
   <Features />
 </div>

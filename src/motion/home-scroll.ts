@@ -1,4 +1,4 @@
-import { ON, type AnimateItem, type ComputedVariable, type Style } from "lusiajs";
+import { ON, type AnimateItem, type ComputedVariable, type Keyframes, type Style } from "lusiajs";
 
 // Scroll motion for the Home page. All Home scroll motion lives here.
 export type Follow = ComputedVariable<HTMLElement | null>;
@@ -13,11 +13,12 @@ export function scrollAcross(
   to: Style,
   start: ScrollPoint,
   end: ScrollPoint,
+  ease?: Keyframes["ease"],
 ): AnimateItem {
   return {
     on: ON.SCROLL,
     options: { follow, start, end },
-    play: { 0: from, 1: to },
+    play: { ease, 0: from, 1: to },
   };
 }
 

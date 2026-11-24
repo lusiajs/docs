@@ -1,9 +1,13 @@
-import { EASE, EDGE, ON, SCREEN, type AnimateItem, type Style } from "lusiajs";
+import { EASE, EDGE, ON, SCREEN, type AnimateItem, type Keyframes, type Style } from "lusiajs";
 import { scrollAcross, type Follow, type ScrollPoint } from "./home-scroll.ts";
 
 // The hero sinks with the page, so it moves at 1 - PUSH speed while the page scrolls through the zone.
 const PUSH = 0.6;
 const zoneEnd: ScrollPoint = [EDGE.TOP, 0];
+const DRIFT_EASE: Keyframes["ease"] = [EASE.STYLE.SINE, EASE.INOUT];
+// The drift runs from the first scroll until the bottom of the hero zone (Features' top) is at 75% of the screen.
+const driftStart: ScrollPoint = [EDGE.TOP, 0];
+const driftEnd: ScrollPoint = [EDGE.BOTTOM, 0.75];
 
 // The zone runs from the anchor's place (80vh, or 50vh on a phone) down the page to the top of the screen.
 function zoneStart(): ScrollPoint {
@@ -14,9 +18,9 @@ function zoneVh(): number {
   return SCREEN.PHONE.value ? 50 : 80;
 }
 
-// Plays `from` to `to` over the slow-down zone only.
+// Plays `from` to `to` over the drift zone only. The easing starts slow and speeds up.
 export function heroBetween(follow: Follow, from: Style, to: Style): AnimateItem {
-  return scrollAcross(follow, from, to, zoneStart(), zoneEnd);
+  return scrollAcross(follow, from, to, driftStart, driftEnd, DRIFT_EASE);
 }
 
 // Moves the hero down over the zone. Its wrapper gets the space below it in CSS.

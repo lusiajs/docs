@@ -12,7 +12,7 @@
 
   const reduced = SCREEN.REDUCED_MOTION.value;
 
-  const { follow } = props({ follow: null as HTMLElement | null });
+  const { zone } = props({ zone: null as HTMLElement | null });
 
   // Each letter drops in on its own delay. Hovering a letter wobbles it.
   const letterIn = {
@@ -63,7 +63,7 @@
       scale: `${offset.scale}`,
     };
     const from = { translate: "0em 0em", rotate: "0deg", scale: "1" };
-    return heroBetween(follow, from, to);
+    return heroBetween(zone, from, to);
   }
 
   const letters = "Lusia".split("").map((char, index) => ({
@@ -114,30 +114,42 @@
     delay: 900,
   };
 
-  // The text drifts up and fades over the first part of the page as the hero scrolls.
+  // The text drifts up, shrinks and fades as the hero scrolls.
   const heroDrift = reduced
     ? []
     : heroBetween(
-        follow,
-        { opacity: 1, translate: "0 0" },
-        { opacity: 0.3, translate: "0 -4vh" },
+        zone,
+        { opacity: 1, translate: "0 0", scale: "1" },
+        { opacity: 0, translate: "0 -12vh", scale: "0.96" },
       );
 
   // The title moves faster than the rest of the hero, so the two separate as you scroll.
   const titleDrift = reduced
     ? []
-    : heroBetween(follow, { translate: "0 0" }, { translate: "0 -8vh" });
+    : heroBetween(zone, { translate: "0 0" }, { translate: "0 -18vh" });
 
   // The two badges fly up and apart, one to each side, to clear the title as it rises.
   const badgeStart = { translate: "0px 0px", rotate: "0deg" };
-  const eyebrowDrift = heroBetween(follow, badgeStart, {
-    translate: "-12vw -8vh",
+  const eyebrowDrift = heroBetween(zone, badgeStart, {
+    translate: "-12vw -12vh",
     rotate: "-16deg",
   });
-  const kaomojiDrift = heroBetween(follow, badgeStart, {
-    translate: "12vw -8vh",
+  const kaomojiDrift = heroBetween(zone, badgeStart, {
+    translate: "12vw -12vh",
     rotate: "14deg",
   });
+
+  // Each button flies up and fades after the one before it, left to right.
+  function buttonRise(index: number) {
+    if (reduced) return [];
+    return heroBetween(
+      zone,
+      { translate: "0 0", opacity: 1 },
+      { translate: `0 -${10 + index * 3}vh`, opacity: 0 },
+    );
+  }
+  const liftPlay = { 0: { translate: "0 0" }, 1: { translate: "0 -3px" } };
+  const buttonLift = reduced ? [] : { play: liftPlay, on: ON.HOVER, duration: 180 };
   const eyebrowAnimate = reduced ? eyebrowMotion : [eyebrowMotion, eyebrowDrift];
   const kaomojiAnimate = reduced ? [] : kaomojiDrift;
 
@@ -202,109 +214,129 @@
       <InstallCommand />
     </div>
     <div class="cta" animate={ctaMotion}>
-      <a
-        class="button rainbow magnetic"
-        href="/guide"
-        onpointermove={pull}
-        onpointerleave={release}
-      >
-        <span class="material-symbols-rounded" aria-hidden="true"
-          >arrow_forward</span
-        >
-        Get started
-      </a>
-      <a
-        class="button github magnetic"
-        href="https://github.com/lusiajs/lusia"
-        target="_blank"
-        rel="noopener noreferrer"
-        onpointermove={pull}
-        onpointerleave={release}
-      >
-        <svg
-          class="github-mark"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path
-            d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91
-              .58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.87-1.36
-              -3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7
-              1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75
-              .4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28
-              1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9
-              10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23
-              2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25
-              5.67.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .3.2.67
-              .8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
-            fill="currentColor"
-          />
-        </svg>
-        GitHub
-      </a>
-      <a
-        class="button npm magnetic"
-        href="https://www.npmjs.com/package/lusiajs"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Lusia on npm"
-        onpointermove={pull}
-        onpointerleave={release}
-      >
-        <svg
-          class="github-mark"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M0 7h24v10H0V7Z
-              M2.5 9H7.5V15H6V10.5H4V15H2.5Z
-              M9.5 9H14.5V13.5H11V15H9.5Z
-              M15.5 9H22V15H20.5V10.5H19.2V15H17.7V10.5H16.5V15H15.5Z"
-            fill="currentColor"
-          />
-        </svg>
-        npm
-      </a>
-      <a
-        class="button vscode magnetic"
-        href="https://marketplace.visualstudio.com/items?itemName=lusia.lusia-vscode"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Lusia for VS Code"
-        onpointermove={pull}
-        onpointerleave={release}
-      >
-        <svg
-          class="github-mark"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path
-            d="M17.5 2 9 9.4 4.6 6 3 6.8v10.4l1.6.8L9 14.6 17.5 22 21 20.3V3.7L17.5 2Z
-              M4.5 14.6 7.8 12 4.5 9.4v5.2Z
-              M18 17.4 13.1 12 18 6.6v10.8Z"
-            fill="currentColor"
-          />
-        </svg>
-        VS Code
-      </a>
-      <button
-        class="button magnetic"
-        type="button"
-        data-copy={AI_PROMPT}
-        onpointermove={pull}
-        onpointerleave={release}
-      >
-        <span class="material-symbols-rounded" aria-hidden="true"
-          >content_copy</span
-        >
-        Copy for AI
-      </button>
+      <span class="cta-item" animate={buttonRise(0)}>
+        <span class="cta-lift" animate={buttonLift}>
+          <a
+            class="button rainbow magnetic"
+            href="/guide"
+            onpointermove={pull}
+            onpointerleave={release}
+          >
+            <span class="material-symbols-rounded" aria-hidden="true"
+              >arrow_forward</span
+            >
+            Get started
+          </a>
+        </span>
+      </span>
+      <span class="cta-item" animate={buttonRise(1)}>
+        <span class="cta-lift" animate={buttonLift}>
+          <a
+            class="button github magnetic"
+            href="https://github.com/lusiajs/lusia"
+            target="_blank"
+            rel="noopener noreferrer"
+            onpointermove={pull}
+            onpointerleave={release}
+          >
+            <svg
+              class="github-mark"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91
+                  .58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.87-1.36
+                  -3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7
+                  1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75
+                  .4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28
+                  1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9
+                  10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23
+                  2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25
+                  5.67.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .3.2.67
+                  .8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
+                fill="currentColor"
+              />
+            </svg>
+            GitHub
+          </a>
+        </span>
+      </span>
+      <span class="cta-item" animate={buttonRise(2)}>
+        <span class="cta-lift" animate={buttonLift}>
+          <a
+            class="button npm magnetic"
+            href="https://www.npmjs.com/package/lusiajs"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Lusia on npm"
+            onpointermove={pull}
+            onpointerleave={release}
+          >
+            <svg
+              class="github-mark"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M0 7h24v10H0V7Z
+                  M2.5 9H7.5V15H6V10.5H4V15H2.5Z
+                  M9.5 9H14.5V13.5H11V15H9.5Z
+                  M15.5 9H22V15H20.5V10.5H19.2V15H17.7V10.5H16.5V15H15.5Z"
+                fill="currentColor"
+              />
+            </svg>
+            npm
+          </a>
+        </span>
+      </span>
+      <span class="cta-item" animate={buttonRise(3)}>
+        <span class="cta-lift" animate={buttonLift}>
+          <a
+            class="button vscode magnetic"
+            href="https://marketplace.visualstudio.com/items?itemName=lusia.lusia-vscode"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Lusia for VS Code"
+            onpointermove={pull}
+            onpointerleave={release}
+          >
+            <svg
+              class="github-mark"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M17.5 2 9 9.4 4.6 6 3 6.8v10.4l1.6.8L9 14.6 17.5 22 21 20.3V3.7L17.5 2Z
+                  M4.5 14.6 7.8 12 4.5 9.4v5.2Z
+                  M18 17.4 13.1 12 18 6.6v10.8Z"
+                fill="currentColor"
+              />
+            </svg>
+            VS Code
+          </a>
+        </span>
+      </span>
+      <span class="cta-item" animate={buttonRise(4)}>
+        <span class="cta-lift" animate={buttonLift}>
+          <button
+            class="button magnetic"
+            type="button"
+            data-copy={AI_PROMPT}
+            onpointermove={pull}
+            onpointerleave={release}
+          >
+            <span class="material-symbols-rounded" aria-hidden="true"
+              >content_copy</span
+            >
+            Copy for AI
+          </button>
+        </span>
+      </span>
     </div>
     <p class="wip-note" animate={noteMotion}>
       I wanted to name it Lucia, but that name was taken on npm (╥﹏╥). So it is
