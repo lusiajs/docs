@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, variable } from "lusiajs";
+  import { ON, variable } from "lusiajs";
 
   interface Task {
     id: number;
@@ -43,10 +43,10 @@
         <li
           class="row"
           animate={{
-            style: fadeIn,
-            when: WHEN.ATTACH,
+            play: fadeIn,
+            on: ON.ATTACH,
             duration: 400,
-            more: { animateSpace: true },
+            options:{ animateSpace: true },
           }}
         >
           <span>{task.title}</span>
@@ -59,10 +59,10 @@
         <li
           class="row"
           animate={{
-            style: fadeIn,
-            when: WHEN.ATTACH,
+            play: fadeIn,
+            on: ON.ATTACH,
             duration: 400,
-            more: { animateSpace: false },
+            options:{ animateSpace: false },
           }}
         >
           <span>{task.title}</span>

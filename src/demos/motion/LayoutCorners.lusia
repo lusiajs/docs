@@ -1,8 +1,8 @@
 <script>
-  import { WHEN, variable } from "lusiajs";
+  import { ON, variable } from "lusiajs";
 
   // The box has no keyframes. Its class moves it to another corner,
-  // and WHEN.MOVE glides it there.
+  // and ON.MOVE glides it there.
   const CORNERS = [
     "corner-top-left",
     "corner-top-right",
@@ -11,7 +11,7 @@
   ];
   const step = variable(0);
   const corner = variable.compute(() => CORNERS[step.value]);
-  const glide = { when: WHEN.MOVE, duration: 600 };
+  const glide = { on: ON.MOVE, duration: 600 };
 
   function nextCorner() {
     step.value = (step.value + 1) % CORNERS.length;

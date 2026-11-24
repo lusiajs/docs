@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE, variable } from "lusiajs";
+  import { ON, EASE, variable } from "lusiajs";
 
   const shown = variable(true);
 
@@ -21,7 +21,7 @@
   <IF {shown.value}>
     <div
       class="box"
-      animate={{ style: spinOut, when: WHEN.DETACH, duration: 500 }}
+      animate={{ play: spinOut, on: ON.DETACH, duration: 500 }}
     >
       Spin
     </div>

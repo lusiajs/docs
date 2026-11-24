@@ -10,7 +10,7 @@
 
   const optionHead = ["Option", "Where", "Values", "Default"];
   const optionRows = [
-    ["more: { animateSpace }", "On one element", "true or false", "false"],
+    ["options:{ animateSpace }", "On one element", "true or false", "false"],
     ["animate.attach.animateSpace", "lusia.config", "true or false", "false"],
     ["animate.detach.animateSpace", "lusia.config", "true or false", "false"],
   ];
@@ -38,7 +38,7 @@
 
   const winHead = ["Order", "Setting", "Used when"];
   const winRows = [
-    ["1", "more: { animateSpace } on the element", "The element sets it"],
+    ["1", "options:{ animateSpace } on the element", "The element sets it"],
     [
       "2",
       "setConfig in the component (SCOPE.TREE or SCOPE.SCOPED)",
@@ -58,15 +58,15 @@
   ];
 
   const elementCode = `<li animate={{
-  style: PRESET.FADE_IN,
-  when: WHEN.ATTACH,
-  more: { animateSpace: true },
+  play: PRESET.FADE_IN,
+  on: ON.ATTACH,
+  options:{ animateSpace: true },
 }}>`;
 
   const offCode = `<li animate={{
-  style: PRESET.FADE_IN,
-  when: WHEN.ATTACH,
-  more: { animateSpace: false },
+  play: PRESET.FADE_IN,
+  on: ON.ATTACH,
+  options:{ animateSpace: false },
 }}>`;
 </script>
 

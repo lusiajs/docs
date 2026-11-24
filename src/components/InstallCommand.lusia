@@ -1,5 +1,5 @@
 <script>
-  import { SCREEN, listen, onAttach, variable, WHEN } from "lusiajs";
+  import { SCREEN, listen, onAttach, variable, ON } from "lusiajs";
   import { copyText } from "../copy.ts";
   import { wobbleStyle } from "../motion/wobble.ts";
   import {
@@ -92,43 +92,43 @@
 
   const pillMotion = reduced
     ? []
-    : { style: pillLift, when: WHEN.HOVER, duration: 250 };
+    : { play: pillLift, on: ON.HOVER, duration: 250 };
   const promptHoverMotion = reduced
     ? []
-    : { style: wobbleStyle, when: WHEN.HOVER, duration: 500 };
+    : { play: wobbleStyle, on: ON.HOVER, duration: 500 };
   // The glyph is mounted only while "Copied" shows, so this wobbles once per copy.
   const promptCopyMotion = reduced
     ? []
-    : { style: wobbleStyle, when: WHEN.ATTACH, duration: 500 };
+    : { play: wobbleStyle, on: ON.ATTACH, duration: 500 };
   const labelMotion = reduced
     ? []
     : [
         {
-          style: copiedLabelIn,
-          when: WHEN.ATTACH,
-          more: { animateSpace: false },
+          play: copiedLabelIn,
+          on: ON.ATTACH,
+          options:{ animateSpace: false },
           duration: 200,
         },
         {
-          style: copiedLabelOut,
-          when: WHEN.DETACH,
-          more: { animateSpace: false },
+          play: copiedLabelOut,
+          on: ON.DETACH,
+          options:{ animateSpace: false },
           duration: 150,
         },
       ];
   const checkMotion = reduced
     ? []
-    : { style: checkPopIn, when: WHEN.ATTACH, duration: 400 };
+    : { play: checkPopIn, on: ON.ATTACH, duration: 400 };
   const commandMotion = reduced
     ? []
     : [
-        { style: commandIn, when: WHEN.ATTACH, duration: 240 },
-        { style: commandOut, when: WHEN.DETACH, duration: 220 },
+        { play: commandIn, on: ON.ATTACH, duration: 240 },
+        { play: commandOut, on: ON.DETACH, duration: 220 },
       ];
   // No keyframes: the highlight glides when its left or width changes.
   const highlightMotion = reduced
     ? []
-    : { when: WHEN.MOVE_OR_RESIZE, duration: 300 };
+    : { on: ON.MOVE_OR_RESIZE, duration: 300 };
 </script>
 
 <div class="install-command">

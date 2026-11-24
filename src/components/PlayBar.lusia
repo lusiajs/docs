@@ -1,5 +1,5 @@
 <script>
-  import { EVENT, PRESET, WHEN, listen, onAttach, variable } from "lusiajs";
+  import { EVENT, PRESET, ON, listen, onAttach, variable } from "lusiajs";
   import {
     addFile,
     copyActive,
@@ -43,8 +43,8 @@
 
   // The name form pops in under the tabs and shrinks away when it closes.
   const formMotion = [
-    { style: PRESET.POP_IN, when: WHEN.ATTACH, duration: 200 },
-    { style: PRESET.POP_OUT, when: WHEN.DETACH, duration: 150 },
+    { play: PRESET.POP_IN, on: ON.ATTACH, duration: 200 },
+    { play: PRESET.POP_OUT, on: ON.DETACH, duration: 150 },
   ];
 
   const COPY_FAILED = "Copy failed. Select the code and copy it instead.";

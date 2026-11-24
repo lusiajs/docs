@@ -1,29 +1,29 @@
 <script>
-  import { WHEN, PRESET, onAttach, variable } from "lusiajs";
+  import { ON, PRESET, onAttach, variable } from "lusiajs";
   import { watchPinned } from "./scroll-readout.ts";
 
   // One tall lane drives all four presets, so they play side by side.
   const lane = variable(null);
 
   const upMotion = {
-    style: PRESET.SLIDE_UP,
-    when: WHEN.SCROLL,
-    more: { follow: lane },
+    play: PRESET.SLIDE_UP,
+    on: ON.SCROLL,
+    options:{ follow: lane },
   };
   const downMotion = {
-    style: PRESET.SLIDE_DOWN,
-    when: WHEN.SCROLL,
-    more: { follow: lane },
+    play: PRESET.SLIDE_DOWN,
+    on: ON.SCROLL,
+    options:{ follow: lane },
   };
   const leftMotion = {
-    style: PRESET.SLIDE_LEFT,
-    when: WHEN.SCROLL,
-    more: { follow: lane },
+    play: PRESET.SLIDE_LEFT,
+    on: ON.SCROLL,
+    options:{ follow: lane },
   };
   const rightMotion = {
-    style: PRESET.SLIDE_RIGHT,
-    when: WHEN.SCROLL,
-    more: { follow: lane },
+    play: PRESET.SLIDE_RIGHT,
+    on: ON.SCROLL,
+    options:{ follow: lane },
   };
 
   onAttach((root) => {

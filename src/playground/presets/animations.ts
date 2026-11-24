@@ -2,17 +2,17 @@ import { ENTRY_FILE } from "../names.ts";
 import type { Preset } from "./index.ts";
 
 const APP = `<script>
-  import { variable, PRESET, WHEN } from "lusiajs";
+  import { variable, PRESET, ON } from "lusiajs";
 
   const shown = variable(true);
 
   // The card fades in when it appears and fades out when it is removed.
   const cardMotion = [
-    { style: PRESET.FADE_IN, when: WHEN.ATTACH, duration: 250 },
-    { style: PRESET.FADE_OUT, when: WHEN.DETACH, duration: 200 },
+    { play: PRESET.FADE_IN, on: ON.ATTACH, duration: 250 },
+    { play: PRESET.FADE_OUT, on: ON.DETACH, duration: 200 },
   ];
 
-  const hoverMotion = { style: PRESET.PULSE, when: WHEN.HOVER, duration: 500 };
+  const hoverMotion = { play: PRESET.PULSE, on: ON.HOVER, duration: 500 };
 
   function toggle() {
     shown.value = !shown.value;

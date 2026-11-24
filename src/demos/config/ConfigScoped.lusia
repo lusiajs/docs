@@ -1,5 +1,5 @@
 <script>
-  import { SCOPE, WHEN, setConfig, variable } from "lusiajs";
+  import { SCOPE, ON, setConfig, variable } from "lusiajs";
   import TaskList from "./TaskList.lusia";
 
   interface Task {
@@ -52,8 +52,8 @@
       <li
         class="row"
         animate={[
-          { style: fadeIn, when: WHEN.ATTACH, duration: 400 },
-          { style: fadeOut, when: WHEN.DETACH, duration: 400 },
+          { play: fadeIn, on: ON.ATTACH, duration: 400 },
+          { play: fadeOut, on: ON.DETACH, duration: 400 },
         ]}
       >
         <span>{task.title}</span>

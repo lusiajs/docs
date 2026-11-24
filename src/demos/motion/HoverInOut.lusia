@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE } from "lusiajs";
+  import { ON, EASE } from "lusiajs";
 
   // It plays in after 250 ms. Leaving plays its own keys, for 700 ms.
   const glow = {
@@ -21,10 +21,10 @@
   };
 
   const hoverMotion = {
-    style: glow,
-    when: WHEN.HOVER,
+    play: glow,
+    on: ON.HOVER,
     duration: 300,
-    more: { inDelay: 250, out: fold, outDuration: 700 },
+    options:{ inDelay: 250, out: fold, outDuration: 700 },
   };
 </script>
 

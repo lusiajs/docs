@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE, EDGE, onAttach } from "lusiajs";
+  import { ON, EASE, EDGE, onAttach } from "lusiajs";
   import { AT, watchProgress } from "./scroll-readout.ts";
 
   // Two items on one card. They set different properties, so they do not fight.
@@ -15,17 +15,17 @@
   };
 
   const fadeInMotion = {
-    style: fadeIn,
-    when: WHEN.SCROLL,
-    more: {
+    play: fadeIn,
+    on: ON.SCROLL,
+    options:{
       start: [EDGE.TOP, EDGE.BOTTOM],
       end: [EDGE.CENTER, EDGE.CENTER],
     },
   };
   const blurOutMotion = {
-    style: blurOut,
-    when: WHEN.SCROLL,
-    more: {
+    play: blurOut,
+    on: ON.SCROLL,
+    options:{
       start: [EDGE.CENTER, EDGE.CENTER],
       end: [EDGE.BOTTOM, EDGE.TOP],
     },

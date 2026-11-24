@@ -5,7 +5,7 @@
   const reduced = SCREEN.REDUCED_MOTION.value;
 
   const dotBounce = {
-    default: [EASE.STYLE.SINE, EASE.INOUT],
+    ease: [EASE.STYLE.SINE, EASE.INOUT],
     0: { translate: "0px 0px" },
     1: { translate: "0px -8px" },
   };
@@ -18,7 +18,7 @@
   function dotMotion(delay: number) {
     return reduced
       ? []
-      : { ...loopSettings, style: dotBounce, duration: 500, delay };
+      : { ...loopSettings, play: dotBounce, duration: 500, delay };
   }
 </script>
 

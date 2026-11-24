@@ -1,11 +1,11 @@
 <script>
-  import { PRESET, WHEN, controller, props } from "lusiajs";
+  import { PRESET, ON, controller, props } from "lusiajs";
 
   const { onReload } = props({ onReload: () => {} });
   const spin = controller();
   const spinMotion = {
-    style: PRESET.SPIN,
-    when: WHEN.MANUAL,
+    play: PRESET.SPIN,
+    on: ON.MANUAL,
     control: spin,
     duration: 600,
     keep: false,

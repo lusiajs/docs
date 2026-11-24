@@ -1,5 +1,5 @@
 <script>
-  import { EVENT, PRESET, WHEN, listen, onAttach, variable } from "lusiajs";
+  import { EVENT, PRESET, ON, listen, onAttach, variable } from "lusiajs";
   import { hasEditedFiles, loadPreset } from "../playground/actions.ts";
   import { PRESETS, type Preset } from "../playground/presets/index.ts";
 
@@ -14,8 +14,8 @@
   const choices = PRESETS.map((preset, index) => ({
     preset,
     motion: {
-      style: PRESET.SLIDE_UP,
-      when: WHEN.ATTACH,
+      play: PRESET.SLIDE_UP,
+      on: ON.ATTACH,
       duration: SLIDE_MS,
       delay: index * STAGGER_MS,
     },
@@ -23,8 +23,8 @@
 
   // The menu pops in from its corner and pops out when it closes.
   const menuMotion = [
-    { style: PRESET.POP_IN, when: WHEN.ATTACH, duration: 200 },
-    { style: PRESET.POP_OUT, when: WHEN.DETACH, duration: 150 },
+    { play: PRESET.POP_IN, on: ON.ATTACH, duration: 200 },
+    { play: PRESET.POP_OUT, on: ON.DETACH, duration: 150 },
   ];
 
   function toggleMenu() {

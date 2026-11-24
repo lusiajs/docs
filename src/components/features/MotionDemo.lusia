@@ -32,7 +32,7 @@
   </div>
   <div class="stage">
     <EACH {plays} as={run} key={run.id}>
-      <div class="shape" animate={{ style: run.motion }}>{run.label}</div>
+      <div class="shape" animate={{ play: run.motion }}>{run.label}</div>
     </EACH>
   </div>
 </div>

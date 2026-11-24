@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, PRESET } from "lusiajs";
+  import { ON, PRESET } from "lusiajs";
   import type { ApiEntry } from "lusiajs/api";
   import { catalog } from "../catalog.ts";
   import { entryMarkdownUrl } from "../ai-docs.ts";
@@ -24,10 +24,10 @@
   // Plays in when the section enters the screen, and back out when it leaves.
   // Only opacity: a transform would make this section the box for fixed demo lines.
   const sectionMotion = {
-    style: PRESET.FADE_IN,
-    when: WHEN.VIEW,
+    play: PRESET.FADE_IN,
+    on: ON.VIEW,
     duration: 600,
-    more: { margin: 80, amount: 0.1, reverse: true },
+    options:{ margin: 80, amount: 0.1, reverse: true },
   };
 
   // The heading tints briefly when a keyword chip links to its section.
@@ -51,8 +51,8 @@
         tokenize(text, keywordIndex, entry.id),
       ),
       flashMotion: {
-        style: flashKeys,
-        when: WHEN.MANUAL,
+        play: flashKeys,
+        on: ON.MANUAL,
         control: flash,
         duration: 900,
       },

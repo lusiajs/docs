@@ -1,5 +1,5 @@
 <script>
-  import { TURN, WHEN } from "lusiajs";
+  import { MIDWAY, ON } from "lusiajs";
 
   const slide = {
     0: { translate: "0px 0px" },
@@ -12,10 +12,10 @@
     <div
       class="box"
       animate={{
-        style: slide,
-        when: WHEN.HOVER,
+        play: slide,
+        on: ON.HOVER,
         duration: 900,
-        midway: { turn: TURN.SUDDEN },
+        midway: { mode: MIDWAY.SWITCH },
       }}
     >
       Sudden
@@ -25,10 +25,10 @@
     <div
       class="box"
       animate={{
-        style: slide,
-        when: WHEN.HOVER,
+        play: slide,
+        on: ON.HOVER,
         duration: 900,
-        midway: { turn: TURN.SMOOTH, turnDuration: 250 },
+        midway: { mode: MIDWAY.SWITCH_SMOOTH, duration: 250 },
       }}
     >
       Smooth

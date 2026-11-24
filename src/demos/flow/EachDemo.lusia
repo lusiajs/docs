@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, PRESET, variable } from "lusiajs";
+  import { ON, PRESET, variable } from "lusiajs";
 
   interface Task {
     id: number;
@@ -49,8 +49,8 @@
       <li
         class="row"
         animate={[
-          { style: PRESET.SLIDE_UP, when: WHEN.ATTACH, duration: 300 },
-          { style: fadeOut, when: WHEN.DETACH, duration: 200 },
+          { play: PRESET.SLIDE_UP, on: ON.ATTACH, duration: 300 },
+          { play: fadeOut, on: ON.DETACH, duration: 200 },
         ]}
       >
         <span>{position}. {task.title}</span>

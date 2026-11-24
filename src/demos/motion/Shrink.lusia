@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE } from "lusiajs";
+  import { ON, EASE } from "lusiajs";
 
   // Only an OUT item: the box is visible at once, and plays this when it is detached.
   const shrinkOut = {
@@ -10,7 +10,7 @@
 
 <div
   class="motion-box"
-  animate={{ style: shrinkOut, when: WHEN.DETACH, duration: 400 }}
+  animate={{ play: shrinkOut, on: ON.DETACH, duration: 400 }}
 >
   Bye
 </div>

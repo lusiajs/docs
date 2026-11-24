@@ -1,8 +1,8 @@
-import { controller, EASE, PRESET, WHEN } from "lusiajs";
+import { controller, EASE, ON, PRESET } from "lusiajs";
 
 // The detail card fades in and rises 16 px each time it is shown.
 const cardKeys = {
-	default: [EASE.STYLE.QUART, EASE.OUT],
+	ease: [EASE.STYLE.QUART, EASE.OUT],
 	0: { opacity: 0, translate: "0px 16px" },
 	1: { opacity: 1, translate: "0px 0px" },
 };
@@ -14,7 +14,7 @@ const fadeOut = {
 };
 
 const gridKeys = {
-	default: [EASE.STYLE.QUART, EASE.IN],
+	ease: [EASE.STYLE.QUART, EASE.IN],
 	0: { opacity: 1, translate: "0px 0px" },
 	1: { opacity: 0, translate: "0px 12px" },
 };
@@ -23,16 +23,16 @@ export const gridController = controller();
 
 // The tile grid sinks and fades when a controller plays it, and rises back when reversed.
 export const gridMotion = {
-	style: gridKeys,
-	when: WHEN.MANUAL,
+	play: gridKeys,
+	on: ON.MANUAL,
 	control: gridController,
 	duration: 220,
 };
 
 export const cardMotion = [
-	{ style: PRESET.SLIDE_UP, when: WHEN.ATTACH, duration: 300 },
-	{ style: fadeOut, when: WHEN.DETACH, duration: 200 },
-	{ style: cardKeys, when: WHEN.VIEW, duration: 380, more: { reverse: true } },
+	{ play: PRESET.SLIDE_UP, on: ON.ATTACH, duration: 300 },
+	{ play: fadeOut, on: ON.DETACH, duration: 200 },
+	{ play: cardKeys, on: ON.VIEW, duration: 380, options: { reverse: true } },
 ];
 
 const borderKeys = {
@@ -40,4 +40,4 @@ const borderKeys = {
 	1: { borderColor: "var(--group)" },
 };
 
-export const tileHoverMotion = { style: borderKeys, when: WHEN.HOVER, duration: 220 };
+export const tileHoverMotion = { play: borderKeys, on: ON.HOVER, duration: 220 };

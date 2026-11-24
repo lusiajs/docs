@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, onDetach, variable } from "lusiajs";
+  import { ON, onDetach, variable } from "lusiajs";
 
   interface Item {
     id: number;
@@ -35,30 +35,30 @@
   // The two panels differ only in animateSpace.
   const offMotion = [
     {
-      style: fadeIn,
-      when: WHEN.ATTACH,
+      play: fadeIn,
+      on: ON.ATTACH,
       duration: 400,
-      more: { animateSpace: false },
+      options:{ animateSpace: false },
     },
     {
-      style: fadeOut,
-      when: WHEN.DETACH,
+      play: fadeOut,
+      on: ON.DETACH,
       duration: 400,
-      more: { animateSpace: false },
+      options:{ animateSpace: false },
     },
   ];
   const onMotion = [
     {
-      style: fadeIn,
-      when: WHEN.ATTACH,
+      play: fadeIn,
+      on: ON.ATTACH,
       duration: 400,
-      more: { animateSpace: true },
+      options:{ animateSpace: true },
     },
     {
-      style: fadeOut,
-      when: WHEN.DETACH,
+      play: fadeOut,
+      on: ON.DETACH,
       duration: 400,
-      more: { animateSpace: true },
+      options:{ animateSpace: true },
     },
   ];
 

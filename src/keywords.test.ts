@@ -25,7 +25,7 @@ const entries: ApiEntry[] = [
 	},
 	{
 		id: "active",
-		name: "WHEN",
+		name: "ON",
 		kind: "value",
 		group: "motion",
 		signature: "",
@@ -70,8 +70,8 @@ describe("keyword tokenizer", () => {
 	});
 
 	test("links an enum member to its parent section", () => {
-		expect(chips(tokenize("Pick WHEN.VIEW.", index, "props"))).toEqual([
-			["WHEN.VIEW", "active"],
+		expect(chips(tokenize("Pick ON.VIEW.", index, "props"))).toEqual([
+			["ON.VIEW", "active"],
 		]);
 	});
 
@@ -117,11 +117,11 @@ describe("keyword tokenizer", () => {
 
 	test("keeps plain text between chips in order", () => {
 		const text = tokenize(
-			"A variable() and WHEN.VIEW.",
+			"A variable() and ON.VIEW.",
 			index,
 			"props",
 		).map((part) => part.text);
-		expect(text.join("")).toBe("A variable() and WHEN.VIEW.");
+		expect(text.join("")).toBe("A variable() and ON.VIEW.");
 	});
 
 	test("text without keywords is one plain part", () => {

@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, controller, EASE } from "lusiajs";
+  import { ON, controller, EASE } from "lusiajs";
 
   // A controller plays the animation on demand: play, reverse or stop.
   const ctl = controller();
@@ -30,7 +30,7 @@
   </div>
   <div
     class="square"
-    animate={{ style: slide, when: WHEN.MANUAL, control: ctl, duration: 1200 }}
+    animate={{ play: slide, on: ON.MANUAL, control: ctl, duration: 1200 }}
   ></div>
 </div>
 

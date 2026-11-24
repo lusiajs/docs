@@ -1,16 +1,16 @@
 <script>
-  import { PRESET, WHEN, variable } from "lusiajs";
+  import { PRESET, ON, variable } from "lusiajs";
 
   const loggedIn = variable(false);
 
   // Each piece eases in when it appears and out when it leaves.
   const textMotion = [
-    { style: PRESET.SLIDE_UP },
-    { style: PRESET.FADE_OUT, when: WHEN.DETACH },
+    { play: PRESET.SLIDE_UP },
+    { play: PRESET.FADE_OUT, on: ON.DETACH },
   ];
   const buttonMotion = [
-    { style: PRESET.POP_IN },
-    { style: PRESET.POP_OUT, when: WHEN.DETACH },
+    { play: PRESET.POP_IN },
+    { play: PRESET.POP_OUT, on: ON.DETACH },
   ];
   const todos = variable([
     { id: 1, title: "Write docs" },
@@ -58,9 +58,9 @@
       <li
         class="item"
         animate={[
-          { style: PRESET.POP_IN },
-          { style: PRESET.FADE_OUT, when: WHEN.DETACH },
-          { when: WHEN.MOVE },
+          { play: PRESET.POP_IN },
+          { play: PRESET.FADE_OUT, on: ON.DETACH },
+          { on: ON.MOVE },
         ]}
       >
         <span>{i.value + 1}. {todo.title}</span>

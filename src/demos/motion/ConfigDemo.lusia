@@ -1,5 +1,5 @@
 <script>
-  import { PRESET, WHEN, variable } from "lusiajs";
+  import { ON, PRESET, variable } from "lusiajs";
 
   const open = variable(false);
 
@@ -10,12 +10,12 @@
 
 <div class="motion-stage">
   <button onclick={toggle} type="button">Toggle</button>
-  <div class="box" animate={{ style: PRESET.FADE_IN, when: open }}>
+  <div class="box" animate={{ play: PRESET.FADE_IN, on: open }}>
     Uses the project duration
   </div>
   <div
     class="box"
-    animate={{ style: PRESET.FADE_IN, when: open, duration: 2000 }}
+    animate={{ play: PRESET.FADE_IN, on: open, duration: 2000 }}
   >
     Sets its own duration
   </div>

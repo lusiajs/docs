@@ -86,13 +86,13 @@
   );
 
   function changeMotion(
-    style: object,
+    play: object,
     duration: number,
     index: number,
     delay = 0,
   ) {
     if (reduced) return [];
-    return { style, duration, delay, when: isActive[index] };
+    return { play, duration, delay, on: isActive[index] };
   }
 
   function copyMotion(index: number) {

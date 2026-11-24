@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE, variable } from "lusiajs";
+  import { ON, EASE, variable } from "lusiajs";
 
   // The tall section drives three steps. Each step plays in its own slice of the section.
   const section = variable(null);
@@ -12,19 +12,19 @@
   };
 
   const stepOne = {
-    style: stepPulse,
-    when: WHEN.SCROLL,
-    more: { follow: section, part: [0, 0.33] },
+    play: stepPulse,
+    on: ON.SCROLL,
+    options:{ follow: section, part: [0, 0.33] },
   };
   const stepTwo = {
-    style: stepPulse,
-    when: WHEN.SCROLL,
-    more: { follow: section, part: [0.33, 0.66] },
+    play: stepPulse,
+    on: ON.SCROLL,
+    options:{ follow: section, part: [0.33, 0.66] },
   };
   const stepThree = {
-    style: stepPulse,
-    when: WHEN.SCROLL,
-    more: { follow: section, part: [0.66, 1] },
+    play: stepPulse,
+    on: ON.SCROLL,
+    options:{ follow: section, part: [0.66, 1] },
   };
 </script>
 

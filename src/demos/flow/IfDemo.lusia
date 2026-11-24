@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, PRESET, variable } from "lusiajs";
+  import { ON, PRESET, variable } from "lusiajs";
 
   const mode = variable("out");
 
@@ -10,8 +10,8 @@
   };
 
   const branchMotion = [
-    { style: PRESET.SLIDE_UP, when: WHEN.ATTACH, duration: 300 },
-    { style: fadeOut, when: WHEN.DETACH, duration: 200 },
+    { play: PRESET.SLIDE_UP, on: ON.ATTACH, duration: 300 },
+    { play: fadeOut, on: ON.DETACH, duration: 200 },
   ];
 
   function signIn() {

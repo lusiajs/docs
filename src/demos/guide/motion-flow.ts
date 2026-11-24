@@ -1,5 +1,5 @@
 export const code = `<script>
-  import { PRESET, WHEN, variable } from "lusiajs";
+  import { PRESET, ON, variable } from "lusiajs";
 
   const shown = variable(true);
 </script>
@@ -8,8 +8,8 @@ export const code = `<script>
 <IF {shown}>
   <p
     animate={[
-      { style: PRESET.FADE_IN, when: WHEN.ATTACH },
-      { style: PRESET.FADE_OUT, when: WHEN.DETACH },
+      { play: PRESET.FADE_IN, on: ON.ATTACH },
+      { play: PRESET.FADE_OUT, on: ON.DETACH },
     ]}
   >
     Hello

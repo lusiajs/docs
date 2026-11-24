@@ -1,5 +1,5 @@
 <script>
-  import { HOVER_AREA, WHEN } from "lusiajs";
+  import { HOVER_AREA, ON } from "lusiajs";
 
   const grow = {
     0: { scale: "1" },
@@ -11,10 +11,10 @@
   <div
     class="box"
     animate={{
-      style: grow,
-      when: WHEN.HOVER,
+      play: grow,
+      on: ON.HOVER,
       duration: 250,
-      more: { area: HOVER_AREA.FINAL },
+      options:{ area: HOVER_AREA.FINAL },
     }}
   >
     Final box
@@ -22,10 +22,10 @@
   <div
     class="box"
     animate={{
-      style: grow,
-      when: WHEN.HOVER,
+      play: grow,
+      on: ON.HOVER,
       duration: 250,
-      more: { area: HOVER_AREA.ELEMENT },
+      options:{ area: HOVER_AREA.ELEMENT },
     }}
   >
     Element box

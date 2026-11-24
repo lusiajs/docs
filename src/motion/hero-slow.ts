@@ -1,4 +1,4 @@
-import { EASE, EDGE, SCREEN, WHEN, type AnimateItem, type Style } from "lusiajs";
+import { EASE, EDGE, ON, SCREEN, type AnimateItem, type Style } from "lusiajs";
 import { scrollAcross, type Follow, type ScrollPoint } from "./home-scroll.ts";
 
 // The hero sinks with the page, so it moves at 1 - PUSH speed while the page scrolls through the zone.
@@ -25,10 +25,10 @@ export function heroSlow(follow: Follow): AnimateItem | never[] {
 	if (SCREEN.REDUCED_MOTION.value) return [];
 	const pushVh = Math.round(zoneVh() * PUSH);
 	return {
-		when: WHEN.SCROLL,
-		more: { follow, start: zoneStart(), end: zoneEnd },
-		style: {
-			default: [EASE.STYLE.LINEAR, EASE.OUT],
+		on: ON.SCROLL,
+		options: { follow, start: zoneStart(), end: zoneEnd },
+		play: {
+			ease: [EASE.STYLE.LINEAR, EASE.OUT],
 			0: { translate: "0 0" },
 			1: { translate: `0 ${pushVh}vh` },
 		},

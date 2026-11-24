@@ -1,48 +1,45 @@
 <script>
-  import { WHEN, EASE, MIDWAY, variable, TURN } from "lusiajs";
+  import { ON, EASE, MIDWAY, variable } from "lusiajs";
 
-  // Hover in and out quickly. Each box turns its own way when you change your mind.
+  // Hover in and out quickly. The box changes its play in the mode you pick.
   const grow = {
     0: { scale: "1" },
     1: [EASE.OUT, { scale: "1.4" }],
   };
 
-  const playModes = {
-    turn: MIDWAY.TURN,
-    finish: MIDWAY.FINISH,
-    restart: MIDWAY.RESTART,
-    skip: MIDWAY.SKIP,
-    ignore: MIDWAY.IGNORE,
+  const modes = {
+    SWITCH: MIDWAY.SWITCH,
+    SWITCH_SMOOTH: MIDWAY.SWITCH_SMOOTH,
+    SWITCH_STOP: MIDWAY.SWITCH_STOP,
+    WAIT: MIDWAY.WAIT,
+    RESTART: MIDWAY.RESTART,
+    JUMP_TO_END: MIDWAY.JUMP_TO_END,
+    KEEP_CURRENT: MIDWAY.KEEP_CURRENT,
   };
 
-  const turnModes = [
-    { label: "SUDDEN", turn: TURN.SUDDEN },
-    { label: "SMOOTH", turn: TURN.SMOOTH },
-    { label: "STOP", turn: TURN.STOP },
-  ];
+  const modeName = variable("SWITCH");
 
-  const modeName = variable("turn");
-
-  // midway is read when a box attaches. The boxes are rebuilt when the mode changes.
-  const boxes = variable.compute(() =>
-    turnModes.map(({ label, turn }) => ({
-      key: label + modeName.value,
-      label,
-      turn,
-      play: playModes[modeName.value as keyof typeof playModes],
-    })),
-  );
+  // midway is read when a box attaches. The box is rebuilt when the mode changes.
+  const boxes = variable.compute(() => [
+    {
+      key: modeName.value,
+      label: modeName.value,
+      mode: modes[modeName.value as keyof typeof modes],
+    },
+  ]);
 </script>
 
 <div class="midway-demo">
   <label>
     Play mode
     <select bind-value={modeName}>
-      <option value="turn">TURN (default)</option>
-      <option value="finish">FINISH</option>
-      <option value="restart">RESTART</option>
-      <option value="skip">SKIP</option>
-      <option value="ignore">IGNORE</option>
+      <option value="SWITCH">SWITCH (default)</option>
+      <option value="SWITCH_SMOOTH">SWITCH_SMOOTH</option>
+      <option value="SWITCH_STOP">SWITCH_STOP</option>
+      <option value="WAIT">WAIT</option>
+      <option value="RESTART">RESTART</option>
+      <option value="JUMP_TO_END">JUMP_TO_END</option>
+      <option value="KEEP_CURRENT">KEEP_CURRENT</option>
     </select>
   </label>
   <div class="row">
@@ -52,10 +49,10 @@
         <div
           class="box"
           animate={{
-            style: grow,
-            when: WHEN.HOVER,
+            play: grow,
+            on: ON.HOVER,
             duration: 800,
-            midway: { play: box.play, turn: box.turn, turnDuration: 250 },
+            midway: { mode: box.mode },
           }}
         ></div>
       </div>

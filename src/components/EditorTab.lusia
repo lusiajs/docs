@@ -1,5 +1,5 @@
 <script>
-  import { PRESET, WHEN, props, variable } from "lusiajs";
+  import { PRESET, ON, props, variable } from "lusiajs";
 
   const { name, active, onSelect } = props({
     name: "",
@@ -9,12 +9,12 @@
 
   // A new tab slides in. A closed tab fades, and the tabs after it slide over the gap.
   const tabMotion = [
-    { style: PRESET.SLIDE_DOWN, when: WHEN.ATTACH, duration: 250 },
+    { play: PRESET.SLIDE_DOWN, on: ON.ATTACH, duration: 250 },
     {
-      style: PRESET.FADE_OUT,
-      when: WHEN.DETACH,
+      play: PRESET.FADE_OUT,
+      on: ON.DETACH,
       duration: 200,
-      more: { animateSpace: true },
+      options:{ animateSpace: true },
     },
   ];
 

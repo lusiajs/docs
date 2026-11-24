@@ -1,5 +1,5 @@
 <script>
-  import { onAttach, onDetach, WHEN, EASE } from "lusiajs";
+  import { onAttach, onDetach, ON, EASE } from "lusiajs";
   import { attachRuns, detachRuns } from "./lifecycle-count.ts";
 
   // IN plays when the box attaches. OUT plays when detach() is called.
@@ -25,8 +25,8 @@
 <div
   class="lifecycle-box"
   animate={[
-    { style: popIn, duration: 400 },
-    { style: shrinkOut, when: WHEN.DETACH, duration: 400 },
+    { play: popIn, duration: 400 },
+    { play: shrinkOut, on: ON.DETACH, duration: 400 },
   ]}
 >
   <p>Mounted box</p>

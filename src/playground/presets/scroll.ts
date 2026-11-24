@@ -2,7 +2,7 @@ import { ENTRY_FILE } from "../names.ts";
 import type { Preset } from "./index.ts";
 
 const APP = `<script>
-  import { WHEN, EASE } from "lusiajs";
+  import { ON, EASE } from "lusiajs";
 
   // With no start or end, the range is the card entering and leaving the screen.
   const rise = {
@@ -10,7 +10,7 @@ const APP = `<script>
     1: [EASE.STYLE.LINEAR, EASE.OUT, { opacity: 1, filter: "blur(0px)" }],
   };
 
-  const riseMotion = { style: rise, when: WHEN.SCROLL };
+  const riseMotion = { play: rise, on: ON.SCROLL };
 </script>
 
 <main class="app">

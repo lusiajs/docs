@@ -1,12 +1,12 @@
 <script>
-  import { WHEN, EASE } from "lusiajs";
+  import { ON, EASE } from "lusiajs";
 
   const rise = {
     0: { opacity: 0, translate: "0px 20px" },
     1: [EASE.STYLE.QUART, EASE.OUT, { opacity: 1, translate: "0px 0px" }],
   };
 
-  const reveal = { style: rise, when: WHEN.VIEW, duration: 500 };
+  const reveal = { play: rise, on: ON.VIEW, duration: 500 };
 </script>
 
 <div class="motion-stage">

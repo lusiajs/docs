@@ -1,5 +1,5 @@
 import {
-	WHEN,
+	ON,
 	type AnimateItem,
 	type ComputedVariable,
 	type Style,
@@ -20,9 +20,9 @@ export function scrollAcross(
 	end: ScrollPoint,
 ): AnimateItem {
 	return {
-		when: WHEN.SCROLL,
-		more: { follow, start, end },
-		style: { 0: from, 1: to },
+		on: ON.SCROLL,
+		options: { follow, start, end },
+		play: { 0: from, 1: to },
 	};
 }
 
@@ -34,9 +34,9 @@ export function scrollOwn(
 	end: ScrollPoint,
 ): AnimateItem {
 	return {
-		when: WHEN.SCROLL,
-		more: { start, end },
-		style: { 0: from, 1: to },
+		on: ON.SCROLL,
+		options: { start, end },
+		play: { 0: from, 1: to },
 	};
 }
 
@@ -48,6 +48,6 @@ export function scrollBetween(
 	to: Style,
 	part?: [number, number],
 ): AnimateItem {
-	const more = part ? { follow, part } : { follow };
-	return { when: WHEN.SCROLL, more, style: { 0: from, 1: to } };
+	const options = part ? { follow, part } : { follow };
+	return { on: ON.SCROLL, options, play: { 0: from, 1: to } };
 }

@@ -2,13 +2,13 @@ import { ENTRY_FILE } from "../names.ts";
 import type { Preset } from "./index.ts";
 
 const APP = `<script>
-  import { variable, PRESET, WHEN } from "lusiajs";
+  import { variable, PRESET, ON } from "lusiajs";
 
   const tasks = variable<string[]>([]);
   const draft = variable("");
   const hasTasks = variable.compute(() => tasks.value.length > 0);
 
-  const rowMotion = { style: PRESET.SLIDE_UP, when: WHEN.ATTACH, duration: 250 };
+  const rowMotion = { play: PRESET.SLIDE_UP, on: ON.ATTACH, duration: 250 };
 
   function add() {
     const task = draft.value.trim();

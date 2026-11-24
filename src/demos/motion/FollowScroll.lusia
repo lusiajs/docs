@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE, EDGE } from "lusiajs";
+  import { ON, EASE, EDGE } from "lusiajs";
 
   // The bar fills and the card turns as the demo crosses the middle of the screen.
   const fill = {
@@ -13,14 +13,14 @@
   };
 
   const scrolled = {
-    when: WHEN.SCROLL,
-    more: {
+    on: ON.SCROLL,
+    options:{
       start: [EDGE.TOP, 0.9],
       end: [EDGE.TOP, 0.4],
     },
   };
-  const barMotion = { ...scrolled, style: fill };
-  const cardMotion = { ...scrolled, style: turn };
+  const barMotion = { ...scrolled, play: fill };
+  const cardMotion = { ...scrolled, play: turn };
 </script>
 
 <div class="motion-stage">

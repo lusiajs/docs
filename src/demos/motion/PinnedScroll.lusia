@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE, variable } from "lusiajs";
+  import { ON, EASE, variable } from "lusiajs";
 
   // The tall element drives the progress. The box stays on screen while it scrolls past.
   const pinDemo = variable<Element | null>(null);
@@ -15,15 +15,15 @@
   };
 
   const growMotion = {
-    style: grow,
-    when: WHEN.SCROLL,
-    more: { follow: pinDemo, part: [0, 0.5] },
+    play: grow,
+    on: ON.SCROLL,
+    options:{ follow: pinDemo, part: [0, 0.5] },
   };
 
   const turnMotion = {
-    style: turn,
-    when: WHEN.SCROLL,
-    more: { follow: pinDemo, part: [0.5, 1] },
+    play: turn,
+    on: ON.SCROLL,
+    options:{ follow: pinDemo, part: [0.5, 1] },
   };
 </script>
 

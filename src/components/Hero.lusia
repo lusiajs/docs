@@ -1,5 +1,5 @@
 <script>
-  import { SCREEN, onAttach, variable, props, WHEN, EASE } from "lusiajs";
+  import { SCREEN, onAttach, variable, props, ON, EASE } from "lusiajs";
   import { homePath, pageLink } from "../page-link.ts";
   import { scrollHint } from "../motion.ts";
   import { heroBetween } from "../motion/hero-slow.ts";
@@ -19,7 +19,7 @@
     1: [EASE.STYLE.QUART, EASE.OUT, { opacity: 1, translate: "0px 0px" }],
   };
   const letterWobble = {
-    default: [EASE.STYLE.SINE, EASE.OUT],
+    ease: [EASE.STYLE.SINE, EASE.OUT],
     0: { rotate: "0deg" },
     0.25: { rotate: "-14deg" },
     0.5: { rotate: "10deg" },
@@ -31,13 +31,13 @@
     if (reduced) return [];
     return [
       {
-        style: letterIn,
-        when: WHEN.ATTACH,
-        more: { animateSpace: true },
+        play: letterIn,
+        on: ON.ATTACH,
+        options:{ animateSpace: true },
         duration: 600,
         delay: 80 + index * 70,
       },
-      { style: letterWobble, when: WHEN.HOVER, duration: 500 },
+      { play: letterWobble, on: ON.HOVER, duration: 500 },
     ];
   }
 
@@ -83,32 +83,32 @@
   };
 
   const eyebrowMotion = {
-    style: fadeIn,
-    when: WHEN.ATTACH,
+    play: fadeIn,
+    on: ON.ATTACH,
     duration: 600,
     delay: 500,
   };
   const taglineMotion = {
-    style: fadeIn,
-    when: WHEN.ATTACH,
+    play: fadeIn,
+    on: ON.ATTACH,
     duration: 600,
     delay: 600,
   };
   const installMotion = {
-    style: ctaIn,
-    when: WHEN.ATTACH,
+    play: ctaIn,
+    on: ON.ATTACH,
     duration: 600,
     delay: 700,
   };
   const ctaMotion = {
-    style: ctaIn,
-    when: WHEN.ATTACH,
+    play: ctaIn,
+    on: ON.ATTACH,
     duration: 600,
     delay: 800,
   };
   const noteMotion = {
-    style: fadeIn,
-    when: WHEN.ATTACH,
+    play: fadeIn,
+    on: ON.ATTACH,
     duration: 600,
     delay: 900,
   };
@@ -141,7 +141,7 @@
   const kaomojiAnimate = reduced ? [] : kaomojiDrift;
 
   const hintMotion = {
-    style: scrollHint,
+    play: scrollHint,
     loop: true,
     backAndForth: true,
     duration: 1600,

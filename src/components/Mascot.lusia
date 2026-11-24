@@ -1,12 +1,12 @@
 <script>
-  import { SCREEN, WHEN, EASE } from "lusiajs";
+  import { SCREEN, ON, EASE } from "lusiajs";
 
   const reduced = SCREEN.REDUCED_MOTION.value;
 
   // The eyes close for a moment, once every few seconds.
   const blink = {
-    style: {
-      default: [EASE.STYLE.SINE, EASE.INOUT],
+    play: {
+      ease: [EASE.STYLE.SINE, EASE.INOUT],
       0: { scale: "1 1" },
       0.45: { scale: "1 1" },
       0.5: { scale: "1 0.1" },
@@ -19,22 +19,22 @@
 
   // Waves when the pointer is on it.
   const wave = {
-    style: {
-      default: [EASE.STYLE.SINE, EASE.OUT],
+    play: {
+      ease: [EASE.STYLE.SINE, EASE.OUT],
       0: { rotate: "0deg" },
       0.25: { rotate: "-22deg" },
       0.5: { rotate: "14deg" },
       0.75: { rotate: "-8deg" },
       1: { rotate: "0deg" },
     },
-    when: WHEN.HOVER,
+    on: ON.HOVER,
     duration: 800,
   };
 
   // Leans toward the page as the mascot scrolls across the screen.
   const lean = {
-    style: { 0: { rotate: "-10deg" }, 1: { rotate: "10deg" } },
-    when: WHEN.SCROLL,
+    play: { 0: { rotate: "-10deg" }, 1: { rotate: "10deg" } },
+    on: ON.SCROLL,
   };
 
   const eyeMotion = reduced ? [] : blink;

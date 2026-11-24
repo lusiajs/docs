@@ -1,47 +1,47 @@
 <script>
-  import { WHEN, EASE } from "lusiajs";
+  import { ON, EASE } from "lusiajs";
 
-  // With no default, the keys use the engine default: QUART and INOUT.
+  // With no ease, the keys use the engine default: QUART and INOUT.
   const plain = {
     0: { translate: "0px 0px" },
     1: { translate: "150px 0px" },
   };
 
-  // default sets the easing for every key that does not set its own.
+  // ease sets the easing for every key that does not set its own.
   const backOut = {
-    default: [EASE.STYLE.BACK, EASE.OUT],
+    ease: [EASE.STYLE.BACK, EASE.OUT],
     0: { translate: "0px 0px" },
     1: { translate: "150px 0px" },
   };
 
-  // Key 1 sets only the ease. It keeps the default's BOUNCE style.
+  // Key 1 sets only the ease. It keeps the keyframes' BOUNCE style.
   const bounceIn = {
-    default: [EASE.STYLE.BOUNCE, EASE.IN],
+    ease: [EASE.STYLE.BOUNCE, EASE.IN],
     0: { translate: "0px 0px" },
     1: [EASE.OUT, { translate: "150px 0px" }],
   };
 
-  const plainMotion = { style: plain, when: WHEN.HOVER, duration: 800 };
-  const backMotion = { style: backOut, when: WHEN.HOVER, duration: 800 };
-  const bounceMotion = { style: bounceIn, when: WHEN.HOVER, duration: 1000 };
+  const plainMotion = { play: plain, on: ON.HOVER, duration: 800 };
+  const backMotion = { play: backOut, on: ON.HOVER, duration: 800 };
+  const bounceMotion = { play: bounceIn, on: ON.HOVER, duration: 1000 };
 </script>
 
 <div class="curve-demo">
   <p>Hover each box. The defaults are set on the keyframes, not on the item.</p>
   <div class="row">
-    <span class="label">No default: QUART, INOUT</span>
+    <span class="label">No ease: QUART, INOUT</span>
     <div class="track">
       <div class="box" animate={plainMotion}></div>
     </div>
   </div>
   <div class="row">
-    <span class="label">default: BACK, OUT</span>
+    <span class="label">ease: BACK, OUT</span>
     <div class="track">
       <div class="box" animate={backMotion}></div>
     </div>
   </div>
   <div class="row">
-    <span class="label">default: BOUNCE, IN. Key 1 sets OUT only</span>
+    <span class="label">ease: BOUNCE, IN. Key 1 sets OUT only</span>
     <div class="track">
       <div class="box" animate={bounceMotion}></div>
     </div>

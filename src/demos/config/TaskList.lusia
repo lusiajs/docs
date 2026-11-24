@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, variable } from "lusiajs";
+  import { ON, variable } from "lusiajs";
 
   interface Task {
     id: number;
@@ -12,7 +12,7 @@
   ]);
   let nextId = 3;
 
-  // No more.animateSpace here. The parent's setConfig decides whether the rows slide.
+  // No options.animateSpace here. The parent's setConfig decides whether the rows slide.
   const fadeIn = {
     0: { opacity: 0 },
     1: { opacity: 1 },
@@ -40,8 +40,8 @@
       <li
         class="row"
         animate={[
-          { style: fadeIn, when: WHEN.ATTACH, duration: 400 },
-          { style: fadeOut, when: WHEN.DETACH, duration: 400 },
+          { play: fadeIn, on: ON.ATTACH, duration: 400 },
+          { play: fadeOut, on: ON.DETACH, duration: 400 },
         ]}
       >
         <span>{task.title}</span>

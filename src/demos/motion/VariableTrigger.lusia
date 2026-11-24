@@ -16,7 +16,7 @@
 
 <div class="motion-stage">
   <button onclick={toggleOpen} type="button">Open or close the panel</button>
-  <div class="panel" animate={{ style: panelIn, when: open, duration: 400 }}>
+  <div class="panel" animate={{ play: panelIn, on: open, duration: 400 }}>
     Panel content
   </div>
 </div>

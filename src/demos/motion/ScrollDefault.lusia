@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE, onAttach } from "lusiajs";
+  import { ON, EASE, onAttach } from "lusiajs";
   import { AT, watchProgress } from "./scroll-readout.ts";
 
   // With no start or end, the range runs from the card's top at the screen's bottom
@@ -10,7 +10,7 @@
     1: [EASE.STYLE.LINEAR, EASE.OUT, { opacity: 1, filter: "blur(0px)" }],
   };
 
-  const riseMotion = { style: rise, when: WHEN.SCROLL };
+  const riseMotion = { play: rise, on: ON.SCROLL };
 
   onAttach((root) => {
     const slot = root.querySelector(".slot");

@@ -5,7 +5,7 @@
   "animate": {
     "duration": 400,
     "ease": ["CUBIC", "OUT"],
-    "midway": { "play": "RESTART", "turn": "SMOOTH" },
+    "midway": { "mode": "RESTART" },
     "in": "FADE_IN",
     "out": "FADE_OUT"
   }

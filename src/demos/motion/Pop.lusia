@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE } from "lusiajs";
+  import { ON, EASE } from "lusiajs";
 
   // Two items: a pop when attached (IN) and a spin when detached (OUT).
   const popIn = {
@@ -16,8 +16,8 @@
 <div
   class="motion-box"
   animate={[
-    { style: popIn, duration: 500 },
-    { style: spinOut, when: WHEN.DETACH, duration: 400 },
+    { play: popIn, duration: 500 },
+    { play: spinOut, on: ON.DETACH, duration: 400 },
   ]}
 >
   Pop

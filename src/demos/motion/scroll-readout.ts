@@ -1,8 +1,8 @@
 import { EDGE } from "lusiajs";
 
-// Demo-only helpers for the SCROLL pages. They measure the same way WHEN.SCROLL does, so the readouts match the motion.
+// Demo-only helpers for the SCROLL pages. They measure the same way ON.SCROLL does, so the readouts match the motion.
 
-// [element edge, screen edge], the same pair shape as WHEN.SCROLL start and end.
+// [element edge, screen edge], the same pair shape as ON.SCROLL start and end.
 export type ScrollPoint = [number, number];
 
 export const AT = {

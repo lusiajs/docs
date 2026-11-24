@@ -1,7 +1,7 @@
 import {
 	controller,
 	EASE,
-	WHEN,
+	ON,
 	type AnimateItem,
 	type Controller,
 	type Keyframes,
@@ -43,7 +43,7 @@ function pick(list: string[]): string {
 
 function flight(dx: number, dy: number, turn: number): Keyframes {
 	return {
-		default: [EASE.STYLE.QUART, EASE.OUT],
+		ease: [EASE.STYLE.QUART, EASE.OUT],
 		0: { opacity: 1, translate: "0px 0px", rotate: "0deg" },
 		1: { opacity: 0, translate: `${dx}px ${dy}px`, rotate: `${turn}deg` },
 	};
@@ -63,9 +63,9 @@ function makeSpark(options: SparkOptions): Spark {
 		x: options.x,
 		y: options.y,
 		motion: {
-			style: flight(dx, dy, turn),
+			play: flight(dx, dy, turn),
 			duration: options.duration,
-			when: WHEN.MANUAL,
+			on: ON.MANUAL,
 			control,
 		},
 		control,

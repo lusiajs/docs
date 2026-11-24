@@ -1,5 +1,5 @@
 <script>
-  import { PRESET, WHEN, onAttach, variable } from "lusiajs";
+  import { PRESET, ON, onAttach, variable } from "lusiajs";
   import { templateFiles } from "./project-files.ts";
 
   interface Entry {
@@ -60,10 +60,10 @@
   }
 
   const rowMotion = {
-    style: PRESET.SLIDE_UP,
-    when: WHEN.ATTACH,
+    play: PRESET.SLIDE_UP,
+    on: ON.ATTACH,
     duration: 350,
-    more: { animateSpace: true },
+    options:{ animateSpace: true },
   };
 
   onAttach(() => {

@@ -99,10 +99,10 @@ describe("guide demos", () => {
 		}
 	});
 
-	test("demo titles are plain words, without a WHEN or ATTACH suffix", () => {
+	test("demo titles are plain words, without a ON or ATTACH suffix", () => {
 		for (const entry of Object.values(catalog)) {
 			for (const demo of entry.demos ?? []) {
-				expect(demo.title, demo.id).not.toMatch(/\(WHEN\./);
+				expect(demo.title, demo.id).not.toMatch(/\(ON\./);
 			}
 		}
 	});

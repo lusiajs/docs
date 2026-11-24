@@ -2,7 +2,7 @@ import { EASE } from "lusiajs";
 
 // The pill rises a little on hover.
 export const pillLift = {
-	default: [EASE.STYLE.SINE, EASE.OUT],
+	ease: [EASE.STYLE.SINE, EASE.OUT],
 	0: { translate: "0px 0px" },
 	1: { translate: "0px -2px" },
 };

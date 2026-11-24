@@ -1,13 +1,13 @@
 <script>
-  import { WHEN, variable } from "lusiajs";
+  import { ON, variable } from "lusiajs";
 
   // The card keeps its place. When the text opens, its size changes,
-  // and WHEN.RESIZE glides the card to the new size.
+  // and ON.RESIZE glides the card to the new size.
   const open = variable(false);
   const glide = {
-    when: WHEN.RESIZE,
+    on: ON.RESIZE,
     duration: 500,
-    style: { 0: { opacity: 0.8 }, 1: { opacity: 1 } },
+    play: { 0: { opacity: 0.8 }, 1: { opacity: 1 } },
   };
 
   function toggleOpen() {

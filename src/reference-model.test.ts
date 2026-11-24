@@ -62,7 +62,7 @@ describe("wrapSignature", () => {
 
 	test("leaves text without a parameter list alone", () => {
 		const long =
-			"const WHEN: { readonly ATTACH: When; readonly DETACH: When; readonly VIEW: When }";
+			"const ON: { readonly ATTACH: When; readonly DETACH: When; readonly VIEW: When }";
 		expect(wrapSignature(long)).toBe(long);
 	});
 });
@@ -155,9 +155,9 @@ describe("parameterRows", () => {
 	test("returns no rows for an entry that is not a function", () => {
 		expect(
 			parameterRows(
-				entry("turn", {
+				entry("midway", {
 					kind: "value",
-					signature: "const TURN: { readonly SUDDEN: TurnMode }",
+					signature: "const MIDWAY: { readonly SWITCH: MidwayMode }",
 				}),
 			),
 		).toEqual([]);

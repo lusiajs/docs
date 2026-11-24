@@ -1,5 +1,5 @@
 <script>
-  import { WHEN } from "lusiajs";
+  import { ON } from "lusiajs";
   import LoadingMark from "./LoadingMark.lusia";
 
   const fadeOut = {
@@ -12,7 +12,7 @@
   class="page-loading"
   role="status"
   aria-label="Loading the page"
-  animate={{ style: fadeOut, when: WHEN.DETACH, duration: 200 }}
+  animate={{ play: fadeOut, on: ON.DETACH, duration: 200 }}
 >
   <LoadingMark />
 </div>

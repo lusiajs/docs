@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE } from "lusiajs";
+  import { ON, EASE } from "lusiajs";
 
   // An easing is any function from 0 to 1 that starts at 0 and ends at 1.
   function squared(t: number) {
@@ -16,7 +16,7 @@
   <p>Hover the square. It uses a custom easing.</p>
   <div
     class="square"
-    animate={{ style: slide, when: WHEN.HOVER, duration: 700 }}
+    animate={{ play: slide, on: ON.HOVER, duration: 700 }}
   ></div>
 </div>
 

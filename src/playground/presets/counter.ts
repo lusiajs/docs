@@ -2,7 +2,7 @@ import { ENTRY_FILE } from "../names.ts";
 import type { Preset } from "./index.ts";
 
 const APP = `<script>
-  import { variable, PRESET, WHEN } from "lusiajs";
+  import { variable, PRESET, ON } from "lusiajs";
 
   const count = variable(0);
   const items = variable<string[]>(["Apples", "Pears"]);
@@ -10,7 +10,7 @@ const APP = `<script>
   const label = variable.compute(() => (count.value > 4 ? "Lots of clicks" : "Keep clicking"));
 
   // Each row slides up when it appears in the list.
-  const rowMotion = { style: PRESET.SLIDE_UP, when: WHEN.ATTACH, duration: 300 };
+  const rowMotion = { play: PRESET.SLIDE_UP, on: ON.ATTACH, duration: 300 };
 
   function increment() {
     count.value++;

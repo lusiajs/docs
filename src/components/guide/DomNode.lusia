@@ -1,7 +1,7 @@
 <NOLAZY />
 
 <script>
-  import { PRESET, WHEN, props, variable } from "lusiajs";
+  import { PRESET, ON, props, variable } from "lusiajs";
   import DomNode from "./DomNode.lusia";
 
   interface DomData {
@@ -36,10 +36,10 @@
   };
   const space = { animateSpace: true };
   const nodeMotion = [
-    { style: enter, when: WHEN.ATTACH, duration: 420, more: space },
-    { style: leave, when: WHEN.DETACH, duration: 280, more: space },
+    { play: enter, on: ON.ATTACH, duration: 420, options:space },
+    { play: leave, on: ON.DETACH, duration: 280, options:space },
   ];
-  const textMotion = { style: PRESET.PULSE, when: WHEN.ATTACH, duration: 500 };
+  const textMotion = { play: PRESET.PULSE, on: ON.ATTACH, duration: 500 };
 </script>
 
 <li class="dom-node" animate={nodeMotion}>

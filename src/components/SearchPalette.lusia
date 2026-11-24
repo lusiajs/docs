@@ -1,5 +1,5 @@
 <script>
-  import { EVENT, WHEN, listen, variable } from "lusiajs";
+  import { EVENT, ON, listen, variable } from "lusiajs";
   import Highlight from "./Highlight.lusia";
   import { buildSearchIndex } from "../search/build.ts";
   import { groupJump, groupStarts, moveIndex } from "../search/keys.ts";
@@ -26,11 +26,11 @@
     () => typed.value.trim() !== "" && count.value === 0,
   );
 
-  const glide = { when: WHEN.MOVE_OR_RESIZE, duration: 380 };
+  const glide = { on: ON.MOVE_OR_RESIZE, duration: 380 };
   const fadeIn = { 0: { opacity: 0 }, 1: { opacity: 1 } };
   const backdrop = {
-    style: fadeIn,
-    when: searchOpen,
+    play: fadeIn,
+    on: searchOpen,
     duration: 250,
   };
 
@@ -44,13 +44,13 @@
     1: { opacity: 0, translate: "0px -8px", scale: 0.97 },
   };
   const panelMotion = [
-    { style: panelIn, when: WHEN.ATTACH, duration: 220, keep: false },
+    { play: panelIn, on: ON.ATTACH, duration: 220, keep: false },
     {
-      style: panelOut,
-      when: WHEN.DETACH,
+      play: panelOut,
+      on: ON.DETACH,
       duration: 160,
     },
-    { when: WHEN.RESIZE, duration: 260 },
+    { on: ON.RESIZE, duration: 260 },
   ];
 
   // Rows rise in turn. Rows past the twelfth start together, so long lists stay quick.
@@ -63,7 +63,7 @@
 
   function rowMotion(index: number) {
     const stagger = Math.min(index, MAX_STAGGERED_ROWS) * ROW_STEP_MS;
-    return { style: rowIn, when: WHEN.ATTACH, duration: 200, delay: stagger };
+    return { play: rowIn, on: ON.ATTACH, duration: 200, delay: stagger };
   }
 
   // The shortcut hint shows this platform's key: Cmd on Apple devices, Ctrl elsewhere.

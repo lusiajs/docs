@@ -16,7 +16,7 @@
 <div class="motion-stage">
   <div
     class="dot"
-    animate={{ style: pulse, loop: true, backAndForth: true, duration: 2400 }}
+    animate={{ play: pulse, loop: true, backAndForth: true, duration: 2400 }}
   ></div>
 </div>
 

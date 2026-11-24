@@ -1,9 +1,9 @@
 <script>
-  import { WHEN, variable } from "lusiajs";
+  import { ON, variable } from "lusiajs";
 
   // Each row glides to its new place when the list reorders.
   const names = variable(["Ada", "Grace", "Linus", "Ken"]);
-  const glide = { when: WHEN.MOVE, duration: 400 };
+  const glide = { on: ON.MOVE, duration: 400 };
 
   function moveFirstToEnd() {
     const [first, ...rest] = names.value;

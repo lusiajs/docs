@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE, EDGE, onAttach } from "lusiajs";
+  import { ON, EASE, EDGE, onAttach } from "lusiajs";
   import { watchProgress } from "./scroll-readout.ts";
 
   const fadeIn = {
@@ -16,19 +16,19 @@
   const defaultEnd = [EDGE.BOTTOM, EDGE.TOP];
 
   const edgeMotion = {
-    style: fadeIn,
-    when: WHEN.SCROLL,
-    more: { start: edgeStart, end: edgeEnd },
+    play: fadeIn,
+    on: ON.SCROLL,
+    options:{ start: edgeStart, end: edgeEnd },
   };
   const numberMotion = {
-    style: fadeIn,
-    when: WHEN.SCROLL,
-    more: { start: numberStart, end: numberEnd },
+    play: fadeIn,
+    on: ON.SCROLL,
+    options:{ start: numberStart, end: numberEnd },
   };
   const enterMotion = {
-    style: fadeIn,
-    when: WHEN.SCROLL,
-    more: { start: defaultStart, end: defaultEnd },
+    play: fadeIn,
+    on: ON.SCROLL,
+    options:{ start: defaultStart, end: defaultEnd },
   };
 
   onAttach((root) => {

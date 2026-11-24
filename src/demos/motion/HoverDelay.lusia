@@ -1,5 +1,5 @@
 <script>
-  import { WHEN, EASE } from "lusiajs";
+  import { ON, EASE } from "lusiajs";
 
   // The box stays lit for 300 ms after the pointer leaves,
   // so a quick pass does not flicker.
@@ -9,10 +9,10 @@
   };
 
   const hoverDelay = {
-    style: glow,
-    when: WHEN.HOVER,
+    play: glow,
+    on: ON.HOVER,
     duration: 400,
-    more: { outDelay: 300 },
+    options:{ outDelay: 300 },
   };
 </script>
 

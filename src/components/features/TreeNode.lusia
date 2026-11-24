@@ -23,7 +23,7 @@
       {item.value.name}
     </button>
     <IF {open}>
-      <ul animate={{ style: PRESET.SLIDE_DOWN }}>
+      <ul animate={{ play: PRESET.SLIDE_DOWN }}>
         <EACH {children} as={child} key={child.name}>
           <TreeNode item={child} />
         </EACH>

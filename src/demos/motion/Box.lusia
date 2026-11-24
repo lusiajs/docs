@@ -9,7 +9,7 @@
   };
 </script>
 
-<div class="motion-box" animate={{ style: fadeIn, duration: 900 }}>Hello</div>
+<div class="motion-box" animate={{ play: fadeIn, duration: 900 }}>Hello</div>
 
 <style>
   .motion-box {

@@ -3,7 +3,7 @@
     EASE,
     EVENT,
     SCREEN,
-    WHEN,
+    ON,
     listen,
     onAttach,
     props,
@@ -48,13 +48,13 @@
     ? []
     : [
         {
-          style: logoIn,
-          when: WHEN.ATTACH,
-          more: { animateSpace: false },
+          play: logoIn,
+          on: ON.ATTACH,
+          options:{ animateSpace: false },
           duration: 600,
           delay: 80,
         },
-        { style: wobbleStyle, when: WHEN.HOVER, duration: 500 },
+        { play: wobbleStyle, on: ON.HOVER, duration: 500 },
       ];
 </script>
 
