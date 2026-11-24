@@ -1,5 +1,5 @@
 <script>
-  import { SCREEN, listen, onAttach, variable } from "lusiajs";
+  import { EVENT, SCREEN, listen, onAttach, variable } from "lusiajs";
 
   const reduced = SCREEN.REDUCED_MOTION.value;
 
@@ -31,14 +31,17 @@
 
   function measure() {
     const el = box.peek();
-    if (!el || reduced) return;
+    if (!el || reduced || el.clientHeight === 0) return;
     progress.value = rows.map((row) => rowProgress(row.peek()!, el));
   }
 
   onAttach(() => {
     measure();
     const el = box.peek();
-    if (el) listen(el, "scroll", measure);
+    if (!el) return;
+    listen(el, "scroll", measure);
+    // The box may still be settling on attach, so measure again once it has its size.
+    listen(el, EVENT.SIZE, measure);
   });
 
   function itemStyle(index: number): string {

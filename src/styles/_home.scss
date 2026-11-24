@@ -29,29 +29,35 @@ $star: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 
   will-change: translate, rotate;
 }
 
-// Pastel rays around the hero title, the same look the hero had before.
+// A 1:1 box centred on the title, so turning it never shows a cut edge.
+// Margins centre it because the scroll motion owns translate.
 .bg-rays {
-  top: 0;
-  left: -20%;
-  width: 140%;
-  height: 120svh;
-  background: repeating-conic-gradient(
-    from 0deg at 50% 45%,
-    transparent 0 6deg,
-    var(--accent-soft) 6deg 8deg
-  );
+  --rays-size: max(140vw, 140svh);
+
+  top: 54svh;
+  left: 50%;
+  width: var(--rays-size);
+  height: var(--rays-size);
+  margin: calc(var(--rays-size) / -2) 0 0 calc(var(--rays-size) / -2);
   opacity: 0.5;
   -webkit-mask-image: radial-gradient(
-    ellipse 50% 50% at 50% 45%,
+    circle closest-side,
     transparent 25%,
     #000 60%,
     transparent 100%
   );
-  mask-image: radial-gradient(
-    ellipse 50% 50% at 50% 45%,
-    transparent 25%,
-    #000 60%,
-    transparent 100%
+  mask-image: radial-gradient(circle closest-side, transparent 25%, #000 60%, transparent 100%);
+}
+
+// Own GPU layer, so the spin turns it without repainting the gradient.
+.bg-rays-spin {
+  position: absolute;
+  inset: 0;
+  will-change: rotate;
+  background: repeating-conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0 6deg,
+    var(--accent-soft) 6deg 8deg
   );
 }
 
@@ -66,28 +72,8 @@ $star: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 
   mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
 }
 
-// Each layer moves by the page's scroll share (--page-progress), so it ends at its far offset on the last scroll.
-.bg-rays {
-  translate: 0 calc(var(--page-progress, 0) * -15vh);
-  rotate: calc(var(--page-progress, 0) * 30deg);
-}
-
-.bg-dots {
-  translate: 0 calc(var(--page-progress, 0) * -25vh);
-}
-
 .bg-sparkles {
   inset: 0;
-  translate: 0 calc(var(--page-progress, 0) * -45vh);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bg-rays,
-  .bg-dots,
-  .bg-sparkles {
-    translate: none;
-    rotate: none;
-  }
 }
 
 .bg-sparkle {
@@ -198,10 +184,11 @@ $star: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 
   }
 }
 
-// Sits at the top of the page, so it stays in place while the page scrolls.
+// Pinned to the screen corner, so sparks land at the pointer's screen position.
 .cursor-layer {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
   z-index: 60;
   height: 0;
   pointer-events: none;
@@ -222,7 +209,6 @@ $star: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 
   left: 0;
   height: 3px;
   background: linear-gradient(90deg, var(--pink), var(--lavender), var(--mint));
-  transform: scaleX(var(--page-progress, 0));
   transform-origin: left;
 }
 

@@ -1,6 +1,6 @@
 import { compileParts } from "lusiajs/compiler/pipeline.ts";
 
-const NO_STYLE = { css: "", deps: [], sassMs: 0, cached: false };
+const NO_STYLE = { css: "", deps: [], ms: 0 };
 
 /**
  * Runs the compiler's own steps with an empty style step: Sass does not run in the browser,

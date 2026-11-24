@@ -1,4 +1,10 @@
 <script>
+  import { props, SCREEN } from "lusiajs";
+  import { pageScroll, tunnelIn, tunnelOut } from "../motion/home-bg.ts";
+
+  const { follow } = props({ follow: null as HTMLElement | null });
+  const reduced = SCREEN.REDUCED_MOTION.value;
+
   const copyCount = 12;
   const biggestVmin = 160;
   const shrink = 0.8;
@@ -20,6 +26,11 @@
     return firstOpacity + (lastOpacity - firstOpacity) * share;
   }
 
+  // The nearest copy (index 0) moves most, so the tunnel gives a depth parallax.
+  function depthShift(index: number) {
+    return 120 - index * 9;
+  }
+
   function copyCss(index: number) {
     const size = copySize(index);
     const width = size * imageWidthShare;
@@ -29,8 +40,16 @@
       `height: ${height}vmin`,
       `margin: ${-height / 2}vmin 0 0 ${-width / 2}vmin`,
       `opacity: ${copyOpacity(index)}`,
-      `--shift: ${(0.04 + index * 0.03) * 100}`,
     ].join("; ");
+  }
+
+  function copyScroll(index: number) {
+    if (reduced) return [];
+    return pageScroll(
+      follow,
+      { translate: "0 0" },
+      { translate: `0 -${depthShift(index)}vh` },
+    );
   }
 
   // Each stroke bucket shares one outline file, so thin lines stay visible.
@@ -46,24 +65,28 @@
     css: copyCss(index),
     lightSrc: outlineSource("light", index),
     darkSrc: outlineSource("dark", index),
+    motion: reduced ? [] : [tunnelIn(index), tunnelOut],
+    scroll: copyScroll(index),
   }));
 </script>
 
 <div class="logo-tunnel" aria-hidden="true">
   <EACH {copies} as="{copy}">
-    <span class="tunnel-copy" style={copy.css}>
-      <img
-        class="tunnel-image tunnel-image-light"
-        src={copy.lightSrc}
-        alt=""
-        decoding="async"
-      />
-      <img
-        class="tunnel-image tunnel-image-dark"
-        src={copy.darkSrc}
-        alt=""
-        decoding="async"
-      />
+    <span class="tunnel-copy" style={copy.css} animate={copy.scroll}>
+      <span class="tunnel-pop" animate={copy.motion}>
+        <img
+          class="tunnel-image tunnel-image-light"
+          src={copy.lightSrc}
+          alt=""
+          decoding="async"
+        />
+        <img
+          class="tunnel-image tunnel-image-dark"
+          src={copy.darkSrc}
+          alt=""
+          decoding="async"
+        />
+      </span>
     </span>
   </EACH>
 </div>
@@ -77,15 +100,19 @@
     height: 100svh;
   }
 
-  // The biggest copy moves least and the smallest most, and each grows a little.
+  // The margin centres each copy on its 50% point, so the translate moves it from centre.
   .tunnel-copy {
     position: absolute;
     top: 50%;
     left: 50%;
     pointer-events: none;
     will-change: translate, scale;
-    translate: 0 calc(var(--page-progress, 0) * var(--shift) * -1vh);
-    scale: calc(1 + var(--page-progress, 0) * 0.06);
+  }
+
+  .tunnel-pop {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
   .tunnel-image {
@@ -96,13 +123,6 @@
 
   .tunnel-image-dark {
     display: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .tunnel-copy {
-      translate: none;
-      scale: none;
-    }
   }
 
   :root[data-theme="dark"] .tunnel-image-light {

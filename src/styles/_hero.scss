@@ -34,6 +34,22 @@
   }
 }
 
+// The span reaches up to the document top, above the status strip.
+.hero-zone {
+  position: relative;
+}
+
+// Scroll spans for the Home page. They reach up past the status strip.
+.hero-zone-span,
+.page-span {
+  position: absolute;
+  top: calc(-1 * var(--strip-h, 0px));
+  bottom: 0;
+  left: 0;
+  width: 0;
+  pointer-events: none;
+}
+
 // The room the sinking hero moves into, so Features keeps its gap below the hero.
 .hero-slow {
   padding-bottom: 48vh;
@@ -139,6 +155,15 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.75rem;
+}
+
+// Each button sits in its own wrapper, so the scroll rise does not fight the pointer pull on the button.
+.cta-item {
+  display: flex;
+}
+
+.cta-lift {
+  display: flex;
 }
 
 // Solid brand fills for the npm and VS Code buttons.

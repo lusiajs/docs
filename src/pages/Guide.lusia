@@ -21,5 +21,6 @@
   <main class="content" id="sections" animate={pageMotion}>
     <span id="first-demo-group" class="anchor-target"></span>
     <Docs />
+    <span data-spy-end aria-hidden="true"></span>
   </main>
 </div>

@@ -449,7 +449,7 @@
     font-size: clamp(2.8rem, 8vw, 6.5rem);
     line-height: 1.05;
     text-align: left;
-    background: var(--rainbow);
+    background: var(--rainbow-text);
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;

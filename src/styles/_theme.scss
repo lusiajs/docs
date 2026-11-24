@@ -53,6 +53,16 @@ $font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
       #ffc2de
     );
     --rainbow-ink: #3a2e4a;
+    --rainbow-text: linear-gradient(
+      90deg,
+      #d6246e,
+      #d9681a,
+      #b08400,
+      #17904c,
+      #1f7ac9,
+      #6a4fd1,
+      #d6246e
+    );
     --toon-line: #2a2236;
     --selection-bg: #ffc9e3;
     --selection-fg: #3a2e4a;
@@ -109,6 +119,7 @@ $font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
       #ffc2de
     );
     --rainbow-ink: #2a2236;
+    --rainbow-text: var(--rainbow);
     --toon-line: #f2f2f2;
     --selection-bg: #5a3a6e;
     --selection-fg: #f8f2ff;

@@ -1,3 +1,11 @@
+<script>
+  import { props } from "lusiajs";
+  import { pageScroll } from "../motion/home-bg.ts";
+
+  const { follow } = props({ follow: null as HTMLElement | null });
+  const barMotion = pageScroll(follow, { scale: "0 1" }, { scale: "1 1" });
+</script>
+
 <div class="progress-track" aria-hidden="true">
-  <div class="progress-bar"></div>
+  <div class="progress-bar" animate={barMotion}></div>
 </div>
