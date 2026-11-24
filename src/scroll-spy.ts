@@ -11,6 +11,7 @@ interface Spy {
   sections: HTMLElement[];
   demos: HTMLElement[];
   visible: Set<HTMLElement>;
+  atBottom: boolean;
   linksById: Map<string, HTMLAnchorElement[]>;
 }
 
@@ -20,9 +21,21 @@ export function initScrollSpy(signal: AbortSignal, targets: SpyTargets): void {
     sections: queryAll(targets.sections),
     demos: targets.demos ? queryAll(targets.demos) : [],
     visible: new Set(),
+    atBottom: false,
     linksById: groupLinksById(document.querySelector<HTMLElement>("#sidebar")!),
   };
   const stops = watchTargets(spy);
+  const end = document.querySelector<HTMLElement>("[data-spy-end]");
+  if (end) {
+    keepRunning(() => {
+      stops.push(
+        listen(end, EVENT.VIEW, ({ in: isIn }) => {
+          spy.atBottom = isIn;
+          activate(spy);
+        }),
+      );
+    });
+  }
   signal.addEventListener("abort", () => {
     for (const stop of stops) stop();
   });
@@ -55,13 +68,13 @@ function queryAll(selector: string): HTMLElement[] {
 }
 
 // The first visible target in page order, or the last one when the page is scrolled to its end.
-function current(targets: HTMLElement[], visible: Set<HTMLElement>): HTMLElement | undefined {
+function current(
+  targets: HTMLElement[],
+  visible: Set<HTMLElement>,
+  atBottom: boolean,
+): HTMLElement | undefined {
   const shown = targets.filter((target) => visible.has(target));
-  return atPageBottom() ? shown.at(-1) : shown[0];
-}
-
-function atPageBottom(): boolean {
-  return window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+  return atBottom ? shown.at(-1) : shown[0];
 }
 
 function groupLinksById(sidebar: HTMLElement): Map<string, HTMLAnchorElement[]> {
@@ -82,8 +95,8 @@ function nestedDemo(
 }
 
 function activate(spy: Spy): void {
-  const section = current(spy.sections, spy.visible);
-  const demo = nestedDemo(section, current(spy.demos, spy.visible));
+  const section = current(spy.sections, spy.visible, spy.atBottom);
+  const demo = nestedDemo(section, current(spy.demos, spy.visible, spy.atBottom));
   const links = [...linksFor(spy, section), ...linksFor(spy, demo)];
   if (sameItems(links, currentLinks())) return;
   setCurrentLinks(links);

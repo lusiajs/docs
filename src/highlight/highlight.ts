@@ -8,8 +8,19 @@ export function languageFor(path: string): string {
   return "none";
 }
 
+const cache = new Map<string, string>();
+
 // The HTML for the code. Unknown languages get the code as escaped text.
 export function highlightCode(code: string, language: string): string {
+  const key = `${language}\n${code}`;
+  const cached = cache.get(key);
+  if (cached !== undefined) return cached;
+  const html = highlightUncached(code, language);
+  cache.set(key, html);
+  return html;
+}
+
+function highlightUncached(code: string, language: string): string {
   const grammar = Prism.languages[language];
   if (!grammar) return escapeHtml(code);
   return Prism.highlight(code, grammar, language);
