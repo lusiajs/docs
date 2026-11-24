@@ -150,6 +150,12 @@ import HoverInOut from "./demos/motion/HoverInOut.lusia";
 import hoverInOutSource from "./demos/motion/HoverInOut.lusia?raw";
 import KeyframeDefault from "./demos/motion/KeyframeDefault.lusia";
 import keyframeDefaultSource from "./demos/motion/KeyframeDefault.lusia?raw";
+import MouseMove from "./demos/motion/MouseMove.lusia";
+import mouseMoveSource from "./demos/motion/MouseMove.lusia?raw";
+import Glide from "./demos/motion/Glide.lusia";
+import glideSource from "./demos/motion/Glide.lusia?raw";
+import KeyframeKeyEase from "./demos/motion/KeyframeKeyEase.lusia";
+import keyframeKeyEaseSource from "./demos/motion/KeyframeKeyEase.lusia?raw";
 import Keys from "./demos/motion/Keys.lusia";
 import keysSource from "./demos/motion/Keys.lusia?raw";
 import LayoutCard from "./demos/motion/LayoutCard.lusia";
@@ -995,6 +1001,44 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
+  "keyframes-type": {
+    icon: "data_object",
+    table: {
+      head: ["Priority", "Ease comes from", "Example"],
+      rows: [
+        ["1 (wins)", "The key's own ease", "0.5: [EASE.IN, { opacity: 0.8 }]"],
+        ["2", "The keyframes ease", "ease: [EASE.STYLE.BACK, EASE.OUT]"],
+        ["3", "setConfig or lusia.config: animate.ease", "animate: { ease: [EASE.STYLE.CUBIC, EASE.OUT] }"],
+        ["4", "Built-in QUART and INOUT", "Used when nothing above is set"],
+      ],
+    },
+    demos: [
+      {
+        id: "animate-keyframe-ease",
+        title: "Keyframe ease",
+        caption: "ease is only a default. Keys that do not set their own ease use it.",
+        components: [KeyframeDefault],
+        sources: [
+          {
+            path: "src/demos/motion/KeyframeDefault.lusia",
+            text: keyframeDefaultSource,
+          },
+        ],
+      },
+      {
+        id: "animate-keyframe-key-ease",
+        title: "One key overrides the ease",
+        caption: "Key 0.5 sets its own ease. The other keys keep the keyframes ease.",
+        components: [KeyframeKeyEase],
+        sources: [
+          {
+            path: "src/demos/motion/KeyframeKeyEase.lusia",
+            text: keyframeKeyEaseSource,
+          },
+        ],
+      },
+    ],
+  },
   "animate-item": { icon: "tune" },
   style: {
     icon: "code",
@@ -1141,15 +1185,18 @@ export const catalog: Record<string, CatalogEntry> = {
         ],
         ["animate.keep", "true or false", "true", "Remove the inline styles when a play ends"],
         [
-          "animate.midway.play",
-          "TURN, FINISH, RESTART, SKIP, IGNORE",
-          "TURN",
+          "animate.midway.mode",
+          "SWITCH, SWITCH_SMOOTH, SWITCH_STOP, WAIT, RESTART, JUMP_TO_END, KEEP_CURRENT, or a function",
+          "SWITCH",
           "What a new play does while one runs",
         ],
-        ["animate.midway.turn", "SUDDEN, SMOOTH, STOP", "SUDDEN", "How the motion turns around"],
-        ["animate.midway.turnDuration", "number, ms", "200", "Length of the turn"],
-        ["animate.midway.turnStyle", "easing style, e.g. CUBIC", "CUBIC", "Curve of the turn"],
-        ["animate.midway.turnEase", "IN, OUT, INOUT", "INOUT", "Direction of the turn"],
+        ["animate.midway.duration", "number, ms", "200", "Length of the switch"],
+        [
+          "animate.midway.ease",
+          '[style, direction], e.g. ["CUBIC", "INOUT"]',
+          '["CUBIC", "INOUT"]',
+          "Curve of the switch",
+        ],
         [
           "animate.view.margin",
           'number, or a CSS length such as "10%"',
@@ -1205,13 +1252,13 @@ export const catalog: Record<string, CatalogEntry> = {
           "animate.in",
           'preset name, e.g. "FADE_IN", or your own keyframes',
           "none",
-          "Preset for items with no style, on attach and other triggers",
+          "Preset for items with no play, on attach and other triggers",
         ],
         [
           "animate.out",
           'preset name, e.g. "FADE_OUT", or your own keyframes',
           "none",
-          "Preset for items with no style, on detach",
+          "Preset for items with no play, on detach",
         ],
         ["outdir", "text", "dist", "Output folder for lusia build"],
         ["minify", "true or false", "true", "Minify the build"],
@@ -1372,15 +1419,15 @@ export const catalog: Record<string, CatalogEntry> = {
     table: {
       head: ["Value", "What it does"],
       rows: [
-        ["WHEN.ATTACH", "Plays 0 to 1 once when attached. The default."],
-        ["WHEN.DETACH", "Plays its own keyframes on detach. Detach waits for it."],
-        ["WHEN.VIEW", "Plays when at least 15% is visible. Once unless more.reverse is set."],
-        ["WHEN.HOVER", "Plays 0 to 1 on pointer enter, 1 to 0 on leave."],
-        ["WHEN.SCROLL", "Moves the animation with the element's place on the screen."],
-        ["WHEN.MOVE", "Glides the element when its place changes."],
-        ["WHEN.RESIZE", "Glides the element when its size changes."],
-        ["WHEN.MOVE_OR_RESIZE", "Glides the element when its place or size changes."],
-        ["WHEN.MANUAL", "No trigger. Only a controller plays it."],
+        ["ON.ATTACH", "Plays 0 to 1 once when attached. The default."],
+        ["ON.DETACH", "Plays its own keyframes on detach. Detach waits for it."],
+        ["ON.VIEW", "Plays when at least 15% is visible. Once unless options.reverse is set."],
+        ["ON.HOVER", "Plays 0 to 1 on pointer enter, 1 to 0 on leave."],
+        ["ON.SCROLL", "Moves the animation with the element's place on the screen."],
+        ["ON.MOVE", "Glides the element when its place changes."],
+        ["ON.RESIZE", "Glides the element when its size changes."],
+        ["ON.MOVE_OR_RESIZE", "Glides the element when its place or size changes."],
+        ["ON.MANUAL", "No trigger. Only a controller plays it."],
       ],
     },
     demos: [
@@ -1429,6 +1476,47 @@ export const catalog: Record<string, CatalogEntry> = {
           {
             path: "src/demos/motion/VariableTrigger.lusia",
             text: variableTriggerSource,
+          },
+        ],
+      },
+    ],
+  },
+  "mouse-move": {
+    icon: "mouse",
+    table: {
+      head: ["Value", "What it is"],
+      rows: [
+        ["x", "0 at the left edge of the element, 1 at the right edge"],
+        ["y", "0 at the top edge of the element, 1 at the bottom edge"],
+      ],
+    },
+    demos: [
+      {
+        id: "animate-mouse-move",
+        title: "Follow the pointer",
+        caption: "The box tilts toward the pointer. Each move calls play with the new x and y.",
+        components: [MouseMove],
+        sources: [
+          {
+            path: "src/demos/motion/MouseMove.lusia",
+            text: mouseMoveSource,
+          },
+        ],
+      },
+    ],
+  },
+  glide: {
+    icon: "open_with",
+    demos: [
+      {
+        id: "animate-glide",
+        title: "Glide to a variable's element",
+        caption: "The highlight glides to the tile that the variable holds. A new tile moves it again.",
+        components: [Glide],
+        sources: [
+          {
+            path: "src/demos/motion/Glide.lusia",
+            text: glideSource,
           },
         ],
       },
@@ -1696,18 +1784,6 @@ export const catalog: Record<string, CatalogEntry> = {
         ],
       },
       {
-        id: "animate-keyframe-default",
-        title: "Keyframe default",
-        caption: "default sets the style and ease for keys that do not set their own.",
-        components: [KeyframeDefault],
-        sources: [
-          {
-            path: "src/demos/motion/KeyframeDefault.lusia",
-            text: keyframeDefaultSource,
-          },
-        ],
-      },
-      {
         id: "animate-keys",
         title: "Several keys",
         caption: "Three keys set the color and size. The loop goes back and forth.",
@@ -1821,11 +1897,24 @@ export const catalog: Record<string, CatalogEntry> = {
   },
   midway: {
     icon: "alt_route",
+    table: {
+      head: ["Mode", "What it does"],
+      rows: [
+        ["MIDWAY.SWITCH", "Turns the play around at once. The default."],
+        ["MIDWAY.SWITCH_SMOOTH", "Turns the play around over duration, bending into the new direction."],
+        ["MIDWAY.SWITCH_STOP", "Stops the play where it is, then plays the new one."],
+        ["MIDWAY.WAIT", "Lets the play finish, then plays the new one. Hands off suddenly."],
+        ["MIDWAY.RESTART", "Starts the play again from the beginning."],
+        ["MIDWAY.JUMP_TO_END", "Jumps to the end of the play, then plays the new one. Hands off suddenly."],
+        ["MIDWAY.KEEP_CURRENT", "Ignores the new play while one runs."],
+        ["(from, to, t, speed) => progress", "Your own function. It returns the progress for each frame of the switch."],
+      ],
+    },
     demos: [
       {
         id: "animate-midway",
         title: "Midway: changing your mind",
-        caption: "Hover in and out quickly. Each box turns its own way.",
+        caption: "Hover in and out quickly. Pick a mode to see how a new play hands off.",
         components: [MidwayMode],
         sources: [
           {
@@ -1834,15 +1923,10 @@ export const catalog: Record<string, CatalogEntry> = {
           },
         ],
       },
-    ],
-  },
-  turn: {
-    icon: "u_turn_left",
-    demos: [
       {
         id: "turn-midway",
-        title: "Sudden and smooth turns",
-        caption: "Hover in and out while the box moves. SUDDEN jumps to the new direction, SMOOTH bends into it.",
+        title: "Sudden and smooth switches",
+        caption: "Hover in and out while the box moves. SWITCH jumps to the new direction, SWITCH_SMOOTH bends into it.",
         components: [Turn],
         sources: [{ path: "src/demos/motion/Turn.lusia", text: turnSource }],
       },

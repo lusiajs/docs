@@ -1,0 +1,65 @@
+<script>
+  import { variable } from "lusiajs";
+
+  const first = variable(null);
+  const second = variable(null);
+  const third = variable(null);
+
+  // The highlight glides to the tile that target holds.
+  const target = variable(null);
+  const glide = { glide: target, duration: 400 };
+
+  function pick(tile) {
+    target.value = tile.value;
+  }
+</script>
+
+<div class="glide-demo">
+  <p>Click a tile. The highlight glides to it.</p>
+  <div class="stage">
+    <button class="tile" bind-element={first} onclick={() => pick(first)}>One</button>
+    <button class="tile" bind-element={second} onclick={() => pick(second)}>Two</button>
+    <button class="tile" bind-element={third} onclick={() => pick(third)}>Three</button>
+    <div class="highlight" animate={glide}></div>
+  </div>
+</div>
+
+<style>
+  .glide-demo {
+    display: grid;
+    gap: 0.75rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .stage {
+      position: relative;
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.5rem;
+    }
+
+    .tile {
+      position: relative;
+      z-index: 1;
+      width: 6rem;
+      height: 3rem;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--fg);
+      cursor: pointer;
+    }
+
+    .highlight {
+      position: absolute;
+      border-radius: 10px;
+      background: var(--pink);
+      pointer-events: none;
+    }
+  }
+</style>

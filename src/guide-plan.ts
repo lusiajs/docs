@@ -142,7 +142,7 @@ export const guidePlan: GuideGroup[] = [
       {
         id: "triggers",
         label: "Triggers",
-        entries: ["when", "hover-area", "controller", "animate-space-page", "animate-space"],
+        entries: ["when", "hover-area", "mouse-move", "controller", "animate-space-page", "animate-space"],
       },
       {
         id: "runtime",
@@ -157,12 +157,12 @@ export const guidePlan: GuideGroup[] = [
       {
         id: "layout",
         label: "Layout",
-        entries: ["layout"],
+        entries: ["layout", "glide"],
       },
       {
         id: "advanced",
         label: "Advanced",
-        entries: ["midway", "turn", "interpolate"],
+        entries: ["midway", "interpolate"],
       },
     ],
   },

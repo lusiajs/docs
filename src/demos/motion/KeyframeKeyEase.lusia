@@ -1,0 +1,45 @@
+<script>
+  import { ON, EASE } from "lusiajs";
+
+  // The keyframes ease is BACK, OUT. Key 0.5 sets its own IN, so it wins at that key.
+  const pulse = {
+    ease: [EASE.STYLE.BACK, EASE.OUT],
+    0: { opacity: 0, translate: "0px 0px" },
+    0.5: [EASE.IN, { opacity: 0.8, translate: "75px 0px" }],
+    1: { opacity: 1, translate: "150px 0px" },
+  };
+
+  const motion = { play: pulse, on: ON.HOVER, duration: 900 };
+</script>
+
+<div class="curve-demo">
+  <p>Hover the box. Key 0.5 uses its own ease, so the middle of the move differs.</p>
+  <div class="track">
+    <div class="box" animate={motion}></div>
+  </div>
+</div>
+
+<style>
+  .curve-demo {
+    display: grid;
+    gap: 0.75rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .track {
+      padding: 0.25rem 0;
+    }
+
+    .box {
+      width: 2.6rem;
+      height: 2.6rem;
+      border-radius: 12px;
+      background: var(--pink);
+    }
+  }
+</style>

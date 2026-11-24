@@ -1,0 +1,42 @@
+<script>
+  import { ON } from "lusiajs";
+
+  // x and y run from 0 to 1 inside the box. The box tilts toward the pointer.
+  const tilt = ({ x, y }) => ({
+    rotate: `${(x - 0.5) * 24}deg`,
+    translate: `0px ${(y - 0.5) * 16}px`,
+  });
+
+  const follow = { play: tilt, on: ON.MOUSE_MOVE };
+</script>
+
+<div class="pointer-demo">
+  <p>Move over the box. It tilts toward the pointer.</p>
+  <div class="box" animate={follow}>Move here</div>
+</div>
+
+<style>
+  .pointer-demo {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: start;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .box {
+      display: grid;
+      place-items: center;
+      width: 10rem;
+      height: 6rem;
+      border-radius: 14px;
+      background: var(--pink);
+      color: var(--fg);
+      user-select: none;
+    }
+  }
+</style>
