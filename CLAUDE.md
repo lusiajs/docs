@@ -36,7 +36,7 @@ Run `bun run check` and make sure it passes.
 
 # 9. Commits
 
-Use Conventional Commits. One commit per logical change.
+Use Conventional Commits. One commit per logical change. Before committing, look for the issue the change belongs to and reference it: `refs #N`, or `fixes #N` when the commit finishes it.
 
 # 10. Framework updates are automatic
 
