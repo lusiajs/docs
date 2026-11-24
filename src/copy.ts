@@ -6,7 +6,7 @@ export function initCopy(root: HTMLElement, signal: AbortSignal): void {
 	const onClick = (event: MouseEvent): void => {
 		const button = (
 			event.target as Element | null
-		)?.closest<HTMLButtonElement>(".copy-button");
+		)?.closest<HTMLButtonElement>(".copy-button, button[data-copy]");
 		if (button && root.contains(button)) void copy(button);
 	};
 	// Capture, because a demo swaps its code panel for the editor in its own bubble handler and the

@@ -8,6 +8,7 @@
   import Mascot from "./Mascot.lusia";
   import HeroLogo from "./HeroLogo.lusia";
   import InstallCommand from "./InstallCommand.lusia";
+  import { AI_PROMPT } from "../ai-prompt.ts";
 
   const reduced = SCREEN.REDUCED_MOTION.value;
 
@@ -292,6 +293,18 @@
         </svg>
         VS Code
       </a>
+      <button
+        class="button magnetic"
+        type="button"
+        data-copy={AI_PROMPT}
+        onpointermove={pull}
+        onpointerleave={release}
+      >
+        <span class="material-symbols-rounded" aria-hidden="true"
+          >content_copy</span
+        >
+        Copy for AI
+      </button>
     </div>
     <p class="wip-note" animate={noteMotion}>
       I wanted to name it Lucia, but that name was taken on npm (╥﹏╥). So it is

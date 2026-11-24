@@ -72,6 +72,25 @@ describe("initCopy", () => {
 		root.remove();
 	});
 
+	test("copies data-copy from a plain button", async () => {
+		const root = document.createElement("div");
+		document.body.append(root);
+		const controller = new AbortController();
+		initCopy(root, controller.signal);
+
+		const button = document.createElement("button");
+		button.dataset.copy = "starter prompt";
+		const glyph = document.createElement("span");
+		glyph.className = "material-symbols-rounded";
+		button.append(glyph);
+		root.append(button);
+		click(glyph);
+		await settle();
+
+		expect(copied).toEqual(["starter prompt"]);
+		root.remove();
+	});
+
 	test("copies before a demo swaps its code panel", async () => {
 		const root = document.createElement("div");
 		document.body.append(root);
