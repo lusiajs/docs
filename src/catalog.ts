@@ -1257,7 +1257,7 @@ export const catalog: Record<string, CatalogEntry> = {
         ],
         ["dev.port", "number, 0 to 65535", "3000", "Dev server port. A change needs a restart"],
         ["lazy.mode", "smart, all, off", "smart", "Which imported components load later"],
-        ["lazy.prefetch", "idle, view, none", "idle", "When split components start to download"],
+        ["lazy.prefetch", "idle, view, none", "idle", "When split components download. With view, each one also shows only near the screen"],
         [
           "lint.rules",
           "rule name: off, warn, error",
