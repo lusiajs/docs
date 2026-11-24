@@ -9,7 +9,12 @@ import { entryMarkdownUrl } from "../src/ai-docs.ts";
 import { generateDocs } from "../scripts/ai-docs/generate.ts";
 import { findBrokenLinks } from "../scripts/ai-docs/links.ts";
 import { configSchema, packageJson } from "../scripts/ai-docs/source.ts";
-import { apiPagePath, indexPagePath, llmsFullTxtPath, llmsTxtPath } from "../scripts/ai-docs/paths.ts";
+import {
+  apiPagePath,
+  indexPagePath,
+  llmsFullTxtPath,
+  llmsTxtPath,
+} from "../scripts/ai-docs/paths.ts";
 
 const WORDS_THAT_MEAN_A_BUG = ["undefined", "[object Object]"];
 const LLMS_LINK = /\]\(([^)\s]+)\)/g;

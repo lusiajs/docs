@@ -4,9 +4,9 @@ import { variable } from "lusiajs";
 export const searchOpen = variable(false);
 
 export function openSearch(): void {
-	searchOpen.value = true;
+  searchOpen.value = true;
 }
 
 export function closeSearch(): void {
-	searchOpen.value = false;
+  searchOpen.value = false;
 }

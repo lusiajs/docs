@@ -2,7 +2,7 @@ import { EASE } from "lusiajs";
 
 // Looping keyframes shared by the hero and the features section.
 export const scrollHint = {
-	ease: [EASE.STYLE.SINE, EASE.INOUT],
-	0: { translate: "0px 0px" },
-	1: { translate: "0px 6px" },
+  ease: [EASE.STYLE.SINE, EASE.INOUT],
+  0: { translate: "0px 0px" },
+  1: { translate: "0px 6px" },
 };

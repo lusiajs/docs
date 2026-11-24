@@ -6,7 +6,14 @@ import { buildErrorsPage } from "./errors-page.ts";
 import { buildIndexPage } from "./index-page.ts";
 import { buildLlmsFullTxt, buildLlmsTxt } from "./llms.ts";
 import type { DocFiles } from "./links.ts";
-import { apiPagePath, configPagePath, errorsPagePath, indexPagePath, llmsFullTxtPath, llmsTxtPath } from "./paths.ts";
+import {
+  apiPagePath,
+  configPagePath,
+  errorsPagePath,
+  indexPagePath,
+  llmsFullTxtPath,
+  llmsTxtPath,
+} from "./paths.ts";
 import { configSchema, packageJson } from "./source.ts";
 
 const INTRO_SUFFIX =

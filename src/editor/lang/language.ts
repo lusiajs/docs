@@ -13,12 +13,12 @@ export const typescriptLanguage = typescript;
  * `lang="css"` keeps the built-in CSS parser, as the compiler does.
  */
 export const lusiaLanguage = html({
-	nestedLanguages: [
-		{ tag: "script", parser: typescript.language.parser },
-		{
-			tag: "style",
-			attrs: (attrs) => attrs.lang !== "css",
-			parser: scss.language.parser,
-		},
-	],
+  nestedLanguages: [
+    { tag: "script", parser: typescript.language.parser },
+    {
+      tag: "style",
+      attrs: (attrs) => attrs.lang !== "css",
+      parser: scss.language.parser,
+    },
+  ],
 });

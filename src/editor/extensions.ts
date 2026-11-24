@@ -1,51 +1,42 @@
 import {
-	autocompletion,
-	closeBrackets,
-	closeBracketsKeymap,
-	completionKeymap,
-	type CompletionSource,
+  autocompletion,
+  closeBrackets,
+  closeBracketsKeymap,
+  completionKeymap,
+  type CompletionSource,
 } from "@codemirror/autocomplete";
-import {
-	defaultKeymap,
-	history,
-	historyKeymap,
-	indentWithTab,
-} from "@codemirror/commands";
+import { defaultKeymap, history, historyKeymap, indentWithTab } from "@codemirror/commands";
 import { htmlCompletionSource } from "@codemirror/lang-html";
 import {
-	bracketMatching,
-	foldGutter,
-	foldKeymap,
-	indentOnInput,
-	indentUnit,
+  bracketMatching,
+  foldGutter,
+  foldKeymap,
+  indentOnInput,
+  indentUnit,
 } from "@codemirror/language";
 import { lintGutter, lintKeymap } from "@codemirror/lint";
+import { highlightSelectionMatches, search, searchKeymap } from "@codemirror/search";
 import {
-	highlightSelectionMatches,
-	search,
-	searchKeymap,
-} from "@codemirror/search";
-import {
-	Annotation,
-	Compartment,
-	EditorState,
-	Prec,
-	type Extension,
-	type Transaction,
+  Annotation,
+  Compartment,
+  EditorState,
+  Prec,
+  type Extension,
+  type Transaction,
 } from "@codemirror/state";
 import {
-	crosshairCursor,
-	drawSelection,
-	dropCursor,
-	EditorView,
-	highlightActiveLine,
-	highlightActiveLineGutter,
-	highlightSpecialChars,
-	keymap,
-	lineNumbers,
-	rectangularSelection,
-	tooltips,
-	type KeyBinding,
+  crosshairCursor,
+  drawSelection,
+  dropCursor,
+  EditorView,
+  highlightActiveLine,
+  highlightActiveLineGutter,
+  highlightSpecialChars,
+  keymap,
+  lineNumbers,
+  rectangularSelection,
+  tooltips,
+  type KeyBinding,
 } from "@codemirror/view";
 import { lusiaCompletionSource } from "./completion-source.ts";
 import type { EditorFile } from "./files.ts";
@@ -61,113 +52,108 @@ import { editorTheme } from "./theme.ts";
 export const externalChange = Annotation.define<boolean>();
 
 export interface EditorStateOptions {
-	fileName: string;
-	getFiles: () => readonly EditorFile[];
-	readOnly: Compartment;
-	readOnlyValue: boolean;
-	wrap: Compartment;
-	wrapValue: boolean;
-	onEdit: (code: string) => void;
-	format: () => void;
+  fileName: string;
+  getFiles: () => readonly EditorFile[];
+  readOnly: Compartment;
+  readOnlyValue: boolean;
+  wrap: Compartment;
+  wrapValue: boolean;
+  onEdit: (code: string) => void;
+  format: () => void;
 }
 
 /** The extensions of one file's state. Each file keeps its own undo history and cursor. */
 export function editorExtensions(options: EditorStateOptions): Extension[] {
-	const { fileName, getFiles } = options;
-	return [
-		lineNumbers(),
-		highlightActiveLineGutter(),
-		highlightSpecialChars(),
-		history(),
-		foldGutter(),
-		drawSelection(),
-		dropCursor(),
-		EditorState.allowMultipleSelections.of(true),
-		indentOnInput(),
-		indentUnit.of("\t"),
-		lusiaHighlighting,
-		bracketMatching(),
-		closeBrackets(),
-		autocompletion({ override: completionSources(fileName, getFiles) }),
-		rectangularSelection(),
-		crosshairCursor(),
-		highlightActiveLine(),
-		highlightSelectionMatches(),
-		search({ top: true }),
-		lintGutter(),
-		lusiaLinter(fileName, getFiles),
-		lusiaHover(fileName, getFiles),
-		languageFor(fileName),
-		editorTheme,
-		indentGuides(),
-		options.wrap.of(wrapExtensions(options.wrapValue)),
-		// Popups sit on the page, so the demo card and the editor scroller cannot clip them.
-		tooltips({ parent: document.body, position: "fixed" }),
-		options.readOnly.of(readOnlyExtensions(options.readOnlyValue)),
-		EditorView.contentAttributes.of({
-			"aria-label": `Code of ${fileName}`,
-		}),
-		keymap.of([
-			...closeBracketsKeymap,
-			...defaultKeymap,
-			...searchKeymap,
-			...historyKeymap,
-			...foldKeymap,
-			...completionKeymap,
-			...lintKeymap,
-			indentWithTab,
-			formatKey(options.format),
-		]),
-		Prec.lowest(keymap.of([{ key: "Escape", run: leaveEditor }])),
-		EditorView.updateListener.of((update) => {
-			if (update.docChanged && !isExternal(update.transactions))
-				options.onEdit(update.state.doc.toString());
-		}),
-	];
+  const { fileName, getFiles } = options;
+  return [
+    lineNumbers(),
+    highlightActiveLineGutter(),
+    highlightSpecialChars(),
+    history(),
+    foldGutter(),
+    drawSelection(),
+    dropCursor(),
+    EditorState.allowMultipleSelections.of(true),
+    indentOnInput(),
+    indentUnit.of("\t"),
+    lusiaHighlighting,
+    bracketMatching(),
+    closeBrackets(),
+    autocompletion({ override: completionSources(fileName, getFiles) }),
+    rectangularSelection(),
+    crosshairCursor(),
+    highlightActiveLine(),
+    highlightSelectionMatches(),
+    search({ top: true }),
+    lintGutter(),
+    lusiaLinter(fileName, getFiles),
+    lusiaHover(fileName, getFiles),
+    languageFor(fileName),
+    editorTheme,
+    indentGuides(),
+    options.wrap.of(wrapExtensions(options.wrapValue)),
+    // Popups sit on the page, so the demo card and the editor scroller cannot clip them.
+    tooltips({ parent: document.body, position: "fixed" }),
+    options.readOnly.of(readOnlyExtensions(options.readOnlyValue)),
+    EditorView.contentAttributes.of({
+      "aria-label": `Code of ${fileName}`,
+    }),
+    keymap.of([
+      ...closeBracketsKeymap,
+      ...defaultKeymap,
+      ...searchKeymap,
+      ...historyKeymap,
+      ...foldKeymap,
+      ...completionKeymap,
+      ...lintKeymap,
+      indentWithTab,
+      formatKey(options.format),
+    ]),
+    Prec.lowest(keymap.of([{ key: "Escape", run: leaveEditor }])),
+    EditorView.updateListener.of((update) => {
+      if (update.docChanged && !isExternal(update.transactions))
+        options.onEdit(update.state.doc.toString());
+    }),
+  ];
 }
 
 export function readOnlyExtensions(readOnly: boolean): Extension[] {
-	return [
-		EditorState.readOnly.of(readOnly),
-		EditorView.editable.of(!readOnly),
-	];
+  return [EditorState.readOnly.of(readOnly), EditorView.editable.of(!readOnly)];
 }
 
 export function wrapExtensions(wrap: boolean): Extension[] {
-	return wrap ? [EditorView.lineWrapping] : [];
+  return wrap ? [EditorView.lineWrapping] : [];
 }
 
 function completionSources(
-	fileName: string,
-	getFiles: () => readonly EditorFile[],
+  fileName: string,
+  getFiles: () => readonly EditorFile[],
 ): CompletionSource[] {
-	const lusia = lusiaCompletionSource(fileName, getFiles);
-	return fileName.endsWith(".ts") ? [lusia] : [lusia, htmlCompletionSource];
+  const lusia = lusiaCompletionSource(fileName, getFiles);
+  return fileName.endsWith(".ts") ? [lusia] : [lusia, htmlCompletionSource];
 }
 
 function languageFor(fileName: string): Extension {
-	if (fileName.endsWith(".ts")) return typescriptLanguage.extension;
-	return [lusiaLanguage.extension, lusiaMarks];
+  if (fileName.endsWith(".ts")) return typescriptLanguage.extension;
+  return [lusiaLanguage.extension, lusiaMarks];
 }
 
 function formatKey(format: () => void): KeyBinding {
-	return {
-		key: "Shift-Alt-f",
-		run: () => {
-			format();
-			return true;
-		},
-	};
+  return {
+    key: "Shift-Alt-f",
+    run: () => {
+      format();
+      return true;
+    },
+  };
 }
 
 // Tab indents, so Escape is how a keyboard user leaves the editor.
 function leaveEditor(view: EditorView): boolean {
-	view.contentDOM.blur();
-	return true;
+  view.contentDOM.blur();
+  return true;
 }
 
 function isExternal(transactions: readonly Transaction[]): boolean {
-	return transactions.some(
-		(transaction) => transaction.annotation(externalChange) === true,
-	);
+  return transactions.some((transaction) => transaction.annotation(externalChange) === true);
 }

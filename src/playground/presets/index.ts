@@ -9,19 +9,19 @@ import { scroll } from "./scroll.ts";
 import { todo } from "./todo.ts";
 
 export interface Preset {
-	id: string;
-	title: string;
-	description: string;
-	files: PlayFile[];
+  id: string;
+  title: string;
+  description: string;
+  files: PlayFile[];
 }
 
 export const PRESETS: readonly Preset[] = [
-	blank,
-	counter,
-	todo,
-	animations,
-	scroll,
-	components,
-	scopedStyles,
-	forms,
+  blank,
+  counter,
+  todo,
+  animations,
+  scroll,
+  components,
+  scopedStyles,
+  forms,
 ];

@@ -267,7 +267,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "reactivity-overview-flow",
         title: "Step by step",
-        caption: "A variable is read in the markup. Each click writes it, and only the text changes.",
+        caption:
+          "A variable is read in the markup. Each click writes it, and only the text changes.",
         components: [ReactivityFlow],
         sources: [
           { path: "src/demos/guide/ReactivityFlow.lusia", text: reactivityFlowSource },
@@ -299,7 +300,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "flow-overview-flow",
         title: "Step by step",
-        caption: "IF shows one branch. A click makes the condition true, and the other branch leaves.",
+        caption:
+          "IF shows one branch. A click makes the condition true, and the other branch leaves.",
         components: [ConditionFlow],
         sources: [
           { path: "src/demos/guide/ConditionFlow.lusia", text: conditionFlowSource },
@@ -364,7 +366,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "intro-flow",
         title: "From file to DOM",
-        caption: "Lusia compiles the file. Its markup becomes DOM nodes, and a click changes only the text.",
+        caption:
+          "Lusia compiles the file. Its markup becomes DOM nodes, and a click changes only the text.",
         components: [IntroFlow],
         sources: [
           { path: "src/demos/guide/IntroFlow.lusia", text: introFlowSource },
@@ -388,7 +391,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "start-project-tree",
         title: "Files after bun create",
-        caption: "The files the CLI writes for a new app. Press Create again to watch them appear, and click a file to read it.",
+        caption:
+          "The files the CLI writes for a new app. Press Create again to watch them appear, and click a file to read it.",
         components: [ProjectTree],
         sources: [
           { path: "src/demos/guide/ProjectTree.lusia", text: projectTreeSource },
@@ -610,7 +614,12 @@ export const catalog: Record<string, CatalogEntry> = {
         ["attach()", "Your code", "Places the component on the page", "Mount a component by hand"],
         ["onAttach()", "The component", "After it is placed", "Listeners, timers, data loading"],
         ["onAttach() return", "Lusia", "When it is detached", "Undo what onAttach set up"],
-        ["detach()", "Your code", "Plays the OUT animation, then removes it", "Unmount a component"],
+        [
+          "detach()",
+          "Your code",
+          "Plays the OUT animation, then removes it",
+          "Unmount a component",
+        ],
         ["onDetach()", "The component", "When it leaves the page", "Final cleanup or counting"],
       ],
     },
@@ -618,7 +627,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "lifecycle-mount",
         title: "Mount and unmount",
-        caption: "Mount places the box and runs onAttach. Unmount plays its OUT animation, then runs onDetach.",
+        caption:
+          "Mount places the box and runs onAttach. Unmount plays its OUT animation, then runs onDetach.",
         components: [Lifecycle],
         sources: [
           {
@@ -664,7 +674,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "detach-wait",
         title: "Detach and wait",
-        caption: "detach() resolves after the DETACH animation. The status changes only when the box is gone.",
+        caption:
+          "detach() resolves after the DETACH animation. The status changes only when the box is gone.",
         components: [DetachDemo],
         sources: [
           { path: "src/demos/components/DetachDemo.lusia", text: detachDemoSource },
@@ -705,7 +716,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "script-block",
         title: "Script block",
-        caption: "The script holds the imports, the variables and the functions. The markup can call the functions.",
+        caption:
+          "The script holds the imports, the variables and the functions. The markup can call the functions.",
         components: [ScriptBlock],
         sources: [{ path: "src/demos/basics/ScriptBlock.lusia", text: scriptBlockSource }],
       },
@@ -813,7 +825,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "nolazy-badge",
         title: "Badge",
-        caption: "NOLAZY keeps the badge in the page that imports it. It is never loaded later on its own.",
+        caption:
+          "NOLAZY keeps the badge in the page that imports it. It is never loaded later on its own.",
         components: [NolazyDemo],
         sources: [
           { path: "src/demos/components/NolazyDemo.lusia", text: nolazyDemoSource },
@@ -966,9 +979,18 @@ export const catalog: Record<string, CatalogEntry> = {
         ["PRESET.FADE_IN", "Fades in from transparent."],
         ["PRESET.FADE_OUT", "Fades out to transparent."],
         ["PRESET.SLIDE_UP", "Comes up from below, moving up 24px into place while fading in."],
-        ["PRESET.SLIDE_DOWN", "Comes down from above, moving down 24px into place while fading in."],
-        ["PRESET.SLIDE_LEFT", "Comes in from the left, moving right 24px into place while fading in."],
-        ["PRESET.SLIDE_RIGHT", "Comes in from the right, moving left 24px into place while fading in."],
+        [
+          "PRESET.SLIDE_DOWN",
+          "Comes down from above, moving down 24px into place while fading in.",
+        ],
+        [
+          "PRESET.SLIDE_LEFT",
+          "Comes in from the left, moving right 24px into place while fading in.",
+        ],
+        [
+          "PRESET.SLIDE_RIGHT",
+          "Comes in from the right, moving left 24px into place while fading in.",
+        ],
         ["PRESET.POP_IN", "Grows from 80% size while fading in."],
         ["PRESET.POP_OUT", "Shrinks to 80% size while fading out."],
         ["PRESET.ZOOM_IN", "Grows from nothing to full size."],
@@ -1131,7 +1153,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "config-duration",
         title: "Project defaults",
-        caption: "The first box has no duration, so it uses the value in lusia.config. The second sets its own.",
+        caption:
+          "The first box has no duration, so it uses the value in lusia.config. The second sets its own.",
         components: [ConfigDemo],
         sources: [{ path: "src/demos/motion/ConfigDemo.lusia", text: configDemoSource }],
       },
@@ -1294,7 +1317,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "scroll-edges-diagram",
         title: "Element edge and screen edge",
-        caption: "Each point of start and end pairs an element edge with a screen edge. Here the element top meets the screen center.",
+        caption:
+          "Each point of start and end pairs an element edge with a screen edge. Here the element top meets the screen center.",
         components: [ScrollEdges],
         sources: [{ path: "src/components/guide/ScrollEdges.lusia", text: scrollEdgesSource }],
       },
@@ -1475,7 +1499,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "animate-glide",
         title: "Glide to a variable's element",
-        caption: "The highlight glides to the tile that the variable holds. A new tile moves it again.",
+        caption:
+          "The highlight glides to the tile that the variable holds. A new tile moves it again.",
         components: [Glide],
         sources: [
           {
@@ -1533,7 +1558,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "scoped-block",
         title: "Scoped block",
-        caption: "The @scoped rule stops at the child. The child card has no border, but its h2 still turns red.",
+        caption:
+          "The @scoped rule stops at the child. The child card has no border, but its h2 still turns red.",
         components: [ScopedRules],
         sources: [
           { path: "src/demos/styling/ScopedRules.lusia", text: scopedRulesSource },
@@ -1572,7 +1598,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "screen-sizes-tiles",
         title: "Three ways",
-        caption: "Resize the window. Each tile changes at the PHONE size, using SCREEN in markup, a style in an IF, or the screen() mixin.",
+        caption:
+          "Resize the window. Each tile changes at the PHONE size, using SCREEN in markup, a style in an IF, or the screen() mixin.",
         components: [ScreenSizes],
         sources: [{ path: "src/demos/styling/ScreenSizes.lusia", text: screenSizesSource }],
       },
@@ -1596,7 +1623,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "style-screen-if-tile",
         title: "style in IF",
-        caption: "The second tile has a style in each IF branch. Its padding changes at the PHONE size.",
+        caption:
+          "The second tile has a style in each IF branch. Its padding changes at the PHONE size.",
         components: [ScreenSizes],
         sources: [{ path: "src/demos/styling/ScreenSizes.lusia", text: screenSizesSource }],
       },
@@ -1624,7 +1652,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "elseif-grades",
         title: "Grade branches",
-        caption: "The first true branch wins. Each button sets the score, and the matching grade shows.",
+        caption:
+          "The first true branch wins. Each button sets the score, and the matching grade shows.",
         components: [ElseifDemo],
         sources: [{ path: "src/demos/flow/ElseifDemo.lusia", text: elseifDemoSource }],
       },
@@ -1636,7 +1665,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "else-login",
         title: "Fallback branch",
-        caption: "ELSE shows when the IF condition is false. Toggle the button to switch between the two.",
+        caption:
+          "ELSE shows when the IF condition is false. Toggle the button to switch between the two.",
         components: [ElseDemo],
         sources: [{ path: "src/demos/flow/ElseDemo.lusia", text: elseDemoSource }],
       },
@@ -1650,16 +1680,25 @@ export const catalog: Record<string, CatalogEntry> = {
         ["onclick={fn}", "DOM event only", "Runs on the DOM click event."],
         ["on:click={fn}", "DOM event", "The same click as onclick."],
         ["on:view={fn}", "EVENT.VIEW", "Runs when the element enters or leaves the screen."],
-        ["on:scroll={fn}", "EVENT.SCROLL", "Runs with progress from 0 to 1. onscroll is the DOM scroll event."],
+        [
+          "on:scroll={fn}",
+          "EVENT.SCROLL",
+          "Runs with progress from 0 to 1. onscroll is the DOM scroll event.",
+        ],
         ["on:size={fn}", "EVENT.SIZE", "Runs when the element changes size."],
-        ["on:click-outside={fn}", "EVENT.CLICK_OUTSIDE", "Runs on a press outside the element, or Escape."],
+        [
+          "on:click-outside={fn}",
+          "EVENT.CLICK_OUTSIDE",
+          "Runs on a press outside the element, or Escape.",
+        ],
       ],
     },
     demos: [
       {
         id: "on-name-view",
         title: "Click and view",
-        caption: "on:click counts clicks. on:view sets the text when the box enters or leaves the screen. Scroll the page to see it change.",
+        caption:
+          "on:click counts clicks. on:view sets the text when the box enters or leaves the screen. Scroll the page to see it change.",
         components: [OnName],
         sources: [{ path: "src/demos/events/OnName.lusia", text: onNameSource }],
       },
@@ -1671,7 +1710,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "listen-card",
         title: "Listen in a component",
-        caption: "listen() watches a DOM click and the EVENT.VIEW event on the card. Both stop when the component detaches.",
+        caption:
+          "listen() watches a DOM click and the EVENT.VIEW event on the card. Both stop when the component detaches.",
         components: [Listen],
         sources: [{ path: "src/demos/events/Listen.lusia", text: listenSource }],
       },
@@ -1695,7 +1735,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "keep-running-count",
         title: "Listener that keeps running",
-        caption: "keepRunning() keeps the listener alive after the component detaches. Stop watching ends it.",
+        caption:
+          "keepRunning() keeps the listener alive after the component detaches. Stop watching ends it.",
         components: [KeepRunning],
         sources: [{ path: "src/demos/events/KeepRunning.lusia", text: keepRunningSource }],
       },
@@ -1707,7 +1748,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "bind-prop-checked",
         title: "Checkbox",
-        caption: "bind-checked links the checked property and the variable. A check updates the variable.",
+        caption:
+          "bind-checked links the checked property and the variable. A check updates the variable.",
         components: [BindProp],
         sources: [{ path: "src/demos/events/BindProp.lusia", text: bindPropSource }],
       },
@@ -1739,7 +1781,11 @@ export const catalog: Record<string, CatalogEntry> = {
       rows: [
         ["1 (wins)", "The key's own ease", "0.5: [EASE.IN, { opacity: 0.8 }]"],
         ["2", "The keyframes ease", "ease: [EASE.STYLE.BACK, EASE.OUT]"],
-        ["3", "setConfig or lusia.config: animate.ease", "animate: { ease: [EASE.STYLE.CUBIC, EASE.OUT] }"],
+        [
+          "3",
+          "setConfig or lusia.config: animate.ease",
+          "animate: { ease: [EASE.STYLE.CUBIC, EASE.OUT] }",
+        ],
         ["4", "Built-in QUART and INOUT", "Used when nothing above is set"],
       ],
     },
@@ -1812,7 +1858,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "config-tree",
         title: "Tree: children too",
-        caption: "Set with SCOPE.TREE in this component. The list inside a child component slides too.",
+        caption:
+          "Set with SCOPE.TREE in this component. The list inside a child component slides too.",
         components: [ConfigTree],
         sources: [
           {
@@ -1848,8 +1895,16 @@ export const catalog: Record<string, CatalogEntry> = {
     table: {
       head: ["Value", "Reaches", "Call it in"],
       rows: [
-        ["SCOPE.SCOPED", "This component's own markup, with its IF and EACH blocks", "Top of the script"],
-        ["SCOPE.TREE", "This component and every component inside it. The default", "Top of the script"],
+        [
+          "SCOPE.SCOPED",
+          "This component's own markup, with its IF and EACH blocks",
+          "Top of the script",
+        ],
+        [
+          "SCOPE.TREE",
+          "This component and every component inside it. The default",
+          "Top of the script",
+        ],
         ["SCOPE.GLOBAL", "The whole app, until the page ends", "onAttach, onDetach or a function"],
       ],
     },
@@ -1860,7 +1915,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "config-global",
         title: "Whole app",
-        caption: "Turn it on to slide neighbors in every list that sets nothing itself. Turn it off to undo.",
+        caption:
+          "Turn it on to slide neighbors in every list that sets nothing itself. Turn it off to undo.",
         components: [ConfigGlobal],
         sources: [
           {
@@ -1898,13 +1954,22 @@ export const catalog: Record<string, CatalogEntry> = {
       head: ["Mode", "What it does"],
       rows: [
         ["MIDWAY.SWITCH", "Turns the play around at once. The default."],
-        ["MIDWAY.SWITCH_SMOOTH", "Turns the play around over duration, bending into the new direction."],
+        [
+          "MIDWAY.SWITCH_SMOOTH",
+          "Turns the play around over duration, bending into the new direction.",
+        ],
         ["MIDWAY.SWITCH_STOP", "Stops the play where it is, then plays the new one."],
         ["MIDWAY.WAIT", "Lets the play finish, then plays the new one. Hands off suddenly."],
         ["MIDWAY.RESTART", "Starts the play again from the beginning."],
-        ["MIDWAY.JUMP_TO_END", "Jumps to the end of the play, then plays the new one. Hands off suddenly."],
+        [
+          "MIDWAY.JUMP_TO_END",
+          "Jumps to the end of the play, then plays the new one. Hands off suddenly.",
+        ],
         ["MIDWAY.KEEP_CURRENT", "Ignores the new play while one runs."],
-        ["(from, to, t, speed) => progress", "Your own function. It returns the progress for each frame of the switch."],
+        [
+          "(from, to, t, speed) => progress",
+          "Your own function. It returns the progress for each frame of the switch.",
+        ],
       ],
     },
     demos: [
@@ -1923,7 +1988,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "turn-midway",
         title: "Sudden and smooth switches",
-        caption: "Hover in and out while the box moves. SWITCH jumps to the new direction, SWITCH_SMOOTH bends into it.",
+        caption:
+          "Hover in and out while the box moves. SWITCH jumps to the new direction, SWITCH_SMOOTH bends into it.",
         components: [Turn],
         sources: [{ path: "src/demos/motion/Turn.lusia", text: turnSource }],
       },
@@ -1937,7 +2003,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "hover-area-boxes",
         title: "Two hover areas",
-        caption: "The final box is checked at rest, so it can flicker when it grows. The element box follows the growth.",
+        caption:
+          "The final box is checked at rest, so it can flicker when it grows. The element box follows the growth.",
         components: [HoverArea],
         sources: [{ path: "src/demos/motion/HoverArea.lusia", text: hoverAreaSource }],
       },
@@ -1949,7 +2016,8 @@ export const catalog: Record<string, CatalogEntry> = {
       {
         id: "interpolate-bar",
         title: "Blend two values",
-        caption: "interpolate() returns a function. Call it with t from 0 to 1 to get the blended width and color.",
+        caption:
+          "interpolate() returns a function. Call it with t from 0 to 1 to get the blended width and color.",
         components: [Interpolate],
         sources: [{ path: "src/demos/motion/Interpolate.lusia", text: interpolateSource }],
       },

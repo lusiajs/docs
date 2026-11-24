@@ -20,7 +20,7 @@
 
   // "lusiajs" and "lusiajs/internal" share one blob, so the runtime is a single module instance.
   function addImportMap(run) {
-    var imports = { "lusiajs": blobUrl(run.runtime) };
+    var imports = { lusiajs: blobUrl(run.runtime) };
     imports["lusiajs/internal"] = imports["lusiajs"];
     for (var name in run.modules) {
       imports[MODULE_PREFIX + name] = blobUrl(run.modules[name]);

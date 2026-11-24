@@ -12,11 +12,5 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true
   },
-  "include": [
-    "src",
-    "test",
-    "scripts",
-    "lusia.config.ts",
-    "node_modules/lusiajs/lusia.d.ts"
-  ]
+  "include": ["src", "test", "scripts", "lusia.config.ts", "node_modules/lusiajs/lusia.d.ts"]
 }

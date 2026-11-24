@@ -15,22 +15,22 @@ bun install
 bun run dev
 ```
 
-| Command | What it does |
-| ------- | ------------ |
-| `bun run dev` | Starts the dev server |
-| `bun run build` | Builds the site into `dist/` |
-| `bun test` | Runs the tests |
-| `bun run typecheck` | Checks the types |
-| `bun run check` | Typecheck, tests and build |
+| Command             | What it does                 |
+| ------------------- | ---------------------------- |
+| `bun run dev`       | Starts the dev server        |
+| `bun run build`     | Builds the site into `dist/` |
+| `bun test`          | Runs the tests               |
+| `bun run typecheck` | Checks the types             |
+| `bun run check`     | Typecheck, tests and build   |
 
 ## For AI tools
 
 The site serves the docs as plain text and Markdown for AI tools.
 
-| File | What it is |
-| ---- | ---------- |
-| `/llms.txt` | Short index with links to every page |
-| `/llms-full.txt` | All pages in one file |
-| `/docs/` | One Markdown page per API entry, error codes and config |
+| File             | What it is                                              |
+| ---------------- | ------------------------------------------------------- |
+| `/llms.txt`      | Short index with links to every page                    |
+| `/llms-full.txt` | All pages in one file                                   |
+| `/docs/`         | One Markdown page per API entry, error codes and config |
 
 The files are generated into `public/` by `scripts/ai-docs.ts` on every `dev` and `build`.

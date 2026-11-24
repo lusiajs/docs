@@ -54,10 +54,7 @@ export function progressOf(el: Element, start: ScrollPoint, end: ScrollPoint): n
 export function pinnedProgressOf(el: Element): number {
   const rect = el.getBoundingClientRect();
   if (rect.height <= window.innerHeight) return rect.top <= 0 ? 1 : 0;
-  return Math.min(
-    1,
-    Math.max(0, -rect.top / (rect.height - window.innerHeight)),
-  );
+  return Math.min(1, Math.max(0, -rect.top / (rect.height - window.innerHeight)));
 }
 
 /** Writes the pinned progress of a tall element into `out` while the page scrolls. */

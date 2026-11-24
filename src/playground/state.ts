@@ -14,7 +14,4 @@ export const compileErrors = variable<LiveError[]>([]);
 export const runtimeErrors = variable<LiveError[]>([]);
 export const jump = variable<EditorJump | null>(null);
 export const notice = variable("");
-export const errors = variable.compute(() => [
-	...compileErrors.value,
-	...runtimeErrors.value,
-]);
+export const errors = variable.compute(() => [...compileErrors.value, ...runtimeErrors.value]);

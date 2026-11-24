@@ -74,7 +74,8 @@ export const guidePlan: GuideGroup[] = [
   {
     group: "components",
     label: "Components",
-    intro: "Split a page into files. Pass props in, place children with CONTENT, and attach components by code.",
+    intro:
+      "Split a page into files. Pass props in, place children with CONTENT, and attach components by code.",
     icon: "widgets",
     color: "var(--mint)",
     entries: [
@@ -99,7 +100,8 @@ export const guidePlan: GuideGroup[] = [
   {
     group: "styling",
     label: "Styling",
-    intro: "Each component has its own CSS. Scoped, tree and global rules control where it applies.",
+    intro:
+      "Each component has its own CSS. Scoped, tree and global rules control where it applies.",
     icon: "palette",
     color: "var(--sky)",
     entries: [
@@ -120,7 +122,8 @@ export const guidePlan: GuideGroup[] = [
   {
     group: "motion",
     label: "Motion",
-    intro: "Animate any element with the animate attribute. Start with a first animation, then tune timing and triggers.",
+    intro:
+      "Animate any element with the animate attribute. Start with a first animation, then tune timing and triggers.",
     icon: "animation",
     color: "var(--peach)",
     subgroups: [
@@ -142,7 +145,14 @@ export const guidePlan: GuideGroup[] = [
       {
         id: "triggers",
         label: "Triggers",
-        entries: ["on", "hover-area", "mouse-move", "controller", "animate-space-page", "animate-space"],
+        entries: [
+          "on",
+          "hover-area",
+          "mouse-move",
+          "controller",
+          "animate-space-page",
+          "animate-space",
+        ],
       },
       {
         id: "runtime",

@@ -7,13 +7,13 @@ export type ReloadStorage = Pick<Storage, "getItem" | "setItem">;
 // True when no automatic reload happened in the window, and records this one.
 // If storage fails, no reload is allowed: the reload could not be recorded.
 export function claimAutoReload(getStorage: () => ReloadStorage, now: number): boolean {
-	try {
-		const storage = getStorage();
-		const last = storage.getItem(STORAGE_KEY);
-		if (last !== null && now - Number(last) < RELOAD_WINDOW_MS) return false;
-		storage.setItem(STORAGE_KEY, String(now));
-		return true;
-	} catch {
-		return false;
-	}
+  try {
+    const storage = getStorage();
+    const last = storage.getItem(STORAGE_KEY);
+    if (last !== null && now - Number(last) < RELOAD_WINDOW_MS) return false;
+    storage.setItem(STORAGE_KEY, String(now));
+    return true;
+  } catch {
+    return false;
+  }
 }
