@@ -92,13 +92,15 @@
         id={section.entry.id}
         animate={sectionMotion}
       >
-        <h2 class="doc-title" animate={section.flashMotion}>
-          <code class="doc-name">{section.entry.name}</code>
-          <span class="doc-subtitle"
-            ><RichText parts={section.subtitle}
-          /></span>
-        </h2>
-        <CopyForLlm url={entryMarkdownUrl(section.entry.id)} />
+        <div class="doc-head">
+          <h2 class="doc-title" animate={section.flashMotion}>
+            <code class="doc-name">{section.entry.name}</code>
+            <span class="doc-subtitle"
+              ><RichText parts={section.subtitle}
+            /></span>
+          </h2>
+          <CopyForLlm url={entryMarkdownUrl(section.entry.id)} />
+        </div>
         <IF {section.learn}>
           <p class="doc-learn">You will learn: {section.learn}</p>
         </IF>
