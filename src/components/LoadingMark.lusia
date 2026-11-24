@@ -23,7 +23,7 @@
 </script>
 
 <div class="loading-mark">
-  <img class="logo" src="/logo.svg" width="64" height="64" alt="" />
+  <img class="logo" src="/logo-animated.svg" width="64" height="64" alt="" />
   <p class="name">Lusia</p>
   <div class="dots" aria-hidden="true">
     <span class="dot pink" animate={dotMotion(0)}></span>
