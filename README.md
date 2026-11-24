@@ -1,4 +1,4 @@
-<p align="center"><img src="public/logo.svg" width="96" alt="Lusia logo"></p>
+<p align="center"><img src="public/logo-animated.svg" width="96" alt="Lusia logo"></p>
 
 # Lusia docs
 

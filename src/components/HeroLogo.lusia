@@ -60,7 +60,7 @@
 
 <img
   class="hero-logo"
-  src="/logo.svg"
+  src="/logo-animated.svg"
   alt=""
   aria-hidden="true"
   bind-element={logoEl}
