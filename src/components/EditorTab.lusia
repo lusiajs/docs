@@ -22,13 +22,25 @@
   const isSelected = variable.compute(() => active.value === name.value);
   const selectedText = variable.compute(() => String(isSelected.value));
 
-  // Bindings refresh the tab after this watcher runs, so scroll once they have.
-  variable.autoRun(() => {
-    const el = tab.value;
-    if (!el || !isSelected.value) return;
-    queueMicrotask(() => {
-      el.scrollIntoView({ inline: "nearest", block: "nearest" });
-    });
+  // Only the tab strip scrolls. The page keeps its place when a demo mounts.
+  function revealTab(el: HTMLElement) {
+    const list = el.closest<HTMLElement>('[role="tablist"]');
+    if (!list) return;
+    const listBox = list.getBoundingClientRect();
+    const tabBox = el.getBoundingClientRect();
+    const tabLeft =
+      tabBox.left - listBox.left - list.clientLeft + list.scrollLeft;
+    const tabRight = tabLeft + tabBox.width;
+    if (tabLeft < list.scrollLeft) {
+      list.scrollLeft = tabLeft;
+    } else if (tabRight > list.scrollLeft + list.clientWidth) {
+      list.scrollLeft = tabRight - list.clientWidth;
+    }
+  }
+
+  variable.watch([tab, isSelected], () => {
+    const el = tab.peek();
+    if (el && isSelected.peek()) revealTab(el);
   });
 
   function choose() {
