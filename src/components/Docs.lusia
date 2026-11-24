@@ -42,6 +42,7 @@
       entry,
       demos: catalog[entry.id]?.demos ?? [],
       table: catalog[entry.id]?.table ?? null,
+      precedence: catalog[entry.id]?.precedence ?? null,
       files: catalog[entry.id]?.files ?? [],
       intro: entry.id === startProjectId,
       detail: entry.id === animateSpacePageId,
@@ -119,6 +120,9 @@
         </IF>
         <IF {section.table}>
           <DocTable head={section.table.head} rows={section.table.rows} />
+        </IF>
+        <IF {section.precedence}>
+          <DocTable head={section.precedence.head} rows={section.precedence.rows} />
         </IF>
         <IF {section.files.length > 0}>
           <CodePanel sources={section.files} />

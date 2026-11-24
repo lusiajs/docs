@@ -243,6 +243,7 @@ export interface CatalogEntry {
   icon: string;
   demos?: Demo[];
   table?: CatalogTable;
+  precedence?: CatalogTable;
   files?: SourceFile[];
 }
 
@@ -1001,44 +1002,7 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
-  "keyframes-type": {
-    icon: "data_object",
-    table: {
-      head: ["Priority", "Ease comes from", "Example"],
-      rows: [
-        ["1 (wins)", "The key's own ease", "0.5: [EASE.IN, { opacity: 0.8 }]"],
-        ["2", "The keyframes ease", "ease: [EASE.STYLE.BACK, EASE.OUT]"],
-        ["3", "setConfig or lusia.config: animate.ease", "animate: { ease: [EASE.STYLE.CUBIC, EASE.OUT] }"],
-        ["4", "Built-in QUART and INOUT", "Used when nothing above is set"],
-      ],
-    },
-    demos: [
-      {
-        id: "animate-keyframe-ease",
-        title: "Keyframe ease",
-        caption: "ease is only a default. Keys that do not set their own ease use it.",
-        components: [KeyframeDefault],
-        sources: [
-          {
-            path: "src/demos/motion/KeyframeDefault.lusia",
-            text: keyframeDefaultSource,
-          },
-        ],
-      },
-      {
-        id: "animate-keyframe-key-ease",
-        title: "One key overrides the ease",
-        caption: "Key 0.5 sets its own ease. The other keys keep the keyframes ease.",
-        components: [KeyframeKeyEase],
-        sources: [
-          {
-            path: "src/demos/motion/KeyframeKeyEase.lusia",
-            text: keyframeKeyEaseSource,
-          },
-        ],
-      },
-    ],
-  },
+  "keyframes-type": { icon: "data_object" },
   "animate-item": { icon: "tune" },
   style: {
     icon: "code",
@@ -1770,7 +1734,40 @@ export const catalog: Record<string, CatalogEntry> = {
         ["EASE.INOUT", "Slow at both ends, fast in the middle."],
       ],
     },
+    precedence: {
+      head: ["Priority", "Ease comes from", "Example"],
+      rows: [
+        ["1 (wins)", "The key's own ease", "0.5: [EASE.IN, { opacity: 0.8 }]"],
+        ["2", "The keyframes ease", "ease: [EASE.STYLE.BACK, EASE.OUT]"],
+        ["3", "setConfig or lusia.config: animate.ease", "animate: { ease: [EASE.STYLE.CUBIC, EASE.OUT] }"],
+        ["4", "Built-in QUART and INOUT", "Used when nothing above is set"],
+      ],
+    },
     demos: [
+      {
+        id: "animate-keyframe-ease",
+        title: "Keyframe ease",
+        caption: "ease is only a default. Keys that do not set their own ease use it.",
+        components: [KeyframeDefault],
+        sources: [
+          {
+            path: "src/demos/motion/KeyframeDefault.lusia",
+            text: keyframeDefaultSource,
+          },
+        ],
+      },
+      {
+        id: "animate-keyframe-key-ease",
+        title: "One key overrides the ease",
+        caption: "Key 0.5 sets its own ease. The other keys keep the keyframes ease.",
+        components: [KeyframeKeyEase],
+        sources: [
+          {
+            path: "src/demos/motion/KeyframeKeyEase.lusia",
+            text: keyframeKeyEaseSource,
+          },
+        ],
+      },
       {
         id: "animate-easing",
         title: "Custom easing",
