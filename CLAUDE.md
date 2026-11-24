@@ -73,3 +73,7 @@ Worktrees go in `.worktrees/` inside this repo (gitignored): `git worktree add .
 # 14. Reuse before writing
 
 Before writing logic, search the repo for code that already does the same job (a check, a cache, a parser, a helper). Reuse or extend it. When two places need the same thing, make one shared helper or base interface and have both use it. Never write a second version. Every agent spec includes this check.
+
+# 15. Use the framework first
+
+Build with Lusia's own features (animate, EVENT, listen, lazy, variable) before writing plain DOM or browser code. If a feature is missing or needs a workaround, tell the user when done.
