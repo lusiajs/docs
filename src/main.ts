@@ -1,6 +1,8 @@
 import { attach, type Instance } from "lusiajs";
 import Loader from "./components/Loader.lusia";
 import Site from "./components/Site.lusia";
+import { normalizePath } from "./page-link.ts";
+import { preloadPage } from "./page-load.ts";
 import { notFoundSpec, pageSpecs } from "./pages.ts";
 import { startRouter } from "./router.ts";
 import { initSearchShortcuts } from "./search/shortcuts.ts";
@@ -10,6 +12,10 @@ const LOADER_MAX_MS = 2500;
 // The Loader takes over from the static copy in index.html, so the first paint never goes blank.
 const loader = attach(Loader, document.body);
 document.getElementById("loader")?.remove();
+
+// The first page's code loads while the loader waits on the fonts, so crawlers see content sooner.
+const firstPage = pageSpecs.find((spec) => spec.path === normalizePath(location.pathname));
+if (firstPage) preloadPage(firstPage);
 
 attach(Site, document.body);
 initSearchShortcuts();
