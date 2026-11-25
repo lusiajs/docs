@@ -1,0 +1,11 @@
+<script>
+  import { props } from "lusiajs";
+
+  const { title } = props({ title: "" });
+</script>
+
+<head>
+  <title>{title}</title>
+</head>
+
+<p>While this is shown, the browser tab title is: <strong>{title}</strong></p>

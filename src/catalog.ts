@@ -53,6 +53,7 @@ import NolazyBadge from "./demos/components/NolazyBadge.lusia";
 import nolazyBadgeSource from "./demos/components/NolazyBadge.lusia?raw";
 import HeadDemo from "./demos/components/HeadDemo.lusia";
 import headDemoSource from "./demos/components/HeadDemo.lusia?raw";
+import headTitleSource from "./demos/components/HeadTitle.lusia?raw";
 import NoSsrDemo from "./demos/components/NoSsrDemo.lusia";
 import noSsrDemoSource from "./demos/components/NoSsrDemo.lusia?raw";
 import PathDemo from "./demos/routing/PathDemo.lusia";
@@ -848,7 +849,10 @@ export const catalog: Record<string, CatalogEntry> = {
         caption:
           "The title is set while this demo is shown. The browser tab shows the new title, and the old one comes back when the demo is removed.",
         components: [HeadDemo],
-        sources: [{ path: "src/demos/components/HeadDemo.lusia", text: headDemoSource }],
+        sources: [
+          { path: "src/demos/components/HeadDemo.lusia", text: headDemoSource },
+          { path: "src/demos/components/HeadTitle.lusia", text: headTitleSource },
+        ],
       },
     ],
   },

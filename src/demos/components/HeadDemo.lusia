@@ -1,22 +1,27 @@
 <script>
   import { variable } from "lusiajs";
+  import HeadTitle from "./HeadTitle.lusia";
 
   const FIRST = "Lusia head demo";
   const RENAMED = "Lusia, renamed";
+  const shown = variable(false);
   const title = variable(FIRST);
+
+  function toggle() {
+    shown.value = !shown.value;
+  }
 
   function changeTitle() {
     title.value = title.value === FIRST ? RENAMED : FIRST;
   }
 </script>
 
-<head>
-  <title>{title}</title>
-</head>
-
 <div class="head-demo">
-  <p>While this demo is shown, the browser tab title is: <strong>{title}</strong></p>
-  <button onclick={changeTitle}>Change the title</button>
+  <button onclick={toggle}>{shown.value ? "Hide" : "Show"} the head block</button>
+  <IF {shown}>
+    <HeadTitle title={title} />
+    <button onclick={changeTitle}>Change the title</button>
+  </IF>
 </div>
 
 <style scoped>
