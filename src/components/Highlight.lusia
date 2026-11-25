@@ -3,7 +3,9 @@
   import type { Part } from "../search/fuzzy.ts";
 
   const noParts: Part[] = [];
-  const { parts } = props({ parts: noParts });
+  const { parts } = props(class {
+    parts = noParts;
+  });
 </script>
 
 <EACH {parts} as={p}>

@@ -1,7 +1,7 @@
 <NO_LAZY />
 
 <script>
-  import { PRESET, ON, props, variable } from "lusiajs";
+  import { PRESET, ON, variable, props } from "lusiajs";
   import DomNode from "./DomNode.lusia";
 
   interface DomData {
@@ -11,11 +11,11 @@
     children?: DomData[];
   }
 
-  const { id, find } = props({
-    id: "",
-    find: (key: string): DomData | undefined => undefined,
+  const { id, find } = props(class {
+    id = "";
+    find = (key: string): DomData | undefined => undefined;
   });
-  const data = variable.compute(() => find.value(id.value));
+  const data = variable.compute(() => find(id));
   const tag = variable.compute(() => data.value?.tag ?? "");
   const childIds = variable.compute(() =>
     (data.value?.children ?? []).map((child) => child.id),

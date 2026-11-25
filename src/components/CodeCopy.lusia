@@ -3,24 +3,24 @@
   import CodeBlock from "./CodeBlock.lusia";
 
   // `copy` is what the button copies. It can differ from the wrapped `text` shown.
-  const { text, copy, language, className } = props({
-    text: "",
-    copy: "",
-    language: "none",
-    className: "",
+  const { text, copy, language, className } = props(class {
+    text = "";
+    copy = "";
+    language = "none";
+    className = "";
   });
 </script>
 
 <div class="code-copy">
   <CodeBlock
-    text={text.value}
-    language={language.value}
-    className={className.value}
+    text={text}
+    language={language}
+    className={className}
   />
   <button
     class="copy-button code-copy-button"
     type="button"
-    data-copy={copy.value}
+    data-copy={copy}
     aria-label="Copy the code"
   >
     <span class="material-symbols-rounded" aria-hidden="true"

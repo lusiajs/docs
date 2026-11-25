@@ -2,15 +2,15 @@
   import { props } from "lusiajs";
   import { highlightCode } from "../highlight/highlight.ts";
 
-  const { text, language, className } = props({
-    text: "",
-    language: "none",
-    className: "",
+  const { text, language, className } = props(class {
+    text = "";
+    language = "none";
+    className = "";
   });
 
   // The text never changes after mount, so it is highlighted once.
-  const codeClass = `language-${language.peek()}`;
-  const html = highlightCode(text.peek(), language.peek());
+  const codeClass = `language-${language}`;
+  const html = highlightCode(text, language);
 </script>
 
 <pre class={className}><code class={codeClass}><HTML>{html}</HTML></code></pre>

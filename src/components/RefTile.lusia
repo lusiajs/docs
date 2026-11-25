@@ -14,16 +14,19 @@
     bullets: [],
     example: "",
   };
-  const { entry, href } = props({ entry: emptyEntry, href: "" });
+  const { entry, href } = props(class {
+    entry = emptyEntry;
+    href = "";
+  });
 
   // The entry never changes after mount, so everything derived from it is computed once.
-  const shown = entry.peek();
+  const shown = entry;
   const search = searchText(shown);
 </script>
 
 <a
   class="ref-tile"
-  href={href.peek()}
+  href={href}
   data-ref-entry={shown.id}
   data-kind={shown.kind}
   data-group={shown.kind}

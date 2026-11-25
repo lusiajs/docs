@@ -2,7 +2,9 @@
   import { props } from "lusiajs";
   import type { Spark } from "../motion/sparks.ts";
 
-  const { sparks } = props({ sparks: [] as Spark[] });
+  const { sparks } = props(class {
+    sparks: Spark[] = [];
+  });
 </script>
 
 <EACH {sparks} as={spark} key={spark.id}>

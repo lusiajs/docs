@@ -1,10 +1,10 @@
 <script>
-  import { PRESET, ON, props, variable } from "lusiajs";
+  import { PRESET, ON, variable, props } from "lusiajs";
 
-  const { name, active, onSelect } = props({
-    name: "",
-    active: "",
-    onSelect: (value: string) => {},
+  const { name, active, onSelect } = props(class {
+    name = "";
+    active = "";
+    onSelect = (value: string) => {};
   });
 
   // A new tab slides in. A closed tab fades, and the tabs after it slide over the gap.
@@ -19,7 +19,7 @@
   ];
 
   const tab = variable<HTMLElement | null>(null);
-  const isSelected = variable.compute(() => active.value === name.value);
+  const isSelected = variable.compute(() => active === name);
   const selectedText = variable.compute(() => String(isSelected.value));
 
   // Only the tab strip scrolls. The page keeps its place when a demo mounts.
@@ -44,7 +44,7 @@
   });
 
   function choose() {
-    onSelect.peek()(name.peek());
+    onSelect(name);
   }
 </script>
 

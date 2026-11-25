@@ -93,7 +93,7 @@ describe("markup completions", () => {
   });
 
   test("a component tag offers the props the imported file declares", () => {
-    const badge = { name: "Badge.lusia", code: `<script>\nprops({ label: "New" })\n</script>` };
+    const badge = { name: "Badge.lusia", code: `<script>\nconst { label } = props(class {\n  label = "New";\n});\n</script>` };
     const items = completeAt(`${BADGE_SCRIPT}</script>\n<Badge |`, [badge]);
     expect(labelsOf(items)).toEqual(["label"]);
   });
@@ -124,11 +124,11 @@ describe(".ts files", () => {
 
   test("a new API name gets an import at the top of the file", () => {
     const items = completeAt("const x = 1;\n|", [], "util.ts");
-    const props = items.find((item) => item.label === "props({ ... })");
-    expect(props?.importEdit).toEqual({
+    const variable = items.find((item) => item.label === "variable");
+    expect(variable?.importEdit).toEqual({
       start: 0,
       end: 0,
-      text: 'import { props } from "lusiajs";\n',
+      text: 'import { variable } from "lusiajs";\n',
     });
   });
 });

@@ -36,7 +36,10 @@ const APP = `<script>
 const BADGE = `<script>
   import { props } from "lusiajs";
 
-  const { label, tone } = props({ label: "New", tone: "info" });
+  const { label, tone } = props(class {
+    label = "New";
+    tone = "info";
+  });
 </script>
 
 <span class="badge {tone}">{label}</span>

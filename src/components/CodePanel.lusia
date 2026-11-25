@@ -1,11 +1,13 @@
 <script>
-  import { props, variable } from "lusiajs";
+  import { variable, props } from "lusiajs";
   import type { SourceFile } from "../catalog.ts";
   import { languageFor } from "../highlight/highlight.ts";
   import { nextIndex } from "../tab-keys.ts";
   import CodeBlock from "./CodeBlock.lusia";
 
-  const { sources } = props({ sources: [] as SourceFile[] });
+  const { sources } = props(class {
+    sources: SourceFile[] = [];
+  });
   const active = variable(0);
 
   function selectTab(index: number) {
@@ -18,7 +20,7 @@
 
   // Arrow keys move between tabs, like a native tab list.
   function onTabKey(event: KeyboardEvent) {
-    const next = nextIndex(event.key, active.value, sources.value.length);
+    const next = nextIndex(event.key, active.value, sources.length);
     if (next === null) return;
     event.preventDefault();
     selectTab(next);
@@ -29,7 +31,7 @@
 
 <div class="code-panel">
   <div class="code-head">
-    <IF {sources.value.length > 1}>
+    <IF {sources.length > 1}>
       <div class="code-tabs" role="tablist" onkeydown={onTabKey}>
         <EACH {sources} as={source} index={i}>
           <button
@@ -50,7 +52,7 @@
       <span class="material-symbols-rounded" aria-hidden="true"
         >description</span
       >
-      <span class="file-name">{fileName(sources.value[0].path)}</span>
+      <span class="file-name">{fileName(sources[0].path)}</span>
     </IF>
     <button class="copy-button" type="button" aria-label="Copy the code">
       <span class="material-symbols-rounded" aria-hidden="true"

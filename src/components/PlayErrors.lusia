@@ -1,13 +1,13 @@
 <script>
-  import { props, variable } from "lusiajs";
+  import { variable, props } from "lusiajs";
   import type { LiveError } from "../live/types.ts";
 
-  const { errors, onJump } = props({
-    errors: [] as LiveError[],
-    onJump: (error: LiveError) => {},
+  const { errors, onJump } = props(class {
+    errors: LiveError[] = [];
+    onJump = (error: LiveError) => {};
   });
 
-  const isEmpty = variable.compute(() => errors.value.length === 0);
+  const isEmpty = variable.compute(() => errors.length === 0);
 
   function where(error: LiveError): string {
     return error.file
@@ -16,7 +16,7 @@
   }
 
   function jump(error: LiveError) {
-    onJump.peek()(error);
+    onJump(error);
   }
 </script>
 

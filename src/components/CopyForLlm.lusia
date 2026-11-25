@@ -1,21 +1,22 @@
 <script>
   import { props } from "lusiajs";
-
-  const { url } = props({ url: "" });
+  const { url } = props(class {
+    url = "";
+  });
 </script>
 
 <div class="llm-actions">
   <button
     class="copy-button copy-llm-button"
     type="button"
-    data-copy-url={url.value}
+    data-copy-url={url}
   >
     <span class="material-symbols-rounded" aria-hidden="true">content_copy</span>
     <span class="copy-llm-label">Copy for LLM</span>
   </button>
   <a
     class="copy-llm-button"
-    href={url.value}
+    href={url}
     target="_blank"
     rel="noopener"
   >

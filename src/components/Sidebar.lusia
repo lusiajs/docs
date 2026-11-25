@@ -4,13 +4,13 @@
   import type { SidebarBlock, SidebarGroup } from "../render.ts";
 
   // shown says which entry ids are visible. By default every entry is.
-  const { groups, shown } = props({
-    groups: [] as SidebarGroup[],
-    shown: (_id: string) => true,
+  const { groups, shown } = props(class {
+    groups: SidebarGroup[] = [];
+    shown = (_id: string) => true;
   });
 
   function entryShown(id: string): boolean {
-    return shown.value(id);
+    return shown(id);
   }
 
   function blockShown(block: SidebarBlock): boolean {

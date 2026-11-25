@@ -1,5 +1,5 @@
 <script>
-  import { onAttach, props, variable } from "lusiajs";
+  import { onAttach, variable, props } from "lusiajs";
   import type { EditorFile, EditorJump } from "../editor/files.ts";
   import { copyText } from "../copy.ts";
   import type { EditorSession } from "../editor/session.ts";
@@ -16,18 +16,18 @@
     onSelect,
     onReset,
     jump,
-  } = props({
-    files: [] as EditorFile[],
-    active: "",
-    readOnly: false,
-    edited: false,
-    toolbar: true,
+  } = props(class {
+    files: EditorFile[] = [];
+    active = "";
+    readOnly = false;
+    edited = false;
+    toolbar = true;
     // A parent can turn wrapping on. The toolbar button also turns it on.
-    wrap: false,
-    onChange: (name: string, code: string) => {},
-    onSelect: (name: string) => {},
-    onReset: () => {},
-    jump: null as EditorJump | null,
+    wrap = false;
+    onChange = (name: string, code: string) => {};
+    onSelect = (name: string) => {};
+    onReset = () => {};
+    jump: EditorJump | null = null;
   });
 
   const selected = variable("");
@@ -35,7 +35,7 @@
   const copied = variable(false);
   let copiedTimer = 0;
   const toolbarWrap = variable(false);
-  const lineWrap = variable.compute(() => wrap.value || toolbarWrap.value);
+  const lineWrap = variable.compute(() => wrap || toolbarWrap.value);
   // A false attribute is removed, so aria-pressed takes the text "false".
   const wrapPressed = variable.compute(() => String(lineWrap.value));
   const copyIcon = variable.compute(() =>
@@ -46,18 +46,18 @@
 
   // An active file set by the parent takes effect; tabs change the selection after that.
   variable.autoRun(() => {
-    selected.value = active.value;
+    selected.value = active;
   });
 
   // Variables are read before the optional call, so they stay tracked until it loads.
   variable.autoRun(() => {
-    const list = files.value;
+    const list = files;
     const name = selected.value;
     session?.show(list, name);
   });
 
   variable.autoRun(() => {
-    const isReadOnly = readOnly.value;
+    const isReadOnly = readOnly;
     session?.setReadOnly(isReadOnly);
   });
 
@@ -68,7 +68,7 @@
 
   // A new jump object moves the cursor, even to the place it was last at.
   variable.autoRun(() => {
-    const target = jump.value;
+    const target = jump;
     if (!target) return;
     selected.value = target.file;
     session?.reveal(target.file, target.line, target.column);
@@ -81,9 +81,9 @@
       .then(({ EditorSession }) => {
         if (closed) return;
         session = new EditorSession(host.peek()!, {
-          files: files.peek(),
+          files: files,
           name: selected.peek(),
-          readOnly: readOnly.peek(),
+          readOnly: readOnly,
           wrap: lineWrap.peek(),
           onChange: changed,
         });
@@ -100,18 +100,18 @@
   });
 
   function changed(name: string, code: string) {
-    onChange.peek()(name, code);
+    onChange(name, code);
   }
 
   function select(name: string) {
     selected.value = name;
-    onSelect.peek()(name);
+    onSelect(name);
   }
 
   const formatFailed = "Could not format this file. Fix the syntax first.";
 
   function reset() {
-    onReset.peek()();
+    onReset();
   }
 
   function toggleWrap() {
@@ -137,14 +137,14 @@
 </script>
 
 <div class="code-panel code-editor">
-  <IF {toolbar.value}>
+  <IF {toolbar}>
     <div class="code-head">
       <EditorTabs
         files={files}
         active={selected}
         onSelect={select}
       />
-      <IF {edited.value}>
+      <IF {edited}>
         <span class="edited-mark">Edited</span>
         <button class="reset-button" type="button" onclick={reset}>
           Reset
@@ -187,7 +187,7 @@
     </div>
   </IF>
   <div class="editor-body" bind-element={host}></div>
-  <IF {toolbar.value}>
+  <IF {toolbar}>
     <p class="editor-hint">
       Tab indents. Press Esc to leave the editor. Shift+Alt+F formats.
     </p>

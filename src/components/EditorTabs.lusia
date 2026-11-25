@@ -1,32 +1,32 @@
 <script>
-  import { props, variable } from "lusiajs";
+  import { variable, props } from "lusiajs";
   import type { EditorFile } from "../editor/files.ts";
   import { nextIndex } from "../tab-keys.ts";
   import EditorTab from "./EditorTab.lusia";
 
-  const { files, active, onSelect, onAdd } = props({
-    files: [] as EditorFile[],
-    active: "",
-    onSelect: (name: string) => {},
-    onAdd: null as (() => void) | null,
+  const { files, active, onSelect, onAdd } = props(class {
+    files: EditorFile[] = [];
+    active = "";
+    onSelect = (name: string) => {};
+    onAdd: (() => void) | null = null;
   });
 
   const showTabs = variable.compute(
-    () => files.value.length > 1 || onAdd.value !== null,
+    () => files.length > 1 || onAdd !== null,
   );
 
   function select(name: string) {
-    onSelect.peek()(name);
+    onSelect(name);
   }
 
   function add() {
-    onAdd.peek()?.();
+    onAdd?.();
   }
 
   // Arrow keys move between tabs and focus them, like a native tab list.
   function onTabKey(event: KeyboardEvent) {
-    const list = files.peek();
-    const current = list.findIndex((file) => file.name === active.peek());
+    const list = files;
+    const current = list.findIndex((file) => file.name === active);
     const next = nextIndex(event.key, current, list.length);
     if (next === null) return;
     event.preventDefault();
@@ -48,7 +48,7 @@
         <EditorTab name={file.name} active={active} onSelect={select} />
       </EACH>
     </div>
-    <IF {onAdd.value !== null}>
+    <IF {onAdd !== null}>
       <button
         class="code-tab-add"
         type="button"

@@ -1,7 +1,9 @@
 <script>
   import { props } from "lusiajs";
-
-  const { value, label } = props({ value: "", label: "Name" });
+  const { value, label } = props(class {
+    value = "";
+    label = "Name";
+  });
 </script>
 
 <label class="field-demo">

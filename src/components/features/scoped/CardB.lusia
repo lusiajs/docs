@@ -1,7 +1,8 @@
 <script>
   import { props } from "lusiajs";
-
-  const { cardEl } = props({ cardEl: null as HTMLElement | null });
+  const { cardEl } = props(class {
+    cardEl: HTMLElement | null = null;
+  });
 </script>
 
 <div class="card" bind-element={cardEl}>

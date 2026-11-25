@@ -1,5 +1,5 @@
 <script>
-  import { props, variable } from "lusiajs";
+  import { variable, props } from "lusiajs";
   import Folder from "./Folder.lusia";
 
   interface Item {
@@ -7,9 +7,11 @@
     children?: Item[];
   }
 
-  const { item } = props({ item: { name: "" } as Item });
+  const { item } = props(class {
+    item: Item = { name: "" };
+  });
   const open = variable(true);
-  const children = variable.compute(() => item.value.children ?? []);
+  const children = variable.compute(() => item.children ?? []);
 
   function toggle() {
     open.value = !open.value;
@@ -17,10 +19,10 @@
 </script>
 
 <li class="node">
-  <IF {item.value.children}>
+  <IF {item.children}>
     <button class="row" type="button" onclick={toggle}>
       <span class="arrow">{open.value ? "▾" : "▸"}</span>
-      <span>{item.value.name}</span>
+      <span>{item.name}</span>
     </button>
     <IF {open}>
       <ul>
@@ -30,7 +32,7 @@
       </ul>
     </IF>
   <ELSE>
-    <span class="file">{item.value.name}</span>
+    <span class="file">{item.name}</span>
   </IF>
 </li>
 

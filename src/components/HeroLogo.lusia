@@ -13,7 +13,9 @@
 
   const reduced = SCREEN.REDUCED_MOTION.value;
 
-  const { letter } = props({ letter: null as HTMLElement | null });
+  const { letter } = props(class {
+    letter: HTMLElement | null = null;
+  });
 
   const logoEl = variable<HTMLElement | null>(null);
 
@@ -21,7 +23,7 @@
   function placeLogo() {
     const logo = logoEl.value;
     const title = logo?.parentElement;
-    const firstLetter = letter.value;
+    const firstLetter = letter;
     if (!logo || !title || !firstLetter) return;
     title.style.setProperty("--title-pad", `${titlePadding(logo)}px`);
     logo.style.setProperty("--letter-left", `${firstLetter.offsetLeft}px`);

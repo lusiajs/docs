@@ -2,7 +2,9 @@
   import { props } from "lusiajs";
   import type { LiveError } from "../live/types.ts";
 
-  const { error } = props({ error: null as LiveError | null });
+  const { error } = props(class {
+    error: LiveError | null = null;
+  });
 
   function placeOf(next: LiveError | null): string {
     if (!next?.file) return "";
@@ -14,21 +16,21 @@
 </script>
 
 <div class="error-note">
-  <IF {error.value !== null}>
+  <IF {error !== null}>
     <div class="live-error" role="alert">
       <p class="live-error-title">
         <span class="material-symbols-rounded" aria-hidden="true">error</span>
-        {error.value?.code ?? "Error"}
+        {error?.code ?? "Error"}
       </p>
-      <p>{error.value?.message}</p>
-      <IF {error.value?.hint !== undefined}>
-        <p class="live-error-hint">{error.value?.hint}</p>
+      <p>{error?.message}</p>
+      <IF {error?.hint !== undefined}>
+        <p class="live-error-hint">{error?.hint}</p>
       </IF>
-      <IF {error.value?.file !== undefined}>
-        <p class="live-error-place">{placeOf(error.value)}</p>
+      <IF {error?.file !== undefined}>
+        <p class="live-error-place">{placeOf(error)}</p>
       </IF>
-      <IF {error.value?.frame !== undefined}>
-        <pre class="live-error-frame">{error.value?.frame}</pre>
+      <IF {error?.frame !== undefined}>
+        <pre class="live-error-frame">{error?.frame}</pre>
       </IF>
     </div>
   </IF>

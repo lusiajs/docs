@@ -30,7 +30,9 @@
     components: [],
     sources: [],
   };
-  const { demo } = props({ demo: emptyDemo });
+  const { demo } = props(class {
+    demo = emptyDemo;
+  });
   const body = variable<Element | null>(null);
   const stage = variable<HTMLElement | null>(null);
   const codeSlot = variable<HTMLElement | null>(null);
@@ -38,7 +40,7 @@
   const near = variable(false);
   // True while the edited build is shown in place of the original demo.
   const live = variable(false);
-  const sources: EditorFile[] = demo.peek().sources.map((file) => ({
+  const sources: EditorFile[] = demo.sources.map((file) => ({
     name: file.path,
     code: file.text,
   }));
@@ -86,9 +88,9 @@
   }
 
   function mountOriginals(): void {
-    originals = demo
-      .peek()
-      .components.map((component) => attach(component, body.peek()!));
+    originals = demo.components.map((component) =>
+      attach(component, body.peek()!),
+    );
   }
 
   // Removes the mounted demo. Its leave animations play first.
@@ -143,19 +145,19 @@
   }
 </script>
 
-<div class="demo-block" id={demo.value.id}>
+<div class="demo-block" id={demo.id}>
   <header class="demo-head">
     <h3 class="demo-title">
-      {demo.value.title}
+      {demo.title}
       <a
         class="demo-anchor"
-        href={pageLink(guidePath, demo.value.id)}
+        href={pageLink(guidePath, demo.id)}
         aria-label="Link to this demo"
       >
         <span class="material-symbols-rounded" aria-hidden="true">link</span>
       </a>
     </h3>
-    <p class="demo-caption">{demo.value.caption}</p>
+    <p class="demo-caption">{demo.caption}</p>
   </header>
   <div class="demo-row">
     <div class="demo">
@@ -186,7 +188,7 @@
       />
     <ELSE>
       <div class="lazy-code" bind-element={codeSlot} onclick={openEditor}>
-        <CodePanel sources={demo.value.sources} />
+        <CodePanel sources={demo.sources} />
       </div>
     </IF>
   </div>

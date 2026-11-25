@@ -1,5 +1,5 @@
 <script>
-  import { props, variable } from "lusiajs";
+  import { variable, props } from "lusiajs";
   import Comment from "./Comment.lusia";
 
   interface Note {
@@ -12,20 +12,20 @@
   // Replies past this depth are not shown, even when the data has them.
   const maxDepth = 3;
 
-  const { comment, depth } = props({
-    comment: { id: 0, author: "", text: "" } as Note,
-    depth: 1,
+  const { comment, depth } = props(class {
+    comment: Note = { id: 0, author: "", text: "" };
+    depth = 1;
   });
-  const replies = variable.compute(() => comment.value.replies ?? []);
+  const replies = variable.compute(() => comment.replies ?? []);
 </script>
 
 <li class="comment">
-  <p class="head"><strong>{comment.value.author}</strong></p>
-  <p class="text">{comment.value.text}</p>
-  <IF {depth.value < maxDepth}>
+  <p class="head"><strong>{comment.author}</strong></p>
+  <p class="text">{comment.text}</p>
+  <IF {depth < maxDepth}>
     <ul class="replies">
       <EACH {replies} as={reply} key={reply.id}>
-        <Comment comment={reply} depth={depth.value + 1} />
+        <Comment comment={reply} depth={depth + 1} />
       </EACH>
     </ul>
   <ELSE>

@@ -1,8 +1,11 @@
 <script>
-  import { props, SCREEN } from "lusiajs";
+  import { SCREEN, variable, props } from "lusiajs";
   import { pageScroll, tunnelIn, tunnelOut } from "../motion/home-bg.ts";
 
-  const { follow } = props({ follow: null as HTMLElement | null });
+  const p = props(class {
+    follow: HTMLElement | null = null;
+  });
+  const follow = variable.compute(() => p.follow);
   const reduced = SCREEN.REDUCED_MOTION.value;
 
   const copyCount = 12;

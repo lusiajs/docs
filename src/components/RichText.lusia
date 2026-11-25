@@ -7,8 +7,11 @@
   // Lets the browser start scrolling before the heading flashes.
   const SCROLL_WAIT_MS = 350;
   const noParts: Part[] = [];
-  const { parts, base } = props({ parts: noParts, base: guidePath });
-  const basePath = base.peek();
+  const { parts, base } = props(class {
+    parts = noParts;
+    base = guidePath;
+  });
+  const basePath = base;
 
   let flashTimer = 0;
 

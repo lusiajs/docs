@@ -1,12 +1,15 @@
 <script>
-  import { onAttach, props, variable } from "lusiajs";
+  import { onAttach, variable, props } from "lusiajs";
   import { highlightInto } from "../../highlight/highlight.ts";
 
-  const { code, language } = props({ code: "", language: "lusia" });
+  const { code, language } = props(class {
+    code = "";
+    language = "lusia";
+  });
   const block = variable<HTMLElement | null>(null);
 
   onAttach(() => {
-    highlightInto(block.value!, code.peek(), language.peek());
+    highlightInto(block.value!, code, language);
   });
 </script>
 

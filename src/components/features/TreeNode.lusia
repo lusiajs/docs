@@ -1,12 +1,14 @@
 <NO_LAZY />
 
 <script>
-  import { PRESET, props, variable } from "lusiajs";
+  import { PRESET, variable, props } from "lusiajs";
   import TreeNode from "./TreeNode.lusia";
 
-  const { item } = props({ item: { name: "" } });
+  const { item } = props(class {
+    item = { name: "" };
+  });
   const open = variable(true);
-  const children = variable.compute(() => item.value.children ?? []);
+  const children = variable.compute(() => item.children ?? []);
   const chevronClass = variable.compute(() =>
     open.value ? "chevron open" : "chevron",
   );
@@ -17,10 +19,10 @@
 </script>
 
 <li class="node">
-  <IF {item.value.children}>
+  <IF {item.children}>
     <button class="branch" type="button" onclick={toggle}>
       <span class={chevronClass}>▸</span>
-      {item.value.name}
+      {item.name}
     </button>
     <IF {open}>
       <ul animate={{ play: PRESET.SLIDE_DOWN }}>
@@ -30,7 +32,7 @@
       </ul>
     </IF>
   <ELSE>
-    <span class="leaf">{item.value.name}</span>
+    <span class="leaf">{item.name}</span>
   </IF>
 </li>
 

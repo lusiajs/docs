@@ -24,16 +24,16 @@
     bullets: [],
     example: "",
   };
-  const { entry, previous, next } = props({
-    entry: emptyEntry,
-    previous: undefined as ApiEntry | undefined,
-    next: undefined as ApiEntry | undefined,
+  const { entry, previous, next } = props(class {
+    entry = emptyEntry;
+    previous: ApiEntry | undefined = undefined;
+    next: ApiEntry | undefined = undefined;
   });
 
   // The entry never changes after mount, so everything derived from it is computed once.
-  const shown = entry.peek();
-  const shownPrevious = previous.peek();
-  const shownNext = next.peek();
+  const shown = entry;
+  const shownPrevious = previous;
+  const shownNext = next;
   const kindLabel = KIND_INFO[shown.kind].label;
   const values = valueRows(shown.members);
   const parameters = parameterRows(shown);

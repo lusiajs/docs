@@ -1,18 +1,25 @@
 <script>
-  import { onAttach, props, variable } from "lusiajs";
+  import { onAttach, variable, props } from "lusiajs";
 
-  const { label, initial, placeholder, submitText, types, onSubmit, onCancel } =
-    props({
-      label: "",
-      initial: "",
-      placeholder: "",
-      submitText: "Save",
-      types: [] as readonly string[],
-      onSubmit: (name: string): string | undefined => undefined,
-      onCancel: () => {},
-    });
+  const {
+    label,
+    initial,
+    placeholder,
+    submitText,
+    types,
+    onSubmit,
+    onCancel,
+  } = props(class {
+    label = "";
+    initial = "";
+    placeholder = "";
+    submitText = "Save";
+    types: readonly string[] = [];
+    onSubmit = (name: string): string | undefined => undefined;
+    onCancel = () => {};
+  });
 
-  const value = variable(initial.peek());
+  const value = variable(initial);
   const problem = variable("");
   const hasProblem = variable.compute(() => problem.value !== "");
   // A false attribute is removed, so aria-invalid takes the text "false".
@@ -29,11 +36,11 @@
   // The parent returns a problem with the name, or nothing to accept it and close it.
   function submit(event: SubmitEvent) {
     event.preventDefault();
-    problem.value = onSubmit.peek()(value.peek().trim()) ?? "";
+    problem.value = onSubmit(value.peek().trim()) ?? "";
   }
 
   function cancel() {
-    onCancel.peek()();
+    onCancel();
   }
 
   // Escape closes the form without the page's own Escape handling running too.

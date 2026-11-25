@@ -1,7 +1,9 @@
 <script>
   import { PRESET, ON, controller, props } from "lusiajs";
 
-  const { onReload } = props({ onReload: () => {} });
+  const { onReload } = props(class {
+    onReload = () => {};
+  });
   const spin = controller();
   const spinMotion = {
     play: PRESET.SPIN,
@@ -13,7 +15,7 @@
 
   function reloadNow() {
     void spin.play();
-    onReload.peek()();
+    onReload();
   }
 </script>
 

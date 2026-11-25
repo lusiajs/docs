@@ -1,12 +1,13 @@
 <script>
   import { props } from "lusiajs";
-
-  const { text } = props({ text: "" });
+  const { text } = props(class {
+    text = "";
+  });
 </script>
 
 <p class="note-box">
   <span class="material-symbols-rounded" aria-hidden="true">info</span>
-  {text.value}
+  {text}
 </p>
 
 <style>

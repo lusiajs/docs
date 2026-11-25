@@ -1,14 +1,15 @@
 <script>
   import { props } from "lusiajs";
-
-  const { onRetry } = props({ onRetry: () => {} });
+  const { onRetry } = props(class {
+    onRetry = () => {};
+  });
 
   function reloadNow() {
     location.reload();
   }
 
   function retryNow() {
-    onRetry.peek()();
+    onRetry();
   }
 </script>
 

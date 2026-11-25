@@ -1,5 +1,5 @@
 <script>
-  import { EVENT, listen, onAttach, props, variable } from "lusiajs";
+  import { EVENT, listen, onAttach, variable, props } from "lusiajs";
   import DomNode from "./DomNode.lusia";
 
   interface FlowNode {
@@ -16,15 +16,18 @@
     nodes: FlowNode[];
   }
 
-  const { code, steps } = props({ code: "", steps: [] as FlowStep[] });
+  const { code, steps } = props(class {
+    code = "";
+    steps: FlowStep[] = [];
+  });
   const root = variable<Element | null>(null);
   const index = variable(0);
   const playing = variable(false);
-  const current = variable.compute(() => steps.value[index.value]);
+  const current = variable.compute(() => steps[index.value]);
   const title = variable.compute(() => current.value?.title ?? "");
   const rows = variable.compute(() => {
     const lit = current.value?.lines ?? [];
-    return code.value.split("\n").map((text, i) => ({
+    return code.split("\n").map((text, i) => ({
       number: i + 1,
       text,
       className: lit.includes(i + 1) ? "line lit" : "line",
@@ -49,7 +52,7 @@
   let timer = 0;
 
   function showStep(next: number): void {
-    const count = steps.peek().length;
+    const count = steps.length;
     index.value = (next + count) % count;
   }
 
@@ -89,7 +92,7 @@
 
 <div class="dom-flow" bind-element={root}>
   <p class="caption">
-    <span class="count">{index.value + 1} / {steps.value.length}</span>
+    <span class="count">{index.value + 1} / {steps.length}</span>
     {title}
   </p>
   <div class="panes">

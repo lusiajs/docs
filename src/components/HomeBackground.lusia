@@ -1,13 +1,14 @@
 <script>
-  import { props, SCREEN } from "lusiajs";
+  import { SCREEN, variable, props } from "lusiajs";
   import LogoTunnel from "./LogoTunnel.lusia";
   import { backdropFade, pageScroll, raysSpin } from "../motion/home-bg.ts";
 
   // One shared backdrop, pinned behind the whole page. Its layers move with the scroll.
-  const { storm, follow } = props({
-    storm: false,
-    follow: null as HTMLElement | null,
+  const p = props(class {
+    storm = false;
+    follow: HTMLElement | null = null;
   });
+  const follow = variable.compute(() => p.follow);
   const reduced = SCREEN.REDUCED_MOTION.value;
   const raysMotion = reduced ? [] : raysSpin;
   const raysScroll = reduced
@@ -72,7 +73,7 @@
     <span class="bg-rays-spin" animate={raysMotion}></span>
   </span>
   <span class="bg-dots" animate={dotsScroll}></span>
-  <LogoTunnel follow={follow} />
+  <LogoTunnel follow={p.follow} />
   <div class="bg-sparkles" animate={sparklesScroll}>
     <span class="bg-sparkle s1"></span>
     <span class="bg-sparkle s2"></span>
@@ -85,7 +86,7 @@
     <EACH {petals} as="{item}">
       <span class="petal" style={item.css}></span>
     </EACH>
-    <IF {storm}>
+    <IF {p.storm}>
       <EACH {stormPetals} as="{item}">
         <span class="petal storm" style={item.css}></span>
       </EACH>

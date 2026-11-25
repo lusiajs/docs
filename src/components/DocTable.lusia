@@ -1,7 +1,9 @@
 <script>
   import { props } from "lusiajs";
-
-  const { head, rows } = props({ head: [] as string[], rows: [] as string[][] });
+  const { head, rows } = props(class {
+    head: string[] = [];
+    rows: string[][] = [];
+  });
 </script>
 
 <div class="doc-table-wrap">

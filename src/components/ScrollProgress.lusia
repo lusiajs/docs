@@ -1,8 +1,11 @@
 <script>
-  import { props } from "lusiajs";
+  import { variable, props } from "lusiajs";
   import { pageScroll } from "../motion/home-bg.ts";
 
-  const { follow } = props({ follow: null as HTMLElement | null });
+  const p = props(class {
+    follow: HTMLElement | null = null;
+  });
+  const follow = variable.compute(() => p.follow);
   const barMotion = pageScroll(follow, { scale: "0 1" }, { scale: "1 1" });
 </script>
 
