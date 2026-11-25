@@ -3,7 +3,7 @@ import Prism from "./prism.ts";
 // Prism grammars are plain nested objects, so they are read through one loose type.
 const grammars = Prism.languages as Record<string, any>;
 
-const FLOW_TAGS = "IF|ELSEIF|ELSE|EACH|FOR|CONTENT|HTML|FALLBACK|NOLAZY";
+const FLOW_TAGS = "IF|ELSEIF|ELSE|EACH|FOR|CONTENT|HTML|FALLBACK|NO_LAZY";
 
 // A tag runs to its `>`. A `{...}` inside it may hold one level of nested braces.
 const TAG_BODY = String.raw`(?:[^>{]|\{(?:[^{}]|\{[^{}]*\})*\})*`;
@@ -53,7 +53,7 @@ function tagInside(nameType: string, namePattern: RegExp): Record<string, unknow
 export const flowTag = {
   pattern: new RegExp(`<\\/?(?:${FLOW_TAGS})(?=[\\s/>])${TAG_BODY}>`),
   greedy: true,
-  inside: tagInside("flow-name", /(?<=^<\/?)[A-Z]+/),
+  inside: tagInside("flow-name", /(?<=^<\/?)[A-Z_]+/),
 };
 
 export const componentTag = {

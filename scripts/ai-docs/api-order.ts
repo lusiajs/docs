@@ -18,6 +18,7 @@ export const GROUP_ORDER: ApiGroup[] = [
   "components",
   "styling",
   "motion",
+  "routing",
 ];
 
 export const GROUP_TITLES: Record<ApiGroup, string> = {
@@ -28,6 +29,7 @@ export const GROUP_TITLES: Record<ApiGroup, string> = {
   components: "Components",
   styling: "Styling",
   motion: "Motion",
+  routing: "Routing",
 };
 
 export function entriesOfKind(entries: ApiEntry[], kind: ApiKind): ApiEntry[] {

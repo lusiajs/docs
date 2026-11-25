@@ -826,7 +826,7 @@ export const catalog: Record<string, CatalogEntry> = {
         id: "nolazy-badge",
         title: "Badge",
         caption:
-          "NOLAZY keeps the badge in the page that imports it. It is never loaded later on its own.",
+          "NO_LAZY keeps the badge in the page that imports it. It is never loaded later on its own.",
         components: [NolazyDemo],
         sources: [
           { path: "src/demos/components/NolazyDemo.lusia", text: nolazyDemoSource },

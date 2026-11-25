@@ -1,4 +1,4 @@
-<NOLAZY />
+<NO_LAZY />
 
 <script>
   import { PRESET, ON, props, variable } from "lusiajs";

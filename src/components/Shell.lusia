@@ -26,7 +26,7 @@
   }
 </script>
 
-<NOLAZY />
+<NO_LAZY />
 
 <span class="top-sentinel" aria-hidden="true" bind-element={sentinelEl}></span>
 
