@@ -3,7 +3,7 @@ import Prism from "./prism.ts";
 // Prism grammars are plain nested objects, so they are read through one loose type.
 const grammars = Prism.languages as Record<string, any>;
 
-const FLOW_TAGS = "IF|ELSEIF|ELSE|EACH|FOR|CONTENT|HTML|FALLBACK|NO_LAZY";
+const FLOW_TAGS = "IF|ELSEIF|ELSE|EACH|FOR|CONTENT|HTML|FALLBACK|NO_LAZY|NO_SSR";
 
 // A tag runs to its `>`. A `{...}` inside it may hold one level of nested braces.
 const TAG_BODY = String.raw`(?:[^>{]|\{(?:[^{}]|\{[^{}]*\})*\})*`;
