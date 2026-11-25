@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "bun scripts/playground-runtime.ts && bun scripts/ai-docs.ts && lusia dev .",
-    "build": "bun scripts/playground-runtime.ts && bun scripts/ai-docs.ts && lusia build . && bun scripts/not-found-page.ts",
+    "build": "bun scripts/playground-runtime.ts && bun scripts/ai-docs.ts && lusia build . && bun scripts/seo.ts && bun scripts/not-found-page.ts",
     "test": "bun test --parallel=6",
     "typecheck": "tsc --noEmit",
     "check": "bun run typecheck && bun run test && bun run build"
