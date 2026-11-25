@@ -1,0 +1,43 @@
+<script>
+  import { variable } from "lusiajs";
+
+  const FIRST = "Lusia head demo";
+  const RENAMED = "Lusia, renamed";
+  const title = variable(FIRST);
+
+  function changeTitle() {
+    title.value = title.value === FIRST ? RENAMED : FIRST;
+  }
+</script>
+
+<head>
+  <title>{title}</title>
+</head>
+
+<div class="head-demo">
+  <p>While this demo is shown, the browser tab title is: <strong>{title}</strong></p>
+  <button onclick={changeTitle}>Change the title</button>
+</div>
+
+<style scoped>
+  .head-demo {
+    display: grid;
+    justify-items: start;
+    gap: 0.6rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      border: 0;
+      border-radius: 8px;
+      background: var(--accent);
+      color: var(--bg);
+      font: inherit;
+      cursor: pointer;
+    }
+  }
+</style>

@@ -1,0 +1,17 @@
+<script>
+  import { PARAMS } from "lusiajs";
+</script>
+
+<div class="params-demo">
+  <p>PARAMS.value is <code>{JSON.stringify(PARAMS.value)}</code></p>
+</div>
+
+<style scoped>
+  .params-demo {
+    color: var(--fg);
+
+    p {
+      margin: 0;
+    }
+  }
+</style>

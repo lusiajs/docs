@@ -1,0 +1,24 @@
+<NO_SSR />
+
+<FALLBACK>
+  <p class="placeholder">Placeholder: the build leaves this component out.</p>
+</FALLBACK>
+
+<div class="no-ssr-demo">
+  <p>This part is drawn by the browser after the page loads.</p>
+</div>
+
+<style scoped>
+  .placeholder {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .no-ssr-demo {
+    color: var(--fg);
+
+    p {
+      margin: 0;
+    }
+  }
+</style>
