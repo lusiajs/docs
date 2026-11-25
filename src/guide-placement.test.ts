@@ -12,6 +12,7 @@ const GROUP_ORDER: ApiGroup[] = [
   "components",
   "styling",
   "motion",
+  "routing",
 ];
 
 const MOTION_SUBGROUP_ORDER = [

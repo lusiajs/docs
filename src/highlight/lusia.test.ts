@@ -56,6 +56,21 @@ describe("lusia Prism grammar", () => {
     expect(hasPiece(list, "component-name", "ELSE")).toBe(false);
   });
 
+  test("NO_LAZY and NO_SSR markers are flow tags", () => {
+    const list = tokenize(`<NO_LAZY />\n<NO_SSR />\n<FALLBACK>\n  <p>Wait</p>\n</FALLBACK>`);
+    expect(hasPiece(list, "flow-name", "NO_LAZY")).toBe(true);
+    expect(hasPiece(list, "flow-name", "NO_SSR")).toBe(true);
+    expect(hasPiece(list, "component-name", "NO_SSR")).toBe(false);
+  });
+
+  test("a top-level head block is HTML, with expressions in its title", () => {
+    const list = tokenize(`<head>\n  <title>{title}</title>\n</head>`);
+    expect(hasPiece(list, "tag", "head")).toBe(true);
+    expect(hasPiece(list, "tag", "title")).toBe(true);
+    expect(hasPiece(list, "expression", "{title}")).toBe(true);
+    expect(hasPiece(list, "flow-name", "head")).toBe(false);
+  });
+
   test("on:name attributes get an event prefix and name", () => {
     const list = tokenize(`<button on:click={save}>Save</button>`);
     expect(hasPiece(list, "event-prefix", "on:")).toBe(true);

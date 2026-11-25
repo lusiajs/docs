@@ -89,7 +89,9 @@ export const guidePlan: GuideGroup[] = [
       "on-attach",
       "on-detach",
       "fallback",
+      "head",
       "nolazy",
+      "nossr",
       "recursive-components",
       "html",
       "component",
@@ -175,5 +177,13 @@ export const guidePlan: GuideGroup[] = [
         entries: ["midway", "interpolate"],
       },
     ],
+  },
+  {
+    group: "routing",
+    label: "Routing",
+    intro: "Each address shows its own page. Read the path and the values in the address, and set the path to move.",
+    icon: "route",
+    color: "var(--pink)",
+    entries: ["path", "path-match", "params", "config-routes"],
   },
 ];

@@ -1,0 +1,23 @@
+<script>
+  import { PATH } from "lusiajs";
+</script>
+
+<div class="path-demo">
+  <p>PATH.value is <code>{PATH.value}</code></p>
+  <p>
+    PATH.match("/guide") is
+    <strong>{PATH.match("/guide") ? "true" : "false"}</strong>
+  </p>
+</div>
+
+<style scoped>
+  .path-demo {
+    display: grid;
+    gap: 0.4rem;
+    color: var(--fg);
+
+    p {
+      margin: 0;
+    }
+  }
+</style>

@@ -51,6 +51,14 @@ import NolazyDemo from "./demos/components/NolazyDemo.lusia";
 import nolazyDemoSource from "./demos/components/NolazyDemo.lusia?raw";
 import NolazyBadge from "./demos/components/NolazyBadge.lusia";
 import nolazyBadgeSource from "./demos/components/NolazyBadge.lusia?raw";
+import HeadDemo from "./demos/components/HeadDemo.lusia";
+import headDemoSource from "./demos/components/HeadDemo.lusia?raw";
+import NoSsrDemo from "./demos/components/NoSsrDemo.lusia";
+import noSsrDemoSource from "./demos/components/NoSsrDemo.lusia?raw";
+import PathDemo from "./demos/routing/PathDemo.lusia";
+import pathDemoSource from "./demos/routing/PathDemo.lusia?raw";
+import ParamsDemo from "./demos/routing/ParamsDemo.lusia";
+import paramsDemoSource from "./demos/routing/ParamsDemo.lusia?raw";
 import MoodHappy from "./demos/components/MoodHappy.lusia";
 import moodHappySource from "./demos/components/MoodHappy.lusia?raw";
 import ScopedRules from "./demos/styling/ScopedRules.lusia";
@@ -257,6 +265,18 @@ const screensConfigSource = `import { defineConfig } from "lusiajs/config";
 
 export default defineConfig({
   screens: { PHONE: 0, TABLET: 700, DESKTOP: 1200 },
+});`;
+
+const routesConfigSource = `import { defineConfig } from "lusiajs/config";
+
+export default defineConfig({
+  routes: {
+    "/": "src/pages/Home.lusia",
+    "/guide": "src/pages/Guide.lusia",
+    "/user/:id": "src/pages/User.lusia",
+    "*": "src/pages/NotFound.lusia",
+  },
+  ssr: false,
 });`;
 
 // Keyed by the api entry id. Entries without a demo show no live card.
@@ -819,6 +839,80 @@ export const catalog: Record<string, CatalogEntry> = {
       },
     ],
   },
+  head: {
+    icon: "title",
+    demos: [
+      {
+        id: "head-title",
+        title: "Page title",
+        caption:
+          "The title is set while this demo is shown. The browser tab shows the new title, and the old one comes back when the demo is removed.",
+        components: [HeadDemo],
+        sources: [{ path: "src/demos/components/HeadDemo.lusia", text: headDemoSource }],
+      },
+    ],
+  },
+  nossr: {
+    icon: "cloud_off",
+    demos: [
+      {
+        id: "nossr-placeholder",
+        title: "Skipped at build time",
+        caption:
+          "NO_SSR leaves the component out of the page built on the server. Its FALLBACK is the placeholder shown in its place.",
+        components: [NoSsrDemo],
+        sources: [{ path: "src/demos/components/NoSsrDemo.lusia", text: noSsrDemoSource }],
+      },
+    ],
+  },
+  path: {
+    icon: "link",
+    demos: [
+      {
+        id: "path-value",
+        title: "Current path",
+        caption: "PATH.value holds the path of this page, without the query or hash.",
+        components: [PathDemo],
+        sources: [{ path: "src/demos/routing/PathDemo.lusia", text: pathDemoSource }],
+      },
+    ],
+  },
+  "path-match": {
+    icon: "rule",
+    demos: [
+      {
+        id: "path-match-guide",
+        title: "Match a pattern",
+        caption: "PATH.match() returns true when the path matches the pattern. This page is /guide.",
+        components: [PathDemo],
+        sources: [{ path: "src/demos/routing/PathDemo.lusia", text: pathDemoSource }],
+      },
+    ],
+  },
+  params: {
+    icon: "data_object",
+    demos: [
+      {
+        id: "params-values",
+        title: "Address values",
+        caption:
+          "PARAMS.value holds the :name parts and the query values of the address. This page has none, so it is empty.",
+        components: [ParamsDemo],
+        sources: [{ path: "src/demos/routing/ParamsDemo.lusia", text: paramsDemoSource }],
+      },
+    ],
+  },
+  "config-routes": {
+    icon: "map",
+    table: {
+      head: ["Option", "Default", "What it does"],
+      rows: [
+        ["routes", "none", "Maps each page address to its page file."],
+        ["ssr", "on when routes is set", "Renders the pages on the server at build time. false turns it off."],
+      ],
+    },
+    files: [{ path: "lusia.config.ts", text: routesConfigSource }],
+  },
   nolazy: {
     icon: "push_pin",
     demos: [
@@ -826,7 +920,7 @@ export const catalog: Record<string, CatalogEntry> = {
         id: "nolazy-badge",
         title: "Badge",
         caption:
-          "NOLAZY keeps the badge in the page that imports it. It is never loaded later on its own.",
+          "NO_LAZY keeps the badge in the page that imports it. It is never loaded later on its own.",
         components: [NolazyDemo],
         sources: [
           { path: "src/demos/components/NolazyDemo.lusia", text: nolazyDemoSource },

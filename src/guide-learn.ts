@@ -35,6 +35,8 @@ const learnLines: Record<string, string> = {
   "recursive-components": "How a component can place itself, such as a file tree.",
   nolazy: "How to keep a component in the page that imports it.",
   fallback: "How to show a placeholder while a component loads.",
+  head: "How to set the page title and meta tags while a component is shown.",
+  nossr: "How to skip a component when pages are built on the server.",
   html: "How to insert HTML from a variable, and the risk of doing so.",
   lifecycle: "When a component is placed, removed, and how to run code at each step.",
   attach: "How to place a component on the page by code.",
@@ -72,6 +74,10 @@ const learnLines: Record<string, string> = {
   "set-config": "How to change animation settings for one component and its children.",
   scope: "How far a setConfig call reaches: its own markup, its tree, or the whole app.",
   "set-config-global": "How to change an animation setting for the whole app, and undo it.",
+  path: "How to read the current page path, and how to move to another page.",
+  "path-match": "How to check whether the current path matches a pattern.",
+  params: "How to read the :name parts and the query values of the address.",
+  "config-routes": "How to map each address to its page file, and turn build-time rendering off.",
 };
 
 // The learn line of a Guide section, or null when the section has none.

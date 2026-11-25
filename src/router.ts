@@ -1,4 +1,4 @@
-import type { Component, Props } from "lusiajs";
+import { PATH, type Component, type Props } from "lusiajs";
 import PageError from "./components/PageError.lusia";
 import PageLoading from "./components/PageLoading.lusia";
 import { scrollToId } from "./hash-scroll.ts";
@@ -75,7 +75,8 @@ async function show(path: string, hash: string, push: boolean): Promise<void> {
   const spec = specFor(path);
   const id = ++navigation;
   const url = addressFor(spec, path) + hash;
-  if (push && url !== location.pathname + location.hash) history.pushState(null, "", url);
+  // PATH.value pushes the address and keeps lusia's PATH and PARAMS in sync.
+  if (push && url !== location.pathname + location.hash) PATH.value = url;
   showAddress(spec);
   const shown = currentScreen();
   if (shown?.spec === spec) {
